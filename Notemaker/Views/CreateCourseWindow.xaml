@@ -1,0 +1,61 @@
+﻿<Window x:Class="JayDev.Notemaker.View.CreateCourseWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Add New Course" Height="277" Width="540">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0" Height="30px" VerticalAlignment="Center" LastChildFill="True">
+            <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" Padding="0 0 10 0">Course name:</TextBlock>
+            <TextBox Text="{Binding CourseName}" />
+        </DockPanel>
+        <TextBlock Grid.Row="1">Track List</TextBlock>
+
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Tracks}"  Name="trackGrid" LoadingRow="DataGrid_LoadingRow" AutoGenerateColumns="False" HeadersVisibility="Row" CanUserSortColumns="False" CanUserResizeRows="False" CanUserResizeColumns="False" CanUserReorderColumns="False" GridLinesVisibility="Horizontal" AreRowDetailsFrozen="True" CanUserAddRows="False">
+            <!--<DataGrid.RowHeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}},
+                                      Path=Header}"/>
+                </DataTemplate>
+            </DataGrid.RowHeaderTemplate>-->
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="File Name" Width="*"  
+                                        Binding="{Binding FileName}" 
+                                        IsReadOnly="True"/>
+                <DataGridTextColumn Header="File Name" Width="*"  
+                                        Binding="{Binding Length}" 
+                                        IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" Height="20px" Name="addButton" Click="addButton_Click">Add</Button>
+            <Button Grid.Column="2" Height="20px">Delete</Button>
+            <Button Grid.Column="3" Height="20px">Up</Button>
+            <Button Grid.Column="4" Height="20px">Down</Button>
+        </Grid>
+
+        <Grid Grid.Row="4" Margin="0 10 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" Name="saveCourseButton" Height="20px" Click="saveCourseButton_Click">Save</Button>
+            <Button Grid.Column="2" Name="cancelCourseButton" Height="20px">Cancel</Button>
+        </Grid>
+    </Grid>
+</Window>

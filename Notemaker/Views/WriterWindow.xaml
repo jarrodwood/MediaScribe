@@ -1,0 +1,200 @@
+﻿<Window x:Class="JayDev.Notemaker.View.WriterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="WriterWindow" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        d:DesignHeight="419" d:DesignWidth="988" SizeToContent="Manual" xmlns:notemakerControl="clr-namespace:JayDev.Notemaker.View.Controls" WindowState="Maximized">
+    <DockPanel Name="entireWindow">
+        <DockPanel Name="windowContents">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <Button Height="20px" Name="courseListButton" Click="courseListButton_Click">Course List</Button>
+                <Button Height="20px">To Review Mode</Button>
+                <Button Name="saveCourse" Click="saveCourse_Click">Save Course</Button>
+                <TextBlock Text="Current track: " />
+                <TextBlock Name="currentTrackTextBlock" Text="(none)" />
+            </StackPanel>
+
+            <StackPanel DockPanel.Dock="Bottom">
+
+                <Slider Name="timeSlider" ValueChanged="Slider_ValueChanged" IsMoveToPointEnabled="True" />
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="35"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="35"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Orientation="Horizontal">
+                            <TextBlock Name="currentPlayTime" HorizontalAlignment="Left">34:03</TextBlock>
+                            <TextBlock HorizontalAlignment="Left" xml:space="preserve"> /</TextBlock>
+                            <TextBlock Name="totalTrackTime" HorizontalAlignment="Left">34:03</TextBlock>
+                        </StackPanel>
+                    </Grid>
+                    <Button Grid.Column="1" Height="20px">Prev</Button>
+                    <Button Grid.Column="2" Height="30px" Click="Button_Click">Play</Button>
+                    <Button Grid.Column="3" Height="20px">Next</Button>
+                    <!--<StackPanel Grid.Column="4" Orientation="Horizontal"></StackPanel>-->
+                    <Grid Grid.Column="4" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="65"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label HorizontalAlignment="Right">Volume</Label>
+                        <Slider Grid.Column="1" />
+                    </Grid>
+                </Grid>
+            </StackPanel>
+            <Grid Name="mainGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200px"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Name="leftGridColumn">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="170px" />
+                        <RowDefinition Height="6" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <DockPanel Grid.Row="0" Background="LightGray" DockPanel.Dock="Top"  LastChildFill="True">
+                        <TextBlock DockPanel.Dock="Top">Video</TextBlock>
+                        <DockPanel Name="videoControlHolder">
+                            <notemakerControl:VideoControl x:Name="videoControl" />
+                        </DockPanel>
+                    </DockPanel>
+                    <GridSplitter
+            ResizeDirection="Rows" 
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Grid.Row="1"
+            Width="Auto" 
+            Height="3"
+            HorizontalAlignment="Stretch" 
+            VerticalAlignment="Stretch" 
+            Margin="0" DragCompleted="GridSplitter_DragCompleted_1" />
+
+                    <DockPanel Grid.Row="2">
+                        <TextBlock DockPanel.Dock="Top">Course Track List</TextBlock>
+                        <DataGrid DockPanel.Dock="Bottom" AutoGenerateColumns="False" LoadingRow="DataGrid_LoadingRow" Name="trackGrid" HeadersVisibility="All"
+                          MouseDoubleClick="trackListDataGrid_MouseDoubleClick" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Name"
+                                            Width="*"
+                                           Binding="{Binding StringDisplayValue}" 
+                                           IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Length"
+                                            Width="55"
+                                           Binding="{Binding Length}" 
+                                           IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </Grid>
+
+                <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" DragCompleted="GridSplitter_DragCompleted" />
+
+                <Grid Grid.Column="2">
+                    <DataGrid AutoGenerateColumns="False" Name="noteDataGrid" HeadersVisibility="Column" CanUserSortColumns="False" CanUserResizeRows="True" CanUserAddRows="True" CanUserDeleteRows="True" RowEditEnding="noteDataGrid_RowEditEnding" BeginningEdit="noteDataGrid_BeginningEdit">
+                        <DataGrid.Columns>
+                            <!--<DataGridTextColumn Header="From" Width="150"  
+                                           Binding="{Binding Path=Start.StringDisplayValue, Mode=OneWay}" 
+                                           IsReadOnly="True"/>-->
+                            <DataGridTemplateColumn Header="" Width="50">
+                                <!-- editing template -->
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                                <!-- standard template -->
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Name="playNoteButton" Click="playNoteButton_Click">Play</Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="From" Width="100">
+                                <!-- editing template -->
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Path=Start.StringDisplayValue}" />
+                                            <TextBlock xml:space="preserve"> </TextBlock>
+                                            <Button Name="setNoteStartTime" Click="setNoteStartTime_Click">Set</Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                                <!-- standard template -->
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Start.StringDisplayValue}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="To" Width="100"  
+                                           Binding="{Binding End}" 
+                                           IsReadOnly="True"/>
+                            <!--<DataGridTemplateColumn Header="Note" Width="*"  
+                                                <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <RichTextBox text bin="{Binding Path=PropertyToBindTo}"/>
+                            </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>-->
+                            <!--<DataGridTextColumn Header="Note" Width="*"  
+                                           Binding="{Binding Path=TitleBody}" 
+                                           IsReadOnly="True"/>-->
+                            <DataGridTemplateColumn Header="Note" Width="*">
+                                <!-- editing template -->
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Path=Body, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                                <!-- standard template -->
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock TextWrapping="Wrap">
+                                    <TextBlock.Text>
+                                        <Binding Path="TitleBody"/>
+                                    </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Rating" Width="50"  
+                                           Binding="{Binding Rating}" 
+                                           IsReadOnly="True"/>
+                            <!--<DataGridTextColumn Header="Tags" Width="100"  
+                                           Binding="{Binding Tags}" 
+                                           IsReadOnly="True"/>-->
+                            <DataGridTemplateColumn Header="Del" Width="30">
+                                <!-- editing template -->
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <Button Name="deleteNoteButton" Click="deleteNoteButton_Click">Del</Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                                <!-- standard template -->
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Grid>
+        </DockPanel>
+    </DockPanel>
+</Window>
