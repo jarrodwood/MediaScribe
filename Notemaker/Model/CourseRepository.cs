@@ -5,7 +5,7 @@ using System.Text;
 
 namespace JayDev.Notemaker.Model
 {
-    class CourseRepository
+    public class CourseRepository
     {
         public CourseRepository() { }
 
@@ -27,27 +27,38 @@ namespace JayDev.Notemaker.Model
             return course;
         }
 
-        public SaveResult SaveCourse(Course course) {
+        public SaveResult SaveCourse(Course courseToSave) {
 
-            #region Validation
-
-            if (string.IsNullOrEmpty(course.Name))
+            var allCourses = GetCourseList();
+            for(int i = 0; i < allCourses.Count; i++)
             {
-                throw new ValidationException<Course>("Please enter a name for the course", course);
+                if (allCourses[i].Name == courseToSave.Name)
+                {
+                    allCourses[i] = courseToSave;
+                    SaveCourseList(allCourses);
+                    break;
+                }
             }
+            return new SaveResult();
+            //#region Validation
 
-            ////If the course is new, or if the course has changed names... ensure that we don't already have a file with that name.
-            //string courseLoadedFromFile = (course as ISavedFile).LoadedFromFileName;
-            //if ((string.IsNullOrEmpty(courseLoadedFromFile) || courseLoadedFromFile != sanitisedName)
-            //    && File.Exists(string.Format(GenericFilePath, sanitisedName)))
+            //if (string.IsNullOrEmpty(course.Name))
             //{
-            //    throw new ValidationException<Course>("There is already a course with this name.", course);
+            //    throw new ValidationException<Course>("Please enter a name for the course", course);
             //}
 
-            #endregion
+            //////If the course is new, or if the course has changed names... ensure that we don't already have a file with that name.
+            ////string courseLoadedFromFile = (course as ISavedFile).LoadedFromFileName;
+            ////if ((string.IsNullOrEmpty(courseLoadedFromFile) || courseLoadedFromFile != sanitisedName)
+            ////    && File.Exists(string.Format(GenericFilePath, sanitisedName)))
+            ////{
+            ////    throw new ValidationException<Course>("There is already a course with this name.", course);
+            ////}
 
-            SaveResult result = DataAccess.SaveCourse(course);
-            return result;
+            //#endregion
+
+            //SaveResult result = DataAccess.SaveCourse(course);
+            //return result;
         }
     }
 }

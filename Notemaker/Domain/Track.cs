@@ -15,6 +15,10 @@ namespace JayDev.Notemaker
         public TimeSpan Length { get; set; }
         [DataMember]
         public string FilePath { get; set; }
+        [DataMember]
+        public bool IsVideo { get; set; }
+        [DataMember]
+        public double? AspectRatio { get; set; }
 
         public string FileName
         {

@@ -11,10 +11,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
-using LibMPlayerCommon;
+using GalaSoft.MvvmLight.Command;
 using System.Diagnostics;
 using System.Timers;
+
+using JayDev.Notemaker.Common;
+using System.ComponentModel;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace JayDev.Notemaker.View.Controls
 {
@@ -23,18 +26,75 @@ namespace JayDev.Notemaker.View.Controls
     /// </summary>
     public partial class VideoControl : UserControl
     {
-        private Discover _videoSettings;
-        private MPlayer play;
-        private string filePath;
-        private bool disposed = false; // to detect redundant calls
+        public double? AspectRatio
+        {
+            get { return (double?)GetValue(AspectRatioProperty); }
+            set { SetValue(AspectRatioProperty, value); }
+        }
+        // Using a DependencyProperty as the backing store for AspectRatio.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty AspectRatioProperty =
+            DependencyProperty.Register("AspectRatio", typeof(double?), typeof(VideoControl), new UIPropertyMetadata(null));
+
+        
+
+
+
 
         public delegate void DoubleClickHandler();
-
         public event DoubleClickHandler OnDoubleClick;
+
+        private const double defaultAspectRatio = 1.7777d;//16:9
+
+
+
+        public IntPtr VideoPanelPointer
+        {
+            get { return (IntPtr)GetValue(VideoPanelPointerProperty); }
+            set { SetValue(VideoPanelPointerProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for VideoPanelPointer.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty VideoPanelPointerProperty =
+            DependencyProperty.Register("VideoPanelPointer", typeof(IntPtr), typeof(VideoControl), new UIPropertyMetadata(null));
+
+        
+
+
+        public bool IsShowingVideo
+        {
+            get { return (bool)GetValue(IsShowingVideoProperty); }
+            set { SetValue(IsShowingVideoProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsShowingVideo.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsShowingVideoProperty =
+            DependencyProperty.Register("IsShowingVideo", typeof(bool), typeof(VideoControl), new UIPropertyMetadata(true));
+
+
+
+
+        #region PlayPauseCommand
+
+        public static readonly DependencyProperty PlayPauseCommandqProperty =
+            DependencyProperty.Register("PlayPauseCommandq", typeof(ICommand), typeof(VideoControl));
+
+        /// <summary>
+        /// Gets the PlayCommand.
+        /// </summary>
+        public ICommand PlayPauseCommandq
+        {
+            get { return (ICommand)GetValue(PlayPauseCommandqProperty); }
+            set { SetValue(PlayPauseCommandqProperty, value); }
+        }
+
+        #endregion
+
 
         public VideoControl()
         {
             InitializeComponent();
+           
+
             //this.play.VideoExited += new MplayerEventHandler(play_VideoExited);
 
             //// Set fullscreen
@@ -49,38 +109,28 @@ namespace JayDev.Notemaker.View.Controls
             //    btnPlay_Click(new object(), new EventArgs());
             //}
 
-            this.mPlayerWPFControl1.OnDoubleClick += new MPlayerWPFControl.DoubleClickHandler(mPlayerWPFControl1_OnDoubleClick);
-        }
+            var mPlayerWPFControl1 = MediaPlayerWPFDisplayControl.Instance;
+            this.videoPlaceholder.Content = mPlayerWPFControl1;
+            mPlayerWPFControl1.OnDoubleClick += new MediaPlayerWPFDisplayControl.DoubleClickHandler(mPlayerWPFControl1_OnDoubleClick);
 
-        private bool _isFullscreen = false;
-        void mPlayerWPFControl1_OnDoubleClick(MPlayerWPFControl.DoubleClickEventArgs args)
-        {
-            OnDoubleClick();
-        }
-
-        public enum VideoControlStatus { Stopped, Playing, Paused }
-
-        public VideoControlStatus PlayingStatus
-        {
-            get
+            //Ensure that when the video panel pointer property of the native win32 control is updated, we update our reference to it.
+            DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(MediaPlayerWPFDisplayControl.VideoPanelHandlePropertyProperty, typeof(MediaPlayerWPFDisplayControl));
+            if (dpd != null)
             {
-                if (this.play == null || this.play.CurrentStatus == MediaStatus.Stopped)
-                    return VideoControlStatus.Stopped;
-                if (this.play.CurrentStatus == MediaStatus.Playing)
-                    return VideoControlStatus.Playing;
-                if (this.play.CurrentStatus == MediaStatus.Paused)
-                    return VideoControlStatus.Paused;
-                throw new Exception("error: unexpected playing status?");
+                dpd.AddValueChanged(mPlayerWPFControl1, delegate
+                {
+                    VideoPanelPointer = mPlayerWPFControl1.VideoPanelHandleProperty;
+                });
             }
         }
 
-        public void PauseResume()
+        void mPlayerWPFControl1_OnDoubleClick(MediaPlayerWPFDisplayControl.DoubleClickEventArgs args)
         {
-            if (null != this.play)
-            {
-                this.play.Pause();
-            }
+
+            Messenger.Default.Send(NavigateMessage.ToggleFullscreen, MessageType.Navigate);
+            //PlayPauseCommandq.Execute(null);
         }
+
 
         public enum VideoControlMode { Embedded, Collapsed, Fullscreen }
 
@@ -96,56 +146,6 @@ namespace JayDev.Notemaker.View.Controls
             }
         }
 
-        public void Seek(int time)
-        {
-            this.play.Seek(time, LibMPlayerCommon.Seek.Absolute);
-        }
-
-        public void Stop()
-        {
-            if (null != this.play)
-            {
-                this.play.Stop();
-            }
-        }
-        public void Play(string filePath)
-        {
-            this.filePath = filePath;
-            if (this.filePath == String.Empty || this.filePath == null)
-            {
-                MessageBox.Show("You must select a video file.", "Select a file", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            _videoSettings = new Discover(this.filePath);
-
-
-            MplayerBackends backend;
-            System.PlatformID runningPlatform = System.Environment.OSVersion.Platform;
-            if (runningPlatform == System.PlatformID.Unix)
-            {
-                backend = MplayerBackends.GL2;
-            }
-            else if (runningPlatform == PlatformID.MacOSX)
-            {
-                backend = MplayerBackends.OpenGL;
-            }
-            else
-            {
-                backend = MplayerBackends.Direct3D;
-            }
-
-            this.play = new MPlayer((int)mPlayerWPFControl1.Handle, backend);
-            this.play.Play(this.filePath);
-            SetPanelSizeForAspectRatio();
-        }
-
-
-        public TimeSpan GetCurrentPlayTime()
-        {
-            return new TimeSpan(0, 0, play.CurrentPosition());
-        }
-
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             SetPanelSizeForAspectRatio(e.NewSize.Width, e.NewSize.Height);
@@ -157,29 +157,27 @@ namespace JayDev.Notemaker.View.Controls
         }
         private void SetPanelSizeForAspectRatio(double newWidth, double newHeight)
         {
-            if (this.play != null)
-            {
+                double aspectRatio = AspectRatio ?? defaultAspectRatio;
                 //this.play.ForceAspectRatio(this.panelVideo.Width, this.panelVideo.Height);
                 double width = newWidth;
                 double height = newHeight - this.ControlPanel.ActualHeight;
                 double correctedWidth = -1;
                 double correctedHeight = -1;
                 float panelAspectRatio = (float)width / (float)height;
-                if (panelAspectRatio >= this.play.AspectRatio)
+                if (panelAspectRatio >= aspectRatio)
                 {
                     correctedHeight = height;
-                    correctedWidth = Convert.ToInt32((float)height * this.play.AspectRatio);
-                    this.mPlayerWPFControl1.Width = correctedWidth;
-                    this.mPlayerWPFControl1.Height = correctedHeight;
+                    correctedWidth = Convert.ToInt32((float)height * aspectRatio);
+                    MediaPlayerWPFDisplayControl.Instance.Width = correctedWidth;
+                    MediaPlayerWPFDisplayControl.Instance.Height = correctedHeight;
                 }
                 else
                 {
                     correctedWidth = width;
-                    correctedHeight = Convert.ToInt32((float)width / this.play.AspectRatio);
-                    this.mPlayerWPFControl1.Height = correctedHeight;
-                    this.mPlayerWPFControl1.Width = correctedWidth;
+                    correctedHeight = Convert.ToInt32((float)width / aspectRatio);
+                    MediaPlayerWPFDisplayControl.Instance.Height = correctedHeight;
+                    MediaPlayerWPFDisplayControl.Instance.Width = correctedWidth;
                 }
-            }
         }
 
 

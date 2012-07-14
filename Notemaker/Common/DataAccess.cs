@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.IO;
 using System.Xml;
 using System.Text.RegularExpressions;
+using JayDev.Notemaker.Common;
 
 namespace JayDev.Notemaker
 {

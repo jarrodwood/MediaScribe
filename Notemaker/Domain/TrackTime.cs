@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 using System.ComponentModel;
+using JayDev.Notemaker.Common;
 
 namespace JayDev.Notemaker
 {

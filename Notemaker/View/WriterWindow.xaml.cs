@@ -25,7 +25,7 @@ namespace JayDev.Notemaker.View
     /// <summary>
     /// Interaction logic for WriterWindow.xaml
     /// </summary>
-    public partial class WriterWindow : Window
+    public partial class WriterWindow : UserControl
     {
         CourseRepository repo = new CourseRepository();
         Course currentCourse = null;
@@ -91,7 +91,6 @@ namespace JayDev.Notemaker.View
             //refresh the view which in turn refresh the grid
             dataView.Refresh();
 
-
             timer.Interval = 1000;
             timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
 
@@ -116,35 +115,35 @@ namespace JayDev.Notemaker.View
         WindowState preFullscreenWindowState = WindowState.Maximized;
         void videoControl_OnDoubleClick()
         {
-            if (isFullscreen)
-            {
-                this.WindowStyle = preFullscreenWindowStyle;
-                this.Topmost = false;
-                this.WindowState = preFullscreenWindowState;
-                isFullscreen = false;
+            //if (isFullscreen)
+            //{
+            //    this.WindowStyle = preFullscreenWindowStyle;
+            //    this.Topmost = false;
+            //    this.WindowState = preFullscreenWindowState;
+            //    isFullscreen = false;
 
 
-                this.Content = entireWindow;
-                videoControlHolder.Children.Add(this.videoControl);
-                videoControl.SetMode(Controls.VideoControl.VideoControlMode.Embedded);
-            }
-            else {
-                preFullscreenWindowStyle = this.WindowStyle;
-                preFullscreenWindowState = this.WindowState;
-                if (this.WindowState == System.Windows.WindowState.Maximized)
-                {
-                    //JDW: have to set winbdowState to normal first, otherwise WPF will still show the windows taskbar
-                    this.WindowState = System.Windows.WindowState.Normal;
-                }
-                this.WindowStyle = System.Windows.WindowStyle.None;
-                this.Topmost = true;
-                this.WindowState = System.Windows.WindowState.Maximized;
-                isFullscreen = true;
+            //    this.Content = entireWindow;
+            //    videoControlHolder.Children.Add(this.videoControl);
+            //    videoControl.SetMode(Controls.VideoControl.VideoControlMode.Embedded);
+            //}
+            //else {
+            //    preFullscreenWindowStyle = this.WindowStyle;
+            //    preFullscreenWindowState = this.WindowState;
+            //    if (this.WindowState == System.Windows.WindowState.Maximized)
+            //    {
+            //        //JDW: have to set winbdowState to normal first, otherwise WPF will still show the windows taskbar
+            //        this.WindowState = System.Windows.WindowState.Normal;
+            //    }
+            //    this.WindowStyle = System.Windows.WindowStyle.None;
+            //    this.Topmost = true;
+            //    this.WindowState = System.Windows.WindowState.Maximized;
+            //    isFullscreen = true;
 
-                videoControlHolder.Children.Remove(this.videoControl);
-                this.Content = this.videoControl;
-                videoControl.SetMode(Controls.VideoControl.VideoControlMode.Fullscreen);
-            }
+            //    videoControlHolder.Children.Remove(this.videoControl);
+            //    this.Content = this.videoControl;
+            //    videoControl.SetMode(Controls.VideoControl.VideoControlMode.Fullscreen);
+            //}
         }
         
 
@@ -184,15 +183,15 @@ namespace JayDev.Notemaker.View
 
         private void PlayTrackTime(Track track, TimeSpan timeToPlayFrom)
         {
-            currentTrack = track;
-            currentTrackTextBlock.Text = currentTrack.StringDisplayValue;
-            currentPlayTime.Text = Utility.GetTimeSpanAsShortString(new TimeSpan());
-            totalTrackTime.Text = Utility.GetTimeSpanAsShortString(currentTrack.Length);
-            PlayCurrentTrack();
-            if (timeToPlayFrom != new TimeSpan())
-            {
-                Seek(timeToPlayFrom.TotalSeconds);
-            }
+            //currentTrack = track;
+            //currentTrackTextBlock.Text = currentTrack.StringDisplayValue;
+            //currentPlayTime.Text = Utility.GetTimeSpanAsShortString(new TimeSpan());
+            //totalTrackTime.Text = Utility.GetTimeSpanAsShortString(currentTrack.Length);
+            //PlayCurrentTrack();
+            //if (timeToPlayFrom != new TimeSpan())
+            //{
+            //    Seek(timeToPlayFrom.TotalSeconds);
+            //}
         }
 
 
@@ -241,48 +240,48 @@ namespace JayDev.Notemaker.View
 
         private void courseListButton_Click(object sender, RoutedEventArgs e)
         {
-            this.IsEnabled = false;
-            CourseListWindow window = new CourseListWindow();
-            window.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner;
-            window.Owner = this;
-            window.ShowDialog();
-            this.IsEnabled = true;
+            //this.IsEnabled = false;
+            //CourseListWindow window = new CourseListWindow();
+            //window.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner;
+            //window.Owner = this;
+            //window.ShowDialog();
+            //this.IsEnabled = true;
         }
 
 
         int manualSeekCountdown = 0;
         void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (this.videoControl.PlayingStatus == Controls.VideoControl.VideoControlStatus.Playing)
-            {
-                TimeSpan currentPosition = videoControl.GetCurrentPlayTime();
-                double playedSeconds = currentPosition.TotalSeconds;
+            //if (this.videoControl.PlayingStatus == Controls.VideoControl.VideoControlStatus.Playing)
+            //{
+            //    TimeSpan currentPosition = videoControl.GetCurrentPlayTime();
+            //    double playedSeconds = currentPosition.TotalSeconds;
 
-                //Due to the fact we're using mplayer as the back-end, if the tries to seek, the video might take a second or two to find the appropriate place.
-                //in this case, the best thing we can do is to ensure that the video has jumped more than [x] (in this case, 2) seconds before updating it again
-                if (true == hasUserSeeked)
-                {
-                    double safetyNetSeconds = 2;
-                    if (Math.Abs(playedSeconds - userSeekedFromTime) < safetyNetSeconds)
-                    {
-                        return;
-                    }
-                    else
-                    {
-                        hasUserSeeked = false;
-                    }
-                }
+            //    //Due to the fact we're using mplayer as the back-end, if the tries to seek, the video might take a second or two to find the appropriate place.
+            //    //in this case, the best thing we can do is to ensure that the video has jumped more than [x] (in this case, 2) seconds before updating it again
+            //    if (true == hasUserSeeked)
+            //    {
+            //        double safetyNetSeconds = 2;
+            //        if (Math.Abs(playedSeconds - userSeekedFromTime) < safetyNetSeconds)
+            //        {
+            //            return;
+            //        }
+            //        else
+            //        {
+            //            hasUserSeeked = false;
+            //        }
+            //    }
 
-                //Action dispatchAction = () => this.timeSlider.Value = playedSeconds;
-                Action workAction = delegate
-                {
-                    isSliderUpdatedForSecond = true;
-                    this.timeSlider.Value = playedSeconds;
-                    isSliderUpdatedForSecond = false;
-                    currentPlayTime.Text = Utility.GetTimeSpanAsShortString(currentPosition);
-                };
-                currentDispatcher.BeginInvoke(workAction);
-            }
+            //    //Action dispatchAction = () => this.timeSlider.Value = playedSeconds;
+            //    Action workAction = delegate
+            //    {
+            //        //isSliderUpdatedForSecond = true;
+            //        //this.timeSlider.Value = playedSeconds;
+            //        //isSliderUpdatedForSecond = false;
+            //        //currentPlayTime.Text = Utility.GetTimeSpanAsShortString(currentPosition);
+            //    };
+            //    currentDispatcher.BeginInvoke(workAction);
+            //}
         }
 
         private bool isSliderUpdatedForSecond = false;
@@ -290,55 +289,55 @@ namespace JayDev.Notemaker.View
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (this.videoControl.PlayingStatus == Controls.VideoControl.VideoControlStatus.Stopped)
-            {
-                PlayCurrentTrack();
-            }
-            else
-            {
-                PauseResume();
-            }
+            //if (this.videoControl.PlayingStatus == Controls.VideoControl.VideoControlStatus.Stopped)
+            //{
+            //    PlayCurrentTrack();
+            //}
+            //else
+            //{
+            //    PauseResume();
+            //}
         }
 
         private void PauseResume()
         {
-            if (this.videoControl.PlayingStatus == Controls.VideoControl.VideoControlStatus.Playing)
-            {
-                timer.Stop();
-            }
-            else if(this.videoControl.PlayingStatus == Controls.VideoControl.VideoControlStatus.Paused)
-            {
-                timer.Start();
-            }
-            this.videoControl.PauseResume();
+            //if (this.videoControl.PlayingStatus == Controls.VideoControl.VideoControlStatus.Playing)
+            //{
+            //    timer.Stop();
+            //}
+            //else if(this.videoControl.PlayingStatus == Controls.VideoControl.VideoControlStatus.Paused)
+            //{
+            //    timer.Start();
+            //}
+            //this.videoControl.PauseResume();
         }
 
         private void PlayCurrentTrack()
         {
             if (null != currentTrack && false == string.IsNullOrEmpty(currentTrack.FilePath))
             {
-                Action dispatchAction = () => this.timeSlider.Minimum = 0;
-                currentDispatcher.BeginInvoke(dispatchAction);
-                dispatchAction = () => this.timeSlider.Maximum = currentTrack.Length.TotalSeconds;
-                currentDispatcher.BeginInvoke(dispatchAction);
+                //Action dispatchAction = () => this.timeSlider.Minimum = 0;
+                //currentDispatcher.BeginInvoke(dispatchAction);
+                //dispatchAction = () => this.timeSlider.Maximum = currentTrack.Length.TotalSeconds;
+                //currentDispatcher.BeginInvoke(dispatchAction);
 
-                if (videoControl.PlayingStatus != Controls.VideoControl.VideoControlStatus.Stopped)
-                {
-                    videoControl.Stop();
-                }
-                videoControl.Play(currentTrack.FilePath);
-                timer.Start();
+                //if (videoControl.PlayingStatus != Controls.VideoControl.VideoControlStatus.Stopped)
+                //{
+                //    videoControl.Stop();
+                //}
+                //videoControl.Play(currentTrack.FilePath);
+                //timer.Start();
             }
         }
 
         private void Seek(double timeSeconds)
         {
 
-            //Action dispatchAction = () => this.play.Seek((int)timeSeconds, LibMPlayerCommon.Seek.Absolute);
-            //currentDispatcher.BeginInvoke(dispatchAction);
-            videoControl.Seek((int)timeSeconds);
-            TimeSpan currentPosition = new TimeSpan(0, 0, (int)timeSeconds);
-            currentPlayTime.Text = Utility.GetTimeSpanAsShortString(currentPosition);
+            ////Action dispatchAction = () => this.play.Seek((int)timeSeconds, LibMPlayerCommon.Seek.Absolute);
+            ////currentDispatcher.BeginInvoke(dispatchAction);
+            //videoControl.Seek((int)timeSeconds);
+            //TimeSpan currentPosition = new TimeSpan(0, 0, (int)timeSeconds);
+            //currentPlayTime.Text = Utility.GetTimeSpanAsShortString(currentPosition);
         }
 
         private bool hasUserSeeked = false;
@@ -352,8 +351,26 @@ namespace JayDev.Notemaker.View
                 hasUserSeeked = true;
                 userSeekedFromTime = e.OldValue;
                 Seek(e.NewValue);
-
             }
+        }
+
+
+        private void saveCourse_Click(object sender, RoutedEventArgs e)
+        {
+            SaveCourse();
+        }
+
+        private void SaveCourse()
+        {
+            if (null != observableNotes)
+            {
+                currentCourse.Notes = new List<Note>(observableNotes);
+            }
+            var allCourses = repo.GetCourseList();
+
+            int indexOfDaygame = allCourses.IndexOf(allCourses.First(x => x.Name == "Daygame"));
+            allCourses[indexOfDaygame] = currentCourse;
+            repo.SaveCourseList(allCourses);
         }
 
         private void noteDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
@@ -376,50 +393,32 @@ namespace JayDev.Notemaker.View
             }
         }
 
-        private void saveCourse_Click(object sender, RoutedEventArgs e)
-        {
-            SaveCourse();
-        }
-
-        private void SaveCourse()
-        {
-            if (null != observableNotes)
-            {
-                currentCourse.Notes = new List<Note>(observableNotes);
-            }
-            var allCourses = repo.GetCourseList();
-
-            int indexOfDaygame = allCourses.IndexOf(allCourses.First(x => x.Name == "Daygame"));
-            allCourses[indexOfDaygame] = currentCourse;
-            repo.SaveCourseList(allCourses);
-        }
-
         private void noteDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
-            Note context = e.Row.DataContext as Note;
-            if (null != context)
-            {
-                if (null == context.Start)
-                {
-                    if (null == currentTrack)
-                    {
-                        e.Cancel = true;
-                        return;
-                    }
-                    TrackTime startTrackTime = new TrackTime();
-                    startTrackTime.TracksCollection = currentCourse.Tracks;
-                    startTrackTime.Track = this.currentTrack;
-                    startTrackTime.Time = this.videoControl.GetCurrentPlayTime();
-                    context.Start = startTrackTime;
-                }
-            }
+            //Note context = e.Row.DataContext as Note;
+            //if (null != context)
+            //{
+            //    if (null == context.Start)
+            //    {
+            //        if (null == currentTrack)
+            //        {
+            //            e.Cancel = true;
+            //            return;
+            //        }
+            //        TrackTime startTrackTime = new TrackTime();
+            //        startTrackTime.TracksCollection = currentCourse.Tracks;
+            //        startTrackTime.Track = this.currentTrack;
+            //        startTrackTime.Time = this.videoControl.GetCurrentPlayTime();
+            //        context.Start = startTrackTime;
+            //    }
+            //}
         }
 
         private void setNoteStartTime_Click(object sender, RoutedEventArgs e)
         {
-            Note currentNote = ((FrameworkElement)sender).DataContext as Note;
-            currentNote.Start.Track = this.currentTrack;
-            currentNote.Start.Time = this.videoControl.GetCurrentPlayTime();
+            //Note currentNote = ((FrameworkElement)sender).DataContext as Note;
+            //currentNote.Start.Track = this.currentTrack;
+            //currentNote.Start.Time = this.videoControl.GetCurrentPlayTime();
         }
 
         private void playNoteButton_Click(object sender, RoutedEventArgs e)

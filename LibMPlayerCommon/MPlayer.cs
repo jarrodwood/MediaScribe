@@ -379,7 +379,7 @@ namespace LibMPlayerCommon
         /// <param name="type"></param>
         public void Seek(int value, Seek type)
         {
-            MediaPlayer.StandardInput.WriteLine(string.Format("seek {0} {1}", value, (int)type));
+            MediaPlayer.StandardInput.WriteLine(string.Format("pausing_keep seek {0} {1}", value, (int)type));
             MediaPlayer.StandardInput.Flush();
         }
 
@@ -482,7 +482,7 @@ namespace LibMPlayerCommon
             set 
             {
                 _fullscreen = value;
-                MediaPlayer.StandardInput.WriteLine(string.Format("set_property fullscreen {0}", Convert.ToInt32(_fullscreen)  ));
+                MediaPlayer.StandardInput.WriteLine(string.Format("pausing_keep set_property fullscreen {0}", Convert.ToInt32(_fullscreen)));
                 MediaPlayer.StandardInput.Flush();
             }
         }
@@ -494,7 +494,7 @@ namespace LibMPlayerCommon
         {
             if (this.MplayerRunning)
             {
-                MediaPlayer.StandardInput.WriteLine("vo_fullscreen");
+                MediaPlayer.StandardInput.WriteLine("pausing_keep vo_fullscreen");
                 MediaPlayer.StandardInput.Flush();
             }
         }
