@@ -573,16 +573,20 @@ namespace JayDev.Notemaker.ViewModel
         {
             switch(e.Key) {
                 case Key.NumPad0:
-                _player.PlayPause();
+                    _player.PlayPause();
+                    e.Handled = true;
                     break;
                 case Key.NumPad1:
                     _player.SeekRelative(-10);
+                    e.Handled = true;
                     break;
                 case Key.NumPad2:
                     _player.SeekRelative(-3);
+                    e.Handled = true;
                     break;
                 case Key.NumPad3:
                     _player.SeekRelative(3);
+                    e.Handled = true;
                     break;
             }
         }

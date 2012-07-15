@@ -105,7 +105,7 @@ namespace JayDev.Notemaker.View.Controls
         {
             Messenger.Default.Send("hide", 12345);
             Debug.WriteLine("HIDING NOW");
-            countDown = 5;
+            countDown = 10;
         }
 
         int countDown = 0;
@@ -134,7 +134,7 @@ namespace JayDev.Notemaker.View.Controls
             }
             if (msg == (int)WM_Messages.WM_MOUSELEAVE)
             {
-                countDown = 5;
+                countDown = 10;
                 hoverTimer.Stop();
             }
             else if (msg == (int)WM_Messages.WM_LBUTTONDBLCLK)

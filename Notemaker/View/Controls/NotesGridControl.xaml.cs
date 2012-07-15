@@ -146,12 +146,17 @@ namespace JayDev.Notemaker.View.Controls
                 switch (e.Key)
                 {
                     case Key.NumPad7:
+                        Messenger.Default.Send<string>("show", 12345);
                         BeginEditNewNote();
                         e.Handled = true;
                         break;
                     case Key.NumPad8:
+                        noteDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
+                        Messenger.Default.Send<string>("hide", 12345);
+                        e.Handled = true;
                         break;
                     case Key.NumPad9:
+                        noteDataGrid.CancelEdit(DataGridEditingUnit.Row);
                         break;
                 }
             }
@@ -297,7 +302,10 @@ namespace JayDev.Notemaker.View.Controls
                     this.Dispatcher.BeginInvoke(new DispatcherOperationCallback((param) =>
                     {
                         NoteSavedCommand.Execute(context);
-                        Notes.Add(new Note());
+                        if (false == string.IsNullOrEmpty(Notes.Last().Body))
+                        {
+                            Notes.Add(new Note());
+                        }
                         noteDataGrid.UpdateLayout();
                         noteDataGrid.ScrollIntoView(noteDataGrid.Items[noteDataGrid.Items.Count - 1]);
                         return null;
@@ -337,8 +345,5 @@ namespace JayDev.Notemaker.View.Controls
         {
         }
 
-        private void noteDataGrid_KeyDown(object sender, KeyEventArgs e)
-        {
-        }
     }
 }

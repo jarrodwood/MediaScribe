@@ -10,14 +10,14 @@
              x:Name="NotesGridControlName">
     <Grid>
         <DataGrid    
-                     KeyDown="noteDataGrid_KeyDown"
-            AutoGenerateColumns="False" Name="noteDataGrid" HeadersVisibility="Column" CanUserSortColumns="False" CanUserResizeRows="True" CanUserAddRows="False" CanUserDeleteRows="True" RowEditEnding="noteDataGrid_RowEditEnding" BeginningEdit="noteDataGrid_BeginningEdit"
-                     ItemsSource="{ Binding ElementName=NotesGridControlName, Path=Notes}" CellEditEnding="noteDataGrid_CellEditEnding">
+            AutoGenerateColumns="False" Name="noteDataGrid" HeadersVisibility="Column" CanUserSortColumns="False" CanUserResizeRows="True" CanUserAddRows="False"
+            CanUserDeleteRows="True" RowEditEnding="noteDataGrid_RowEditEnding" BeginningEdit="noteDataGrid_BeginningEdit"
+            ItemsSource="{ Binding ElementName=NotesGridControlName, Path=Notes}" CellEditEnding="noteDataGrid_CellEditEnding">
             <DataGrid.Columns>
                 <!--<DataGridTextColumn Header="From" Width="150"  
                                            Binding="{Binding Path=Start.StringDisplayValue, Mode=OneWay}" 
                                            IsReadOnly="True"/>-->
-                <DataGridTemplateColumn Header="" Width="50">
+                <DataGridTemplateColumn Header="" Width="45">
                     <!-- editing template -->
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
@@ -32,7 +32,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="From" Width="70">
+                <DataGridTemplateColumn Header="From" Width="75">
                     <!-- editing template -->
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
