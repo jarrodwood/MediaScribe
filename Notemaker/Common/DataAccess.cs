@@ -56,7 +56,7 @@ namespace JayDev.Notemaker
                 string xml = System.IO.File.ReadAllText(fileName);
                 result = Deserialize<CourseList>(xml);
 
-                if (result.VersionNumber != Utility.ApplicationVersionNumber)
+                    if (result.VersionNumber != Utility.ApplicationVersionNumber)
                 {
                     throw new ApplicationException("Todo: course data is outdated");
                 }
@@ -67,11 +67,11 @@ namespace JayDev.Notemaker
                     {
                         if (null != note.Start)
                         {
-                            note.Start.TracksCollection = course.Tracks;
+                            note.Start.ParentCourse = course;
                         }
                         if (null != note.End)
                         {
-                            note.End.TracksCollection = course.Tracks;
+                            note.End.ParentCourse = course;
                         }
                     }
                 }
@@ -150,8 +150,8 @@ namespace JayDev.Notemaker
 
             foreach (var note in result.Notes)
             {
-                note.Start.TracksCollection = result.Tracks;
-                note.End.TracksCollection = result.Tracks;
+                note.Start.ParentCourse = result;
+                note.End.ParentCourse = result;
             }
             return result;
         }

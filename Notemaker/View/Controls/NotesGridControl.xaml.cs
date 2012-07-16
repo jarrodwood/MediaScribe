@@ -15,6 +15,8 @@ using System.Collections.ObjectModel;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Windows.Controls.Primitives;
+using System.ComponentModel;
+using System.Diagnostics;
 
 namespace JayDev.Notemaker.View.Controls
 {
@@ -25,43 +27,21 @@ namespace JayDev.Notemaker.View.Controls
     {
         Dispatcher _uiDispatcher;
 
+
+        public Note CurrentNote { get { return (Note)noteDataGrid.SelectedItem; } }
+
         public ObservableCollection<Note> Notes
         {
             get { return (ObservableCollection<Note>)GetValue(NotesProperty); }
             set { SetValue(NotesProperty, value); }
         }
 
+
+        #region Dependency Properties
+
         // Using a DependencyProperty as the backing store for Notes.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NotesProperty =
             DependencyProperty.Register("Notes", typeof(ObservableCollection<Note>), typeof(NotesGridControl), new UIPropertyMetadata(null));
-
-
-
-
-        //public Track CurrentTrack
-        //{
-        //    get { return (Track)GetValue(CurrentTrackProperty); }
-        //    set { SetValue(CurrentTrackProperty, value); }
-        //}
-
-        //// Using a DependencyProperty as the backing store for CurrentTrack.  This enables animation, styling, binding, etc...
-        //public static readonly DependencyProperty CurrentTrackProperty =
-        //    DependencyProperty.Register("CurrentTrack", typeof(Track), typeof(NotesGridControl), new UIPropertyMetadata(null));
-
-
-
-
-        //public TimeSpan CurrentPosition
-        //{
-        //    get { return (TimeSpan)GetValue(CurrentPositionProperty); }
-        //    set { SetValue(CurrentPositionProperty, value); }
-        //}
-
-        //// Using a DependencyProperty as the backing store for CurrentPosition.  This enables animation, styling, binding, etc...
-        //public static readonly DependencyProperty CurrentPositionProperty =
-        //    DependencyProperty.Register("CurrentPosition", typeof(TimeSpan), typeof(NotesGridControl), new UIPropertyMetadata(new TimeSpan()));
-
-
 
 
 
@@ -78,6 +58,22 @@ namespace JayDev.Notemaker.View.Controls
         {
             get { return (ICommand)GetValue(PrepareNoteForEditCommandProperty); }
             set { SetValue(PrepareNoteForEditCommandProperty, value); }
+        }
+
+        #endregion
+
+        #region NoteEditCompletedCommand
+
+        public static readonly DependencyProperty NoteEditCompletedCommandProperty =
+            DependencyProperty.Register("NoteEditCompletedCommand", typeof(ICommand), typeof(NotesGridControl));
+
+        /// <summary>
+        /// Gets the NoteEditCompletedCommand.
+        /// </summary>
+        public ICommand NoteEditCompletedCommand
+        {
+            get { return (ICommand)GetValue(NoteEditCompletedCommandProperty); }
+            set { SetValue(NoteEditCompletedCommandProperty, value); }
         }
 
         #endregion
@@ -129,96 +125,88 @@ namespace JayDev.Notemaker.View.Controls
         }
 
         #endregion
-        
+
+        #endregion
 
         public NotesGridControl()
         {
             InitializeComponent();
             _uiDispatcher = Dispatcher.CurrentDispatcher;
             Messenger.Default.Register<KeyEventArgs>(this, 999, (message) => HandleKeyPress(message));
+            this.IsVisibleChanged += new DependencyPropertyChangedEventHandler(NotesGridControl_IsVisibleChanged);
         }
 
-        private void HandleKeyPress(KeyEventArgs e)
+
+        private static NotesGridControl _lastNotesGridControlVisible = null;
+
+        void NotesGridControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            //only fuck around with the UI if the window's visible
-            if (this.Visibility == Visibility.Visible)
+            if (true == (bool)e.NewValue)
             {
-                switch (e.Key)
-                {
-                    case Key.NumPad7:
-                        Messenger.Default.Send<string>("show", 12345);
-                        BeginEditNewNote();
-                        e.Handled = true;
-                        break;
-                    case Key.NumPad8:
-                        noteDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
-                        Messenger.Default.Send<string>("hide", 12345);
-                        e.Handled = true;
-                        break;
-                    case Key.NumPad9:
-                        noteDataGrid.CancelEdit(DataGridEditingUnit.Row);
-                        break;
-                }
+                _lastNotesGridControlVisible = this;
             }
         }
 
-        private void BeginEditNewNote()
+
+
+        private void HandleKeyPress(KeyEventArgs e)
         {
+                //only fuck around with the UI if the window's visible
+                //TODO: this is kind of hacky. figure out a better way!
+                if (_lastNotesGridControlVisible == this)
+                {
+                    switch (e.Key)
+                    {
+                        case Key.NumPad7:
+                            //noteDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
+                            Messenger.Default.Send<string>("show", 12345);
+                            BeginEditNewNote();
+                            e.Handled = true;
+                            break;
+                        case Key.NumPad8:
+                            noteDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
+                            Messenger.Default.Send<string>("hide", 12345);
+                            e.Handled = true;
+                            break;
+                        case Key.NumPad9:
+                            noteDataGrid.CancelEdit(DataGridEditingUnit.Row);
+                            e.Handled = true;
+                            break;
+                    }
+                }
+        }
+
+        public void BeginEditNewNote()
+        {
+            //for (int i = 100; i >= 0; i--)
+            //{
+            //    //JDW: commented out, since the reason the container wasn't ready was because the instance of the grid wasn't visible.
+            //    if (i == 0)
+            //        throw new Exception("why the hell?!");
+            //    if (noteDataGrid.ItemContainerGenerator.Status == System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated)
+            //    {
+            //        break;
+            //    }
+            //    System.Threading.Thread.Sleep(20);
+            //}
             DataGridCell cell = null;
             for (int i = 0; i < noteDataGrid.Columns.Count; i++)
             {
                 if (String.Equals(noteDataGrid.Columns[i].Header, "Note"))
                 {
-                    cell = GetCell(noteDataGrid, noteDataGrid.Items.Count - 1, i);
+                    cell = GetCell(noteDataGrid, Notes.Count, i);
                     break;
                 }
             }
             if (cell != null)
             {
-                ////operation to perform on row edit ended
-                _uiDispatcher.BeginInvoke(new DispatcherOperationCallback((param) =>
-                {
-                    noteDataGrid.ScrollIntoView(noteDataGrid.Items[noteDataGrid.Items.Count-1]);
-                    cell.Focus();
-                    noteDataGrid.CurrentCell = new DataGridCellInfo(cell);
-                    noteDataGrid.BeginEdit();
-                    return null;
-                }), DispatcherPriority.Send, new object[] { null });
+                noteDataGrid.ScrollIntoView(noteDataGrid.Items[noteDataGrid.Items.Count - 1]);
+                cell.Focus();
+                noteDataGrid.CurrentCell = new DataGridCellInfo(cell);
+                noteDataGrid.BeginEdit();
             }
         }
-        //public DataGridCell GetCell(int row, int column)
-        //{
-        //    DataGridRow rowContainer = GetRow(row);
 
-        //    if (rowContainer != null)
-        //    {
-        //        DataGridCellsPresenter presenter = GetVisualChild<DataGridCellsPresenter>(rowContainer);
-
-        //        // try to get the cell but it may possibly be virtualized
-        //        DataGridCell cell = (DataGridCell)presenter.ItemContainerGenerator.ContainerFromIndex(column);
-        //        if (cell == null)
-        //        {
-        //            // now try to bring into view and retreive the cell
-        //            DataGrid_Standard.ScrollIntoView(rowContainer, DataGrid_Standard.Columns[column]);
-        //            cell = (DataGridCell)presenter.ItemContainerGenerator.ContainerFromIndex(column);
-        //        }
-        //        return cell;
-        //    }
-        //    return null;
-        //}
-
-
-        //public DataGridRow GetRow(int index)
-        //{
-        //    DataGridRow row = (DataGridRow)DataGrid_Standard.ItemContainerGenerator.ContainerFromIndex(index);
-        //    if (row == null)
-        //    {
-        //        // may be virtualized, bring into view and try again
-        //        DataGrid_Standard.ScrollIntoView(DataGrid_Standard.Items[index]);
-        //        row = (DataGridRow)DataGrid_Standard.ItemContainerGenerator.ContainerFromIndex(index);
-        //    }
-        //    return row;
-        //}
 
         DataGridCell GetCell(DataGrid dg, int rowIndex, int columnIndex)
         {
@@ -226,96 +214,29 @@ namespace JayDev.Notemaker.View.Controls
             var dc = dg.Columns[columnIndex].GetCellContent(dr);
             return dc.Parent as DataGridCell;
         }
-        //public static DataGridCell GetDataGridCell(DataGrid grid, int rowIndex, int colIndex)
-        //{
-        //    DataGridCell result = null;
-        //    DataGridRow row = (DataGridRow)grid.ItemContainerGenerator.ContainerFromIndex(rowIndex);
-        //    if (row != null)
-        //    {
 
-        //        DataGridCellsPresenter presenter = GetFirstVisualChild<DataGridCellsPresenter>(row);
-        //        result = presenter.ItemContainerGenerator.ContainerFromIndex(colIndex) as DataGridCell;
-
-        //    }
-
-        //    return result;
-        //}
-
-        //public static T GetFirstVisualChild<T>(DependencyObject depObj)
-        //{
-        //    if (depObj != null)
-        //    {
-        //        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
-        //        {
-        //            DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
-        //            if (child != null && child is T)
-        //            {
-        //                return (T)child;
-        //            }
-
-        //            T childItem = GetFirstVisualChild(child);
-        //            if (childItem != null) return childItem;
-        //        }
-        //    }
-
-        //    return null;
-        //}
 
         private void noteDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
-            Note context = e.Row.DataContext as Note;
-            if (null != context)
+            if (e.EditAction == DataGridEditAction.Commit)
             {
-                if (string.IsNullOrEmpty(context.Body))
+                Note context = e.Row.DataContext as Note;
+                //operation to perform on row edit ended
+                this.Dispatcher.BeginInvoke(new DispatcherOperationCallback((param) =>
                 {
-                    context.Start = null;
-                    e.Cancel = true;
-                    //For some reason, this doesn't seem to cancel properly when we programmatically begin editing. To ensure
-                    //that blank notes don't get added to the collection, once this operation is performed we'll manually remove
-                    //them. set at 'send' priority, because we really want this to happen.
-                    this.Dispatcher.BeginInvoke(new DispatcherOperationCallback((param) =>
-                    {
-                        if (Notes.Count > 0)
-                        {
-                            for (int i = Notes.Count-1; i >= 0; i--)
-                            {
-                                if (string.IsNullOrEmpty(Notes[i].Body))
-                                {
-                                    Notes.RemoveAt(i);
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                            }
-                            Note blankNote = new Note();
-                            Notes.Add(blankNote);
-                            noteDataGrid.UpdateLayout();
-                            noteDataGrid.ScrollIntoView(noteDataGrid.Items[noteDataGrid.Items.Count-1]);
-                        }
-                        return null;
-                    }), DispatcherPriority.Send, new object[] { null });
-                }
-                else
-                {
-                    //operation to perform on row edit ended
-                    this.Dispatcher.BeginInvoke(new DispatcherOperationCallback((param) =>
-                    {
-                        NoteSavedCommand.Execute(context);
-                        if (false == string.IsNullOrEmpty(Notes.Last().Body))
-                        {
-                            Notes.Add(new Note());
-                        }
-                        noteDataGrid.UpdateLayout();
-                        noteDataGrid.ScrollIntoView(noteDataGrid.Items[noteDataGrid.Items.Count - 1]);
-                        return null;
-                    }), DispatcherPriority.Background, new object[] { null });
-                }
+                    NoteEditCompletedCommand.Execute(context);
+                    return null;
+                }), DispatcherPriority.Normal, new object[] { null });
             }
         }
 
+        private bool _isEditing = false;
+        public bool IsEditing { get { return _isEditing; } }
+
         private void noteDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
+            Debug.WriteLine("BEGIN EDIT");
+            _isEditing = true;
             Note context = e.Row.DataContext as Note;
             if (null != context)
             {
@@ -343,6 +264,18 @@ namespace JayDev.Notemaker.View.Controls
 
         private void noteDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
+            Debug.WriteLine("LEAVING EDIT");
+            _isEditing = false;
+        }
+
+
+        public void CommitEdit()
+        {
+            noteDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
+        }
+        public void CancelEdit()
+        {
+            noteDataGrid.CancelEdit(DataGridEditingUnit.Row);
         }
 
     }

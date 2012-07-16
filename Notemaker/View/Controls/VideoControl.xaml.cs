@@ -124,6 +124,7 @@ namespace JayDev.Notemaker.View.Controls
             }
         }
 
+
         void mPlayerWPFControl1_OnDoubleClick(MediaPlayerWPFDisplayControl.DoubleClickEventArgs args)
         {
 

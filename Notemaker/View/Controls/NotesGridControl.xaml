@@ -9,15 +9,23 @@
              xmlns:GalaSoft_MvvmLight_Command="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
              x:Name="NotesGridControlName">
     <Grid>
-        <DataGrid    
-            AutoGenerateColumns="False" Name="noteDataGrid" HeadersVisibility="Column" CanUserSortColumns="False" CanUserResizeRows="True" CanUserAddRows="False"
+        <DataGrid
+            AutoGenerateColumns="False" Name="noteDataGrid" HeadersVisibility="Column" CanUserSortColumns="False" CanUserResizeRows="True" CanUserAddRows="True"
             CanUserDeleteRows="True" RowEditEnding="noteDataGrid_RowEditEnding" BeginningEdit="noteDataGrid_BeginningEdit"
-            ItemsSource="{ Binding ElementName=NotesGridControlName, Path=Notes}" CellEditEnding="noteDataGrid_CellEditEnding">
+            ItemsSource="{ Binding ElementName=NotesGridControlName, Path=Notes, Mode=TwoWay}" CellEditEnding="noteDataGrid_CellEditEnding">
+            <DataGrid.InputBindings>
+                <KeyBinding Key="Delete" Command="" />
+            </DataGrid.InputBindings>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Remove Item" Command="Delete" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
             <DataGrid.Columns>
                 <!--<DataGridTextColumn Header="From" Width="150"  
                                            Binding="{Binding Path=Start.StringDisplayValue, Mode=OneWay}" 
                                            IsReadOnly="True"/>-->
-                <DataGridTemplateColumn Header="" Width="45">
+                <DataGridTemplateColumn Header="" Width="15">
                     <!-- editing template -->
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
@@ -28,7 +36,12 @@
                     <!-- standard template -->
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Name="playNoteButton" Click="playNoteButton_Click">Play</Button>
+                            <Button Name="playNoteButton" Click="playNoteButton_Click" Height="14">
+                                    <Path x:Name="arrow"
+                                      StrokeThickness = "1"
+                                      Fill            = "ForestGreen"
+                                      Data            = "M 1,6 L 6,3 L 1,0 L 1,6"/>
+                            </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -67,7 +80,7 @@
                     <!-- editing template -->
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding Path=Body, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}" />
+                            <TextBox Text="{Binding Path=Body, Mode=TwoWay, UpdateSourceTrigger=Explicit}" TextWrapping="Wrap" AcceptsReturn="True" FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                     <!-- standard template -->
@@ -84,24 +97,6 @@
                 <DataGridTextColumn Header="Rating" Width="50"  
                                            Binding="{Binding Rating}" 
                                            IsReadOnly="True"/>
-                <!--<DataGridTextColumn Header="Tags" Width="100"  
-                                           Binding="{Binding Tags}" 
-                                           IsReadOnly="True"/>-->
-                <DataGridTemplateColumn Header="Del" Width="30">
-                    <!-- editing template -->
-                    <DataGridTemplateColumn.CellEditingTemplate>
-                        <DataTemplate>
-                            <Button Name="deleteNoteButton">Del</Button>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellEditingTemplate>
-                    <!-- standard template -->
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

@@ -9,12 +9,13 @@ using JayDev.Notemaker.Common;
 namespace JayDev.Notemaker
 {
     [DataContract]
-    public class TrackTime : INotifyPropertyChanged
+    [Serializable]
+    public class TrackTime : INotifyPropertyChanged, ICloneable
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [DataMember]
         private Track track;
+        [DataMember]
         public Track Track
         {
             get { return track; }
@@ -24,8 +25,8 @@ namespace JayDev.Notemaker
                 OnPropertyChanged("Track");
             }
         }
-        [DataMember]
         private TimeSpan time { get; set; }
+        [DataMember]
         public TimeSpan Time { get { return time; }
             set
             {
@@ -34,15 +35,14 @@ namespace JayDev.Notemaker
             }
         }
 
-        private List<Track> tracksCollection = new List<Track>();
-        public List<Track> TracksCollection { get { return tracksCollection; } set { tracksCollection = value; } }
+        public Course ParentCourse { get; set; }
 
         public string StringDisplayValue
         {
             get
             {
                 StringBuilder resultBuilder = new StringBuilder();
-                int index = tracksCollection.FindIndex(x => x.FilePath == track.FilePath);
+                int index = ParentCourse.Tracks.FindIndex(x => x.FilePath == track.FilePath);
                 if (index != -1)
                 {
                     resultBuilder.Append(index + 1);
@@ -63,7 +63,7 @@ namespace JayDev.Notemaker
             get
             {
                 StringBuilder resultBuilder = new StringBuilder();
-                int index = tracksCollection.FindIndex(x => x.FilePath == track.FilePath);
+                int index = ParentCourse.Tracks.FindIndex(x => x.FilePath == track.FilePath);
                 if (index != -1)
                 {
                     resultBuilder.Append((index + 1).ToString("0000"));
@@ -92,6 +92,15 @@ namespace JayDev.Notemaker
             {
                 handler(this, new PropertyChangedEventArgs(name));
             }
+        }
+
+        public object Clone()
+        {
+            TrackTime clone = new TrackTime();
+            clone.time = this.time;
+            clone.Track = (Track)this.Track.Clone();
+            clone.ParentCourse = this.ParentCourse;
+            return clone;
         }
     }
 }

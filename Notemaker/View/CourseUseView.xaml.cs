@@ -27,17 +27,6 @@ namespace JayDev.Notemaker.View
 
 
 
-        //public ICommand TrackDataGridDoubleClick
-        //{
-        //    get { return (ICommand)GetValue(TrackDataGridDoubleClickProperty); }
-        //    set { SetValue(TrackDataGridDoubleClickProperty, value); }
-        //}
-
-        //// Using a DependencyProperty as the backing store for TrackDataGridDoubleClick.  This enables animation, styling, binding, etc...
-        //public static readonly DependencyProperty TrackDataGridDoubleClickProperty =
-        //    DependencyProperty.RegisterAttached("DataGridDoubleClickCommand", typeof(ICommand), typeof(CourseUseView), new PropertyMetadata(new PropertyChangedCallback(AttachOrRemoveDataGridDoubleClickEvent));
-
-        
 
         public CourseUseView(CourseUseViewModel viewModel)
         {
@@ -45,15 +34,6 @@ namespace JayDev.Notemaker.View
 
             _viewModel = viewModel;
             this.DataContext = _viewModel;
-
-            var message = new ReusableControlMessage(videoControl, ReusableControlType.VideoControl);
-            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(message, MessageType.RegisterReusableControl);
-
-            message = new ReusableControlMessage(notesGrid, ReusableControlType.NotesGridControl);
-            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(message, MessageType.RegisterReusableControl);
-
-            message = new ReusableControlMessage(mediaControls, ReusableControlType.NotesGridControl);
-            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(message, MessageType.RegisterReusableControl);
         }
 
         #region UI Event Handlers
@@ -86,39 +66,6 @@ namespace JayDev.Notemaker.View
         }
 
         #endregion
-
-        
-        //public static void AttachOrRemoveDataGridDoubleClickEvent(DependencyObject obj, DependencyPropertyChangedEventArgs args)
-        //{
-        //    DataGrid dataGrid = obj as DataGrid;
-        //    if ( dataGrid != null )
-        //    {
-        //        ICommand cmd = (ICommand) args.NewValue;
-
-        //        if ( args.OldValue == null && args.NewValue != null )
-        //        {
-        //        dataGrid.MouseDoubleClick += ExecuteDataGridDoubleClick;
-        //        }
-        //        else if ( args.OldValue != null && args.NewValue == null )
-        //        {
-        //        dataGrid.MouseDoubleClick -= ExecuteDataGridDoubleClick;
-        //        }
-        //    }
-        //}
-
-
-        //private void trackGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        //{
-        //    DependencyObject obj = sender as DependencyObject;
-        //    ICommand cmd = (ICommand)obj.GetValue(TrackDataGridDoubleClickProperty);
-        //    if (cmd != null)
-        //    {
-        //        if (cmd.CanExecute(obj))
-        //        {
-        //            cmd.Execute(obj);
-        //        }
-        //    }
-        //}
 
     }
 }

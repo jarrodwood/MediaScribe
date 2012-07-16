@@ -25,84 +25,13 @@ namespace JayDev.Notemaker.View
     /// </summary>
     public partial class MainWindow : Window
     {
-        Microsoft.Practices.Unity.UnityContainer _container = new Microsoft.Practices.Unity.UnityContainer();
-        CourseUseViewModel courseUseViewModel;
-        UserControl currentView;
         public MainWindow()
         {
             InitializeComponent();
 
-            this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
-
-
-            CourseRepository repo = new CourseRepository();
-            courseUseViewModel = new CourseUseViewModel(repo);
-            var blah = repo.GetCourseList();
-
-            if (blah.Count == 0)
-            {
-                CreateDayGameCourse(repo);
-                blah = repo.GetCourseList();
-            }
-            var currentCourse = blah.First(x => x.Name == "Daygame");
-            courseUseViewModel.SetCurrentCourse(currentCourse);
-            CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
-            //_container.RegisterInstance<Course>
-            this.Content = courseUseView;
-            this.currentView = courseUseView;
-            Messenger.Default.Register<NavigateMessage>(this, MessageType.Navigate, (message) => Navigate(message));
-            Messenger.Default.Register<ReusableControlMessage>(this, MessageType.RegisterReusableControl, (message) => RegisterReusableControl(message));
+            Controller.Singleton.Initialize(this);
         }
 
-        void MainWindow_KeyDown(object sender, KeyEventArgs e)
-        {
-            Debug.WriteLine("KEY DOWN: " + e.Key);
-            Messenger.Default.Send<KeyEventArgs>(e, 999);
-        }
-
-        List<ReusableControlMessage> _reusableControlMessages = new List<ReusableControlMessage>();
-        private void RegisterReusableControl(ReusableControlMessage message)
-        {
-            _reusableControlMessages.Add(message);
-        }
-
-        WindowStyle preFullscreenWindowStyle = WindowStyle.SingleBorderWindow;
-        WindowState preFullscreenWindowState = WindowState.Maximized;
-        private void Navigate(NavigateMessage message)
-        {
-            if (currentView is CourseUseView)
-            {
-                FullscreenCourseView bleh = new FullscreenCourseView(courseUseViewModel);
-                this.Content = bleh;
-                currentView = bleh;
-
-                preFullscreenWindowStyle = this.WindowStyle;
-                preFullscreenWindowState = this.WindowState;
-                if (this.WindowState == System.Windows.WindowState.Maximized)
-                {
-                    //JDW: have to set winbdowState to normal first, otherwise WPF will still show the windows taskbar
-                    this.WindowState = System.Windows.WindowState.Normal;
-                }
-                this.WindowStyle = System.Windows.WindowStyle.None;
-                this.Topmost = true;
-                this.WindowState = System.Windows.WindowState.Maximized;
-            }
-            else
-            {
-                CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
-                this.Content = courseUseView;
-                currentView = courseUseView;
-
-                this.WindowStyle = preFullscreenWindowStyle;
-                this.Topmost = false;
-                this.WindowState = preFullscreenWindowState;
-
-                //ensure that the mouse cursor is visible. this is a bit of a hack, since interacting with the win32 control is a PITA... and if the cursor was hidden when we left fullscreen,
-                //it'll stay hidden until it moves back over the win32 control.
-                Mouse.OverrideCursor = null;
-            }
-
-        }
 
         private void CreateDayGameCourse(CourseRepository repo)
         {

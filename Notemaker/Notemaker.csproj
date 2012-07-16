@@ -101,11 +101,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Common\ThreadHelper.cs" />
     <Compile Include="Common\TimeSpanToSecondsConverter.cs" />
     <Compile Include="Common\Commands.cs" />
     <Compile Include="Core\ContentAdorner.cs" />
     <Compile Include="Core\PreviewSliderHelper.cs" />
     <Compile Include="ViewModel\MediaPlayer.cs" />
+    <Compile Include="View\Controller.cs" />
     <Compile Include="View\Controls\MediaControlsControl.xaml.cs">
       <DependentUpon>MediaControlsControl.xaml</DependentUpon>
     </Compile>
@@ -202,6 +204,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Styles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PlayHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\PlayHS.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

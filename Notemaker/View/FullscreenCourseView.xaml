@@ -20,7 +20,7 @@
                                                        Notes="{ Binding Notes, Mode=TwoWay}"
                                                        PlayNoteCommand="{Binding PlayNoteCommand}"
                                                        SetNoteStartTimeCommand="{Binding SetNoteStartTimeCommand}"
-                                           />
+                                                       NoteEditCompletedCommand="{Binding NoteEditCompletedCommand}"/>
 
         <notemakerControl:VideoControl VideoPanelPointer="{Binding VideoPanelPointer, Mode=OneWayToSource}"
                                                            AspectRatio="{Binding CurrentTrackVideoAspectRatio}"

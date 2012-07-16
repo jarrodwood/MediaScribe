@@ -7,7 +7,8 @@ using System.Runtime.Serialization;
 namespace JayDev.Notemaker
 {
     [DataContract]
-    public class Track
+    [Serializable]
+    public class Track : ICloneable
     {
         [DataMember]
         public string Title { get; set; }
@@ -40,6 +41,15 @@ namespace JayDev.Notemaker
                 else
                     return FileName;
             }
+        }
+
+        public object Clone()
+        {
+            Track clone = new Track();
+            clone.Title = this.Title;
+            clone.Length = this.Length;
+            clone.FilePath = this.FilePath;
+            return clone;
         }
     }
 }

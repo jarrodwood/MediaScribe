@@ -9,6 +9,7 @@ using GalaSoft.MvvmLight.Command;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Messaging;
 using System.Windows.Threading;
+using System.ComponentModel;
 
 namespace JayDev.Notemaker.ViewModel
 {
@@ -19,6 +20,8 @@ namespace JayDev.Notemaker.ViewModel
         private CourseRepository _repo;
         private MediaPlayer _player;
         private Dispatcher _uiDispatcher;
+
+        private const bool IsKeepingBlankRowForEdit = true;
 
         private ObservableCollection<Note> _notes;
         public ObservableCollection<Note> Notes { get { return _notes; } set { _notes = value; }  }
@@ -425,7 +428,7 @@ namespace JayDev.Notemaker.ViewModel
                                                   {
                                                       Time = CurrentTrackPlayPosition,
                                                       Track = _currentTrack,
-                                                      TracksCollection = new List<Track>(Tracks)
+                                                      ParentCourse = _currentCourse
                                                   };
                                               }
                                           },
@@ -443,9 +446,32 @@ namespace JayDev.Notemaker.ViewModel
                     ?? (_noteSavedCommand = new RelayCommand<Note>(
                                           (Note context) =>
                                           {
+                                              //TODO: put this on a background thread.
                                               //when a note is saved, we save the course so that changed should never be lost...
                                               _currentCourse.Notes = new List<Note>(Notes);
                                               _repo.SaveCourse(_currentCourse);
+                                          },
+                                          (Note context) => true));
+            }
+        }
+
+
+        private RelayCommand<Note> _noteEditCompletedCommand;
+        public RelayCommand<Note> NoteEditCompletedCommand
+        {
+            get
+            {
+                return _noteEditCompletedCommand
+                    ?? (_noteEditCompletedCommand = new RelayCommand<Note>(
+                                          (Note context) =>
+                                          {
+                                              //TODO: put this on a background thread.
+                                              //the user has finished editing a note. if the body is empty, wipe it. otherwise save the course
+                                              if (false == string.IsNullOrWhiteSpace(context.Body))
+                                              {
+                                                  _currentCourse.Notes = new List<Note>(Notes);
+                                                  _repo.SaveCourse(_currentCourse);
+                                              }
                                           },
                                           (Note context) => true));
             }
@@ -460,8 +486,32 @@ namespace JayDev.Notemaker.ViewModel
                     ?? (_setNoteStartTimeCommand = new RelayCommand<Note>(
                                           (Note context) =>
                                           {
-                                              context.Start.Track = _currentTrack;
-                                              context.Start.Time = CurrentTrackPlayPosition;
+                                              context.Start = new TrackTime()
+                                              {
+                                                  Track = _currentTrack,
+                                                  Time = CurrentTrackPlayPosition,
+                                                  ParentCourse = _currentCourse
+                                              };
+                                          },
+                                          (Note context) => true));
+            }
+        }
+
+        private RelayCommand<Note> _setNoteEndTimeCommand;
+        public RelayCommand<Note> SetNoteEndTimeCommand
+        {
+            get
+            {
+                return _setNoteEndTimeCommand
+                    ?? (_setNoteEndTimeCommand = new RelayCommand<Note>(
+                                          (Note context) =>
+                                          {
+                                              context.End = new TrackTime()
+                                              {
+                                                  Track = _currentTrack,
+                                                  Time = CurrentTrackPlayPosition,
+                                                  ParentCourse = _currentCourse
+                                              };
                                           },
                                           (Note context) => true));
             }
@@ -565,11 +615,60 @@ namespace JayDev.Notemaker.ViewModel
 
             _player = new MediaPlayer();
             _player.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(_player_PropertyChanged);
-            Messenger.Default.Register<KeyEventArgs>(this, 999, (message) => HandleKeyPress(message));
+        }
+
+        void _notes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            bool isSaveRequired = false;
+            if (null != e.NewItems)
+            {
+                foreach (Note note in e.NewItems)
+                {
+                    note.PropertyChanged += new PropertyChangedEventHandler(note_PropertyChanged);
+                    note.ChangeCommitted += new Note.ObjectChangeCommittedEventHandler(note_ChangeCommitted);
+                    if (false == note.IsDirty && false == string.IsNullOrWhiteSpace(note.Body))
+                        isSaveRequired = true;
+                }
+            }
+            if (null != e.OldItems)
+            {
+                foreach (Note note in e.OldItems)
+                {
+                    note.PropertyChanged -= this.note_PropertyChanged;
+                    note.ChangeCommitted -= note_ChangeCommitted;
+                    isSaveRequired = true;
+                }
+            }
+
+            if (isSaveRequired)
+            {
+                SaveCourseInBackground();
+            }
+        }
+
+        void note_ChangeCommitted(object sender, EventArgs e)
+        {
+            SaveCourseInBackground();
+        }
+
+        private void SaveCourseInBackground()
+        {
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += delegate(object s, DoWorkEventArgs args)
+            {
+                _currentCourse.Notes = new List<Note>(Notes);
+                _repo.SaveCourse(_currentCourse);
+            };
+            worker.RunWorkerAsync();
+        }
+
+        void note_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            int a = 5;
         }
 
 
-        private void HandleKeyPress(KeyEventArgs e)
+        public void HandleKeypress(object sender, KeyEventArgs e)
         {
             switch(e.Key) {
                 case Key.NumPad0:
@@ -604,9 +703,8 @@ namespace JayDev.Notemaker.ViewModel
         {
             _currentCourse = course;
             _notes = new ObservableCollection<Note>(course.Notes);
-            _notes.Add(new Note());
+            _notes.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(_notes_CollectionChanged);
             _tracks = new ObservableCollection<Track>(course.Tracks);
-            //Notes.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(Notes_CollectionChanged);
         }
 
         private void SelectTrack(Track track)

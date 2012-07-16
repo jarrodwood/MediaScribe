@@ -7,6 +7,7 @@
              xmlns:notemakerControl="clr-namespace:JayDev.Notemaker.View.Controls"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
+             x:Name="CourseUseViewName"
              d:DesignHeight="419" d:DesignWidth="988">
     <Grid>
         <DockPanel Name="windowContents">
@@ -92,7 +93,8 @@
                                                        NoteSavedCommand="{Binding NoteSavedCommand}"
                                                        Notes="{ Binding Notes, Mode=TwoWay}"
                                                        PlayNoteCommand="{Binding PlayNoteCommand}"
-                                                       SetNoteStartTimeCommand="{Binding SetNoteStartTimeCommand}"/>
+                                                       SetNoteStartTimeCommand="{Binding SetNoteStartTimeCommand}"
+                                                       NoteEditCompletedCommand="{Binding NoteEditCompletedCommand}"/>
                 </Grid>
             </Grid>
         </DockPanel>
