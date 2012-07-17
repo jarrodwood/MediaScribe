@@ -9,15 +9,39 @@
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
              x:Name="CourseUseViewName"
              d:DesignHeight="419" d:DesignWidth="988">
-    <Grid>
+    <Grid Background="#FFEFF5FF">
         <DockPanel Name="windowContents">
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                <Button Height="20px" Name="courseListButton">Course List</Button>
-                <Button Height="20px">To Review Mode</Button>
-                <Button Name="saveCourse" Command="{Binding SaveCourseCommand}">Save Course</Button>
-                <TextBlock Text="Current track: " />
-                <TextBlock Name="currentTrackTextBlock" Text="{Binding Path=CurrentTrackName, TargetNullValue=(none)}" />
-            </StackPanel>
+            <Grid DockPanel.Dock="Top" Height="70">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Background="{x:Null}" BorderBrush="{x:Null}">
+                <StackPanel Grid.Column="0">
+                    <Image Source="/Notemaker;component/Images/4.png" Height="32" Width="32" />
+                    <TextBlock>Course List</TextBlock>
+                </StackPanel>
+                </Button>
+            </Grid>
+            <DockPanel DockPanel.Dock="Top">
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                    <Button>Lock edits</Button>
+                    <Button>Filter list</Button><!-- TODO: filter not just fields, but for notes ONLY for specific track, and by colours within notes. or bolds. -->
+                    <Button>Change list sort</Button>
+                    <Button>Change cols</Button>
+                    <Button>Adjust tags</Button>
+                    <Button>Double/Single list view</Button>
+                    <Button>Text size...</Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Height="20px" Name="courseListButton">Course List</Button>
+                    <Button Height="20px">To Review Mode</Button>
+                    <Button Name="saveCourse" Command="{Binding SaveCourseCommand}">Save Course</Button>
+                    <TextBlock Text="Current track: " />
+                    <TextBlock Name="currentTrackTextBlock" Text="{Binding Path=CurrentTrackName, TargetNullValue=(none)}" />
+                </StackPanel>
+            </DockPanel>
 
             <notemakerControl:MediaControlsControl x:Name="mediaControls"
                                                    DockPanel.Dock="Bottom"
@@ -60,9 +84,9 @@
             VerticalAlignment="Stretch" 
             Margin="0" DragCompleted="GridSplitter_DragCompleted_1" />
 
-                    <StackPanel Orientation="Vertical" Grid.Row="2">
-                        <TextBlock>Course Track List</TextBlock>
-                        <DataGrid AutoGenerateColumns="False" LoadingRow="DataGrid_LoadingRow" Name="trackGrid" HeadersVisibility="All"
+                    <DockPanel Grid.Row="2">
+                        <TextBlock DockPanel.Dock="Top">Course Track List</TextBlock>
+                        <DataGrid VerticalAlignment="Top" AutoGenerateColumns="False" LoadingRow="DataGrid_LoadingRow" Name="trackGrid" HeadersVisibility="All" CanUserAddRows="False"
                            CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding Tracks}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseDoubleClick">
@@ -82,7 +106,7 @@
                                            IsReadOnly="True"/>
                             </DataGrid.Columns>
                         </DataGrid>
-                    </StackPanel>
+                    </DockPanel>
                 </Grid>
 
                 <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" DragCompleted="GridSplitter_DragCompleted" />

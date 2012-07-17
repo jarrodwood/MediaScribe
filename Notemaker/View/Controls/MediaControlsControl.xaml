@@ -77,6 +77,8 @@
                     
                 </StackPanel>
                     <Button DockPanel.Dock="Right" Height="20px" HorizontalAlignment="Right" Command="{Binding ElementName=MediaControlsControlName, Path=StopCommand}">Stop</Button>
+                    <Button DockPanel.Dock="Right" Height="20px" HorizontalAlignment="Right">Toggle notes in trackbar</Button>
+                    <Button DockPanel.Dock="Right" Height="20px" HorizontalAlignment="Right">preview on/off</Button>
                 </DockPanel>
             </Grid>
             <Button Grid.Column="1" Height="20px">Prev</Button>

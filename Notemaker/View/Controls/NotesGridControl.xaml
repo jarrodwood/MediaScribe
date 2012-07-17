@@ -25,27 +25,25 @@
                 <!--<DataGridTextColumn Header="From" Width="150"  
                                            Binding="{Binding Path=Start.StringDisplayValue, Mode=OneWay}" 
                                            IsReadOnly="True"/>-->
-                <DataGridTemplateColumn Header="" Width="15">
-                    <!-- editing template -->
+                <!--<DataGridTemplateColumn Header="" Width="15">
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellEditingTemplate>
-                    <!-- standard template -->
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Name="playNoteButton" Click="playNoteButton_Click" Height="14">
+                                <Button Name="playNoteButton" Click="playNoteButton_Click" Height="14">
                                     <Path x:Name="arrow"
                                       StrokeThickness = "1"
                                       Fill            = "ForestGreen"
                                       Data            = "M 1,6 L 6,3 L 1,0 L 1,6"/>
-                            </Button>
+                                </Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="From" Width="75">
+                </DataGridTemplateColumn>-->
+                <DataGridTemplateColumn Header="From" Width="90">
                     <!-- editing template -->
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
@@ -59,7 +57,15 @@
                     <!-- standard template -->
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=Start.StringDisplayValue}" />
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Button Name="playNoteButton" Click="playNoteButton_Click" Height="14">
+                                    <Path x:Name="arrow"
+                                      StrokeThickness = "1"
+                                      Fill            = "ForestGreen"
+                                      Data            = "M 1,6 L 6,3 L 1,0 L 1,6"/>
+                                </Button>
+                                <TextBlock Text="{Binding Path=Start.StringDisplayValue}" />
+                            </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
