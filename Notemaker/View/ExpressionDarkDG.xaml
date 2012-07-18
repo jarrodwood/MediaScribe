@@ -404,7 +404,7 @@
         <Setter Property='VerticalAlignment' Value='Center' />
         <Setter Property='FontFamily' Value='Verdana' />
         <!--FontSize hack-->
-        <Setter Property='FontSize' Value='11' />
+        <Setter Property='FontSize' Value='10' />
     </Style>
 
 </ResourceDictionary>

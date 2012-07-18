@@ -117,7 +117,7 @@ namespace JayDev.Notemaker.View.Controls
             if(msg != 132 && msg != 70)
             //if (msg != 32 && msg != 132 && msg != 512 && msg != 33)
             {
-                Debug.WriteLine(string.Format("Msg: {0}, wParam: {1}, lParam: {2}, handled? {3}", msg, wParam.ToInt32(), lParam.ToInt32(), handled));
+                //Debug.WriteLine(string.Format("Msg: {0}, wParam: {1}, lParam: {2}, handled? {3}", msg, wParam.ToInt32(), lParam.ToInt32(), handled));
             }
             if (msg == (int)WM_Messages.WM_MOUSEMOVE)
             {

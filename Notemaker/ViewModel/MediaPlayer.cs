@@ -95,14 +95,24 @@ namespace JayDev.Notemaker.ViewModel
             this._play.Seek(relativeTime, LibMPlayerCommon.Seek.Relative);
         }
 
+        public void Volume(double volumePercent)
+        {
+            if (null != this._play)
+            {
+                this._play.Volume((int)volumePercent, true);
+            }
+        }
+
         public void Stop()
         {
             if (null != this._play)
             {
                 _playPositionTimer.Stop();
                 this._play.Stop();
+
             }
         }
+
         public void Play(string filePath, IntPtr handle)
         {
             this._filePath = filePath;

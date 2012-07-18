@@ -73,6 +73,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="View\CourseMaintenanceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\ExpressionDark.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -101,11 +105,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Common\GridLengthConverter.cs" />
     <Compile Include="Common\ThreadHelper.cs" />
     <Compile Include="Common\TimeSpanToSecondsConverter.cs" />
     <Compile Include="Common\Commands.cs" />
     <Compile Include="Core\ContentAdorner.cs" />
     <Compile Include="Core\PreviewSliderHelper.cs" />
+    <Compile Include="ViewModel\CourseMaintenanceViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer.cs" />
     <Compile Include="View\Controller.cs" />
     <Compile Include="View\Controls\MediaControlsControl.xaml.cs">
@@ -136,10 +142,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\WriterWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="Domain\SaveResult.cs" />
     <Compile Include="ViewModel\CourseUseViewModel.cs" />
     <Compile Include="View\App.xaml.cs">
@@ -158,6 +160,9 @@
     <Compile Include="Common\Exceptions.cs" />
     <Compile Include="Common\ISavedFile.cs" />
     <Compile Include="Common\Utility.cs" />
+    <Compile Include="View\CourseMaintenanceView.xaml.cs">
+      <DependentUpon>CourseMaintenanceView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\CourseUseView.xaml.cs">
       <DependentUpon>CourseUseView.xaml</DependentUpon>
     </Compile>
@@ -166,10 +171,6 @@
     </Compile>
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\WriterWindow.xaml.cs">
-      <DependentUpon>WriterWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -204,6 +205,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Styles\" />
+    <Folder Include="Themes\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Play.png" />
@@ -212,10 +214,111 @@
     <None Include="Resources\PlayHS.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\PlayHS.png" />
+    <Page Include="View\Controls\TextFile1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\4.png" />
+    <Resource Include="Images\application-vnd.oasis.opendocument.database.png" />
+    <Resource Include="Images\archive-insert-2.png" />
+    <Resource Include="Images\database.png" />
+    <Resource Include="Images\filenew.png" />
+    <Resource Include="Images\filter.png" />
+    <Resource Include="Images\fonts.png" />
+    <Resource Include="Images\format-list-ordered.png" />
+    <Resource Include="Images\format-list-unordered.png" />
+    <Resource Include="Images\galternatives.png" />
+    <Resource Include="Images\gnome-mime-application-x-archive.png" />
+    <Resource Include="Images\gnome-mime-application-zip.png" />
+    <Resource Include="Images\gthumb.png" />
+    <Resource Include="Images\gtk-add.png" />
+    <Resource Include="Images\gtk-italic.png" />
+    <Resource Include="Images\gtk-justify-fill.png" />
+    <Resource Include="Images\gtk-properties.png" />
+    <Resource Include="Images\gtk-stock-book.png" />
+    <Resource Include="Images\help-about.png" />
+    <Resource Include="Images\help-browser.png" />
+    <Resource Include="Images\list-add-4.png" />
+    <Resource Include="Images\list-add-7.png" />
+    <Resource Include="Images\list-remove-4.png" />
+    <Resource Include="Images\list-remove-6.png" />
+    <Resource Include="Images\newstyle-audio-volume-high.png" />
+    <Resource Include="Images\newstyle-audio-volume-low.png" />
+    <Resource Include="Images\newstyle-audio-volume-medium.png" />
+    <Resource Include="Images\newstyle-audio-volume-muted.png" />
+    <Resource Include="Images\object-rotate-left.png" />
+    <Resource Include="Images\object-rotate-right.png" />
+    <Resource Include="Images\oldstyle-edit-find.png" />
+    <Resource Include="Images\package-available-locked.png" />
+    <Resource Include="Images\package_office.png" />
+    <Resource Include="Images\preferences-desktop-font.png" />
+    <Resource Include="Images\preferences-desktop-keyboard-shortcuts.png" />
+    <Resource Include="Images\preferences-other.png" />
+    <Resource Include="Images\redhat-preferences.png" />
+    <Resource Include="Images\remove.png" />
+    <Resource Include="Images\rhythmbox01.png" />
+    <Resource Include="Images\server-database.png" />
+    <Resource Include="Images\sqlite_database_browser.png" />
+    <Resource Include="Images\stock_close.png" />
+    <Resource Include="Images\stock_dialog-error.png" />
+    <Resource Include="Images\stock_media-fwd.png" />
+    <Resource Include="Images\stock_media-next.png" />
+    <Resource Include="Images\stock_media-pause.png" />
+    <Resource Include="Images\stock_media-play.png" />
+    <Resource Include="Images\stock_media-prev.png" />
+    <Resource Include="Images\stock_media-rec.png" />
+    <Resource Include="Images\stock_media-rew.png" />
+    <Resource Include="Images\stock_media-stop.png" />
+    <Resource Include="Images\stock_refresh.png" />
+    <Resource Include="Images\stock_repeat.png" />
+    <Resource Include="Images\stock_save.png" />
+    <Resource Include="Images\stock_search-and-replace.png" />
+    <Resource Include="Images\stock_search.png" />
+    <Resource Include="Images\stock_shuffle.png" />
+    <Resource Include="Images\stock_text_bold.png" />
+    <Resource Include="Images\stock_text_italic.png" />
+    <Resource Include="Images\stock_volume-0.png" />
+    <Resource Include="Images\stock_volume-max.png" />
+    <Resource Include="Images\stock_volume-med.png" />
+    <Resource Include="Images\stock_volume-min.png" />
+    <Resource Include="Images\stock_volume-mute.png" />
+    <Resource Include="Images\stock_volume.png" />
+    <Resource Include="Images\system-config-rootpassword.png" />
+    <Resource Include="Images\system-restart.png" />
+    <Resource Include="Images\system-run.png" />
+    <Resource Include="Images\system-search.png" />
+    <Resource Include="Images\system-software-update.png" />
+    <Resource Include="Images\system-upgrade.png" />
+    <Resource Include="Images\trashcan_full01.png" />
+    <Resource Include="Images\type-list.png" />
+    <Resource Include="Images\update-manager.png" />
+    <Resource Include="Images\user-trash-default.png" />
+    <Resource Include="Images\view-file-columns.png" />
+    <Resource Include="Images\view-filter.png" />
+    <Resource Include="Images\view-list-details.png" />
+    <Resource Include="Images\view-list-icon.png" />
+    <Resource Include="Images\x-office-address-book.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\system-settings-2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\preferences-composer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\kfm.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\mp_viewer.png" />
+    <Resource Include="Images\seahorse.png" />
+    <Resource Include="Images\stock_lock-brocken.png" />
+    <Resource Include="Images\stock_lock-ok.png" />
+    <Resource Include="Images\text-x-generic.png" />
+    <Resource Include="Images\totem01.png" />
+    <Resource Include="Images\typing-monitor.png" />
+    <Resource Include="Images\video.png" />
+    <Resource Include="Images\xawtv.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -13,6 +13,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using GalaSoft.MvvmLight.Command;
 using JayDev.Notemaker.Common;
+using System.Timers;
+using System.Windows.Threading;
 
 namespace JayDev.Notemaker.View.Controls
 {
@@ -21,6 +23,8 @@ namespace JayDev.Notemaker.View.Controls
     /// </summary>
     public partial class MediaControlsControl : UserControl
     {
+        Dispatcher _uiDispatcher;
+
         #region CurrentPlayTime
 
         public TimeSpan CurrentPlayTime
@@ -100,11 +104,62 @@ namespace JayDev.Notemaker.View.Controls
         #endregion
 
         
+        #region TrackTitle
+
+        public string TrackTitle
+        {
+            get { return (string)GetValue(TrackTitleProperty); }
+            set { SetValue(TrackTitleProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for TrackTitle.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TrackTitleProperty =
+            DependencyProperty.Register("TrackTitle", typeof(string), typeof(MediaControlsControl), new UIPropertyMetadata(null));
+
+        #endregion
+
+
+        #region Volume
+
+        public double Volume
+        {
+            get { return (double)GetValue(VolumeProperty); }
+            set { SetValue(VolumeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Volume.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty VolumeProperty =
+            DependencyProperty.Register("Volume", typeof(double), typeof(MediaControlsControl), new UIPropertyMetadata(0d));
+
+        #endregion
+        
+
+        
         
 
         public MediaControlsControl()
         {
             InitializeComponent();
+            _uiDispatcher = Dispatcher.CurrentDispatcher;
+            //Timer timer = new Timer();
+            //timer.Interval = 100;
+            //Volume = 100;
+            //timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
+
+            //timer.Start();
+        }
+        int countdown = 30;
+        void timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (countdown > 0)
+                countdown--;
+            else
+            {
+                ThreadHelper.ExecuteAsyncUI(_uiDispatcher, delegate
+                {
+                    Volume--;
+                });
+            }
         }
         TimeSpanToSecondsConverter converter = new TimeSpanToSecondsConverter();
 
@@ -115,7 +170,5 @@ namespace JayDev.Notemaker.View.Controls
             TimeSpan result = (TimeSpan)converter.ConvertBack(seekTo, typeof(TimeSpan), null, null);
             SeekToCommand.Execute(result);
         }
-
-
     }
 }

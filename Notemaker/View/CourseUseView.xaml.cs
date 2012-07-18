@@ -52,7 +52,7 @@ namespace JayDev.Notemaker.View
         /// <param name="e"></param>
         private void GridSplitter_DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            _viewModel.LastEmbeddedVideoWidth = mainGrid.ColumnDefinitions[0].Width.Value;
+            //_viewModel.LastEmbeddedVideoWidth = mainGrid.ColumnDefinitions[0].Width.Value;
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace JayDev.Notemaker.View
         /// <param name="e"></param>
         private void GridSplitter_DragCompleted_1(object sender, DragCompletedEventArgs e)
         {
-            _viewModel.LastEmbeddedVideoHeight = leftGridColumn.RowDefinitions[0].Height.Value;
+            //_viewModel.LastEmbeddedVideoHeight = leftGridColumn.RowDefinitions[0].Height.Value;
         }
 
         #endregion

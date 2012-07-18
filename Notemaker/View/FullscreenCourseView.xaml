@@ -12,7 +12,8 @@
                                                    CurrentPlayTime="{Binding CurrentTrackPlayPosition}"
                                                    MaxPlayTime="{Binding CurrentTrackTotalLength}"
                                                    PlayPauseCommand="{Binding PlayPauseCommand}"
-                                                   SeekToCommand="{Binding SeekToCommand}"/>
+                                                   SeekToCommand="{Binding SeekToCommand}"
+                                                   TrackTitle="{Binding CurrentTrackName}"/>
 
         <notemakerControl:NotesGridControl x:Name="notesGrid" DockPanel.Dock="Right" Width="600" 
                                                        PrepareNoteForEditCommand="{Binding PrepareNoteForEditCommand}"

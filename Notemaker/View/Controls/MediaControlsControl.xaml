@@ -9,38 +9,43 @@
             xmlns:local="clr-namespace:JayDev.Notemaker.Core"
              x:Name="MediaControlsControlName">
     <UserControl.Resources>
-        <nmCommon:TimeSpanToSecondsConverter x:Key="timespanConverter" />
-        <DataTemplate x:Key="PreviewDataTemplate">
-            <TextBlock Text="{Binding StringFormat=\{0:00.00\}}"/>
-        </DataTemplate>
-        
-        <Style x:Key="PreviewStyle" TargetType="{x:Type ContentControl}">
-            <Setter Property="ContentTemplate" Value="{StaticResource PreviewDataTemplate}"/>
-            <Setter Property="IsHitTestVisible" Value="False"/>
-            <Setter Property="Margin" Value="-20,-70,0,0" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ContentControl}">
-                        <Grid Margin="-5" Width="50" Height="70">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="0.5*"/>
-                                <RowDefinition Height="0.5*"/>
-                            </Grid.RowDefinitions>
-                            <Grid.Effect>
-                                <DropShadowEffect BlurRadius="5"  ShadowDepth="2"/>
-                            </Grid.Effect>
-                            <Rectangle Stroke="White" StrokeThickness="0.5" Fill="{DynamicResource HuluBack}"/>
-                            <Path Stretch="Fill" Stroke="White" HorizontalAlignment="Center" Margin="20,-1,19.5,-1" VerticalAlignment="Stretch" Width="0.5" Data="M18.875,30.200352 L19.125,40" Grid.Row="1" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="TextFile1.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <nmCommon:TimeSpanToSecondsConverter x:Key="timespanConverter" />
+            <DataTemplate x:Key="PreviewDataTemplate">
+                <TextBlock Text="{Binding StringFormat=\{0:00.00\}}"/>
+            </DataTemplate>
 
-                            <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Uniform" Margin="5">
-                                <ContentPresenter />
-                            </Viewbox>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Foreground" Value="White"/>
-        </Style>
+            <Style x:Key="PreviewStyle" TargetType="{x:Type ContentControl}">
+                <Setter Property="ContentTemplate" Value="{StaticResource PreviewDataTemplate}"/>
+                <Setter Property="IsHitTestVisible" Value="False"/>
+                <Setter Property="Margin" Value="-20,-70,0,0" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ContentControl}">
+                            <Grid Margin="-5" Width="50" Height="70">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.5*"/>
+                                    <RowDefinition Height="0.5*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.Effect>
+                                    <DropShadowEffect BlurRadius="5"  ShadowDepth="2"/>
+                                </Grid.Effect>
+                                <Rectangle Stroke="White" StrokeThickness="0.5" Fill="{DynamicResource HuluBack}"/>
+                                <Path Stretch="Fill" Stroke="White" HorizontalAlignment="Center" Margin="20,-1,19.5,-1" VerticalAlignment="Stretch" Width="0.5" Data="M18.875,30.200352 L19.125,40" Grid.Row="1" />
+
+                                <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Uniform" Margin="5">
+                                    <ContentPresenter />
+                                </Viewbox>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Foreground" Value="White"/>
+            </Style>
+        </ResourceDictionary>
 
     </UserControl.Resources>
     <StackPanel>
@@ -72,10 +77,12 @@
                 <StackPanel Grid.Column="0" Orientation="Horizontal">
                     <TextBlock Name="currentPlayTime" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=CurrentPlayTime, StringFormat=h\\:mm\\:ss}"/>
                     <TextBlock HorizontalAlignment="Left" xml:space="preserve"> / </TextBlock>
-                    <TextBlock Name="totalTrackTime" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=MaxPlayTime, StringFormat=h\\:mm\\:ss}"/>
+                        <TextBlock Name="totalTrackTime" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=MaxPlayTime, StringFormat=h\\:mm\\:ss}"/>
+                        <TextBlock HorizontalAlignment="Left" xml:space="preserve"> - </TextBlock>
+                        <TextBlock HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=TrackTitle, StringFormat=h\\:mm\\:ss, TargetNullValue='No track selected'}"/>
 
-                    
-                </StackPanel>
+
+                    </StackPanel>
                     <Button DockPanel.Dock="Right" Height="20px" HorizontalAlignment="Right" Command="{Binding ElementName=MediaControlsControlName, Path=StopCommand}">Stop</Button>
                     <Button DockPanel.Dock="Right" Height="20px" HorizontalAlignment="Right">Toggle notes in trackbar</Button>
                     <Button DockPanel.Dock="Right" Height="20px" HorizontalAlignment="Right">preview on/off</Button>
@@ -89,10 +96,12 @@
             <Grid Grid.Column="4" VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="65"/>
+                    <ColumnDefinition Width="65"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Label HorizontalAlignment="Right">Volume</Label>
-                <Slider Grid.Column="1" />
+                <!--<Button Grid.Column="0" Template="{StaticResource SpeakerIcon}"/>-->
+                <Label Grid.Column="1" HorizontalAlignment="Right">Volume</Label>
+                <Slider Grid.Column="2" Maximum="100" Minimum="0"  Value="{Binding ElementName=MediaControlsControlName, Path=Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </Grid>
     </StackPanel>

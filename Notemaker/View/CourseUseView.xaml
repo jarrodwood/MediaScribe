@@ -5,25 +5,102 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d"
              xmlns:notemakerControl="clr-namespace:JayDev.Notemaker.View.Controls"
+             xmlns:notemakerCommon="clr-namespace:JayDev.Notemaker.Common"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
              x:Name="CourseUseViewName"
              d:DesignHeight="419" d:DesignWidth="988">
-    <Grid Background="#FFEFF5FF">
+    <UserControl.Resources>
+        <notemakerCommon:GridLengthValueConverter x:Key="gridLengthConverter" />
+    </UserControl.Resources>
+    <!--<Grid Background="#FFEFF5FF">-->
+    <Grid Background="#FFEFF500">
         <DockPanel Name="windowContents">
-            <Grid DockPanel.Dock="Top" Height="70">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="5"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Button Background="{x:Null}" BorderBrush="{x:Null}">
-                <StackPanel Grid.Column="0">
-                    <Image Source="/Notemaker;component/Images/4.png" Height="32" Width="32" />
-                    <TextBlock>Course List</TextBlock>
-                </StackPanel>
-                </Button>
-            </Grid>
+            <ContentControl Name="mainItemsPresenterHost" Focusable="False" DockPanel.Dock="Top">
+                <Border BorderThickness="1,0,1,1" BorderBrush="{TemplateBinding Border.BorderBrush}" Name="groupsBorder" Height="91" SnapsToDevicePixels="True">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                            <LinearGradientBrush.GradientStops>
+                                <GradientStop Color="#EEFFFFFF" Offset="0" />
+                                <GradientStop Color="#BBFFFFFF" Offset="0.1" />
+                                <GradientStop Color="#05FFFFFF" Offset="0.5" />
+                                <GradientStop Color="#20FFFFFF" Offset="1" />
+                            </LinearGradientBrush.GradientStops>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Border BorderThickness="0,0,0,1" BorderBrush="#60FFFFFF" Margin="0,0,0,1" SnapsToDevicePixels="True">
+                        <Grid DockPanel.Dock="Top" Height="70">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Background="{x:Null}" BorderBrush="{x:Null}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static notemakerCommon:NavigateMessage.MaintainCourse}">
+                                <StackPanel>
+                                    <Image Source="/Notemaker;component/Images/package_office.png" Height="48" Width="48" />
+                                    <TextBlock HorizontalAlignment="Center">Course List</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="1" Background="{x:Null}" BorderBrush="{x:Null}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static notemakerCommon:NavigateMessage.MaintainCourse}">
+                                <StackPanel>
+                                    <Image Source="/Notemaker;component/Images/system-settings-2.png" Height="48" Width="48" />
+                                    <TextBlock HorizontalAlignment="Center">Settings</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <ContentControl Grid.Column="2">
+                                <Separator Margin="0 10">
+                                    <Separator.LayoutTransform>
+                                        <RotateTransform Angle="90" />
+                                    </Separator.LayoutTransform>
+                                </Separator>
+                            </ContentControl>
+                            <Button Grid.Column="3" Background="{x:Null}" BorderBrush="{x:Null}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static notemakerCommon:NavigateMessage.MaintainCourse}">
+                                <StackPanel>
+                                    <Image Source="/Notemaker;component/Images/preferences-composer.png" Height="48" Width="48" />
+                                    <TextBlock HorizontalAlignment="Center">Write Notes</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="4" Background="{x:Null}" BorderBrush="{x:Null}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static notemakerCommon:NavigateMessage.MaintainCourse}">
+                                <StackPanel>
+                                    <Image Source="/Notemaker;component/Images/text-x-generic.png" Height="48" Width="48" />
+                                    <TextBlock HorizontalAlignment="Center">Review</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <ContentControl Grid.Column="5">
+                                <Separator Margin="0 10">
+                                    <Separator.LayoutTransform>
+                                        <RotateTransform Angle="90" />
+                                    </Separator.LayoutTransform>
+                                </Separator>
+                            </ContentControl>
+                            <Button Grid.Column="6" Background="{x:Null}" BorderBrush="{x:Null}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static notemakerCommon:NavigateMessage.MaintainCourse}">
+                                <StackPanel>
+                                    <Image Source="/Notemaker;component/Images/stock_save.png" Height="48" Width="48" />
+                                    <TextBlock HorizontalAlignment="Center">Save</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="7" Background="{x:Null}" BorderBrush="{x:Null}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static notemakerCommon:NavigateMessage.MaintainCourse}">
+                                <StackPanel>
+                                    <Image Source="/Notemaker;component/Images/seahorse.png" Height="48" Width="48" />
+                                    <TextBlock HorizontalAlignment="Center">Tags</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="8" Background="{x:Null}" BorderBrush="{x:Null}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static notemakerCommon:NavigateMessage.MaintainCourse}">
+                                <StackPanel>
+                                    <Image Source="/Notemaker;component/Images/archive-insert-2.png" Height="48" Width="48" />
+                                    <TextBlock HorizontalAlignment="Center">Export</TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </Border>
+            </ContentControl>
             <DockPanel DockPanel.Dock="Top">
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
                     <Button>Lock edits</Button>
@@ -34,7 +111,7 @@
                     <Button>Double/Single list view</Button>
                     <Button>Text size...</Button>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Background="#FFDEEFFF">
                     <Button Height="20px" Name="courseListButton">Course List</Button>
                     <Button Height="20px">To Review Mode</Button>
                     <Button Name="saveCourse" Command="{Binding SaveCourseCommand}">Save Course</Button>
@@ -48,18 +125,20 @@
                                                    CurrentPlayTime="{Binding CurrentTrackPlayPosition}"
                                                    MaxPlayTime="{Binding CurrentTrackTotalLength}"
                                                    PlayPauseCommand="{Binding PlayPauseCommand}"
-                                                   SeekToCommand="{Binding SeekToCommand}"/>
+                                                   SeekToCommand="{Binding SeekToCommand}"
+                                                   TrackTitle="{Binding CurrentTrackName}"
+                                                   Volume="{Binding Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
             <Grid Name="mainGrid">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200px"/>
+                    <ColumnDefinition Width="{Binding Path=LastEmbeddedVideoWidth, Mode=TwoWay, Converter={StaticResource gridLengthConverter}, TargetNullValue='300'}"/>
                     <ColumnDefinition Width="5"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
                 <Grid Name="leftGridColumn">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="170px" />
+                        <RowDefinition Height="{Binding Path=LastEmbeddedVideoHeight, Mode=TwoWay, Converter={StaticResource gridLengthConverter}, TargetNullValue='200'}" />
                         <RowDefinition Height="6" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>

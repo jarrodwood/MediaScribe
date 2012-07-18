@@ -12,7 +12,7 @@
         <DataGrid
             AutoGenerateColumns="False" Name="noteDataGrid" HeadersVisibility="Column" CanUserSortColumns="False" CanUserResizeRows="True" CanUserAddRows="True"
             CanUserDeleteRows="True" RowEditEnding="noteDataGrid_RowEditEnding" BeginningEdit="noteDataGrid_BeginningEdit"
-            ItemsSource="{ Binding ElementName=NotesGridControlName, Path=Notes, Mode=TwoWay}" CellEditEnding="noteDataGrid_CellEditEnding">
+            ItemsSource="{ Binding ElementName=NotesGridControlName, Path=Notes, Mode=TwoWay}"  CellEditEnding="noteDataGrid_CellEditEnding">
             <DataGrid.InputBindings>
                 <KeyBinding Key="Delete" Command="" />
             </DataGrid.InputBindings>

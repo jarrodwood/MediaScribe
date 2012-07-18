@@ -36,12 +36,13 @@ namespace JayDev.Notemaker.View.Controls
             set { SetValue(NotesProperty, value); }
         }
 
-
-        #region Dependency Properties
-
         // Using a DependencyProperty as the backing store for Notes.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NotesProperty =
             DependencyProperty.Register("Notes", typeof(ObservableCollection<Note>), typeof(NotesGridControl), new UIPropertyMetadata(null));
+
+
+        #region Dependency Properties
+
 
 
 
@@ -134,6 +135,7 @@ namespace JayDev.Notemaker.View.Controls
             _uiDispatcher = Dispatcher.CurrentDispatcher;
             Messenger.Default.Register<KeyEventArgs>(this, 999, (message) => HandleKeyPress(message));
             this.IsVisibleChanged += new DependencyPropertyChangedEventHandler(NotesGridControl_IsVisibleChanged);
+           
         }
 
 

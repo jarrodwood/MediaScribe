@@ -23,6 +23,11 @@ namespace JayDev.Notemaker
         [DataMember]
         public Nullable<double> EmbeddedVideoHeight { get; set; }
 
+        [DataMember]
+        public Track LastTrack { get; set; }
+        [DataMember]
+        public TimeSpan LastTrackPosition { get; set; }
+
         public TimeSpan CourseLength
         {
             get

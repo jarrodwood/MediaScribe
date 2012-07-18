@@ -10,6 +10,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.Messaging;
 using System.Windows.Threading;
 using System.ComponentModel;
+using System.Timers;
 
 namespace JayDev.Notemaker.ViewModel
 {
@@ -369,6 +370,46 @@ namespace JayDev.Notemaker.ViewModel
 
         #endregion
 
+
+
+        
+        #region Volume
+
+        /// <summary>
+        /// The <see cref="Volume" /> property's name.
+        /// </summary>
+        public const string VolumePropertyName = "Volume";
+
+        private double _volume = 0;
+
+        /// <summary>
+        /// Sets and gets the Volume property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public double Volume
+        {
+            get
+            {
+                return _volume;
+            }
+
+            set
+            {
+                if (_volume == value)
+                {
+                    return;
+                }
+
+                _volume = value;
+                RaisePropertyChanged(VolumePropertyName);
+            }
+        }
+
+        #endregion Volume
+
+
+		
+
         private RelayCommand _saveCourseCommand;
 
         /// <summary>
@@ -382,10 +423,7 @@ namespace JayDev.Notemaker.ViewModel
                     ?? (_saveCourseCommand = new RelayCommand(
                                           () =>
                                           {
-                                              _currentCourse.Notes = new List<Note>(Notes);
-                                              _currentCourse.EmbeddedVideoHeight = LastEmbeddedVideoHeight;
-                                              _currentCourse.EmbeddedVideoWidth = LastEmbeddedVideoWidth;
-                                              _repo.SaveCourse(_currentCourse);
+                                              SaveCourse();
                                           }));
             }
         }
@@ -446,10 +484,8 @@ namespace JayDev.Notemaker.ViewModel
                     ?? (_noteSavedCommand = new RelayCommand<Note>(
                                           (Note context) =>
                                           {
-                                              //TODO: put this on a background thread.
-                                              //when a note is saved, we save the course so that changed should never be lost...
-                                              _currentCourse.Notes = new List<Note>(Notes);
-                                              _repo.SaveCourse(_currentCourse);
+                                              ThreadHelper.ExecuteBackground(delegate { SaveCourse(); });
+                                              
                                           },
                                           (Note context) => true));
             }
@@ -469,8 +505,7 @@ namespace JayDev.Notemaker.ViewModel
                                               //the user has finished editing a note. if the body is empty, wipe it. otherwise save the course
                                               if (false == string.IsNullOrWhiteSpace(context.Body))
                                               {
-                                                  _currentCourse.Notes = new List<Note>(Notes);
-                                                  _repo.SaveCourse(_currentCourse);
+                                                  ThreadHelper.ExecuteBackground(delegate { SaveCourse(); });
                                               }
                                           },
                                           (Note context) => true));
@@ -547,8 +582,7 @@ namespace JayDev.Notemaker.ViewModel
                     ?? (_stopCommand = new RelayCommand(
                                           () =>
                                           {
-                                              PlayStatus = Common.PlayStatus.Stopped;
-                                              _player.Stop();
+                                              Stop();
                                           },
                                           () => true
                                           ));
@@ -604,6 +638,20 @@ namespace JayDev.Notemaker.ViewModel
             }
         }
 
+        private RelayCommand<NavigateMessage> _navigateCommand;
+        public RelayCommand<NavigateMessage> NavigateCommand
+        {
+            get
+            {
+                return _navigateCommand
+                    ?? (_navigateCommand = new RelayCommand<NavigateMessage>(
+                                          (NavigateMessage message) =>
+                                          {
+                                              Messenger.Default.Send(message, MessageType.Navigate);
+                                          }));
+            }
+        }
+
 
         public CourseUseViewModel(CourseRepository repo)
         {
@@ -615,6 +663,44 @@ namespace JayDev.Notemaker.ViewModel
 
             _player = new MediaPlayer();
             _player.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(_player_PropertyChanged);
+
+            this.PropertyChanged += new PropertyChangedEventHandler(CourseUseViewModel_PropertyChanged);
+
+            //set default volume to 100%
+            _updateVolumeTimer = new Timer();
+            _updateVolumeTimer.Interval = volUpdateGap;
+            _updateVolumeTimer.AutoReset = false;
+            _updateVolumeTimer.Elapsed += delegate
+            {
+                _updateVolumeTimer.Stop();
+                _player.Volume(_volume);
+            };
+            Volume = 100;
+        }
+
+
+        int lastUpdatedAtMillisecond = 0;
+        int volUpdateGap = 250;
+        /// <summary>
+        /// Since if we try to update the volume every value change of the slider (like 100 updates per second), mplayer will take a LOOONG time to process all the commands.
+        /// So instead, we'll cap it at, say, 2 changes per second... and when the user stops dragging the slider, we'll have a timer who'll go and set the last value correctly.
+        /// </summary>
+        Timer _updateVolumeTimer;
+        void CourseUseViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == VolumePropertyName)
+            {
+                if (Math.Abs(System.DateTime.Now.Millisecond - lastUpdatedAtMillisecond) > volUpdateGap)
+                {
+                    lastUpdatedAtMillisecond = System.DateTime.Now.Millisecond;
+                    _player.Volume(_volume);
+                }
+                else
+                {
+                    _updateVolumeTimer.Stop();
+                    _updateVolumeTimer.Start();
+                }
+            }
         }
 
         void _notes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -642,24 +728,13 @@ namespace JayDev.Notemaker.ViewModel
 
             if (isSaveRequired)
             {
-                SaveCourseInBackground();
+                ThreadHelper.ExecuteBackground(delegate { SaveCourse(); });
             }
         }
 
         void note_ChangeCommitted(object sender, EventArgs e)
         {
-            SaveCourseInBackground();
-        }
-
-        private void SaveCourseInBackground()
-        {
-            BackgroundWorker worker = new BackgroundWorker();
-            worker.DoWork += delegate(object s, DoWorkEventArgs args)
-            {
-                _currentCourse.Notes = new List<Note>(Notes);
-                _repo.SaveCourse(_currentCourse);
-            };
-            worker.RunWorkerAsync();
+            ThreadHelper.ExecuteBackground(delegate { SaveCourse(); });
         }
 
         void note_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -705,6 +780,18 @@ namespace JayDev.Notemaker.ViewModel
             _notes = new ObservableCollection<Note>(course.Notes);
             _notes.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(_notes_CollectionChanged);
             _tracks = new ObservableCollection<Track>(course.Tracks);
+            _lastEmbeddedVideoHeight = course.EmbeddedVideoHeight;
+            _lastEmbeddedVideoWidth = course.EmbeddedVideoWidth;
+
+            if (null != course.LastTrack)
+            {
+                //JDW: track may have been removed
+                if (course.Tracks.Any(x => x.FilePath == course.LastTrack.FilePath))
+                {
+                    SelectTrack(course.LastTrack);
+                    CurrentTrackPlayPosition = course.LastTrackPosition;
+                }
+            }
         }
 
         private void SelectTrack(Track track)
@@ -740,7 +827,16 @@ namespace JayDev.Notemaker.ViewModel
             {
                 if (_player.PlayingStatus == Common.PlayStatus.Stopped)
                 {
-                    PlayCurrentTrackFromBeginning();
+                    //If we have no play position, start from the beginning. otherwise, start at that spot
+                    if (CurrentTrackPlayPosition == new TimeSpan())
+                    {
+                        PlayCurrentTrackFromBeginning();
+                    }
+                    else
+                    {
+                        PlayCurrentTrackFromBeginning();
+                        SeekCurrentTrackToTime(CurrentTrackPlayPosition);
+                    }
                 }
                 else
                 {
@@ -769,11 +865,28 @@ namespace JayDev.Notemaker.ViewModel
                 SelectTrack(track);
                 _player.Play(track.FilePath, VideoPanelPointer);
             }
+            PlayStatus = Common.PlayStatus.Playing;
             _player.Seek(Convert.ToInt32(time.TotalSeconds));
         }
         private void SeekCurrentTrackToTime(TimeSpan time)
         {
             _player.Seek(Convert.ToInt32(time.TotalSeconds));
+        }
+
+        private void SaveCourse()
+        {
+            _currentCourse.Notes = new List<Note>(Notes);
+            _currentCourse.EmbeddedVideoHeight = LastEmbeddedVideoHeight;
+            _currentCourse.EmbeddedVideoWidth = LastEmbeddedVideoWidth;
+            _currentCourse.LastTrack = _currentTrack;
+            _currentCourse.LastTrackPosition = _currentTrackPlayPosition;
+            _repo.SaveCourse(_currentCourse);
+        }
+        private void Stop()
+        {
+            PlayStatus = Common.PlayStatus.Stopped;
+            CurrentTrackPlayPosition = new TimeSpan();
+            _player.Stop();
         }
     }
 }

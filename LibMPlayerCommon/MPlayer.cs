@@ -504,7 +504,7 @@ namespace LibMPlayerCommon
         /// </summary>
         public void Mute()
         {
-            MediaPlayer.StandardInput.WriteLine("mute");
+            MediaPlayer.StandardInput.WriteLine("pausing_keep mute");
             MediaPlayer.StandardInput.Flush();
         }
 
@@ -513,14 +513,15 @@ namespace LibMPlayerCommon
         /// Accepts a volume value of 0 - 100.
         /// </summary>
         /// <param name="volume"></param>
-        public void Volume(int volume)
+        public void Volume(int volume, bool isAbsolute)
         {
             Debug.Assert(volume >= 0 && volume <= 100);
-
-            MediaPlayer.StandardInput.WriteLine(string.Format("volume {0}", volume));
+            int absoluteAsInt = isAbsolute ? 1 : 0;
+            MediaPlayer.StandardInput.WriteLine(string.Format("pausing_keep volume {0} {1}", volume, absoluteAsInt));
             MediaPlayer.StandardInput.Flush();
 
         }
+
 
 
         /// <summary>
