@@ -120,23 +120,30 @@ namespace JayDev.Notemaker.View
 
         private void HandleMessage(string message)
         {
+            Debug.WriteLine("Handling message: " + message);
             if (message == "show")
             {
-                ThreadHelper.ExecuteSyncUI(_currentDispatcher, delegate
+                if (this.notesGrid.Visibility != Visibility.Visible)
                 {
-                    this.mediaControls.Visibility = System.Windows.Visibility.Visible;
-                    this.notesGrid.Visibility = System.Windows.Visibility.Visible;
-                    Mouse.OverrideCursor = null;
-                });
+                    ThreadHelper.ExecuteSyncUI(_currentDispatcher, delegate
+                    {
+                        this.mediaControls.Visibility = System.Windows.Visibility.Visible;
+                        this.notesGrid.Visibility = System.Windows.Visibility.Visible;
+                        Mouse.OverrideCursor = null;
+                    });
+                }
             }
             else
             {
-                ThreadHelper.ExecuteSyncUI(_currentDispatcher, delegate
+                if (this.notesGrid.Visibility != System.Windows.Visibility.Collapsed)
                 {
-                    this.mediaControls.Visibility = System.Windows.Visibility.Collapsed;
-                    this.notesGrid.Visibility = System.Windows.Visibility.Collapsed;
-                    Mouse.OverrideCursor = Cursors.None;
-                });
+                    ThreadHelper.ExecuteSyncUI(_currentDispatcher, delegate
+                    {
+                        this.mediaControls.Visibility = System.Windows.Visibility.Collapsed;
+                        this.notesGrid.Visibility = System.Windows.Visibility.Collapsed;
+                        Mouse.OverrideCursor = Cursors.None;
+                    });
+                }
             }
         }
 

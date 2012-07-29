@@ -15,11 +15,11 @@ namespace JayDev.Notemaker.Model
             return list.Courses;
         }
 
-        public void SaveCourseList(List<Course> list)
+        public SaveResult SaveCourseList(List<Course> list)
         {
             var oldList = DataAccess.GetCourseList();
             oldList.Courses = list;
-            DataAccess.SaveCourseList(oldList);
+            return DataAccess.SaveCourseList(oldList);
         }
         public Course GetCourse(string courseName)
         {

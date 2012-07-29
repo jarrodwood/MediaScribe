@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Threading;
+using System.ComponentModel;
 
 namespace JayDev.Notemaker.Common
 {
@@ -32,12 +33,24 @@ namespace JayDev.Notemaker.Common
 
         public static void ExecuteBackground(Action action)
         {
-            throw new NotImplementedException();
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork+=new DoWorkEventHandler(delegate(object obj, DoWorkEventArgs args) { action(); });
+            worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(delegate(object sender, RunWorkerCompletedEventArgs e)
+            {
+                if (e.Error != null)
+                {
+                    throw new ApplicationException("background worker failed... " + e.Error);
+                }
+            });
+            worker.RunWorkerAsync();
         }
 
         public static void ExecuteBackground(Action action, Action callback)
         {
-            throw new NotImplementedException();
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += new DoWorkEventHandler(delegate(object obj, DoWorkEventArgs args) { action(); });
+            worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(delegate(object obj, RunWorkerCompletedEventArgs args) { callback(); });
+            worker.RunWorkerAsync();
         }
     }
 }

@@ -47,10 +47,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\Program Files (x86)\Laurent Bugnion (GalaSoft)\Mvvm Light Toolkit\Binaries\WPF4\GalaSoft.MvvmLight.WPF4.dll</HintPath>
     </Reference>
+    <Reference Include="GrayscaleEffect">
+      <HintPath>..\..\..\examples\greyscale effect\WpfApplication1\GrayscaleEffect\bin\Debug\GrayscaleEffect.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.81.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86" />
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.81.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Runtime.Serialization" />
@@ -73,7 +78,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="View\CourseMaintenanceView.xaml">
+    <Page Include="View\Controls\CourseCreatePanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\NavigationButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\NavigationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\ImageButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CourseListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -105,17 +126,38 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Common\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Common\DelayedDataGridTextColumn.cs" />
+    <Compile Include="Common\ExtendedObservableCollection.cs" />
+    <Compile Include="Common\SafeObservable.cs" />
+    <Compile Include="Common\TextListAdorner.cs" />
+    <Compile Include="Common\WatermarkAdorner.cs" />
+    <Compile Include="Common\WatermarkService.cs" />
+    <Compile Include="Common\MaintenanceModeToVisibilityConverter.cs" />
+    <Compile Include="Common\CustomButtonChrome.cs" />
     <Compile Include="Common\GridLengthConverter.cs" />
     <Compile Include="Common\ThreadHelper.cs" />
     <Compile Include="Common\TimeSpanToSecondsConverter.cs" />
     <Compile Include="Common\Commands.cs" />
+    <Compile Include="Common\WPFHelpers.cs" />
     <Compile Include="Core\ContentAdorner.cs" />
     <Compile Include="Core\PreviewSliderHelper.cs" />
-    <Compile Include="ViewModel\CourseMaintenanceViewModel.cs" />
+    <Compile Include="Common\DragEnabledDataGrid.cs" />
+    <Compile Include="ViewModel\CourseListaaViewModel.cs" />
+    <Compile Include="ViewModel\CourseListViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer.cs" />
     <Compile Include="View\Controller.cs" />
+    <Compile Include="View\Controls\CourseCreatePanel.xaml.cs">
+      <DependentUpon>CourseCreatePanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\NavigationButton.xaml.cs">
+      <DependentUpon>NavigationButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Controls\MediaControlsControl.xaml.cs">
       <DependentUpon>MediaControlsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\NavigationControl.xaml.cs">
+      <DependentUpon>NavigationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Controls\NotesGridControl.xaml.cs">
       <DependentUpon>NotesGridControl.xaml</DependentUpon>
@@ -154,14 +196,17 @@
     <Compile Include="Domain\Track.cs" />
     <Compile Include="Domain\TrackTime.cs" />
     <Compile Include="Domain\Tag.cs" />
+    <Compile Include="View\Controls\ImageButton.xaml.cs">
+      <DependentUpon>ImageButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Controls\VideoControl.xaml.cs">
       <DependentUpon>VideoControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\Exceptions.cs" />
     <Compile Include="Common\ISavedFile.cs" />
     <Compile Include="Common\Utility.cs" />
-    <Compile Include="View\CourseMaintenanceView.xaml.cs">
-      <DependentUpon>CourseMaintenanceView.xaml</DependentUpon>
+    <Compile Include="View\CourseListView.xaml.cs">
+      <DependentUpon>CourseListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\CourseUseView.xaml.cs">
       <DependentUpon>CourseUseView.xaml</DependentUpon>
@@ -212,12 +257,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\PlayHS.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="View\Controls\TextFile1.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\application-vnd.oasis.opendocument.database.png" />
@@ -319,6 +358,9 @@
     <Resource Include="Images\typing-monitor.png" />
     <Resource Include="Images\video.png" />
     <Resource Include="Images\xawtv.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\system-search-4.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

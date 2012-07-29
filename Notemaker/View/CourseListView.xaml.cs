@@ -11,17 +11,23 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using JayDev.Notemaker.ViewModel;
 
 namespace JayDev.Notemaker.View
 {
     /// <summary>
     /// Interaction logic for CourseMaintenanceView.xaml
     /// </summary>
-    public partial class CourseMaintenanceView : UserControl
+    public partial class CourseListView : UserControl
     {
-        public CourseMaintenanceView()
+        private CourseListViewModel _viewModel;
+
+        public CourseListView(CourseListViewModel viewModel)
         {
             InitializeComponent();
+
+            this.DataContext = viewModel;
+            this._viewModel = viewModel;
         }
     }
 }

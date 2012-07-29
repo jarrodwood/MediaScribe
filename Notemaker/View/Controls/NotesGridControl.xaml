@@ -10,9 +10,13 @@
              x:Name="NotesGridControlName">
     <Grid>
         <DataGrid
-            AutoGenerateColumns="False" Name="noteDataGrid" HeadersVisibility="Column" CanUserSortColumns="False" CanUserResizeRows="True" CanUserAddRows="True"
+            VirtualizingStackPanel.VirtualizationMode="Recycling"
+            VirtualizingStackPanel.IsVirtualizing="True"
+            EnableColumnVirtualization="True"
+            EnableRowVirtualization="True"
+            AutoGenerateColumns="False" Name="noteDataGrid" HeadersVisibility="Column" CanUserSortColumns="True" CanUserResizeRows="False" CanUserAddRows="True"
             CanUserDeleteRows="True" RowEditEnding="noteDataGrid_RowEditEnding" BeginningEdit="noteDataGrid_BeginningEdit"
-            ItemsSource="{ Binding ElementName=NotesGridControlName, Path=Notes, Mode=TwoWay}"  CellEditEnding="noteDataGrid_CellEditEnding">
+            ItemsSource="{ Binding ElementName=NotesGridControlName, Path=Notes, Mode=TwoWay, IsAsync=True}"  CellEditEnding="noteDataGrid_CellEditEnding">
             <DataGrid.InputBindings>
                 <KeyBinding Key="Delete" Command="" />
             </DataGrid.InputBindings>
@@ -43,7 +47,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>-->
-                <DataGridTemplateColumn Header="From" Width="90">
+                <DataGridTemplateColumn Header="From" Width="90" SortMemberPath="{Binding Path=Start.StringDisplayValue}">
                     <!-- editing template -->
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
@@ -82,7 +86,7 @@
                 <!--<DataGridTextColumn Header="Note" Width="*"  
                                            Binding="{Binding Path=TitleBody}" 
                                            IsReadOnly="True"/>-->
-                <DataGridTemplateColumn Header="Note" Width="*">
+                <DataGridTemplateColumn Header="Note" Width="*" SortMemberPath="{Binding Path=Body}">
                     <!-- editing template -->
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
@@ -92,17 +96,14 @@
                     <!-- standard template -->
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock TextWrapping="Wrap">
-                                    <TextBlock.Text>
-                                        <Binding Path="TitleBody"/>
-                                    </TextBlock.Text>
-                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap"   TextOptions.TextFormattingMode="Display" Text="{Binding Path=TitleBody}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Rating" Width="50"  
                                            Binding="{Binding Rating}" 
-                                           IsReadOnly="True"/>
+                                           IsReadOnly="True"
+                                           SortMemberPath="{Binding Path=Rating}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

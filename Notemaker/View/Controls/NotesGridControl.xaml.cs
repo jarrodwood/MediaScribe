@@ -44,7 +44,9 @@ namespace JayDev.Notemaker.View.Controls
         #region Dependency Properties
 
 
-
+        public bool IsLoaded { get { return noteDataGrid.IsLoaded; } }
+        //TODO: get rid of this!
+        public DataGrid NoteGrid { get { return noteDataGrid; } }
 
 
         #region PrepareNoteForEditCommand
@@ -161,6 +163,7 @@ namespace JayDev.Notemaker.View.Controls
                     {
                         case Key.NumPad7:
                             //noteDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
+                            Debug.WriteLine("SHOW - from key");
                             Messenger.Default.Send<string>("show", 12345);
                             BeginEditNewNote();
                             e.Handled = true;

@@ -34,6 +34,12 @@ namespace JayDev.Notemaker.View
 
             _viewModel = viewModel;
             this.DataContext = _viewModel;
+            notesGrid.Loaded += new RoutedEventHandler(notesGrid_Loaded);
+        }
+
+        void notesGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            _viewModel.NotesLoadedCommand.Execute(null);
         }
 
         #region UI Event Handlers

@@ -10,6 +10,7 @@ using System.Runtime.Serialization;
 
 namespace JayDev.Notemaker.Common
 {
+
     public static class Utility
     {
         private static string applicationVersionNumber = null;

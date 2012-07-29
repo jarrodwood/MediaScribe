@@ -42,10 +42,14 @@ namespace JayDev.Notemaker
             get
             {
                 StringBuilder resultBuilder = new StringBuilder();
-                int index = ParentCourse.Tracks.FindIndex(x => x.FilePath == track.FilePath);
-                if (index != -1)
+                int indexInTrackList = -1;
+                if (null != ParentCourse)
                 {
-                    resultBuilder.Append(index + 1);
+                    ParentCourse.Tracks.FindIndex(x => x.FilePath == track.FilePath);
+                }
+                if (indexInTrackList != -1)
+                {
+                    resultBuilder.Append(indexInTrackList + 1);
                 }
                 else
                 {

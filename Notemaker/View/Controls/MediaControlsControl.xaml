@@ -10,9 +10,6 @@
              x:Name="MediaControlsControlName">
     <UserControl.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="TextFile1.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
             <nmCommon:TimeSpanToSecondsConverter x:Key="timespanConverter" />
             <DataTemplate x:Key="PreviewDataTemplate">
                 <TextBlock Text="{Binding StringFormat=\{0:00.00\}}"/>

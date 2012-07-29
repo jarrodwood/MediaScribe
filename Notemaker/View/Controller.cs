@@ -18,7 +18,7 @@ namespace JayDev.Notemaker.View
         private static MainWindow _mainWindow;
         private static Microsoft.Practices.Unity.UnityContainer _container = new Microsoft.Practices.Unity.UnityContainer();
         private static CourseUseViewModel courseUseViewModel;
-        private static CourseMaintenanceViewModel courseMaintenanceViewModel;
+        private static CourseListViewModel courseListViewModel;
         private static UserControl currentView;
 
         private static Controller _instance;
@@ -40,7 +40,7 @@ namespace JayDev.Notemaker.View
 
             CourseRepository repo = new CourseRepository();
             courseUseViewModel = new CourseUseViewModel(repo);
-            courseMaintenanceViewModel = new CourseMaintenanceViewModel(repo);
+            courseListViewModel = new CourseListViewModel(repo);
             var blah = repo.GetCourseList();
 
             if (blah.Count == 0)
@@ -54,8 +54,8 @@ namespace JayDev.Notemaker.View
             CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
             _mainWindow.Content = courseUseView;
             currentView = courseUseView;
-            Messenger.Default.Register<NavigateMessage>(Singleton, MessageType.Navigate, (message) => Navigate(message));
-
+            Messenger.Default.Register<NavigateArgs>(Singleton, MessageType.Navigate, (message) => Navigate(message));
+            Messenger.Default.Register<string>(Singleton, "errors", (error) => MessageBox.Show(error));
 
             _mainWindow.Closing += new System.ComponentModel.CancelEventHandler(_mainWindow_Closing);
         }
@@ -83,9 +83,9 @@ namespace JayDev.Notemaker.View
         static WindowState preFullscreenWindowState = WindowState.Maximized;
 
 
-        private static void Navigate(NavigateMessage message)
+        private static void Navigate(NavigateArgs args)
         {
-            switch(message) {
+            switch(args.Message) {
                 case NavigateMessage.ToggleFullscreen:
                     if (currentView is CourseUseView)
                     {
@@ -120,12 +120,18 @@ namespace JayDev.Notemaker.View
                         Mouse.OverrideCursor = null;
                     }
                     break;
-                case NavigateMessage.UseCourse:
+                case NavigateMessage.WriteCourseNotes:
+                    {
+                        CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
+                        currentView = courseUseView;
+                        _mainWindow.Content = currentView;
+                        courseUseViewModel.SetCurrentCourse(args.Course);
+                    }
                     break;
-                case NavigateMessage.MaintainCourse:
-                    CourseMaintenanceView courseMaintenanceView = new CourseMaintenanceView();
-                    currentView = courseMaintenanceView;
-                    _mainWindow.Content = courseMaintenanceView;
+                case NavigateMessage.ListCourses:
+                    CourseListView courseListView = new CourseListView(courseListViewModel);
+                    currentView = courseListView;
+                    _mainWindow.Content = currentView;
                     break;
             }
 

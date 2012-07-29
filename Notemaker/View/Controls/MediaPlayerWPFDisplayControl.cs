@@ -110,6 +110,7 @@ namespace JayDev.Notemaker.View.Controls
 
         int countDown = 0;
         Timer hoverTimer;
+        int lastMoveLocation = 0;
         protected override IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             // Handle messages...
@@ -117,19 +118,24 @@ namespace JayDev.Notemaker.View.Controls
             if(msg != 132 && msg != 70)
             //if (msg != 32 && msg != 132 && msg != 512 && msg != 33)
             {
-                //Debug.WriteLine(string.Format("Msg: {0}, wParam: {1}, lParam: {2}, handled? {3}", msg, wParam.ToInt32(), lParam.ToInt32(), handled));
+                Debug.WriteLine(string.Format("Msg: {0}, wParam: {1}, lParam: {2}, handled? {3}", msg, wParam.ToInt32(), lParam.ToInt32(), handled));
             }
             if (msg == (int)WM_Messages.WM_MOUSEMOVE)
             {
-                if (countDown <= 0)
+                if (lParam.ToInt32() != lastMoveLocation)
                 {
-                    Messenger.Default.Send("show", 12345);
-                    hoverTimer.Stop();
-                    hoverTimer.Start();
-                }
-                else
-                {
-                    countDown--;
+                    if (countDown <= 0)
+                    {
+                        Debug.WriteLine("SHOW - from timer");
+                        Messenger.Default.Send("show", 12345);
+                        hoverTimer.Stop();
+                        hoverTimer.Start();
+                    }
+                    else
+                    {
+                        countDown--;
+                    }
+                    lastMoveLocation = lParam.ToInt32();
                 }
             }
             if (msg == (int)WM_Messages.WM_MOUSELEAVE)
@@ -141,7 +147,7 @@ namespace JayDev.Notemaker.View.Controls
             {
                 //OnDoubleClick(new DoubleClickEventArgs());
                 Debug.WriteLine("double-click! yay!");
-                Messenger.Default.Send(NavigateMessage.ToggleFullscreen, MessageType.Navigate);
+                Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen), MessageType.Navigate);
 
                 //JDW: have to set it to handled, otherwise it fires the event twice.
                 handled = true;

@@ -15,7 +15,8 @@
                                                    SeekToCommand="{Binding SeekToCommand}"
                                                    TrackTitle="{Binding CurrentTrackName}"/>
 
-        <notemakerControl:NotesGridControl x:Name="notesGrid" DockPanel.Dock="Right" Width="600" 
+        <notemakerControl:NotesGridControl x:Name="notesGrid" DockPanel.Dock="Right" Width="600"
+                                           VerticalAlignment="Top"
                                                        PrepareNoteForEditCommand="{Binding PrepareNoteForEditCommand}"
                                                        NoteSavedCommand="{Binding NoteSavedCommand}"
                                                        Notes="{ Binding Notes, Mode=TwoWay}"

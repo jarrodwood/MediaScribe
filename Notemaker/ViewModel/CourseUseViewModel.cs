@@ -25,7 +25,23 @@ namespace JayDev.Notemaker.ViewModel
         private const bool IsKeepingBlankRowForEdit = true;
 
         private ObservableCollection<Note> _notes;
-        public ObservableCollection<Note> Notes { get { return _notes; } set { _notes = value; }  }
+        public ObservableCollection<Note> Notes
+        {
+            get { return _notes; }
+            set
+            {
+                if (null != _notes)
+                {
+                    _notes.CollectionChanged -= _notes_CollectionChanged;
+                }
+                _notes = value;
+                if (null != value)
+                {
+                    this.RaisePropertyChanged("Notes");
+                    _notes.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(_notes_CollectionChanged);
+                }
+            }
+        }
 
         private ObservableCollection<Track> _tracks;
         public ObservableCollection<Track> Tracks { get { return _tracks; } }
@@ -424,7 +440,8 @@ namespace JayDev.Notemaker.ViewModel
                                           () =>
                                           {
                                               SaveCourse();
-                                          }));
+                                          },
+                                          () => false == _isBusy));
             }
         }
 
@@ -628,7 +645,7 @@ namespace JayDev.Notemaker.ViewModel
                     ?? (_toggleFullscreenCommand = new RelayCommand(
                                           () =>
                                           {
-                                              Messenger.Default.Send(NavigateMessage.ToggleFullscreen, MessageType.Navigate);
+                                              Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen), MessageType.Navigate);
                                           },
                                           () => true
                     //{
@@ -647,7 +664,7 @@ namespace JayDev.Notemaker.ViewModel
                     ?? (_navigateCommand = new RelayCommand<NavigateMessage>(
                                           (NavigateMessage message) =>
                                           {
-                                              Messenger.Default.Send(message, MessageType.Navigate);
+                                              Messenger.Default.Send(new NavigateArgs(message, _currentCourse), MessageType.Navigate);
                                           }));
             }
         }
@@ -726,7 +743,7 @@ namespace JayDev.Notemaker.ViewModel
                 }
             }
 
-            if (isSaveRequired)
+            if (false == _isLoading && false == _isBusy && isSaveRequired)
             {
                 ThreadHelper.ExecuteBackground(delegate { SaveCourse(); });
             }
@@ -776,9 +793,9 @@ namespace JayDev.Notemaker.ViewModel
 
         public void SetCurrentCourse(Course course)
         {
+            _isLoading = true;
             _currentCourse = course;
-            _notes = new ObservableCollection<Note>(course.Notes);
-            _notes.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(_notes_CollectionChanged);
+            Notes = new ExtendedObservableCollection<Note>();
             _tracks = new ObservableCollection<Track>(course.Tracks);
             _lastEmbeddedVideoHeight = course.EmbeddedVideoHeight;
             _lastEmbeddedVideoWidth = course.EmbeddedVideoWidth;
@@ -792,6 +809,31 @@ namespace JayDev.Notemaker.ViewModel
                     CurrentTrackPlayPosition = course.LastTrackPosition;
                 }
             }
+        }
+
+
+        private bool _isLoading = false;
+        private bool _isBusy = false;
+
+        private RelayCommand _notesLoadedCommand;
+
+        /// <summary>
+        /// Gets the NotesLoadedCommand.
+        /// </summary>
+        public RelayCommand NotesLoadedCommand
+        {
+            get
+            {
+                return _notesLoadedCommand
+                    ?? (_notesLoadedCommand = new RelayCommand(
+                            () =>
+                            {
+                                _isBusy = true;
+                                Notes = new ObservableCollection<Note>(_currentCourse.Notes);
+                                    _isBusy = false;
+                                    _isLoading = false;
+                            }));
+}
         }
 
         private void SelectTrack(Track track)
@@ -863,6 +905,9 @@ namespace JayDev.Notemaker.ViewModel
             {
                 _player.Stop();
                 SelectTrack(track);
+            }
+            if (PlayStatus == Common.PlayStatus.Stopped || PlayStatus == Common.PlayStatus.Paused)
+            {
                 _player.Play(track.FilePath, VideoPanelPointer);
             }
             PlayStatus = Common.PlayStatus.Playing;
@@ -875,6 +920,10 @@ namespace JayDev.Notemaker.ViewModel
 
         private void SaveCourse()
         {
+            if (_isBusy)
+            {
+                throw new Exception("Error: shouldn't be trying to save when busy");
+            }
             _currentCourse.Notes = new List<Note>(Notes);
             _currentCourse.EmbeddedVideoHeight = LastEmbeddedVideoHeight;
             _currentCourse.EmbeddedVideoWidth = LastEmbeddedVideoWidth;

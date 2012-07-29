@@ -235,18 +235,23 @@ namespace JayDev.Notemaker.Common
         WM_HELP_Before0x0400 = 0x000c, //12
     }
 
+    public enum MaintenanceMode { View, Create, Edit, None }
     public enum MessageType { Navigate, RegisterReusableControl }
-    public enum NavigateMessage { ToggleFullscreen, MaintainCourse, UseCourse }
+    public enum NavigateMessage { ToggleFullscreen, ListCourses, WriteCourseNotes, ReviewCourseNotes }
     public enum ReusableControlType { VideoControl, VideoControlsControl, NotesGridControl  }
 
-    public class ReusableControlMessage
+    public class NavigateArgs
     {
-        UserControl ReusableControl { get; set; }
-        ReusableControlType Type { get; set; }
-        public ReusableControlMessage(UserControl reusableControl, ReusableControlType type)
+        public Course Course { get; set; }
+        public NavigateMessage Message { get; set; }
+        public NavigateArgs(NavigateMessage message)
         {
-            this.ReusableControl = reusableControl;
-            this.Type = type;
+            this.Message = message;
+        }
+        public NavigateArgs(NavigateMessage message, Course course)
+        {
+            this.Message = message;
+            this.Course = course;
         }
     }
 

@@ -8,6 +8,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
                     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
+                        xmlns:notemakerCommon="clr-namespace:JayDev.Notemaker.Common"
                     xmlns:primitives="clr-namespace:System.Windows.Controls.Primitives;assembly=PresentationFramework"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     >
@@ -365,6 +366,52 @@
 
     <!--DataGrid -->
     <Style TargetType='{x:Type controls:DataGrid}'>
+
+        <Setter Property="Foreground" Value="#333" />
+        <Setter Property='ScrollViewer.CanContentScroll' Value='False' />
+        <Setter Property='AutoGenerateColumns' Value='False' />
+        <Setter Property="IsTabStop" Value="True" />
+        <!-- alternating row background 1 -->
+        <Setter Property="RowBackground" Value="#EEE" />
+        <!-- alternating row background 2 -->
+        <Setter Property="Background" Value="#DDD" />
+        <!-- not used? -->
+        <Setter Property="AlternatingRowBackground" Value="#00FFFFFF" />
+        <Setter Property="GridLinesVisibility" Value="Vertical" />
+        <Setter Property="HorizontalGridLinesBrush" Value="#FFC9CACA" />
+        <Setter Property="IsTabStop" Value="True" />
+        <Setter Property="VerticalGridLinesBrush" Value="#FFA3AEB9" />
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFA3AEB9" Offset="0" />
+                    <GradientStop Color="#FFA3AEB9" Offset="0.375" />
+                    <GradientStop Color="#FFA3AEB9" Offset="0.375" />
+                    <GradientStop Color="#FFA3AEB9" Offset="1" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property='IsReadOnly' Value='False' />
+        <Setter Property='CanUserSortColumns' Value='True' />
+        <Setter Property='CanUserResizeRows' Value='False' />
+        <Setter Property='CanUserSortColumns' Value='True' />
+        <Setter Property='IsSynchronizedWithCurrentItem' Value='True'/>
+        <Setter Property="EnableRowVirtualization" Value="True" />
+        <!--<Setter Property='CellStyle' Value='{StaticResource CellStyle}' />
+        <Setter Property='RowStyle' Value='{StaticResource RowStyle}' />-->
+        <Setter Property='RowDetailsVisibilityMode' Value='VisibleWhenSelected' />
+        <Setter Property='ColumnHeaderStyle' Value='{StaticResource ColumnHeaderStyle}' />
+        <Setter Property='VerticalAlignment' Value='Center' />
+        <Setter Property='FontFamily' Value='Verdana' />
+        <!--FontSize hack-->
+        <Setter Property='FontSize' Value='10' />
+    </Style>
+
+
+
+    <!--DataGrid -->
+    <Style TargetType='{x:Type notemakerCommon:DragEnabledDataGrid}'>
 
         <Setter Property="Foreground" Value="#333" />
         <Setter Property='ScrollViewer.CanContentScroll' Value='False' />

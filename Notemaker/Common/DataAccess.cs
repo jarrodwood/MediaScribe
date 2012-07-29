@@ -7,6 +7,7 @@ using System.IO;
 using System.Xml;
 using System.Text.RegularExpressions;
 using JayDev.Notemaker.Common;
+using System.Data.SQLite;
 
 namespace JayDev.Notemaker
 {
@@ -30,6 +31,14 @@ namespace JayDev.Notemaker
         {
             try
             {
+                if (isListChangedSinceLastSave)
+                {
+                    isListChangedSinceLastSave = false;
+                }
+                else
+                {
+                    return lastSavedCourseList;
+                }
                 #region Preparation
                 //If this is the first time running the application, we won't have a data folder or a course list file... so we'll need to create some.
 
@@ -75,6 +84,8 @@ namespace JayDev.Notemaker
                         }
                     }
                 }
+
+                lastSavedCourseList = Deserialize<CourseList>(xml);
                 return result;
             }
             catch (IOException e)
@@ -83,11 +94,21 @@ namespace JayDev.Notemaker
             }
         }
 
+        static CourseList lastSavedCourseList = null;
+        static bool isListChangedSinceLastSave = true;
+
         public static SaveResult SaveCourseList(CourseList list)
         {
             SaveResult result = new SaveResult();
             try
             {
+                isListChangedSinceLastSave = true;
+                //set new IDs on the new courses
+                foreach (Course course in list.Courses.Where(x => null == x.ID))
+                {
+                    course.ID = Guid.NewGuid();
+                }
+
                 if (File.Exists(string.Format(GenericFilePath, "bkup.xml")))
                 {
                     File.Delete(string.Format(GenericFilePath, "bkup.xml"));
@@ -109,34 +130,38 @@ namespace JayDev.Notemaker
             return result;
         }
 
+        static SQLiteConnection conn = null;
+
         public static SaveResult SaveCourse(Course course)
         {
             SaveResult result = new SaveResult();
-            try
-            {
-                string sanitisedName = MakeValidFileName(course.Name);
-                string xmlData = DataAccess.Serialize(course);
-                string filePath = string.Format(GenericFilePath, sanitisedName);
-                System.IO.File.WriteAllText(filePath, xmlData, Encoding.UTF8);
 
-                CourseList list = GetCourseList();
-                list.Courses.Add(course);
-                SaveResult courseListSaveResult = SaveCourseList(list);
-                if (false == result.IsSaveSuccessful)
-                {
-                    result.Errors.Add("There was an error saving the course list: " + courseListSaveResult.ToString());
-                    return result;
-                }
+            string sanitisedName = MakeValidFileName(course.Name);
+            string xmlData = DataAccess.Serialize(course);
+            string filePath = string.Format(GenericFilePath, sanitisedName);
+            System.IO.File.WriteAllText(filePath, xmlData, Encoding.UTF8);
 
-                //Set the saved-file metadata, and get outta here
-                ISavedFile file = course as ISavedFile;
-                file.LoadedFromFileName = sanitisedName;
-                file.SavedDateTime = System.IO.File.GetLastWriteTime(filePath);
-            }
-            catch (Exception e)
+            CourseList list = GetCourseList();
+            list.Courses.Add(course);
+            SaveResult courseListSaveResult = SaveCourseList(list);
+            if (false == result.IsSaveSuccessful)
             {
-                result.Errors.Add("Error saving course: " + e.ToString());
+                result.Errors.Add("There was an error saving the course list: " + courseListSaveResult.ToString());
+                return result;
             }
+
+            //Set the saved-file metadata, and get outta here
+            ISavedFile file = course as ISavedFile;
+            file.LoadedFromFileName = sanitisedName;
+            file.SavedDateTime = System.IO.File.GetLastWriteTime(filePath);
+
+            if (null == conn)
+            {
+                string dbFilePath = string.Format(GenericFilePath, "NotemakerTest.db");
+                conn = new SQLiteConnection(@"Data Source=" + dbFilePath + ";Version=3;");
+            }
+
+
 
             return result;
         }

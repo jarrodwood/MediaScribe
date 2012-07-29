@@ -12,6 +12,8 @@ namespace JayDev.Notemaker
     public class Course : SavedFile
     {
         [DataMember]
+        public Guid ID;
+        [DataMember]
         public List<Note> Notes = new List<Note>();
         [DataMember]
         public List<Track> Tracks = new List<Track>();
