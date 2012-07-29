@@ -97,7 +97,8 @@
                     <!-- standard template -->
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock TextWrapping="Wrap"   TextOptions.TextFormattingMode="Display" Text="{Binding Path=TitleBody}" />
+                            <atb:BindableTextBlock TextWrapping="Wrap" TextOptions.TextFormattingMode="Display" MarkedupText="{Binding Path=Body}" />
+                            <!--<TextBlock TextWrapping="Wrap"   TextOptions.TextFormattingMode="Display" Text="{Binding Path=TitleBody}" />-->
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
