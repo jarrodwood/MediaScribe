@@ -39,6 +39,12 @@
     <StartupObject>JayDev.Notemaker.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.ActiveRecord">
+      <HintPath>..\..\activerecord\Castle.ActiveRecord.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\activerecord\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1673db7d5906b0ad, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\Program Files (x86)\Laurent Bugnion (GalaSoft)\Mvvm Light Toolkit\Binaries\WPF4\GalaSoft.MvvmLight.Extras.WPF4.dll</HintPath>
@@ -50,9 +56,19 @@
     <Reference Include="GrayscaleEffect">
       <HintPath>..\..\..\examples\greyscale effect\WpfApplication1\GrayscaleEffect\bin\Debug\GrayscaleEffect.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.AvalonEdit">
+      <HintPath>..\..\..\Program Files (x86)\SharpDevelop\5.0\bin\ICSharpCode.AvalonEdit.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\activerecord\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="NHibernate">
+      <HintPath>..\..\activerecord\NHibernate.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite, Version=1.0.81.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86" />
     <Reference Include="System.Data.SQLite.Linq, Version=1.0.81.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL" />
@@ -143,6 +159,7 @@
     <Compile Include="Core\ContentAdorner.cs" />
     <Compile Include="Core\PreviewSliderHelper.cs" />
     <Compile Include="Common\DragEnabledDataGrid.cs" />
+    <Compile Include="Core\SqliteConnectionProvider.cs" />
     <Compile Include="ViewModel\CourseListaaViewModel.cs" />
     <Compile Include="ViewModel\CourseListViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer.cs" />
@@ -236,6 +253,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -243,6 +263,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\AvalonTextBox\AvalonTextBox.csproj">
+      <Project>{CA7E4D71-3858-48F2-AF68-7E6DA88F79C9}</Project>
+      <Name>AvalonTextBox</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LibMPlayerCommon\LibMPlayerCommon.csproj">
       <Project>{5D3616D0-160D-4601-AB67-E1ED9111C676}</Project>
       <Name>LibMPlayerCommon</Name>

@@ -5,17 +5,23 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.ComponentModel;
 using JayDev.Notemaker.Common;
+using Castle.ActiveRecord;
 
 namespace JayDev.Notemaker
 {
     [DataContract]
     [Serializable]
+    [ActiveRecord("TrackTimes")]
     public class TrackTime : INotifyPropertyChanged, ICloneable
     {
+        [PrimaryKey("TrackTimeID")]
+        public int ID { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private Track track;
         [DataMember]
+        [BelongsTo("TrackID", Cascade = CascadeEnum.SaveUpdate)]
         public Track Track
         {
             get { return track; }
@@ -27,7 +33,10 @@ namespace JayDev.Notemaker
         }
         private TimeSpan time { get; set; }
         [DataMember]
-        public TimeSpan Time { get { return time; }
+        [Property("Time")]
+        public TimeSpan Time
+        {
+            get { return time; }
             set
             {
                 time = value;
@@ -35,17 +44,23 @@ namespace JayDev.Notemaker
             }
         }
 
-        public Course ParentCourse { get; set; }
-
         public string StringDisplayValue
         {
             get
             {
                 StringBuilder resultBuilder = new StringBuilder();
                 int indexInTrackList = -1;
-                if (null != ParentCourse)
+                if (null != Track && null != Track.ParentCourse)
                 {
-                    ParentCourse.Tracks.FindIndex(x => x.FilePath == track.FilePath);
+                    //TODO: store this in DB
+                    for (int i = 0; i < Track.ParentCourse.Tracks.Count; i++)
+                    {
+                        if (Track.ParentCourse.Tracks[i].FilePath == track.FilePath)
+                        {
+                            indexInTrackList = i;
+                            break;
+                        }
+                    }
                 }
                 if (indexInTrackList != -1)
                 {
@@ -67,10 +82,19 @@ namespace JayDev.Notemaker
             get
             {
                 StringBuilder resultBuilder = new StringBuilder();
-                int index = ParentCourse.Tracks.FindIndex(x => x.FilePath == track.FilePath);
-                if (index != -1)
+                //TODO: store this in DB
+                int indexInTrackList = -1;
+                for (int i = 0; i < Track.ParentCourse.Tracks.Count; i++)
                 {
-                    resultBuilder.Append((index + 1).ToString("0000"));
+                    if (Track.ParentCourse.Tracks[i].FilePath == track.FilePath)
+                    {
+                        indexInTrackList = i;
+                        break;
+                    }
+                }
+                if (indexInTrackList != -1)
+                {
+                    resultBuilder.Append((indexInTrackList + 1).ToString("0000"));
                 }
                 else
                 {
@@ -103,7 +127,6 @@ namespace JayDev.Notemaker
             TrackTime clone = new TrackTime();
             clone.time = this.time;
             clone.Track = (Track)this.Track.Clone();
-            clone.ParentCourse = this.ParentCourse;
             return clone;
         }
     }

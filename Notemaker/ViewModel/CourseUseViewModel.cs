@@ -16,6 +16,8 @@ namespace JayDev.Notemaker.ViewModel
 {
     public class CourseUseViewModel : GalaSoft.MvvmLight.ViewModelBase
     {
+        #region Private Local Variables, Constants
+
         private Course _currentCourse;
         private Track _currentTrack;
         private CourseRepository _repo;
@@ -23,6 +25,12 @@ namespace JayDev.Notemaker.ViewModel
         private Dispatcher _uiDispatcher;
 
         private const bool IsKeepingBlankRowForEdit = true;
+
+        #endregion 
+
+        #region Public Properties & Backing Fields
+
+        #region Notes
 
         private ObservableCollection<Note> _notes;
         public ObservableCollection<Note> Notes
@@ -43,8 +51,14 @@ namespace JayDev.Notemaker.ViewModel
             }
         }
 
+        #endregion
+
+        #region Tracks
+
         private ObservableCollection<Track> _tracks;
         public ObservableCollection<Track> Tracks { get { return _tracks; } }
+
+        #endregion
 
         #region CourseName
 
@@ -386,9 +400,6 @@ namespace JayDev.Notemaker.ViewModel
 
         #endregion
 
-
-
-        
         #region Volume
 
         /// <summary>
@@ -423,8 +434,9 @@ namespace JayDev.Notemaker.ViewModel
 
         #endregion Volume
 
+        #endregion
 
-		
+        #region Commands
 
         private RelayCommand _saveCourseCommand;
 
@@ -482,8 +494,9 @@ namespace JayDev.Notemaker.ViewModel
                                                   context.Start = new TrackTime()
                                                   {
                                                       Time = CurrentTrackPlayPosition,
-                                                      Track = _currentTrack,
-                                                      ParentCourse = _currentCourse
+                                                      Track = _currentTrack
+                                                      //,
+                                                      //ParentCourse = _currentCourse
                                                   };
                                               }
                                           },
@@ -501,7 +514,8 @@ namespace JayDev.Notemaker.ViewModel
                     ?? (_noteSavedCommand = new RelayCommand<Note>(
                                           (Note context) =>
                                           {
-                                              ThreadHelper.ExecuteBackground(delegate { SaveCourse(); });
+                                              throw new Exception("where do we call this from? code disabled in meantime..");
+                                              //ThreadHelper.ExecuteBackground(delegate { SaveCourse(); });
                                               
                                           },
                                           (Note context) => true));
@@ -518,11 +532,9 @@ namespace JayDev.Notemaker.ViewModel
                     ?? (_noteEditCompletedCommand = new RelayCommand<Note>(
                                           (Note context) =>
                                           {
-                                              //TODO: put this on a background thread.
-                                              //the user has finished editing a note. if the body is empty, wipe it. otherwise save the course
                                               if (false == string.IsNullOrWhiteSpace(context.Body))
                                               {
-                                                  ThreadHelper.ExecuteBackground(delegate { SaveCourse(); });
+                                                  ThreadHelper.ExecuteBackground(delegate { _repo.SaveNote(_currentCourse, context); });
                                               }
                                           },
                                           (Note context) => true));
@@ -541,8 +553,9 @@ namespace JayDev.Notemaker.ViewModel
                                               context.Start = new TrackTime()
                                               {
                                                   Track = _currentTrack,
-                                                  Time = CurrentTrackPlayPosition,
-                                                  ParentCourse = _currentCourse
+                                                  Time = CurrentTrackPlayPosition
+                                                  //,
+                                                  //ParentCourse = _currentCourse
                                               };
                                           },
                                           (Note context) => true));
@@ -561,8 +574,9 @@ namespace JayDev.Notemaker.ViewModel
                                               context.End = new TrackTime()
                                               {
                                                   Track = _currentTrack,
-                                                  Time = CurrentTrackPlayPosition,
-                                                  ParentCourse = _currentCourse
+                                                  Time = CurrentTrackPlayPosition
+                                                  //,
+                                                  //ParentCourse = _currentCourse
                                               };
                                           },
                                           (Note context) => true));
@@ -669,6 +683,30 @@ namespace JayDev.Notemaker.ViewModel
             }
         }
 
+        private RelayCommand _notesLoadedCommand;
+
+        /// <summary>
+        /// Gets the NotesLoadedCommand.
+        /// </summary>
+        public RelayCommand NotesLoadedCommand
+        {
+            get
+            {
+                return _notesLoadedCommand
+                    ?? (_notesLoadedCommand = new RelayCommand(
+                            () =>
+                            {
+                                _isBusy = true;
+                                Notes = new ObservableCollection<Note>(_currentCourse.Notes);
+                                _isBusy = false;
+                                _isLoading = false;
+                            }));
+            }
+        }
+
+        #endregion
+
+        #region Constructor
 
         public CourseUseViewModel(CourseRepository repo)
         {
@@ -694,6 +732,9 @@ namespace JayDev.Notemaker.ViewModel
             };
             Volume = 100;
         }
+
+        #endregion
+
 
 
         int lastUpdatedAtMillisecond = 0;
@@ -751,6 +792,7 @@ namespace JayDev.Notemaker.ViewModel
 
         void note_ChangeCommitted(object sender, EventArgs e)
         {
+            throw new Exception("need to save note instead of whole course");
             ThreadHelper.ExecuteBackground(delegate { SaveCourse(); });
         }
 
@@ -814,27 +856,6 @@ namespace JayDev.Notemaker.ViewModel
 
         private bool _isLoading = false;
         private bool _isBusy = false;
-
-        private RelayCommand _notesLoadedCommand;
-
-        /// <summary>
-        /// Gets the NotesLoadedCommand.
-        /// </summary>
-        public RelayCommand NotesLoadedCommand
-        {
-            get
-            {
-                return _notesLoadedCommand
-                    ?? (_notesLoadedCommand = new RelayCommand(
-                            () =>
-                            {
-                                _isBusy = true;
-                                Notes = new ObservableCollection<Note>(_currentCourse.Notes);
-                                    _isBusy = false;
-                                    _isLoading = false;
-                            }));
-}
-        }
 
         private void SelectTrack(Track track)
         {

@@ -5,19 +5,28 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Collections.ObjectModel;
 using System.Windows;
+using Castle.ActiveRecord;
 
 namespace JayDev.Notemaker
 {
     [DataContract]
-    public class Course : SavedFile
+    [ActiveRecord("Courses")]
+    public class Course : ActiveRecordBase<Course>
     {
+        [PrimaryKey("CourseID")]
+        public int ID { get; set; }
+
+        public IList<Note> _notes = new List<Note>();
         [DataMember]
-        public Guid ID;
+        [HasMany(typeof(Note), Table = "Notes", ColumnKey = "CourseID", Cascade = ManyRelationCascadeEnum.None)]
+        public IList<Note> Notes { get { return _notes; } set { _notes = value; } }
+
+        public IList<Track> _tracks = new List<Track>();
         [DataMember]
-        public List<Note> Notes = new List<Note>();
+        [HasMany(typeof(Track), Table = "Tracks", ColumnKey = "CourseID", Cascade = ManyRelationCascadeEnum.None)]
+        public IList<Track> Tracks { get { return _tracks; } set { _tracks = value; } }
         [DataMember]
-        public List<Track> Tracks = new List<Track>();
-        [DataMember]
+        [Property("Name")]
         public string Name { get; set; }
 
         [DataMember]

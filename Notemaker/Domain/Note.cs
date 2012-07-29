@@ -7,13 +7,22 @@ using System.ComponentModel;
 using JayDev.Notemaker.Common;
 using System.Reflection;
 using System.Collections.ObjectModel;
+using Castle.ActiveRecord;
+using System.Windows.Documents;
 
 namespace JayDev.Notemaker
 {
     [DataContract]
     [Serializable]
-    public class Note : INotifyPropertyChanged, IEditableObject, ICloneable
+    [ActiveRecord("Notes")]
+    public class Note : ActiveRecordBase<Note>, INotifyPropertyChanged, IEditableObject, ICloneable
     {
+        [PrimaryKey("NoteID")]
+        public int ID { get; set; }
+
+        [BelongsTo("CourseID")]
+        public Course ParentCourse { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private TrackTime _start;
@@ -23,6 +32,7 @@ namespace JayDev.Notemaker
         public event ObjectChangeCommittedEventHandler ChangeCommitted;
 
         [DataMember]
+        [BelongsTo("StartTrackTimeID", Cascade = CascadeEnum.SaveUpdate)]
         public TrackTime Start
         {
             get { return _start; }
@@ -58,6 +68,7 @@ namespace JayDev.Notemaker
         public TrackTime _end;
 
         [DataMember]
+        [BelongsTo("EndTrackTimeID", Cascade = CascadeEnum.SaveUpdate)]
         public TrackTime End
         {
             get { return _end; }
@@ -101,6 +112,7 @@ namespace JayDev.Notemaker
 
         private string _body;
         [DataMember]
+        [Property("Body")]
         public string Body
         {
             get { return _body; }
@@ -113,6 +125,7 @@ namespace JayDev.Notemaker
 
         private int _rating;
         [DataMember]
+        [Property("Rating")]
         public int Rating
         {
             get { return _rating; }
@@ -122,6 +135,13 @@ namespace JayDev.Notemaker
                 OnPropertyChanged("Rating");
             }
         }
+
+
+        [Property("BodyInlines")]
+        public List<Inline> BodyInlines { get; set; }
+
+        [Property("BodyStripped")]
+        public string BodyStripped { get; set; }
 
         private ObservableCollection<Tag> _tags;
         [DataMember]

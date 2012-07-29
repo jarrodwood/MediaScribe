@@ -43,7 +43,8 @@ namespace JayDev.Notemaker
                 //If this is the first time running the application, we won't have a data folder or a course list file... so we'll need to create some.
 
                 //If data folder doesn't exist, create it.
-                if (false == Directory.Exists(ApplicationFolderPath)) {
+                if (false == Directory.Exists(ApplicationFolderPath))
+                {
                     Directory.CreateDirectory(ApplicationFolderPath);
                 }
                 string fileName = string.Format(GenericFilePath, CourseListFileName);
@@ -65,22 +66,29 @@ namespace JayDev.Notemaker
                 string xml = System.IO.File.ReadAllText(fileName);
                 result = Deserialize<CourseList>(xml);
 
-                    if (result.VersionNumber != Utility.ApplicationVersionNumber)
+                if (result.VersionNumber != Utility.ApplicationVersionNumber)
                 {
                     throw new ApplicationException("Todo: course data is outdated");
                 }
 
                 foreach (var course in result.Courses)
                 {
-                    foreach (var note in course.Notes)
+                    foreach (Track track in course.Tracks)
                     {
+                        track.ParentCourse = course;
+                    }
+
+                    foreach (Note note in course.Notes)
+                    {
+                        note.ParentCourse = course;
+
                         if (null != note.Start)
                         {
-                            note.Start.ParentCourse = course;
+                            note.Start.Track = course.Tracks.First(x => x.FilePath == note.Start.Track.FilePath);
                         }
                         if (null != note.End)
                         {
-                            note.End.ParentCourse = course;
+                            note.End.Track = course.Tracks.First(x => x.FilePath == note.End.Track.FilePath);
                         }
                     }
                 }
@@ -90,7 +98,7 @@ namespace JayDev.Notemaker
             }
             catch (IOException e)
             {
-                throw new DataAccessException("An error has occured attempting to load the course list.", e);
+                throw new Exception("An error has occured attempting to load the course list.", e);
             }
         }
 
@@ -103,11 +111,6 @@ namespace JayDev.Notemaker
             try
             {
                 isListChangedSinceLastSave = true;
-                //set new IDs on the new courses
-                foreach (Course course in list.Courses.Where(x => null == x.ID))
-                {
-                    course.ID = Guid.NewGuid();
-                }
 
                 if (File.Exists(string.Format(GenericFilePath, "bkup.xml")))
                 {
@@ -119,8 +122,8 @@ namespace JayDev.Notemaker
                 System.IO.File.WriteAllText(filePath, xmlData, Encoding.UTF8);
 
                 //Set the saved-file metadata, and get outta here
-                ISavedFile file = list as ISavedFile;
-                file.SavedDateTime = System.IO.File.GetLastWriteTime(filePath);
+                //ISavedFile file = list as ISavedFile;
+                //file.SavedDateTime = System.IO.File.GetLastWriteTime(filePath);
             }
             catch (Exception e)
             {
@@ -129,8 +132,6 @@ namespace JayDev.Notemaker
 
             return result;
         }
-
-        static SQLiteConnection conn = null;
 
         public static SaveResult SaveCourse(Course course)
         {
@@ -150,16 +151,11 @@ namespace JayDev.Notemaker
                 return result;
             }
 
-            //Set the saved-file metadata, and get outta here
-            ISavedFile file = course as ISavedFile;
-            file.LoadedFromFileName = sanitisedName;
-            file.SavedDateTime = System.IO.File.GetLastWriteTime(filePath);
-
-            if (null == conn)
-            {
-                string dbFilePath = string.Format(GenericFilePath, "NotemakerTest.db");
-                conn = new SQLiteConnection(@"Data Source=" + dbFilePath + ";Version=3;");
-            }
+            //if (null == conn)
+            //{
+            //    string dbFilePath = string.Format(GenericFilePath, "NotemakerTest.db");
+            //    conn = new SQLiteConnection(@"Data Source=" + dbFilePath + ";Version=3;");
+            //}
 
 
 
@@ -173,11 +169,12 @@ namespace JayDev.Notemaker
             string sanitisedName = MakeValidFileName(courseName);
             System.IO.File.ReadAllText(string.Format(GenericFilePath, sanitisedName));
 
-            foreach (var note in result.Notes)
-            {
-                note.Start.ParentCourse = result;
-                note.End.ParentCourse = result;
-            }
+            //TODO
+            //foreach (var note in result.Notes)
+            //{
+            //    note.Start.ParentCourse = result;
+            //    note.End.ParentCourse = result;
+            //}
             return result;
         }
 

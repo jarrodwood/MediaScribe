@@ -18,7 +18,7 @@ namespace JayDev.Notemaker.ViewModel
 
         private CourseRepository _repo;
         private Dispatcher _uiDispatcher;
-        private Guid? _selectedCourseID;
+        private int? _selectedCourseID;
 
         #endregion
 
