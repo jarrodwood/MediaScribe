@@ -7,33 +7,27 @@ using System.ComponentModel;
 using JayDev.Notemaker.Common;
 using System.Reflection;
 using System.Collections.ObjectModel;
-using Castle.ActiveRecord;
-using System.Windows.Documents;
 
 namespace JayDev.Notemaker
 {
-    [DataContract]
     [Serializable]
-    [ActiveRecord("Notes")]
-    public class Note : ActiveRecordBase<Note>, INotifyPropertyChanged, IEditableObject, ICloneable
+    public class Note : INotifyPropertyChanged, IEditableObject, ICloneable
     {
-        [PrimaryKey("NoteID")]
-        public int ID { get; set; }
+        public virtual int? ID { get; protected set; }
 
-        [BelongsTo("CourseID")]
-        public Course ParentCourse { get; set; }
+        public virtual int ParentCourseID { get; set; }
+        public virtual Course ParentCourse { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public virtual event PropertyChangedEventHandler PropertyChanged;
 
         private TrackTime _start;
 
         public delegate void ObjectChangeCommittedEventHandler(object sender, EventArgs e);
 
-        public event ObjectChangeCommittedEventHandler ChangeCommitted;
+        public virtual event ObjectChangeCommittedEventHandler ChangeCommitted;
 
         [DataMember]
-        [BelongsTo("StartTrackTimeID", Cascade = CascadeEnum.SaveUpdate)]
-        public TrackTime Start
+        public virtual TrackTime Start
         {
             get { return _start; }
             set
@@ -63,13 +57,12 @@ namespace JayDev.Notemaker
             OnPropertyChanged("Start");
         }
 
-        public bool IsDirty { get; set; }
+        public virtual bool IsDirty { get; set; }
 
-        public TrackTime _end;
+        private TrackTime _end;
 
         [DataMember]
-        [BelongsTo("EndTrackTimeID", Cascade = CascadeEnum.SaveUpdate)]
-        public TrackTime End
+        public virtual TrackTime End
         {
             get { return _end; }
             set
@@ -100,7 +93,7 @@ namespace JayDev.Notemaker
         }
         private string _title;
         [DataMember]
-        public string Title
+        public virtual string Title
         {
             get { return _title; }
             set
@@ -112,8 +105,7 @@ namespace JayDev.Notemaker
 
         private string _body;
         [DataMember]
-        [Property("Body")]
-        public string Body
+        public virtual string Body
         {
             get { return _body; }
             set
@@ -125,8 +117,7 @@ namespace JayDev.Notemaker
 
         private int _rating;
         [DataMember]
-        [Property("Rating")]
-        public int Rating
+        public virtual int Rating
         {
             get { return _rating; }
             set
@@ -136,16 +127,11 @@ namespace JayDev.Notemaker
             }
         }
 
-
-        [Property("BodyInlines")]
-        public List<Inline> BodyInlines { get; set; }
-
-        [Property("BodyStripped")]
-        public string BodyStripped { get; set; }
+        public virtual string BodyStripped { get; set; }
 
         private ObservableCollection<Tag> _tags;
         [DataMember]
-        public ObservableCollection<Tag> Tags
+        public virtual ObservableCollection<Tag> Tags
         {
             get { return _tags; }
             set
@@ -171,7 +157,7 @@ namespace JayDev.Notemaker
             OnPropertyChanged("Tags");
         }
 
-        public string TitleBody
+        public virtual string TitleBody
         {
             get
             {
@@ -195,7 +181,7 @@ namespace JayDev.Notemaker
         }
 
         // Create the OnPropertyChanged method to raise the event
-        protected void OnPropertyChanged(string name)
+        public virtual void OnPropertyChanged(string name)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null)
@@ -208,7 +194,7 @@ namespace JayDev.Notemaker
         private Note _versionBeforeEdit = null;
         // Summary:
         //     Begins an edit on an object.
-        public void BeginEdit()
+        public virtual void BeginEdit()
         {
             //JDW: DataGrid control calls BeginEdit twice. this is known datagrid behaviour. ref: http://stackoverflow.com/questions/4450878/wpf-datagrid-calls-beginedit-on-an-ieditableobject-two-times
             if (false == IsDirty)
@@ -218,14 +204,14 @@ namespace JayDev.Notemaker
             }
         }
 
-        public object Clone()
+        public virtual object Clone()
         {
             Note clone = new Note();
             DeepCopy(this, clone);
             return clone;
         }
 
-        public void CancelEdit()
+        public virtual void CancelEdit()
         {
             //JDW: DataGrid control calls CancelEdit twice. this is known datagrid behaviour. ref: http://stackoverflow.com/questions/4450878/wpf-datagrid-calls-beginedit-on-an-ieditableobject-two-times
             if (IsDirty)
@@ -254,7 +240,7 @@ namespace JayDev.Notemaker
         // Summary:
         //     Pushes changes since the last System.ComponentModel.IEditableObject.BeginEdit()
         //     or System.ComponentModel.IBindingList.AddNew() call into the underlying object.
-        public void EndEdit()
+        public virtual void EndEdit()
         {
             //JDW: DataGrid control calls CancelEdit twice. this is known datagrid behaviour. ref: http://stackoverflow.com/questions/4450878/wpf-datagrid-calls-beginedit-on-an-ieditableobject-two-times
             if (IsDirty)

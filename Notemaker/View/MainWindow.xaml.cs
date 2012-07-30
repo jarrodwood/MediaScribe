@@ -67,11 +67,11 @@ namespace JayDev.Notemaker.View
             {
                 var a = new Discover(track);
                 Console.WriteLine("Length: {0}, is video: {1}, title: {2}", a.Length, a.Video, a.Title);
-                currentCourse.Tracks.Add(new Track() { FilePath = track, Length = new TimeSpan(0, 0, a.Length), IsVideo = a.Video, AspectRatio = a.AspectRatio });
+                currentCourse.Tracks.Add(new Track() { FilePath = track, Length = new TimeSpan(0, 0, a.Length), IsVideo = a.Video? 1 : 0, AspectRatio = a.AspectRatio });
             }
 
             result.Add(currentCourse);
-            repo.SaveCourseList(result);
+            //repo.SaveCourseList(result);
         }
     }
 }

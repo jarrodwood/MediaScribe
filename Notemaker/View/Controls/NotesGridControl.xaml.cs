@@ -17,6 +17,7 @@ using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Windows.Controls.Primitives;
 using System.ComponentModel;
 using System.Diagnostics;
+using JayDev.Notemaker.Common;
 
 namespace JayDev.Notemaker.View.Controls
 {
@@ -281,6 +282,16 @@ namespace JayDev.Notemaker.View.Controls
         public void CancelEdit()
         {
             noteDataGrid.CancelEdit(DataGridEditingUnit.Row);
+        }
+
+        private void noteDataGrid_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
+        {
+            //set focus on the textbox, so the user can just start typing.
+            var textbox = UIHelpers.GetVisualChild<AvalonTextBox.AvalonTextBox>(e.Row);
+            if (textbox != null)
+            {
+                Keyboard.Focus(textbox);
+            }
         }
 
     }

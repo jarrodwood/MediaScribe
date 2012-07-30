@@ -10,8 +10,8 @@ using GalaSoft.MvvmLight.Messaging;
 using System.Diagnostics;
 using System.Windows.Input;
 using System.Windows.Controls;
-using Castle.ActiveRecord.Framework;
-using Castle.ActiveRecord;
+using log4net.Config;
+using JayDev.Notemaker.Core;
 
 namespace JayDev.Notemaker.View
 {
@@ -39,10 +39,13 @@ namespace JayDev.Notemaker.View
             _mainWindow = mainWindow;
             _mainWindow.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
 
+            var logconfig = new System.IO.FileInfo("log4net.xml");
+            if (logconfig.Exists)
+            {
+                log4net.Config.XmlConfigurator.ConfigureAndWatch(logconfig);
+            }  
 
-            IConfigurationSource source = System.Configuration.ConfigurationManager.GetSection("activerecord") as IConfigurationSource;
-            ActiveRecordStarter.Initialize(source, typeof(Track), typeof(Course), typeof(Note), typeof(TrackTime));
-
+            Console.SetOut(new DebugTextWriter());
 
             CourseRepository repo = new CourseRepository();
             courseUseViewModel = new CourseUseViewModel(repo);
@@ -64,18 +67,19 @@ namespace JayDev.Notemaker.View
             Messenger.Default.Register<string>(Singleton, "errors", (error) => MessageBox.Show(error));
 
             _mainWindow.Closing += new System.ComponentModel.CancelEventHandler(_mainWindow_Closing);
-
-
-
-
-
         }
 
         void _mainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            
-            //NOTE: no longer required, since we save each individual change.
-            //courseUseViewModel.SaveCourseCommand.Execute(null);
+            try
+            {
+                //save the course -- specifically intended for the embedded video height/width.
+                courseUseViewModel.SaveCourseCommand.Execute(null);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
 

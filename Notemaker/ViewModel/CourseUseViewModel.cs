@@ -494,9 +494,8 @@ namespace JayDev.Notemaker.ViewModel
                                                   context.Start = new TrackTime()
                                                   {
                                                       Time = CurrentTrackPlayPosition,
-                                                      Track = _currentTrack
-                                                      //,
-                                                      //ParentCourse = _currentCourse
+                                                      Track = _currentTrack,
+                                                      ParentCourse = _currentCourse
                                                   };
                                               }
                                           },
@@ -534,7 +533,8 @@ namespace JayDev.Notemaker.ViewModel
                                           {
                                               if (false == string.IsNullOrWhiteSpace(context.Body))
                                               {
-                                                  ThreadHelper.ExecuteBackground(delegate { _repo.SaveNote(_currentCourse, context); });
+                                                  //ThreadHelper.ExecuteBackground(delegate { _repo.SaveNote(_currentCourse, context); });
+                                                  //_repo.SaveNote(_currentCourse, context);
                                               }
                                           },
                                           (Note context) => true));
@@ -553,9 +553,8 @@ namespace JayDev.Notemaker.ViewModel
                                               context.Start = new TrackTime()
                                               {
                                                   Track = _currentTrack,
-                                                  Time = CurrentTrackPlayPosition
-                                                  //,
-                                                  //ParentCourse = _currentCourse
+                                                  Time = CurrentTrackPlayPosition,
+                                                  ParentCourse = _currentCourse
                                               };
                                           },
                                           (Note context) => true));
@@ -574,9 +573,8 @@ namespace JayDev.Notemaker.ViewModel
                                               context.End = new TrackTime()
                                               {
                                                   Track = _currentTrack,
-                                                  Time = CurrentTrackPlayPosition
-                                                  //,
-                                                  //ParentCourse = _currentCourse
+                                                  Time = CurrentTrackPlayPosition,
+                                                  ParentCourse = _currentCourse
                                               };
                                           },
                                           (Note context) => true));
@@ -763,7 +761,10 @@ namespace JayDev.Notemaker.ViewModel
 
         void _notes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            bool isSaveRequired = false;
+            //if we're still loading, we don't care about any changes going on.
+            if (_isLoading)
+                return;
+
             if (null != e.NewItems)
             {
                 foreach (Note note in e.NewItems)
@@ -771,7 +772,9 @@ namespace JayDev.Notemaker.ViewModel
                     note.PropertyChanged += new PropertyChangedEventHandler(note_PropertyChanged);
                     note.ChangeCommitted += new Note.ObjectChangeCommittedEventHandler(note_ChangeCommitted);
                     if (false == note.IsDirty && false == string.IsNullOrWhiteSpace(note.Body))
-                        isSaveRequired = true;
+                    {
+                        _repo.SaveNote(_currentCourse, note);
+                    }
                 }
             }
             if (null != e.OldItems)
@@ -780,20 +783,19 @@ namespace JayDev.Notemaker.ViewModel
                 {
                     note.PropertyChanged -= this.note_PropertyChanged;
                     note.ChangeCommitted -= note_ChangeCommitted;
-                    isSaveRequired = true;
-                }
-            }
 
-            if (false == _isLoading && false == _isBusy && isSaveRequired)
-            {
-                ThreadHelper.ExecuteBackground(delegate { SaveCourse(); });
+                    _repo.DeleteNote(note);
+                }
             }
         }
 
         void note_ChangeCommitted(object sender, EventArgs e)
         {
-            throw new Exception("need to save note instead of whole course");
-            ThreadHelper.ExecuteBackground(delegate { SaveCourse(); });
+            Note note = sender as Note;
+            if (false == string.IsNullOrWhiteSpace(note.Body))
+            {
+                _repo.SaveNote(_currentCourse, note);
+            }
         }
 
         void note_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -806,7 +808,7 @@ namespace JayDev.Notemaker.ViewModel
         {
             switch(e.Key) {
                 case Key.NumPad0:
-                    _player.PlayPause();
+                    _player.TogglePause();
                     e.Handled = true;
                     break;
                 case Key.NumPad1:
@@ -842,13 +844,13 @@ namespace JayDev.Notemaker.ViewModel
             _lastEmbeddedVideoHeight = course.EmbeddedVideoHeight;
             _lastEmbeddedVideoWidth = course.EmbeddedVideoWidth;
 
-            if (null != course.LastTrack)
+            if (null != course.LastPlayedTrack)
             {
                 //JDW: track may have been removed
-                if (course.Tracks.Any(x => x.FilePath == course.LastTrack.FilePath))
+                if (course.Tracks.Any(x => x.FilePath == course.LastPlayedTrack.FilePath))
                 {
-                    SelectTrack(course.LastTrack);
-                    CurrentTrackPlayPosition = course.LastTrackPosition;
+                    SelectTrack(course.LastPlayedTrack);
+                    CurrentTrackPlayPosition = course.LastPlayedTrackPosition;
                 }
             }
         }
@@ -868,6 +870,8 @@ namespace JayDev.Notemaker.ViewModel
             CurrentTrackName = _currentTrack.StringDisplayValue;
             //Propert
             CurrentTrackTotalLength = track.Length;
+
+            PlayCurrentTrackFromBeginning();
         }
 
 
@@ -911,7 +915,7 @@ namespace JayDev.Notemaker.ViewModel
                     {
                         PlayStatus = Common.PlayStatus.Paused;
                     }
-                    _player.PlayPause();
+                    _player.TogglePause();
                 }
             }
         }
@@ -945,11 +949,10 @@ namespace JayDev.Notemaker.ViewModel
             {
                 throw new Exception("Error: shouldn't be trying to save when busy");
             }
-            _currentCourse.Notes = new List<Note>(Notes);
             _currentCourse.EmbeddedVideoHeight = LastEmbeddedVideoHeight;
             _currentCourse.EmbeddedVideoWidth = LastEmbeddedVideoWidth;
-            _currentCourse.LastTrack = _currentTrack;
-            _currentCourse.LastTrackPosition = _currentTrackPlayPosition;
+            _currentCourse.LastPlayedTrack = _currentTrack;
+            _currentCourse.LastPlayedTrackPosition = _currentTrackPlayPosition;
             _repo.SaveCourse(_currentCourse);
         }
         private void Stop()

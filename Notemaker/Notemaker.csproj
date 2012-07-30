@@ -11,7 +11,8 @@
     <RootNamespace>JayDev.Notemaker</RootNamespace>
     <AssemblyName>Notemaker</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -25,6 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -39,12 +41,6 @@
     <StartupObject>JayDev.Notemaker.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.ActiveRecord">
-      <HintPath>..\..\activerecord\Castle.ActiveRecord.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Core">
-      <HintPath>..\..\activerecord\Castle.Core.dll</HintPath>
-    </Reference>
     <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1673db7d5906b0ad, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\Program Files (x86)\Laurent Bugnion (GalaSoft)\Mvvm Light Toolkit\Binaries\WPF4\GalaSoft.MvvmLight.Extras.WPF4.dll</HintPath>
@@ -59,13 +55,14 @@
     <Reference Include="ICSharpCode.AvalonEdit">
       <HintPath>..\..\..\Program Files (x86)\SharpDevelop\5.0\bin\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
+    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\nhibernate\Required_Bins\Iesi.Collections.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\activerecord\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="NHibernate">
-      <HintPath>..\..\activerecord\NHibernate.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -147,10 +144,14 @@
     <Compile Include="Common\ExtendedObservableCollection.cs" />
     <Compile Include="Common\SafeObservable.cs" />
     <Compile Include="Common\TextListAdorner.cs" />
-    <Compile Include="Common\WatermarkAdorner.cs" />
-    <Compile Include="Common\WatermarkService.cs" />
+    <Compile Include="Core\DebugTextWriter.cs" />
+    <Compile Include="Core\ExtensionMethods.cs" />
+    <Compile Include="Core\LambdaComparer.cs" />
+    <Compile Include="Core\NHibernateHelper.cs" />
+    <Compile Include="Core\WatermarkAdorner.cs" />
+    <Compile Include="Core\WatermarkService.cs" />
     <Compile Include="Common\MaintenanceModeToVisibilityConverter.cs" />
-    <Compile Include="Common\CustomButtonChrome.cs" />
+    <Compile Include="Core\CustomButtonChrome.cs" />
     <Compile Include="Common\GridLengthConverter.cs" />
     <Compile Include="Common\ThreadHelper.cs" />
     <Compile Include="Common\TimeSpanToSecondsConverter.cs" />
@@ -180,7 +181,6 @@
       <DependentUpon>NotesGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Domain\CourseList.cs" />
-    <Compile Include="Domain\SavedFile.cs" />
     <Compile Include="Model\CourseRepository.cs" />
     <Compile Include="Common\DataAccess.cs" />
     <Compile Include="Domain\Course.cs" />
@@ -220,7 +220,6 @@
       <DependentUpon>VideoControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\Exceptions.cs" />
-    <Compile Include="Common\ISavedFile.cs" />
     <Compile Include="Common\Utility.cs" />
     <Compile Include="View\CourseListView.xaml.cs">
       <DependentUpon>CourseListView.xaml</DependentUpon>
@@ -266,6 +265,10 @@
     <ProjectReference Include="..\..\AvalonTextBox\AvalonTextBox.csproj">
       <Project>{CA7E4D71-3858-48F2-AF68-7E6DA88F79C9}</Project>
       <Name>AvalonTextBox</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NHibernateSrc\src\NHibernate\NHibernate.csproj">
+      <Project>{5909BFE7-93CF-4E5F-BE22-6293368AF01D}</Project>
+      <Name>NHibernate</Name>
     </ProjectReference>
     <ProjectReference Include="..\LibMPlayerCommon\LibMPlayerCommon.csproj">
       <Project>{5D3616D0-160D-4601-AB67-E1ED9111C676}</Project>
@@ -388,6 +391,22 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\icon_512.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="hibernate.cfg.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Mappings\Course.hbm.xml" />
+    <EmbeddedResource Include="Mappings\Note.hbm.xml" />
+    <EmbeddedResource Include="Mappings\Track.hbm.xml" />
+    <EmbeddedResource Include="Mappings\TrackTime.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="log4netoff.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

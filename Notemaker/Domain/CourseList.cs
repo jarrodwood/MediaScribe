@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 namespace JayDev.Notemaker
 {
     [DataContract]
-    public class CourseList : SavedFile
+    public class CourseList
     {
         [DataMember]
         public List<Course> Courses = new List<Course>();

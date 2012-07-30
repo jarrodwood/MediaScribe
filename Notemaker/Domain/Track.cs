@@ -3,37 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
-using Castle.ActiveRecord;
 
 namespace JayDev.Notemaker
 {
     [DataContract]
     [Serializable]
-    [ActiveRecord("Tracks")]
-    public class Track : ActiveRecordBase<Track>, ICloneable
+    public class Track : ICloneable
     {
-        [PrimaryKey("TrackID")]
-        public int ID { get; set; }
+        public virtual int? ID { get; set; }
+
+        public virtual int ParentCourseID { get; set; }
 
         [DataMember]
-        [Property("Title")]
-        public string Title { get; set; }
+        public virtual string Title { get; set; }
         [DataMember]
-        [Property("Length")]
-        public TimeSpan Length { get; set; }
+        public virtual TimeSpan Length { get; set; }
         [DataMember]
-        [Property("FilePath")]
-        public string FilePath { get; set; }
+        public virtual string FilePath { get; set; }
         [DataMember]
-        [Property("IsVideo")]
-        public bool IsVideo { get; set; }
+        public virtual int IsVideo { get; set; }
         [DataMember]
-        public double? AspectRatio { get; set; }
+        public virtual float? AspectRatio { get; set; }
 
-        [BelongsTo("CourseID")]
-        public Course ParentCourse { get; set; }
+        public virtual Course ParentCourse { get; set; }
 
-        public string FileName
+        public virtual int? OrderNumber { get; set; }
+
+        public virtual string FileName
         {
             get
             {
@@ -44,7 +40,7 @@ namespace JayDev.Notemaker
         /// <summary>
         /// If the track has a Title, display that. Otherwise, display the file name
         /// </summary>
-        public string StringDisplayValue
+        public virtual string StringDisplayValue
         {
             get
             {
@@ -55,12 +51,20 @@ namespace JayDev.Notemaker
             }
         }
 
-        public object Clone()
+        public virtual void CopyTo(Track track)
+        {
+            track.Title = this.Title;
+            track.Length = this.Length;
+            track.FilePath = this.FilePath;
+            track.IsVideo = this.IsVideo;
+            track.AspectRatio = this.AspectRatio;
+            track.OrderNumber = this.OrderNumber;
+        }
+
+        public virtual object Clone()
         {
             Track clone = new Track();
-            clone.Title = this.Title;
-            clone.Length = this.Length;
-            clone.FilePath = this.FilePath;
+            this.CopyTo(clone);
             return clone;
         }
     }

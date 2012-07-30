@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using JayDev.Notemaker.Core;
+using NHibernate;
+using NHibernate.Criterion;
 
 namespace JayDev.Notemaker.Model
 {
@@ -9,57 +12,177 @@ namespace JayDev.Notemaker.Model
     {
         public CourseRepository() { }
 
-        //public List<Course> GetCourseList()
-        //{
-        //    CourseList list = DataAccess.GetCourseList();
-        //    return list.Courses;
-        //}
-
-        //public SaveResult SaveCourseList(List<Course> list)
-        //{
-        //    var oldList = DataAccess.GetCourseList();
-        //    oldList.Courses = list;
-        //    return DataAccess.SaveCourseList(oldList);
-        //}
-        //public SaveResult SaveCourse(Course courseToSave) {
-
-        //    var allCourses = GetCourseList();
-        //    for(int i = 0; i < allCourses.Count; i++)
-        //    {
-        //        if (allCourses[i].Name == courseToSave.Name)
-        //        {
-        //            allCourses[i] = courseToSave;
-        //            SaveCourseList(allCourses);
-        //            break;
-        //        }
-        //    }
-        //    return new SaveResult();
-        //}
+        private object _destructiveOperationLockToken = new object();
 
         public List<Course> GetCourseList()
         {
-            return new List<Course>(Course.FindAll());
-        }
-
-        public SaveResult SaveCourseList(List<Course> list)
-        {
-            foreach (Course course in list)
+            IList<Course> result;
+            using (ISession session = NHibernateHelper.OpenSession())
             {
-                course.SaveAndFlush();
+                result = session.CreateCriteria<Course>().List<Course>();
             }
-            return new SaveResult();
+
+            foreach (Course course in result)
+            {
+                foreach (Note note in course.Notes)
+                {
+                    if (null != note.Start)
+                        note.Start.ParentCourse = course;
+                    if (null != note.End)
+                        note.End.ParentCourse = course;
+                }
+            }
+
+            return result as List<Course>;
         }
 
-        public SaveResult SaveCourse(Course courseToSave)
+        public Course GetCourse(int courseID)
         {
-            courseToSave.SaveAndFlush();
-            return new SaveResult();
+            Course result;
+            using (ISession session = NHibernateHelper.OpenSession())
+            {
+                result = session.Get<Course>(courseID);
+            }
+
+            foreach (Note note in result.Notes)
+            {
+                if (null != note.Start)
+                    note.Start.ParentCourse = result;
+                if (null != note.End)
+                    note.End.ParentCourse = result;
+            }
+
+            return result;
+        }
+
+        public void SaveCourse(Course course)
+        {
+            lock (_destructiveOperationLockToken)
+            {
+                using (ISession session = NHibernateHelper.OpenSession())
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    session.SaveOrUpdate(course);
+
+                    transaction.Commit();
+                }
+            }
+        }
+
+        public void SaveCourseAndTracks(Course course)
+        {
+            lock (_destructiveOperationLockToken)
+            {
+                using (ISession session = NHibernateHelper.OpenSession())
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    //save changes to the course
+                    session.SaveOrUpdate(course);
+
+                    IList<Track> savedTracks = session.CreateCriteria<Track>().Add(Expression.Where<Track>(x => x.ParentCourse.ID == course.ID)).List<Track>();
+                    savedTracks = savedTracks ?? new List<Track>();
+
+
+                    IList<Track> potentiallyUpdatedTracks = course.Tracks;
+
+                    List<Track> mergedTracks = new List<Track>();
+                    List<Track> normalTracksToSave = new List<Track>();
+
+                    //time to use some intelligence. if the FILE NAME of a track that was removed from the collection... is the same as the
+                    //name of a track that's been /added/ to the collection... it's probably the same file, but's been moved or accidentally
+                    //removed and re-added. we'll be smart, and persist the new values across to the old tracks (so that we can keep all
+                    //the note associations for it)
+                    foreach(Track track in potentiallyUpdatedTracks) 
+                    {
+                        Track savedTrackWithSameName = savedTracks.FirstOrDefault(x => x.FileName == track.FileName && x.ID != track.ID);
+                        if (null != savedTrackWithSameName)
+                        {
+                            track.CopyTo(savedTrackWithSameName);
+                            //update, don't merge. because the object is persistent (within scope of session)
+                            session.Update(savedTrackWithSameName);
+                            //store the object in the merged collection, which will be returned.
+                            mergedTracks.Add(savedTrackWithSameName);
+                        }
+                        else
+                        {
+                            normalTracksToSave.Add(track);
+                        }
+                    }
+
+                    //now, go through and delete from the database, all the tracks that were removed from the collection but weren't
+                    //'copies', like we dealt with just above.
+                    List<Track> removedTracks = savedTracks.Except(mergedTracks, x => x.ID).Except(course.Tracks, x => x.ID).ToList();
+                    foreach (Track removedTrack in removedTracks)
+                    {
+                        session.Delete(removedTrack);
+                    }
+
+                    //finally, go through the REST of the tracks (new tracks, and updated tracks) and merge them.
+                    foreach (Track track in normalTracksToSave)
+                    {
+                        if (null == track.ID)
+                        {
+                            track.ParentCourse = course;
+                            track.ParentCourseID = course.ID.Value;
+                            session.Save(track);
+                            mergedTracks.Add(track);
+                        }
+                        else
+                        {
+                            Track mergedTrack = session.Merge<Track>(track);
+                            mergedTracks.Add(mergedTrack);
+                            //session.Update(track);
+                            //mergedTracks.Add(track);
+                        }
+                    }
+
+                    //now we can store the merged collection against the course, and get outta here!
+                    course.Tracks.Clear();
+                    course.Tracks.AddRange(mergedTracks);
+
+                    transaction.Commit();
+                }
+            }
         }
 
         public void SaveNote(Course parentCourse, Note note)
         {
-            note.ParentCourse = parentCourse;
-            note.SaveAndFlush();
+            lock (_destructiveOperationLockToken)
+            {
+                using (ISession session = NHibernateHelper.OpenSession())
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    note.ParentCourse = parentCourse;
+                    note.ParentCourseID = parentCourse.ID.Value;
+                    session.Save(note);
+
+                    if (null != note.Start)
+                        session.Save(note.Start);
+                    if (null != note.End)
+                        session.Save(note.End);
+
+                    transaction.Commit();
+                }
+            }
+        }
+
+
+        public void DeleteNote(Note note)
+        {
+            lock (_destructiveOperationLockToken)
+            {
+                using (ISession session = NHibernateHelper.OpenSession())
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    if (null != note.Start)
+                        session.Delete(note.Start);
+                    if (null != note.End)
+                        session.Delete(note.End);
+                    session.Delete(note);
+
+                    transaction.Commit();
+                }
+            }
         }
     }
 }

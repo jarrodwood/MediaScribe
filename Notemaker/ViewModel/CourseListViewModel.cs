@@ -70,6 +70,8 @@ namespace JayDev.Notemaker.ViewModel
 
         #endregion
 
+        #region SaveCourseCommand
+
         private RelayCommand _saveCourseCommand;
 
         /// <summary>
@@ -83,42 +85,48 @@ namespace JayDev.Notemaker.ViewModel
                     ?? (_saveCourseCommand = new RelayCommand(
                                           () =>
                                           {
-                                              Course courseToSave = new Course() {
-                                                  Name = SelectedCourseName,
-                                                  Tracks = new List<Track>(SelectedCourseTracks)
-                                              };
-                                              List<Course> list = _repo.GetCourseList();
-
-                                              Course matchingCourse = list.FirstOrDefault(x => x.ID == _selectedCourseID);
-                                              if (null != matchingCourse)
+                                              //update the OrderNumbers on the tracks before we save them
+                                              for (int i = 0; i < SelectedCourseTracks.Count; i++)
                                               {
-                                                  int index = list.IndexOf(matchingCourse);
-                                                  list[index] = courseToSave;
+                                                  SelectedCourseTracks[i].OrderNumber = i;
+                                              }
+
+                                              Course courseToSave;
+                                              if (null != SelectedCourse && SelectedCourse.ID != null)
+                                              {
+                                                  courseToSave = _repo.GetCourse(SelectedCourse.ID.Value);
                                               }
                                               else
                                               {
-                                                  list.Add(courseToSave);
+                                                  courseToSave = new Course();
                                               }
+                                              courseToSave.Name = SelectedCourseName;
+                                              courseToSave.Tracks.Clear();
+                                              SelectedCourseTracks.ToList().ForEach(x => courseToSave.Tracks.Add(x));
 
-                                              SaveResult result = _repo.SaveCourseList(list);
-                                              if (false == result.IsSaveSuccessful)
-                                              {
-                                                  Messenger.Default.Send<string>(result.ToString(), "errors");
-                                              }
-                                              else
-                                              {
+                                              _repo.SaveCourseAndTracks(courseToSave);
+                                              //if (false == result.IsSaveSuccessful)
+                                              //{
+                                              //    Messenger.Default.Send<string>(result.ToString(), "errors");
+                                              //}
+                                              //else
+                                              //{
                                                   Courses = new ObservableCollection<Course>(_repo.GetCourseList());
                                                   //ensure that the row can be selected in the datagrid
                                                   SelectedCourse = Courses.First(x => x.Name == SelectedCourseName);
-                                              }
+                                              //}
 
                                               MaintenanceMode = Common.MaintenanceMode.View;
+
+                                              Courses = new ObservableCollection<Course>(_repo.GetCourseList());
                                           },
                                           () => //can save if there is a name, and tracks.
                                               false == string.IsNullOrWhiteSpace(SelectedCourseName)
                                               && SelectedCourseTracks.Count > 0));
             }
         }
+
+        #endregion
 
         #region DeleteCourseCommand
 
@@ -136,6 +144,7 @@ namespace JayDev.Notemaker.ViewModel
                                           () =>
                                           {
                                               MaintenanceMode = Common.MaintenanceMode.Edit;
+                                              SaveCourseCommand.RaiseCanExecuteChanged();
                                           }));
             }
         }
@@ -161,6 +170,8 @@ namespace JayDev.Notemaker.ViewModel
 
         #endregion
 
+        #region AddTracksCommand
+
         private RelayCommand _addTracksCommand;
 
         /// <summary>
@@ -178,8 +189,8 @@ namespace JayDev.Notemaker.ViewModel
                                               Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
                                               dlg.Multiselect = true;
                                               StringBuilder filterBuilder = new StringBuilder();
-                                              filterBuilder.Append("Audio and Video Files|*.3GP;*.ASF;*.AVI;*.FLV;*.FLA;*.M4V;*.MKV;*.MOV;*.MPEG;*.MPG;*.OGV;*.RM;*.WMV;*.WAV;*.FLAC;*.M4A;*.WMA;*.MP2;*.MP3;*.WMA;*.AAC;*.M4A;*.RA;*.RM;*.SWA");
-                                              filterBuilder.Append("|Video Files|*.3GP;*.ASF;*.AVI;*.FLV;*.FLA;*.M4V;*.MKV;*.MOV;*.MPEG;*.MPG;*.OGV;*.RM;*.WMV");
+                                              filterBuilder.Append("Audio and Video Files|*.3GP;*.ASF;*.AVI;*.FLV;*.FLA;*.M4V;*.MKV;*.MOV;*.MP4;*.MPEG;*.MPG;*.OGV;*.RM;*.WMV;*.WAV;*.FLAC;*.M4A;*.WMA;*.MP2;*.MP3;*.WMA;*.AAC;*.M4A;*.RA;*.RM;*.SWA");
+                                              filterBuilder.Append("|Video Files|*.3GP;*.ASF;*.AVI;*.FLV;*.FLA;*.M4V;*.MKV;*.MOV;*.MP4;*.MPEG;*.MPG;*.OGV;*.RM;*.WMV");
                                               filterBuilder.Append("|Audio Files|*.WAV;*.FLAC;*.M4A;*.WMA;*.MP2;*.MP3;*.WMA;*.AAC;*.M4A;*.RA;*.RM;*.SWA");
                                               filterBuilder.Append("|All Files|*.*");
                                               dlg.Filter = filterBuilder.ToString(); // Filter files by extension    
@@ -198,25 +209,26 @@ namespace JayDev.Notemaker.ViewModel
                                                           {
                                                               FilePath = file,
                                                               Title = discoverer.Title,
-                                                              Length = new TimeSpan(0, 0, discoverer.Length)
+                                                              Length = new TimeSpan(0, 0, discoverer.Length),
+                                                              IsVideo = discoverer.Video? 1 : 0,
+                                                              AspectRatio = discoverer.Video ? (float?)discoverer.AspectRatio : null
                                                           };
                                                           ThreadHelper.ExecuteAsyncUI(_uiDispatcher, delegate
                                                           {
                                                               SelectedCourseTracks.Add(track);
+                                                              //notify that we might be able to save now.
+                                                              SaveCourseCommand.RaiseCanExecuteChanged();
                                                           });
                                                       }
-
-                                                      //at the end of executing the background thread, notify that we might be able to save now.
-                                                      ThreadHelper.ExecuteSyncUI(_uiDispatcher, delegate
-                                                      {
-                                                          SaveCourseCommand.RaiseCanExecuteChanged();
-                                                      });
                                                   });
                                               }
                                           }));
             }
         }
 
+        #endregion
+
+        #region MoveItemsCommand
 
         private RelayCommand<MoveItemsCommandParameter> _moveItemsCommand;
         public RelayCommand<MoveItemsCommandParameter> MoveItemsCommand
@@ -233,13 +245,14 @@ namespace JayDev.Notemaker.ViewModel
                                               //insert dragged elements at hovered-over-rows location. we'll reverse the collection, so the inserts go in in the right order.
                                               args.ObjectsToInsert.Reverse();
                                               args.ObjectsToInsert.ForEach(x => SelectedCourseTracks.Insert(args.InsertToIndex, (Track)x));
-
                                           },
                                           (MoveItemsCommandParameter args) => true));
             }
         }
 
         #endregion
+
+        #region DeleteTracksCommand
 
         private RelayCommand _deleteTracksCommand;
 
@@ -259,12 +272,17 @@ namespace JayDev.Notemaker.ViewModel
                                                   SelectedCourseTracks.Remove(track);
                                               }
                                           },
-                                          () => {
+                                          () =>
+                                          {
                                               return _selectedCourseSelectedTracks != null && _selectedCourseSelectedTracks.Count() > 0;
                                           }
                                           ));
             }
         }
+
+        #endregion
+
+        #region WriteNotesCommand
 
         private RelayCommand _writeNotesCommand;
 
@@ -284,17 +302,48 @@ namespace JayDev.Notemaker.ViewModel
             }
         }
 
+        #endregion
+
+        #endregion
+
         #region Notified Properties
+
+        #region Courses
 
         private ObservableCollection<Course> _courses = new ObservableCollection<Course>();
         public ObservableCollection<Course> Courses { get { return _courses; } set { _courses = value; } }
 
+        #endregion
+
+        #region AreCoursesExisting
+
         public const string AreCoursesExistingPropertyName = "AreCoursesExisting";
         public bool AreCoursesExisting { get { return Courses.Count > 0; } }
 
+        #endregion
 
+        #region AreTracksExistingInSelectedCourse
+
+        /// <summary>
+        /// The <see cref="AreTracksExistingInSelectedCourse" /> property's name.
+        /// </summary>
         public const string AreTracksExistingInSelectedCoursePropertyName = "AreTracksExistingInSelectedCourse";
-        public bool AreTracksExistingInSelectedCourse { get { return null != SelectedCourseTracks && SelectedCourseTracks.Count > 0; } }
+
+        /// <summary>
+        /// Sets and gets the AreTracksExistingInSelectedCourse property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public bool AreTracksExistingInSelectedCourse
+        {
+            get
+            {
+                return null != SelectedCourseTracks && SelectedCourseTracks.Count > 0;
+            }
+        }
+
+        #endregion
+
+        #region SelectedCourse
 
         /// <summary>
         /// The <see cref="SelectedCourse" /> property's name.
@@ -331,6 +380,8 @@ namespace JayDev.Notemaker.ViewModel
             }
         }
 
+        #endregion
+
         #region MaintenanceMode
 
         /// <summary>
@@ -365,6 +416,8 @@ namespace JayDev.Notemaker.ViewModel
 
         #endregion MaintenanceMode
 
+        #region SelectedCourseName
+
         /// <summary>
         /// The <see cref="SelectedCourseName" /> property's name.
         /// </summary>
@@ -392,14 +445,18 @@ namespace JayDev.Notemaker.ViewModel
 
                 _selectedCourseName = value;
                 RaisePropertyChanged(SelectedCourseNamePropertyName);
+
                 //when the name changes, we may be able to save the course
-                if (MaintenanceMode == Common.MaintenanceMode.Edit)
+                if (MaintenanceMode == Common.MaintenanceMode.Edit || MaintenanceMode == Common.MaintenanceMode.Create)
                 {
                     SaveCourseCommand.RaiseCanExecuteChanged();
                 }
             }
         }
 
+        #endregion
+
+        #region SelectedCourseTracks
 
         /// <summary>
         /// The <see cref="SelectedCourseTracks" /> property's name.
@@ -429,9 +486,13 @@ namespace JayDev.Notemaker.ViewModel
                 _selectedCourseTracks = value;
                 RaisePropertyChanged(SelectedCourseTracksPropertyName);
                 _selectedCourseTracks.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(_selectedCourseTracks_CollectionChanged);
+                RaisePropertyChanged(AreTracksExistingInSelectedCoursePropertyName);
             }
         }
 
+        #endregion
+
+        #region SelectedCourseSelectedTracks
 
         /// <summary>
         /// The <see cref="SelectedCourseSelectedTracks" /> property's name.
@@ -466,8 +527,12 @@ namespace JayDev.Notemaker.ViewModel
                 DeleteTracksCommand.RaiseCanExecuteChanged();
             }
         }
+
         #endregion
 
+        #endregion
+
+        #region Constructor
 
         public CourseListViewModel(CourseRepository repo)
         {
@@ -478,85 +543,11 @@ namespace JayDev.Notemaker.ViewModel
 
             List<Course> courseList = _repo.GetCourseList();
             Courses = new ObservableCollection<Course>(courseList);
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
-            //Courses.Add(new Course() { Name = "Test course 1" });
         }
+
+        #endregion
+
+        #region Event Handlers
 
         void _courses_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -569,5 +560,7 @@ namespace JayDev.Notemaker.ViewModel
         {
             RaisePropertyChanged(AreTracksExistingInSelectedCoursePropertyName);
         }
+
+        #endregion
     }
 }

@@ -67,7 +67,7 @@ namespace JayDev.Notemaker.ViewModel
             }
         }
 
-        public void PlayPause()
+        public void TogglePause()
         {
             if (null != this._play)
             {
@@ -89,6 +89,9 @@ namespace JayDev.Notemaker.ViewModel
         public void Seek(int time)
         {
             this._play.Seek(time, LibMPlayerCommon.Seek.Absolute);
+            //set the play position, to instantly update the trackbar... instead of waiting for the timer to tick.
+            //TODO: the timer still makes it jump back for some reason - mplayer's returning the old time for a second or two ?
+            this.CurrentPlayPosition = new TimeSpan(0, 0, time);
         }
         public void SeekRelative(int relativeTime)
         {
