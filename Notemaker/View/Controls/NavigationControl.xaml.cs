@@ -20,6 +20,17 @@ namespace JayDev.Notemaker.View.Controls
     public partial class NavigationControl : UserControl
     {
 
+        public ICommand ExportCommand
+        {
+            get { return (ICommand)GetValue(ExportCommandProperty); }
+            set { SetValue(ExportCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ExportCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ExportCommandProperty =
+            DependencyProperty.Register("ExportCommand", typeof(ICommand), typeof(NavigationControl));
+
+
 
         public ICommand NavigateCommand
         {

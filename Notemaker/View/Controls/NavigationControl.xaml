@@ -115,7 +115,8 @@
                         </ContentControl>
                         <notemakerControls:NavigationButton Grid.Column="6" Text="Save Course" MySource="/Notemaker;component/Images/stock_save.png" />
                         <notemakerControls:NavigationButton Grid.Column="7" Text="Configure&#13;Tags" MySource="/Notemaker;component/Images/seahorse.png" IsEnabled="False" />
-                        <notemakerControls:NavigationButton Grid.Column="8" Text="Export" MySource="/Notemaker;component/Images/archive-insert-2.png" />
+                        <notemakerControls:NavigationButton Grid.Column="8" Text="Export" MySource="/Notemaker;component/Images/archive-insert-2.png"
+                                                            Command="{Binding ExportCommand}" />
                         <Grid Grid.Column="9">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="70"/>

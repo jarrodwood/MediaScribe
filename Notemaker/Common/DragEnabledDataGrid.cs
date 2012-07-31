@@ -34,6 +34,18 @@ namespace JayDev.Notemaker.Common
     {
 
 
+        public bool CanDrag
+        {
+            get { return (bool)GetValue(CanDragProperty); }
+            set { SetValue(CanDragProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CanDrag.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CanDragProperty =
+            DependencyProperty.Register("CanDrag", typeof(bool), typeof(DragEnabledDataGrid), new UIPropertyMetadata(null));
+
+        
+
         public List<object> ReadOnlySelectedItems
         {
             get { return (List<object>)GetValue(ReadOnlySelectedItemsProperty); }
@@ -118,14 +130,17 @@ namespace JayDev.Notemaker.Common
 
         void DragSource_PreviewMouseMove(object sender, MouseEventArgs e)
         {
-            if (_isClickingDownOnSelectedItem && !IsDragging)
+            if (CanDrag)
             {
-                Point position = e.GetPosition(null);
-
-                if (Math.Abs(position.X - _startPoint.X) > SystemParameters.MinimumHorizontalDragDistance ||
-                    Math.Abs(position.Y - _startPoint.Y) > SystemParameters.MinimumVerticalDragDistance)
+                if (_isClickingDownOnSelectedItem && !IsDragging)
                 {
-                     StartDragInProcAdorner(e); 
+                    Point position = e.GetPosition(null);
+
+                    if (Math.Abs(position.X - _startPoint.X) > SystemParameters.MinimumHorizontalDragDistance ||
+                        Math.Abs(position.Y - _startPoint.Y) > SystemParameters.MinimumVerticalDragDistance)
+                    {
+                        StartDragInProcAdorner(e);
+                    }
                 }
             }
         }

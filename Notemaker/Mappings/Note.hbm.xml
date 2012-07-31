@@ -15,8 +15,8 @@
     <property name="Body" />
     <property name="Rating" />
     <property name="ParentCourseID" column="CourseID" />
-    <many-to-one name="Start" fetch="join" class="TrackTime" column="StartTrackTimeID" cascade="none" />
-    <many-to-one name="End" fetch="join" class="TrackTime" column="EndTrackTimeID" cascade="none" />
+    <many-to-one name="Start" fetch="join" class="TrackTime" column="StartTrackTimeID" cascade="All" />
+    <many-to-one name="End" fetch="join" class="TrackTime" column="EndTrackTimeID" cascade="All" />
   </class>
 
 </hibernate-mapping>

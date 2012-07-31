@@ -12,12 +12,17 @@
              d:DesignHeight="419" d:DesignWidth="1388">
     <UserControl.Resources>
         <notemakerCommon:GridLengthValueConverter x:Key="gridLengthConverter" />
+        <notemakerCommon:BooleanToVisibilityConverter 
+                x:Key="BooleanToVisibilityConverterTrueIsVisible" 
+                True="Visible" 
+                False="Collapsed" />
     </UserControl.Resources>
     <!--<Grid Background="#FFEFF5FF">-->
     <Grid Background="#EFEFEF">
         <DockPanel Name="windowContents">
             <notemakerControl:NavigationControl DockPanel.Dock="Top"
                                                 NavigateCommand="{Binding NavigateCommand}"
+                                                ExportCommand="{Binding ExportCommand}"
                                                 />
             
 
@@ -43,15 +48,15 @@
                         <RowDefinition Height="6" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <DockPanel Grid.Row="0" Background="LightGray" DockPanel.Dock="Top"  LastChildFill="True">
-                        <TextBlock DockPanel.Dock="Top">Video</TextBlock>
-                        <DockPanel Name="videoControlHolder">
+                    <DockPanel Grid.Row="0" Background="LightGray" DockPanel.Dock="Top"  LastChildFill="True" Visibility="{Binding IsCurrentTrackVideo, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
+                        <!--<TextBlock DockPanel.Dock="Top">Video</TextBlock>
+                        <DockPanel Name="videoControlHolder">-->
                             <notemakerControl:VideoControl x:Name="videoControl"
                                                            VideoPanelPointer="{Binding VideoPanelPointer, Mode=OneWayToSource}"
                                                            AspectRatio="{Binding CurrentTrackVideoAspectRatio}"
                                                            IsShowingVideo="{Binding IsCurrentTrackVideo}"
                                                            PlayPauseCommandq="{Binding ToggleFullscreenCommand}"/>
-                        </DockPanel>
+                        <!--</DockPanel>-->
                     </DockPanel>
                     <GridSplitter
             ResizeDirection="Rows" 
@@ -62,7 +67,7 @@
             Height="3"
             HorizontalAlignment="Stretch" 
             VerticalAlignment="Stretch" 
-            Margin="0" DragCompleted="GridSplitter_DragCompleted_1" />
+            Margin="0" DragCompleted="GridSplitter_DragCompleted_1"  Visibility="{Binding IsCurrentTrackVideo, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}" />
 
                     <DockPanel Grid.Row="2">
                         <TextBlock DockPanel.Dock="Top">Course Track List</TextBlock>

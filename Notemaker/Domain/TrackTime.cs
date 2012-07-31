@@ -46,27 +46,28 @@ namespace JayDev.Notemaker
             }
         }
 
+        public virtual int? IndexOfTrackInCourse
+        {
+            get
+            {
+                if (null != track)
+                {
+                    return track.OrderNumber + 1;
+                }
+
+                return null;
+            }
+        }
+
         public virtual string StringDisplayValue
         {
             get
             {
                 StringBuilder resultBuilder = new StringBuilder();
-                int indexInTrackList = -1;
-                if (null != ParentCourse)
+                int? index = IndexOfTrackInCourse;
+                if (null != index)
                 {
-                    //TODO: store this in DB
-                    for (int i = 0; i < ParentCourse.Tracks.Count; i++)
-                    {
-                        if (ParentCourse.Tracks[i].FilePath == track.FilePath)
-                        {
-                            indexInTrackList = i;
-                            break;
-                        }
-                    }
-                }
-                if (indexInTrackList != -1)
-                {
-                    resultBuilder.Append(indexInTrackList + 1);
+                    resultBuilder.Append(index);
                 }
                 else
                 {

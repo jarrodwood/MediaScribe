@@ -66,7 +66,7 @@
                             </StackPanel>
                         </Border>
                         <!--</ContentControl>-->
-                        <DataGrid VerticalAlignment="Top" AutoGenerateColumns="False" Name="courseGrid" HeadersVisibility="All" CanUserAddRows="False"
+                        <DataGrid VerticalAlignment="Top" AutoGenerateColumns="False" Name="courseGrid" HeadersVisibility="Column" CanUserAddRows="False"
                                   SelectionMode="Single"
                             CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding Courses}" SelectedItem="{Binding SelectedCourse}">
                             <i:Interaction.Triggers>
@@ -114,7 +114,8 @@
                 <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
 
                 <DockPanel Grid.Column="2" LastChildFill="True">
-                    <Border DockPanel.Dock="Top" BorderBrush="#B9C9DA" BorderThickness="1" Margin="15" Background="#E3ECF6" Padding="15">
+                    <DockPanel DockPanel.Dock="Top">
+                    <Border DockPanel.Dock="Bottom" BorderBrush="#B9C9DA" BorderThickness="1" Margin="15" Background="#E3ECF6" Padding="15">
                         <StackPanel>
 
 
@@ -133,9 +134,10 @@
                                 </StackPanel>
                                 <DockPanel Margin="0 15 0 0">
                                         <notemakerCommon:DragEnabledDataGrid VerticalAlignment="Top"
-                                                                             AutoGenerateColumns="False" HeadersVisibility="All" CanUserAddRows="False"
+                                                                             AutoGenerateColumns="False" HeadersVisibility="Column" CanUserAddRows="False"
                                CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks, Mode=TwoWay}"
                                                                              OnDragDisplayPropertyName="StringDisplayValue"
+                                                                             CanDrag="False"
                                                                              ReadOnlySelectedItems="{Binding SelectedCourseSelectedTracks, Mode=OneWayToSource}"
                                                                              MoveItemsCommand="{Binding Path=MoveItemsCommand}">
                                             <DataGrid.Columns>
@@ -186,11 +188,17 @@
                                             </StackPanel>
                                         </Border>
                                         <notemakerCommon:DragEnabledDataGrid VerticalAlignment="Top"
-                                                                             AutoGenerateColumns="False"  x:Name="trackGrid" HeadersVisibility="All" CanUserAddRows="False"
+                                                                             AutoGenerateColumns="False"  x:Name="trackGrid" HeadersVisibility="Column" CanUserAddRows="False"
                                CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks, Mode=TwoWay}"
                                                                              OnDragDisplayPropertyName="StringDisplayValue"
+                                                                             CanDrag="True"
                                                                              ReadOnlySelectedItems="{Binding SelectedCourseSelectedTracks, Mode=OneWayToSource}"
                                                                              MoveItemsCommand="{Binding Path=MoveItemsCommand}">
+                                            <DataGrid.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Remove Track" Command="Delete" />
+                                                </ContextMenu>
+                                            </DataGrid.ContextMenu>
                                             <!--<i:Interaction.Triggers>
                                             <i:EventTrigger EventName="MouseDoubleClick">
                                                 <cmd:EventToCommand Command="{Binding SelectTrackCommand,Mode=OneWay}"
@@ -245,11 +253,17 @@
                                             </StackPanel>
                                         </Border>
                                         <notemakerCommon:DragEnabledDataGrid VerticalAlignment="Top"
-                                                                             AutoGenerateColumns="False" HeadersVisibility="All" CanUserAddRows="False"
+                                                                             AutoGenerateColumns="False" HeadersVisibility="Column" CanUserAddRows="False"
                                CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks, Mode=TwoWay}"
                                                                              OnDragDisplayPropertyName="StringDisplayValue"
+                                                                             CanDrag="True"
                                                                              ReadOnlySelectedItems="{Binding SelectedCourseSelectedTracks, Mode=OneWayToSource}"
                                                                              MoveItemsCommand="{Binding Path=MoveItemsCommand}">
+                                            <DataGrid.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Remove Track" Command="Delete" />
+                                                </ContextMenu>
+                                            </DataGrid.ContextMenu>
                                             <!--<i:Interaction.Triggers>
                                             <i:EventTrigger EventName="MouseDoubleClick">
                                                 <cmd:EventToCommand Command="{Binding SelectTrackCommand,Mode=OneWay}"
@@ -276,7 +290,6 @@
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 0">
                                     <Button Padding="5 1" Command="{Binding SaveCourseCommand}">Save</Button>
                                     <Button Margin="10 0 0 0" Padding="5 1">Cancel</Button>
-                                    <Button Margin="10 0 0 0" Padding="5 1">Go To Course</Button>
                                 </StackPanel>
                             </StackPanel>
 
@@ -323,7 +336,7 @@
                                 </DataGrid>
                             </StackPanel>-->
                     </Border>
-
+                    </DockPanel>
                     <!--<DataGrid DockPanel.Dock="Bottom" VerticalAlignment="Top" AutoGenerateColumns="False"  Name="trackGrid" HeadersVisibility="All" CanUserAddRows="False"
                            CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks}">
 

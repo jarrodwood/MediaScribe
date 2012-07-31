@@ -24,7 +24,7 @@
             </DataGrid.InputBindings>
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Remove Item" Command="Delete" />
+                    <MenuItem Header="Remove Note" Command="Delete" />
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>

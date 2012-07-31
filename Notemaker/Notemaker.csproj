@@ -41,6 +41,9 @@
     <StartupObject>JayDev.Notemaker.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus">
+      <HintPath>..\..\..\libraries\EPPlus\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1673db7d5906b0ad, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\Program Files (x86)\Laurent Bugnion (GalaSoft)\Mvvm Light Toolkit\Binaries\WPF4\GalaSoft.MvvmLight.Extras.WPF4.dll</HintPath>
@@ -144,6 +147,7 @@
     <Compile Include="Common\ExtendedObservableCollection.cs" />
     <Compile Include="Common\SafeObservable.cs" />
     <Compile Include="Common\TextListAdorner.cs" />
+    <Compile Include="Common\XslsExporter.cs" />
     <Compile Include="Core\DebugTextWriter.cs" />
     <Compile Include="Core\ExtensionMethods.cs" />
     <Compile Include="Core\LambdaComparer.cs" />

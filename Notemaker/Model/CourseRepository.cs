@@ -77,7 +77,14 @@ namespace JayDev.Notemaker.Model
                 using (ITransaction transaction = session.BeginTransaction())
                 {
                     //save changes to the course
-                    session.SaveOrUpdate(course);
+                    if (null == course.ID)
+                    {
+                        session.Save(course);
+                    }
+                    else
+                    {
+                        course = session.Merge<Course>(course);
+                    }
 
                     IList<Track> savedTracks = session.CreateCriteria<Track>().Add(Expression.Where<Track>(x => x.ParentCourse.ID == course.ID)).List<Track>();
                     savedTracks = savedTracks ?? new List<Track>();
@@ -154,12 +161,35 @@ namespace JayDev.Notemaker.Model
                 {
                     note.ParentCourse = parentCourse;
                     note.ParentCourseID = parentCourse.ID.Value;
-                    session.Save(note);
 
-                    if (null != note.Start)
-                        session.Save(note.Start);
-                    if (null != note.End)
-                        session.Save(note.End);
+                    if (null == note.ID)
+                    {
+                        session.Save(note);
+                    }
+                    else
+                    {
+                        Note oldNote = session.Get<Note>(note.ID);
+                        if (null != oldNote.Start && note.Start.ID != oldNote.Start.ID)
+                        {
+                            session.Delete(oldNote.Start);
+                        }
+                        if (null != oldNote.End && note.End.ID != oldNote.End.ID)
+                        {
+                            session.Delete(oldNote.End);
+                        }
+
+                        note = session.Merge<Note>(note);
+                    }
+
+                    ////TODO: detect if start or end have been removed, and delete them from DB...
+                    //if (null != note.Start)
+                    //{
+                    //    session.Save(note.Start);
+                    //}
+                    //if (null != note.End)
+                    //{
+                    //    session.Save(note.End);
+                    //}
 
                     transaction.Commit();
                 }

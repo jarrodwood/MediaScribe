@@ -11,6 +11,7 @@ using GalaSoft.MvvmLight.Messaging;
 using System.Windows.Threading;
 using System.ComponentModel;
 using System.Timers;
+using System.Runtime.InteropServices;
 
 namespace JayDev.Notemaker.ViewModel
 {
@@ -27,6 +28,10 @@ namespace JayDev.Notemaker.ViewModel
         private const bool IsKeepingBlankRowForEdit = true;
 
         #endregion 
+
+        //TODO: MOVE THIS OUT OF VIEWMODEL!
+        [DllImport("user32.dll")]
+        static extern bool SetForegroundWindow(IntPtr hWnd);
 
         #region Public Properties & Backing Fields
 
@@ -47,6 +52,13 @@ namespace JayDev.Notemaker.ViewModel
                 {
                     this.RaisePropertyChanged("Notes");
                     _notes.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(_notes_CollectionChanged);
+
+                    //hook up event handlers for the notes, so we can save any changes to them
+                    foreach (Note note in _notes)
+                    {
+                        note.PropertyChanged += new PropertyChangedEventHandler(note_PropertyChanged);
+                        note.ChangeCommitted += new Note.ObjectChangeCommittedEventHandler(note_ChangeCommitted);
+                    }
                 }
             }
         }
@@ -556,6 +568,24 @@ namespace JayDev.Notemaker.ViewModel
                                                   Time = CurrentTrackPlayPosition,
                                                   ParentCourse = _currentCourse
                                               };
+
+                                              ////NOTE: if we already have a 'start' tracktime, don't replace it - update it. this is to save
+                                              ////us NHibernate pain
+                                              //if (null == context.Start)
+                                              //{
+                                              //    context.Start = new TrackTime()
+                                              //    {
+                                              //        Track = _currentTrack,
+                                              //        Time = CurrentTrackPlayPosition,
+                                              //        ParentCourse = _currentCourse
+                                              //    };
+                                              //}
+                                              //else
+                                              //{
+                                              //    context.Start.Track = _currentTrack;
+                                              //    context.Start.Time = CurrentTrackPlayPosition;
+                                              //    context.Start.ParentCourse = _currentCourse;
+                                              //}
                                           },
                                           (Note context) => true));
             }
@@ -699,6 +729,60 @@ namespace JayDev.Notemaker.ViewModel
                                 _isBusy = false;
                                 _isLoading = false;
                             }));
+            }
+        }
+
+        private RelayCommand _exportCommand;
+
+        /// <summary>
+        /// Gets the ExportCommand.
+        /// </summary>
+        public RelayCommand ExportCommand
+        {
+            get
+            {
+                return _exportCommand
+                    ?? (_exportCommand = new RelayCommand(
+                                          () =>
+                                          {
+                                              //TODO: refactor so we don't use dialogs in viewmodels
+                                              Microsoft.Win32.SaveFileDialog saveFileDialog1 = new Microsoft.Win32.SaveFileDialog();
+                                              saveFileDialog1.OverwritePrompt = true;
+                                              saveFileDialog1.RestoreDirectory = true;
+                                              saveFileDialog1.DefaultExt = "xslx";
+                                              // Adds a extension if the user does not
+                                              saveFileDialog1.AddExtension = true;
+                                              saveFileDialog1.InitialDirectory = Convert.ToString(Environment.SpecialFolder.MyDocuments);
+                                              saveFileDialog1.Filter = "Excel Spreadsheet|*.xlsx";
+                                              saveFileDialog1.FileName = string.Format("Exported Notes for {0} - {1}.xlsx", _currentCourse.Name, DateTime.Now.ToString("dd-MM-yyyy HH.mm.ss"));
+                                              saveFileDialog1.Title = "Save Exported Notes";
+
+                                              if (saveFileDialog1.ShowDialog() == true)
+                                              {
+                                                  try
+                                                  {
+                                                      using (System.IO.FileStream fs = (System.IO.FileStream)saveFileDialog1.OpenFile())
+                                                      {
+                                                          XslsExporter exporter = new XslsExporter();
+                                                          exporter.CreateSpreadsheet(fs, Tracks.ToList(), Notes.ToList());
+
+                                                          fs.Close();
+                                                      }
+
+                                                      var openResult = System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Export successful! Would you like to open the file?", "Open exported file confirmation", System.Windows.MessageBoxButton.YesNo);
+                                                      if(openResult == System.Windows.MessageBoxResult.Yes) {
+                                                          System.Diagnostics.ProcessStartInfo info = new System.Diagnostics.ProcessStartInfo();
+                                                          info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Maximized;
+                                                          info.FileName = saveFileDialog1.FileName;
+                                                          var process = System.Diagnostics.Process.Start(info);
+                                                      }
+                                                  }
+                                                  catch (Exception e)
+                                                  {
+                                                      System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Error exporting :( - " + e.ToString());
+                                                  }
+                                              }
+                                          }));
             }
         }
 
