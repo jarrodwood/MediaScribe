@@ -66,6 +66,10 @@
       <HintPath>..\..\activerecord\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\nhibernate\Required_Bins\NHibernate.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -126,6 +130,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Themes\JarrodDatagrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\MyHuluStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -144,11 +152,16 @@
     </Page>
     <Compile Include="Common\BooleanToVisibilityConverter.cs" />
     <Compile Include="Common\DelayedDataGridTextColumn.cs" />
+    <Compile Include="Common\DoubleClickableDataGrid.cs" />
     <Compile Include="Common\ExtendedObservableCollection.cs" />
+    <Compile Include="Common\NumericRangeVisibilityConverter.cs" />
+    <Compile Include="Common\PlayStatusVisibilityConverters.cs" />
     <Compile Include="Common\SafeObservable.cs" />
+    <Compile Include="Common\SecondsToTimespanConverter.cs" />
     <Compile Include="Common\TextListAdorner.cs" />
     <Compile Include="Common\XslsExporter.cs" />
     <Compile Include="Core\DebugTextWriter.cs" />
+    <Compile Include="Core\EnumConverter.cs" />
     <Compile Include="Core\ExtensionMethods.cs" />
     <Compile Include="Core\LambdaComparer.cs" />
     <Compile Include="Core\NHibernateHelper.cs" />
@@ -270,10 +283,6 @@
       <Project>{CA7E4D71-3858-48F2-AF68-7E6DA88F79C9}</Project>
       <Name>AvalonTextBox</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\NHibernateSrc\src\NHibernate\NHibernate.csproj">
-      <Project>{5909BFE7-93CF-4E5F-BE22-6293368AF01D}</Project>
-      <Name>NHibernate</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LibMPlayerCommon\LibMPlayerCommon.csproj">
       <Project>{5D3616D0-160D-4601-AB67-E1ED9111C676}</Project>
       <Name>LibMPlayerCommon</Name>
@@ -281,7 +290,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Styles\" />
-    <Folder Include="Themes\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Play.png" />
@@ -411,6 +419,14 @@
     <Content Include="log4netoff.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Page Include="Themes\JarrodGlassButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\JarrodSlider.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

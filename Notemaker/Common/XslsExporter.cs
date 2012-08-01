@@ -74,22 +74,24 @@ namespace JayDev.Notemaker.Common
                     //if the chunk is ONLY space, it will corrupt the file. hack: replace all leading/trailing spaces with non-breaking
                     //spaces
                     char[] textCharArray = currentSection.Text.ToCharArray();
+                    //replace all spaces at the front...
                     for (int z = 0; z < textCharArray.Length; z++)
                     {
                         if (textCharArray[z] == ' ')
                         {
-                            textCharArray[z] = '\u00A0';
+                            textCharArray[z] = '\u00A0'; //'\u00A0' is the non-breaking-space character
                         }
                         else
                         {
                             break;
                         }
                     }
+                    //replace all spaces at the end...
                     for (int z = textCharArray.Length - 1; z >= 0; z--)
                     {
                         if (textCharArray[z] == ' ')
                         {
-                            textCharArray[z] = '\u00A0';
+                            textCharArray[z] = '\u00A0'; //'\u00A0' is the non-breaking-space character
                         }
                         else
                         {

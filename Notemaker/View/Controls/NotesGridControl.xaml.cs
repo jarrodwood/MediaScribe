@@ -31,6 +31,14 @@ namespace JayDev.Notemaker.View.Controls
 
         public Note CurrentNote { get { return (Note)noteDataGrid.SelectedItem; } }
 
+
+        public bool IsLoaded { get { return noteDataGrid.IsLoaded; } }
+        //TODO: get rid of this!
+        public DataGrid NoteGrid { get { return noteDataGrid; } }
+
+        #region Dependency Properties
+
+
         public ObservableCollection<Note> Notes
         {
             get { return (ObservableCollection<Note>)GetValue(NotesProperty); }
@@ -41,14 +49,9 @@ namespace JayDev.Notemaker.View.Controls
         public static readonly DependencyProperty NotesProperty =
             DependencyProperty.Register("Notes", typeof(ObservableCollection<Note>), typeof(NotesGridControl), new UIPropertyMetadata(null));
 
+        #endregion
 
-        #region Dependency Properties
-
-
-        public bool IsLoaded { get { return noteDataGrid.IsLoaded; } }
-        //TODO: get rid of this!
-        public DataGrid NoteGrid { get { return noteDataGrid; } }
-
+        #region Commands
 
         #region PrepareNoteForEditCommand
 

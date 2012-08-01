@@ -53,7 +53,7 @@
 
                     <DockPanel DockPanel.Dock="Top">
                         <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
-                        <Border DockPanel.Dock="Bottom" BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#DDD">
+                        <Border DockPanel.Dock="Bottom" BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#EAEAEA">
                             <StackPanel MinHeight="30">
                                 <TextBlock Text="Please add a new course!" Margin="0 5 0 0" HorizontalAlignment="Center"  VerticalAlignment="Center" Visibility="{Binding AreCoursesExisting, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}" />
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
@@ -66,46 +66,57 @@
                             </StackPanel>
                         </Border>
                         <!--</ContentControl>-->
-                        <DataGrid VerticalAlignment="Top" AutoGenerateColumns="False" Name="courseGrid" HeadersVisibility="Column" CanUserAddRows="False"
+                        <notemakerCommon:DoubleClickableDataGrid VerticalAlignment="Top" AutoGenerateColumns="False" x:Name="courseGrid" HeadersVisibility="Column" CanUserAddRows="False"                                                                 
                                   SelectionMode="Single"
-                            CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding Courses}" SelectedItem="{Binding SelectedCourse}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="MouseDoubleClick">
-                                    <cmd:EventToCommand Command="{Binding WriteNotesCommand,Mode=OneWay}"
-                                            MustToggleIsEnabledValue="True" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
+                                  CanUserSortColumns="True" CanUserReorderColumns="False" CanUserResizeRows="False"
+                                  ItemsSource="{Binding Courses}"
+                                  SelectedItem="{Binding SelectedCourse}"
+                                  RowDoubleClickCommand="{Binding WriteNotesCommand}"  Style="{StaticResource DataGridStyle1}">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Course Name"
                                             Width="*"
                                             Binding="{Binding Name}" 
+                                            SortMemberPath="Name"
+                                            CanUserSort="True"
                                             IsReadOnly="True"/>
                                 <DataGridTextColumn Header="Length"
                                             Width="55"
                                             Binding="{Binding CourseLength}" 
+                                            SortMemberPath="CourseLength"
+                                            CanUserSort="True"
                                             IsReadOnly="True"/>
                                 <DataGridTextColumn Header="Files"
                                             Width="55"
                                             Binding="{Binding Path=Tracks.Count}" 
+                                            SortMemberPath="Tracks.Count"
+                                            CanUserSort="True"
                                             IsReadOnly="True"/>
                                 <DataGridTextColumn Header="Notes"
                                             Width="55"
                                             Binding="{Binding Path=Notes.Count}" 
+                                            SortMemberPath="Notes.Count"
+                                            CanUserSort="True"
                                             IsReadOnly="True"/>
                                 <DataGridTextColumn Header="Created"
                                             Width="85"
                                             Binding="{Binding Path=CourseLength}" 
+                                            SortMemberPath="CourseLength"
+                                            CanUserSort="True"
                                             IsReadOnly="True"/>
                                 <DataGridTextColumn Header="Modified"
                                             Width="85"
                                             Binding="{Binding CourseLength}" 
+                                            SortMemberPath="CourseLength"
+                                            CanUserSort="True"
                                             IsReadOnly="True"/>
                                 <DataGridTextColumn Header="Viewed"
                                             Width="85"
                                             Binding="{Binding CourseLength}" 
+                                            SortMemberPath="CourseLength"
+                                            CanUserSort="True"
                                             IsReadOnly="True"/>
                             </DataGrid.Columns>
-                        </DataGrid>
+                        </notemakerCommon:DoubleClickableDataGrid>
                     </DockPanel>
                     <!--Empty content control, which 'fills' the dockpanel. As the grid grows, this will shrink away to nothing... and as the grid continues to grow, it'll get scrollbars.-->
                     <ContentControl>
@@ -139,7 +150,7 @@
                                                                              OnDragDisplayPropertyName="StringDisplayValue"
                                                                              CanDrag="False"
                                                                              ReadOnlySelectedItems="{Binding SelectedCourseSelectedTracks, Mode=OneWayToSource}"
-                                                                             MoveItemsCommand="{Binding Path=MoveItemsCommand}">
+                                                                             MoveItemsCommand="{Binding Path=MoveItemsCommand}" Style="{StaticResource DataGridStyle1}">
                                             <DataGrid.Columns>
                                                 <DataGridTextColumn Header="Name"
                                                 Width="*"
@@ -175,7 +186,7 @@
                                 <DockPanel Margin="0 15 0 0">
                                     <DockPanel DockPanel.Dock="Top">
                                         <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
-                                        <Border DockPanel.Dock="Bottom" BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#DDD">
+                                        <Border DockPanel.Dock="Bottom" BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#EAEAEA">
                                             <StackPanel MinHeight="30">
                                                 <TextBlock Margin="0 5 0 0"  Text="Please add some tracks!" HorizontalAlignment="Center" VerticalAlignment="Bottom"  Visibility="{Binding AreTracksExistingInSelectedCourse, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}" />
                                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
@@ -193,7 +204,7 @@
                                                                              OnDragDisplayPropertyName="StringDisplayValue"
                                                                              CanDrag="True"
                                                                              ReadOnlySelectedItems="{Binding SelectedCourseSelectedTracks, Mode=OneWayToSource}"
-                                                                             MoveItemsCommand="{Binding Path=MoveItemsCommand}">
+                                                                             MoveItemsCommand="{Binding Path=MoveItemsCommand}" Style="{StaticResource DataGridStyle1}">
                                             <DataGrid.ContextMenu>
                                                 <ContextMenu>
                                                     <MenuItem Header="Remove Track" Command="Delete" />
@@ -240,7 +251,7 @@
                                 <DockPanel Margin="0 15 0 0">
                                     <DockPanel DockPanel.Dock="Top">
                                         <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
-                                        <Border DockPanel.Dock="Bottom" BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#DDD">
+                                        <Border DockPanel.Dock="Bottom" BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#EAEAEA">
                                             <StackPanel MinHeight="30">
                                                 <TextBlock Margin="0 5 0 0"  Text="Please add some tracks!" HorizontalAlignment="Center" VerticalAlignment="Bottom"  Visibility="{Binding AreTracksExistingInSelectedCourse, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}" />
                                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
@@ -258,7 +269,7 @@
                                                                              OnDragDisplayPropertyName="StringDisplayValue"
                                                                              CanDrag="True"
                                                                              ReadOnlySelectedItems="{Binding SelectedCourseSelectedTracks, Mode=OneWayToSource}"
-                                                                             MoveItemsCommand="{Binding Path=MoveItemsCommand}">
+                                                                             MoveItemsCommand="{Binding Path=MoveItemsCommand}" Style="{StaticResource DataGridStyle1}">
                                             <DataGrid.ContextMenu>
                                                 <ContextMenu>
                                                     <MenuItem Header="Remove Track" Command="Delete" />

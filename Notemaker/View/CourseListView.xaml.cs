@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using JayDev.Notemaker.ViewModel;
+using JayDev.Notemaker.Common;
 
 namespace JayDev.Notemaker.View
 {
@@ -29,5 +30,6 @@ namespace JayDev.Notemaker.View
             this.DataContext = viewModel;
             this._viewModel = viewModel;
         }
+
     }
 }

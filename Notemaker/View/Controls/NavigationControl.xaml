@@ -32,116 +32,150 @@
             <Setter Property="FontSize" Value="12" />
         </Style>
     </UserControl.Resources>
-    <Grid SnapsToDevicePixels="True">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Border BorderBrush="#0F0" Background="#E3ECF6" Name="BackgroundBorder" Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="3" />
-        <Border Grid.Row="1" Grid.ColumnSpan="3">
-            <Popup IsOpen="False" PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}" AllowsTransparency="True" Name="PART_ITEMSPRESENTERPOPUP">
-                <mwt:SystemDropShadowChrome Color="#00FFFFFF" Name="Shdw" Margin="0,0,5,5" FocusVisualStyle="{x:Null}" Focusable="True" RenderOptions.ClearTypeHint="Enabled">
-                    <Border Background="#0F0" Name="CollapsedPopupBackgroundBorder">
-                        <ContentControl Name="popupItemsPresenterHost" Margin="0,1,0,0" Focusable="False" KeyboardNavigation.TabNavigation="Cycle" KeyboardNavigation.DirectionalNavigation="Cycle" />
-                    </Border>
-                </mwt:SystemDropShadowChrome>
-            </Popup>
-        </Border>
-        <ContentControl Name="mainItemsPresenterHost" Focusable="False" Grid.Row="2" Grid.ColumnSpan="3">
-            <Border BorderThickness="1,1,1,1" BorderBrush="#B9C9DA" Name="groupsBorder" Height="91" SnapsToDevicePixels="True">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                        <LinearGradientBrush.GradientStops>
-                            <GradientStop Color="#EEFFFFFF" Offset="0" />
-                            <GradientStop Color="#BBFFFFFF" Offset="0.1" />
-                            <GradientStop Color="#05FFFFFF" Offset="0.5" />
-                            <GradientStop Color="#20FFFFFF" Offset="1" />
-                        </LinearGradientBrush.GradientStops>
-                    </LinearGradientBrush>
-                </Border.Background>
-                <Border BorderThickness="0,0,0,1" BorderBrush="#60FFFFFF" Margin="0,0,0,1" SnapsToDevicePixels="True">
-                    <Grid DockPanel.Dock="Top" Height="85">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="20"/>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="20"/>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="80"/>
-                        </Grid.ColumnDefinitions>
-                        <notemakerControls:NavigationButton Margin="10 0 00 0" Grid.Column="0" Text="Course&#13;List" MySource="/Notemaker;component/Images/package_office.png"
+    <Grid>
+
+
+        <Viewbox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"  Stretch="Fill" Margin="0,0,0,0" Height="92">
+            <Grid Height="92" Width="1832">
+
+                <Rectangle Height="92" Stroke="#FF75B2DE" VerticalAlignment="Bottom"  StrokeThickness="1" d:LayoutOverrides="HorizontalAlignment">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF96D1FF" Offset="0.991"/>
+                            <GradientStop Color="#FFE3F3FF" Offset="0.017"/>
+                            <GradientStop Color="#FFD2EBFF" Offset="0.759"/>
+                            <GradientStop Color="#FFD2EBFF" Offset="0.25"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <Rectangle Height="60.01" Margin="1.144,0.544,1.126,0" VerticalAlignment="Top" d:LayoutOverrides="HorizontalAlignment">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TransformGroup>
+                                    <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleY="0.559" ScaleX="1.117"/>
+                                    <SkewTransform AngleY="0" AngleX="0" CenterY="0.5" CenterX="0.5"/>
+                                    <RotateTransform Angle="0" CenterY="0.5" CenterX="0.5"/>
+                                    <TranslateTransform X="0.058" Y="-0.22"/>
+                                </TransformGroup>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="#AAFFFFFF" Offset="0"/>
+                            <GradientStop Offset="1"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+
+            </Grid>
+        </Viewbox>
+        <Grid SnapsToDevicePixels="True" Visibility="Visible">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="1" Grid.ColumnSpan="3">
+                <Popup IsOpen="False" PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}" AllowsTransparency="True" Name="PART_ITEMSPRESENTERPOPUP">
+                    <mwt:SystemDropShadowChrome Color="#00FFFFFF" Name="Shdw" Margin="0,0,5,5" FocusVisualStyle="{x:Null}" Focusable="True" RenderOptions.ClearTypeHint="Enabled">
+                        <Border Background="#0F0" Name="CollapsedPopupBackgroundBorder">
+                            <ContentControl Name="popupItemsPresenterHost" Margin="0,1,0,0" Focusable="False" KeyboardNavigation.TabNavigation="Cycle" KeyboardNavigation.DirectionalNavigation="Cycle" />
+                        </Border>
+                    </mwt:SystemDropShadowChrome>
+                </Popup>
+            </Border>
+            <ContentControl Name="mainItemsPresenterHost" Focusable="False" Grid.Row="2" Grid.ColumnSpan="3">
+                <Border BorderThickness="1,1,1,1" BorderBrush="#B9C9DA" Name="groupsBorder" Height="91" SnapsToDevicePixels="True" Visibility="Visible">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                            <LinearGradientBrush.GradientStops>
+                                <GradientStop Color="#EEFFFFFF" Offset="0" />
+                                <GradientStop Color="#BBFFFFFF" Offset="0.1" />
+                                <GradientStop Color="#05FFFFFF" Offset="0.5" />
+                                <GradientStop Color="#20FFFFFF" Offset="1" />
+                            </LinearGradientBrush.GradientStops>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Border BorderThickness="0,0,0,1" BorderBrush="#60FFFFFF" Margin="0,0,0,1" SnapsToDevicePixels="True">
+                        <Grid DockPanel.Dock="Top" Height="85">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="80"/>
+                            </Grid.ColumnDefinitions>
+                            <notemakerControls:NavigationButton Margin="10 0 00 0" Grid.Column="0" Text="Course&#13;List" MySource="/Notemaker;component/Images/package_office.png"
                                                        Command="{Binding NavigateCommand}" CommandParameter="{x:Static notemakerCommon:NavigateMessage.ListCourses}"/>
-                        <!--" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" Command="{Binding NavigateCommand}" CommandParameter="{x:Static notemakerCommon:NavigateMessage.MaintainCourse}">
+                            <!--" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" Command="{Binding NavigateCommand}" CommandParameter="{x:Static notemakerCommon:NavigateMessage.MaintainCourse}">
                         <StackPanel>
                             <Image Source="/Notemaker;component/Images/system-settings-2.png" Height="48" Width="48" />
                             <TextBlock HorizontalAlignment="Center" Style="{StaticResource ChangeMyFonts}">Settings</TextBlock>
                         </StackPanel>
                         </Button>-->
-                        <notemakerControls:NavigationButton Grid.Column="1" Text="Settings" MySource="/Notemaker;component/Images/system-settings-2.png"  />
-                        <ContentControl Grid.Column="2">
-                            <Separator Margin="0 10" Style="{StaticResource MySeparatorStyle}">
-                                <Separator.LayoutTransform>
-                                    <RotateTransform Angle="90" />
-                                </Separator.LayoutTransform>
-                            </Separator>
-                        </ContentControl>
-                        <notemakerControls:NavigationButton Grid.Column="3" Text="Write Notes" MySource="/Notemaker;component/Images/preferences-composer.png" IsEnabled="False" />
-                        <notemakerControls:NavigationButton Grid.Column="4" Text="Review&#13;Notes" MySource="/Notemaker;component/Images/text-x-generic.png" IsEnabled="False" />
-                        <ContentControl Grid.Column="5">
-                            <Separator Margin="0 10" Style="{StaticResource MySeparatorStyle}">
-                                <Separator.LayoutTransform>
-                                    <RotateTransform Angle="90" />
-                                </Separator.LayoutTransform>
-                            </Separator>
-                        </ContentControl>
-                        <notemakerControls:NavigationButton Grid.Column="6" Text="Save Course" MySource="/Notemaker;component/Images/stock_save.png" />
-                        <notemakerControls:NavigationButton Grid.Column="7" Text="Configure&#13;Tags" MySource="/Notemaker;component/Images/seahorse.png" IsEnabled="False" />
-                        <notemakerControls:NavigationButton Grid.Column="8" Text="Export" MySource="/Notemaker;component/Images/archive-insert-2.png"
+                            <notemakerControls:NavigationButton Grid.Column="1" Text="Settings" MySource="/Notemaker;component/Images/system-settings-2.png"  />
+                            <ContentControl Grid.Column="2">
+                                <Separator Margin="0 10" Style="{StaticResource MySeparatorStyle}">
+                                    <Separator.LayoutTransform>
+                                        <RotateTransform Angle="90" />
+                                    </Separator.LayoutTransform>
+                                </Separator>
+                            </ContentControl>
+                            <notemakerControls:NavigationButton Grid.Column="3" Text="Write Notes" MySource="/Notemaker;component/Images/preferences-composer.png" IsEnabled="False" />
+                            <notemakerControls:NavigationButton Grid.Column="4" Text="Review&#13;Notes" MySource="/Notemaker;component/Images/text-x-generic.png" IsEnabled="False" />
+                            <ContentControl Grid.Column="5">
+                                <Separator Margin="0 10" Style="{StaticResource MySeparatorStyle}">
+                                    <Separator.LayoutTransform>
+                                        <RotateTransform Angle="90" />
+                                    </Separator.LayoutTransform>
+                                </Separator>
+                            </ContentControl>
+                            <notemakerControls:NavigationButton Grid.Column="6" Text="Save Course" MySource="/Notemaker;component/Images/stock_save.png" />
+                            <notemakerControls:NavigationButton Grid.Column="7" Text="Configure&#13;Tags" MySource="/Notemaker;component/Images/seahorse.png" IsEnabled="False" />
+                            <notemakerControls:NavigationButton Grid.Column="8" Text="Export" MySource="/Notemaker;component/Images/archive-insert-2.png"
                                                             Command="{Binding ExportCommand}" />
-                        <Grid Grid.Column="9">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="30"/>
-                                <ColumnDefinition Width="20"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBox Grid.Column="1" VerticalAlignment="Center" Foreground="LightGray" Text="Search notes..." />
-                            <Image Grid.Column="2" Source="/Notemaker;component/Images/system-search-4.png" Height="24" Width="24" />
-                        </Grid>
+                            <Grid Grid.Column="9">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="20"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Grid.Column="1" VerticalAlignment="Center" Foreground="LightGray" Text="Search notes..." />
+                                <Image Grid.Column="2" Source="/Notemaker;component/Images/system-search-4.png" Height="24" Width="24" />
+                            </Grid>
 
-                        <notemakerControls:NavigationButton Grid.Column="10" Text="Fullscreen&#13;Writing"  />
-                        <notemakerControls:NavigationButton Grid.Column="11" Text="Show All&#13;Tracks' Notes" MySource="/Notemaker;component/Images/stock_search.png" IsEnabled="False" />
-                        <notemakerControls:NavigationButton Grid.Column="12" Text="Lock Edit" MySource="/Notemaker;component/Images/system-config-rootpassword.png" IsEnabled="False" />
-                        <notemakerControls:NavigationButton Grid.Column="13" Text="Show Two&#13;Lists" MySource="/Notemaker;component/Images/view-list-icon.png" IsEnabled="False" />
-                        <notemakerControls:NavigationButton Grid.Column="14" Text="Sort List" MySource="/Notemaker;component/Images/update-manager.png" IsEnabled="False" />
-                        <notemakerControls:NavigationButton Grid.Column="15" Text="Filter List" MySource="/Notemaker;component/Images/filter.png" IsEnabled="False" />
-                        <notemakerControls:NavigationButton Grid.Column="16" Text="Change List&#13;Font Size" MySource="/Notemaker;component/Images/fonts.png" IsEnabled="False" />
-                        <notemakerControls:NavigationButton Grid.Column="17" Text="Change List&#13;Columns" Margin="00 0 10 0" MySource="/Notemaker;component/Images/view-file-columns.png" IsEnabled="False" />
-                    </Grid>
+                            <notemakerControls:NavigationButton Grid.Column="10" Text="Fullscreen&#13;Writing"  />
+                            <notemakerControls:NavigationButton Grid.Column="11" Text="Show All&#13;Tracks' Notes" MySource="/Notemaker;component/Images/stock_search.png" IsEnabled="False" />
+                            <notemakerControls:NavigationButton Grid.Column="12" Text="Lock Edit" MySource="/Notemaker;component/Images/system-config-rootpassword.png" IsEnabled="False" />
+                            <notemakerControls:NavigationButton Grid.Column="13" Text="Show Two&#13;Lists" MySource="/Notemaker;component/Images/view-list-icon.png" IsEnabled="False" />
+                            <notemakerControls:NavigationButton Grid.Column="14" Text="Sort List" MySource="/Notemaker;component/Images/update-manager.png" IsEnabled="False" />
+                            <notemakerControls:NavigationButton Grid.Column="15" Text="Filter List" MySource="/Notemaker;component/Images/filter.png" IsEnabled="False" />
+                            <notemakerControls:NavigationButton Grid.Column="16" Text="Change List&#13;Font Size" MySource="/Notemaker;component/Images/fonts.png" IsEnabled="False" />
+                            <notemakerControls:NavigationButton Grid.Column="17" Text="Change List&#13;Columns" Margin="00 0 10 0" MySource="/Notemaker;component/Images/view-file-columns.png" IsEnabled="False" />
+                        </Grid>
+                    </Border>
                 </Border>
+            </ContentControl>
+            <Border BorderBrush="#0F0" Name="QatBottomHost" Grid.Row="3" Grid.ColumnSpan="3">
+                <ContentPresenter Name="QatBottomHostContentPresenter" HorizontalAlignment="Left" VerticalAlignment="Center" IsHitTestVisible="True" />
             </Border>
-        </ContentControl>
-        <Border BorderBrush="#0F0" Name="QatBottomHost" Grid.Row="3" Grid.ColumnSpan="3">
-            <ContentPresenter Name="QatBottomHostContentPresenter" HorizontalAlignment="Left" VerticalAlignment="Center" IsHitTestVisible="True" />
-        </Border>
+        </Grid>
     </Grid>
 </UserControl>

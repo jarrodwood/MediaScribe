@@ -25,6 +25,20 @@ namespace JayDev.Notemaker.View.Controls
     {
         Dispatcher _uiDispatcher;
 
+        #region PlayStatus
+
+        public PlayStatus PlayStatus
+        {
+            get { return (PlayStatus)GetValue(PlayStatusProperty); }
+            set { SetValue(PlayStatusProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for PlayStatus.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PlayStatusProperty =
+            DependencyProperty.Register("PlayStatus", typeof(PlayStatus), typeof(MediaControlsControl), new UIPropertyMetadata(null));
+
+        #endregion
+
         #region CurrentPlayTime
 
         public TimeSpan CurrentPlayTime
@@ -141,26 +155,8 @@ namespace JayDev.Notemaker.View.Controls
         {
             InitializeComponent();
             _uiDispatcher = Dispatcher.CurrentDispatcher;
-            //Timer timer = new Timer();
-            //timer.Interval = 100;
-            //Volume = 100;
-            //timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
+        }
 
-            //timer.Start();
-        }
-        int countdown = 30;
-        void timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            if (countdown > 0)
-                countdown--;
-            else
-            {
-                ThreadHelper.ExecuteAsyncUI(_uiDispatcher, delegate
-                {
-                    Volume--;
-                });
-            }
-        }
         TimeSpanToSecondsConverter converter = new TimeSpanToSecondsConverter();
 
         private void timeSlider_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)

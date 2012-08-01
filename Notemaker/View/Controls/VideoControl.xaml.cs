@@ -76,12 +76,12 @@ namespace JayDev.Notemaker.View.Controls
         #region PlayPauseCommand
 
         public static readonly DependencyProperty PlayPauseCommandqProperty =
-            DependencyProperty.Register("PlayPauseCommandq", typeof(ICommand), typeof(VideoControl));
+            DependencyProperty.Register("PlayPauseCommand", typeof(ICommand), typeof(VideoControl));
 
         /// <summary>
         /// Gets the PlayCommand.
         /// </summary>
-        public ICommand PlayPauseCommandq
+        public ICommand PlayPauseCommand
         {
             get { return (ICommand)GetValue(PlayPauseCommandqProperty); }
             set { SetValue(PlayPauseCommandqProperty, value); }
@@ -129,7 +129,7 @@ namespace JayDev.Notemaker.View.Controls
         {
 
             Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen), MessageType.Navigate);
-            //PlayPauseCommandq.Execute(null);
+            //PlayPauseCommand.Execute(null);
         }
 
 

@@ -30,10 +30,9 @@ namespace JayDev.Notemaker.Common
             this.ObjectsToInsert = objectsToInsert;
         }
     }
+
     public class DragEnabledDataGrid : DataGrid
     {
-
-
         public bool CanDrag
         {
             get { return (bool)GetValue(CanDragProperty); }

@@ -18,7 +18,7 @@
             AutoGenerateColumns="False" Name="noteDataGrid" HeadersVisibility="Column" CanUserSortColumns="True" CanUserResizeRows="False" CanUserAddRows="True"
             CanUserDeleteRows="True" RowEditEnding="noteDataGrid_RowEditEnding" BeginningEdit="noteDataGrid_BeginningEdit"
             PreparingCellForEdit="noteDataGrid_PreparingCellForEdit"
-            ItemsSource="{ Binding ElementName=NotesGridControlName, Path=Notes, Mode=TwoWay, IsAsync=True}"  CellEditEnding="noteDataGrid_CellEditEnding">
+            ItemsSource="{ Binding ElementName=NotesGridControlName, Path=Notes, Mode=TwoWay, IsAsync=True}"  CellEditEnding="noteDataGrid_CellEditEnding" Style="{StaticResource DataGridStyle1}">
             <DataGrid.InputBindings>
                 <KeyBinding Key="Delete" Command="" />
             </DataGrid.InputBindings>
@@ -49,7 +49,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>-->
-                <DataGridTemplateColumn Header="From" Width="90" SortMemberPath="{Binding Path=Start.StringDisplayValue}">
+                <DataGridTemplateColumn Header="From" Width="90" SortMemberPath="Start.StringDisplayValue" CanUserSort="True">
                     <!-- editing template -->
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
@@ -88,7 +88,7 @@
                 <!--<DataGridTextColumn Header="Note" Width="*"  
                                            Binding="{Binding Path=TitleBody}" 
                                            IsReadOnly="True"/>-->
-                <DataGridTemplateColumn Header="Note" Width="*" SortMemberPath="{Binding Path=Body}">
+                <DataGridTemplateColumn Header="Note" Width="*" SortMemberPath="Body" CanUserSort="True">
                     <!-- editing template -->
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
@@ -110,7 +110,7 @@
                 <DataGridTextColumn Header="Rating" Width="50"  
                                            Binding="{Binding Rating}" 
                                            IsReadOnly="True"
-                                           SortMemberPath="{Binding Path=Rating}"/>
+                                           SortMemberPath="Rating"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

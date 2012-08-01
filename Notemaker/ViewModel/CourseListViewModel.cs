@@ -122,6 +122,7 @@ namespace JayDev.Notemaker.ViewModel
                                           },
                                           () => //can save if there is a name, and tracks.
                                               false == string.IsNullOrWhiteSpace(SelectedCourseName)
+                                              && null != SelectedCourseTracks
                                               && SelectedCourseTracks.Count > 0));
             }
         }
@@ -297,7 +298,12 @@ namespace JayDev.Notemaker.ViewModel
                     ?? (_writeNotesCommand = new RelayCommand(
                                           () =>
                                           {
-                                              Messenger.Default.Send(new NavigateArgs(NavigateMessage.WriteCourseNotes, SelectedCourse), MessageType.Navigate);
+                                              //NOTE: double-clicking on the headers for the grid also triggers this event, so check to
+                                              //ensure that an item is selected first.
+                                              if (null != SelectedCourse)
+                                              {
+                                                  Messenger.Default.Send(new NavigateArgs(NavigateMessage.WriteCourseNotes, SelectedCourse), MessageType.Navigate);
+                                              }
                                           }));
             }
         }

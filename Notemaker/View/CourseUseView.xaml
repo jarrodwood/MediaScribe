@@ -18,7 +18,7 @@
                 False="Collapsed" />
     </UserControl.Resources>
     <!--<Grid Background="#FFEFF5FF">-->
-    <Grid Background="#EFEFEF">
+    <Grid Background="#FFEFF5FF">
         <DockPanel Name="windowContents">
             <notemakerControl:NavigationControl DockPanel.Dock="Top"
                                                 NavigateCommand="{Binding NavigateCommand}"
@@ -33,6 +33,7 @@
                                                    PlayPauseCommand="{Binding PlayPauseCommand}"
                                                    SeekToCommand="{Binding SeekToCommand}"
                                                    TrackTitle="{Binding CurrentTrackName}"
+                                                   PlayStatus="{Binding PlayStatus}"
                                                    Volume="{Binding Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
             <Grid Name="mainGrid">
@@ -55,7 +56,7 @@
                                                            VideoPanelPointer="{Binding VideoPanelPointer, Mode=OneWayToSource}"
                                                            AspectRatio="{Binding CurrentTrackVideoAspectRatio}"
                                                            IsShowingVideo="{Binding IsCurrentTrackVideo}"
-                                                           PlayPauseCommandq="{Binding ToggleFullscreenCommand}"/>
+                                                           PlayPauseCommand="{Binding ToggleFullscreenCommand}"/>
                         <!--</DockPanel>-->
                     </DockPanel>
                     <GridSplitter
@@ -72,7 +73,7 @@
                     <DockPanel Grid.Row="2">
                         <TextBlock DockPanel.Dock="Top">Course Track List</TextBlock>
                         <DataGrid VerticalAlignment="Top" AutoGenerateColumns="False" LoadingRow="DataGrid_LoadingRow" Name="trackGrid" HeadersVisibility="All" CanUserAddRows="False"
-                           CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding Tracks}">
+                           CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding Tracks}" Style="{StaticResource DataGridStyle1}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseDoubleClick">
                                     <cmd:EventToCommand Command="{Binding SelectTrackCommand,Mode=OneWay}"

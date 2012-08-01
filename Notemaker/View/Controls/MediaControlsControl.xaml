@@ -6,23 +6,35 @@
              mc:Ignorable="d" 
              d:DesignHeight="102" d:DesignWidth="916"
              xmlns:nmCommon="clr-namespace:JayDev.Notemaker.Common"
+             xmlns:nmControls="clr-namespace:JayDev.Notemaker.View.Controls"
             xmlns:local="clr-namespace:JayDev.Notemaker.Core"
              x:Name="MediaControlsControlName">
     <UserControl.Resources>
         <ResourceDictionary>
             <nmCommon:TimeSpanToSecondsConverter x:Key="timespanConverter" />
+            <nmCommon:SecondsToTimeSpanConverter x:Key="secondsConverter" />
+            <nmCommon:PlayButtonVisibilityConverter x:Key="playButtonConverter" />
+            <nmCommon:PauseButtonVisibilityConverter x:Key="pauseButtonConverter" />
+            <nmCommon:NumericRangeVisibilityConverter x:Key="muteVolumeConverter" 
+                VisibleFrom="0" VisibleTo="0" />
+            <nmCommon:NumericRangeVisibilityConverter x:Key="minVolumeConverter" 
+                VisibleFrom="1" VisibleTo="32" />
+            <nmCommon:NumericRangeVisibilityConverter x:Key="medVolumeConverter" 
+                VisibleFrom="33" VisibleTo="66" />
+            <nmCommon:NumericRangeVisibilityConverter x:Key="maxVolumeConverter" 
+                VisibleFrom="67" VisibleTo="100" />
             <DataTemplate x:Key="PreviewDataTemplate">
-                <TextBlock Text="{Binding StringFormat=\{0:00.00\}}"/>
+                <TextBlock Text="{Binding StringFormat=\{0:00.00\}, Converter={StaticResource secondsConverter}}"/>
             </DataTemplate>
 
             <Style x:Key="PreviewStyle" TargetType="{x:Type ContentControl}">
                 <Setter Property="ContentTemplate" Value="{StaticResource PreviewDataTemplate}"/>
                 <Setter Property="IsHitTestVisible" Value="False"/>
-                <Setter Property="Margin" Value="-20,-70,0,0" />
+                <Setter Property="Margin" Value="-30,-70,0,0" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ContentControl}">
-                            <Grid Margin="-5" Width="50" Height="70">
+                            <Grid Margin="-5" Width="70" Height="70">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="0.5*"/>
                                     <RowDefinition Height="0.5*"/>
@@ -34,7 +46,7 @@
                                 <Path Stretch="Fill" Stroke="White" HorizontalAlignment="Center" Margin="20,-1,19.5,-1" VerticalAlignment="Stretch" Width="0.5" Data="M18.875,30.200352 L19.125,40" Grid.Row="1" />
 
                                 <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Uniform" Margin="5">
-                                    <ContentPresenter />
+                                    <ContentPresenter  />
                                 </Viewbox>
                             </Grid>
                         </ControlTemplate>
@@ -45,61 +57,233 @@
         </ResourceDictionary>
 
     </UserControl.Resources>
-    <StackPanel>
+    
 
-        <!--<Slider Name="timeSlider" ValueChanged="Slider_ValueChanged" IsMoveToPointEnabled="True" />-->
-        <Slider Background="#FF101010" Name="timeSlider" SmallChange="0.5" IsSnapToTickEnabled="True" TickFrequency="0.5" Height="15"
-                    Style="{DynamicResource HuluSlider}" PreviewMouseLeftButtonUp="timeSlider_PreviewMouseLeftButtonUp"
+        <Grid Name="BottomBar"  Height="75" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="auto">
+            <Viewbox Stretch="Fill" Margin="0,4,0,0">
+                <Grid Height="60" Width="1832">
+
+                    <Rectangle Height="60" Stroke="#FF75B2DE" VerticalAlignment="Center"  StrokeThickness="1" d:LayoutOverrides="HorizontalAlignment">
+                        <Rectangle.Fill>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FF8CCDFD" Offset="1"/>
+                                <GradientStop Color="#FFE3F3FF" Offset="0.017"/>
+                                <GradientStop Color="#FFB8E1FF" Offset="0.487"/>
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <Rectangle Height="39.01" Margin="1.144,0.544,1.126,0" VerticalAlignment="Top" d:LayoutOverrides="HorizontalAlignment">
+                        <Rectangle.Fill>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <LinearGradientBrush.RelativeTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleY="0.559" ScaleX="1.117"/>
+                                        <SkewTransform AngleY="0" AngleX="0" CenterY="0.5" CenterX="0.5"/>
+                                        <RotateTransform Angle="0" CenterY="0.5" CenterX="0.5"/>
+                                        <TranslateTransform X="0.058" Y="-0.22"/>
+                                    </TransformGroup>
+                                </LinearGradientBrush.RelativeTransform>
+                                <GradientStop Color="#AAFFFFFF" Offset="0"/>
+                                <GradientStop Offset="1"/>
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <Rectangle Height="40.016" Margin="1.464,19.124,1.154,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" d:LayoutOverrides="HorizontalAlignment">
+                        <Rectangle.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="180"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Rectangle.RenderTransform>
+                        <Rectangle.Fill>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <LinearGradientBrush.RelativeTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleY="0.559" ScaleX="1.117"/>
+                                        <SkewTransform AngleY="0" AngleX="0" CenterY="0.5" CenterX="0.5"/>
+                                        <RotateTransform Angle="0" CenterY="0.5" CenterX="0.5"/>
+                                        <TranslateTransform X="0.058" Y="-0.22"/>
+                                    </TransformGroup>
+                                </LinearGradientBrush.RelativeTransform>
+                                <GradientStop Color="#AAFFFFFF" Offset="0"/>
+                                <GradientStop Offset="0.315"/>
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+
+                </Grid>
+            </Viewbox>
+
+            <Grid x:Name="TrackBar" Margin="0 0 0 0" Height="12" VerticalAlignment="Top">
+                <Slider Name="timeSlider" SmallChange="0.5" IsSnapToTickEnabled="True" TickFrequency="0.5" Height="15"
+                    Style="{DynamicResource JarrodSlider}" PreviewMouseLeftButtonUp="timeSlider_PreviewMouseLeftButtonUp"
         		local:SliderPreviewHelper.PreviewEnabled="True"  
         		local:SliderPreviewHelper.ContentStyle="{StaticResource PreviewStyle}"      
                 Value="{Binding ElementName=MediaControlsControlName, Path=CurrentPlayTime, Converter={StaticResource timespanConverter}, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                 Maximum="{Binding ElementName=MediaControlsControlName, Path=MaxPlayTime, Converter={StaticResource timespanConverter}}"
                 Minimum="0"
                 />
+            </Grid>
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="35"/>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="35"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="0" VerticalAlignment="Center">
+
+
+            <Grid Margin="0 10.5 0 0">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="40"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <DockPanel>
-                <StackPanel Grid.Column="0" Orientation="Horizontal">
-                    <TextBlock Name="currentPlayTime" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=CurrentPlayTime, StringFormat=h\\:mm\\:ss}"/>
-                    <TextBlock HorizontalAlignment="Left" xml:space="preserve"> / </TextBlock>
-                        <TextBlock Name="totalTrackTime" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=MaxPlayTime, StringFormat=h\\:mm\\:ss}"/>
-                        <TextBlock HorizontalAlignment="Left" xml:space="preserve"> - </TextBlock>
-                        <TextBlock HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=TrackTitle, StringFormat=h\\:mm\\:ss, TargetNullValue='No track selected'}"/>
+
+                <Grid Grid.Column="0" VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <DockPanel>
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="20 0 0 0">
+                            <TextBlock Name="currentPlayTime" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=CurrentPlayTime, StringFormat=h\\:mm\\:ss}"/>
+                            <TextBlock HorizontalAlignment="Left" xml:space="preserve"> /</TextBlock>
+                            <TextBlock Name="totalTrackTime" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=MaxPlayTime, StringFormat=h\\:mm\\:ss}"/>
+                            <TextBlock HorizontalAlignment="Left" xml:space="preserve"> -</TextBlock>
+                            <TextBlock HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=TrackTitle, StringFormat=h\\:mm\\:ss, TargetNullValue='No track selected'}"/>
 
 
-                    </StackPanel>
-                    <Button DockPanel.Dock="Right" Height="20px" HorizontalAlignment="Right" Command="{Binding ElementName=MediaControlsControlName, Path=StopCommand}">Stop</Button>
-                    <Button DockPanel.Dock="Right" Height="20px" HorizontalAlignment="Right">Toggle notes in trackbar</Button>
-                    <Button DockPanel.Dock="Right" Height="20px" HorizontalAlignment="Right">preview on/off</Button>
-                </DockPanel>
-            </Grid>
-            <Button Grid.Column="1" Height="20px">Prev</Button>
-            <!--<Button Grid.Column="2" Height="30px" Click="Button_Click">Play</Button>-->
-            <Button Grid.Column="2" Height="30px" Command="{Binding ElementName=MediaControlsControlName, Path=PlayPauseCommand}">Play</Button>
-            <Button Grid.Column="3" Height="20px">Next</Button>
+                        </StackPanel>
+                        <!--<Button DockPanel.Dock="Right" Height="20px" HorizontalAlignment="Right" Command="{Binding ElementName=MediaControlsControlName, Path=StopCommand}">Stop</Button>
+                        <Button DockPanel.Dock="Right" Height="20px" HorizontalAlignment="Right">Toggle notes in trackbar</Button>
+                        <Button DockPanel.Dock="Right" Height="20px" HorizontalAlignment="Right">preview on/off</Button>-->
+                    </DockPanel>
+                </Grid>
+
+
+            <Button Grid.Column="1" x:Name="prevButton" Style="{StaticResource GlassButton}" Width="32" Height="32">
+                <Grid RenderTransformOrigin="0.5, 0.5">
+                    <Grid.RenderTransform>
+                        <RotateTransform Angle="180" />
+                    </Grid.RenderTransform>
+                    <Path x:Name="nextPath3"
+					Data            = "M0,0 L0.5,1 L0,2 Z" Margin="-5 3 0 0" Height="15" Stretch="Fill" Width="11" Stroke="#FF0E244E" StrokeThickness="0.8">
+                        <Path.Fill>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FFBABABA" Offset="0.629"/>
+                                <GradientStop Color="White" Offset="0.409"/>
+                            </LinearGradientBrush>
+                        </Path.Fill>
+                    </Path>
+                    <Path x:Name="nextPath4"
+					Data = "M5,5 L5,0 0,0 0,5 Z" Margin="14 3 0 0" Height="15" Stretch="Fill" Width="3.8" Stroke="#FF0E244E" StrokeThickness="0.8">
+                        <Path.Fill>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FFBABABA" Offset="0.629"/>
+                                <GradientStop Color="White" Offset="0.409"/>
+                            </LinearGradientBrush>
+                        </Path.Fill>
+                    </Path>
+                </Grid>
+            </Button>
+
+            <Button Grid.Column="2" x:Name="stopButton" Style="{StaticResource GlassButton}" Width="42" Height="42" 
+                    Command="{Binding ElementName=MediaControlsControlName, Path=StopCommand}">
+                <Path x:Name="stop"
+				Data = "M5,5 L5,0 0,0 0,5 Z" Margin="0 0 0 0" Height="16" Stretch="Fill" Width="16" Stroke="#FF0E244E" StrokeThickness="1">
+                    <Path.Fill>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFBABABA" Offset="0.629"/>
+                            <GradientStop Color="White" Offset="0.409"/>
+                        </LinearGradientBrush>
+                    </Path.Fill>
+                </Path>
+            </Button>
+
+            
+                <Button Grid.Column="3" x:Name="playButton" Style="{StaticResource GlassButton}" Width="42" Height="42"
+                     Command="{Binding ElementName=MediaControlsControlName, Path=PlayPauseCommand}">
+                <Grid>
+                    <Grid Visibility="{Binding ElementName=MediaControlsControlName, Path=PlayStatus, Converter={StaticResource playButtonConverter}}">
+                <Path x:Name="arrow" Width="16" Margin="4 0 0 0" Height="20"
+				Data            = "M 1,6 L 6,3 L 1,0 L 1,6 Z"  Stretch="Fill" Stroke="#FF0E244E" StrokeThickness="1">
+                    <Path.Fill>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFBABABA" Offset="0.629"/>
+                            <GradientStop Color="White" Offset="0.409"/>
+                        </LinearGradientBrush>
+                    </Path.Fill>
+                </Path>
+                    </Grid>
+                    <Grid Visibility="{Binding ElementName=MediaControlsControlName, Path=PlayStatus, Converter={StaticResource pauseButtonConverter}}">
+                        <Path 
+					Data = "M5,5 L5,0 0,0 0,5 Z" Margin="-9 0 0 0" Height="20" Stretch="Fill" Width="6" Stroke="#FF0E244E" StrokeThickness="1">
+                            <Path.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFBABABA" Offset="0.629"/>
+                                    <GradientStop Color="White" Offset="0.409"/>
+                                </LinearGradientBrush>
+                            </Path.Fill>
+                        </Path>
+                        <Path 
+					Data = "M5,5 L5,0 0,0 0,5 Z" Margin="9 0 0 0" Height="20" Stretch="Fill" Width="6" Stroke="#FF0E244E" StrokeThickness="1">
+                            <Path.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFBABABA" Offset="0.629"/>
+                                    <GradientStop Color="White" Offset="0.409"/>
+                                </LinearGradientBrush>
+                            </Path.Fill>
+                        </Path>
+
+                    </Grid>
+                </Grid>
+            </Button>
+
+
+            <Button Grid.Column="4" x:Name="nextButton" Style="{StaticResource GlassButton}" Width="32" Height="32">
+                <Grid>
+                    <Path x:Name="nextPath1"
+					Data            = "M0,0 L0.5,1 L0,2 Z" Margin="-5 -3 0 0" Height="15" Stretch="Fill" Width="11" Stroke="#FF0E244E" StrokeThickness="0.8">
+                        <Path.Fill>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FFBABABA" Offset="0.629"/>
+                                <GradientStop Color="White" Offset="0.409"/>
+                            </LinearGradientBrush>
+                        </Path.Fill>
+                    </Path>
+                    <Path x:Name="nextPath2"
+					Data = "M5,5 L5,0 0,0 0,5 Z" Margin="14 -3 0 0" Height="15" Stretch="Fill" Width="4.0" Stroke="#FF0E244E" StrokeThickness="0.8">
+                        <Path.Fill>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FFBABABA" Offset="0.629"/>
+                                <GradientStop Color="White" Offset="0.409"/>
+                            </LinearGradientBrush>
+                        </Path.Fill>
+                    </Path>
+                </Grid>
+            </Button>
+                
+                
+                
             <!--<StackPanel Grid.Column="4" Orientation="Horizontal"></StackPanel>-->
-            <Grid Grid.Column="4" VerticalAlignment="Center">
+            <Grid Grid.Column="5" VerticalAlignment="Center" Margin="0 0 20 0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="65"/>
-                    <ColumnDefinition Width="65"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="65"/>
+                    <ColumnDefinition Width="150"/>
                 </Grid.ColumnDefinitions>
                 <!--<Button Grid.Column="0" Template="{StaticResource SpeakerIcon}"/>-->
-                <Label Grid.Column="1" HorizontalAlignment="Right">Volume</Label>
-                <Slider Grid.Column="2" Maximum="100" Minimum="0"  Value="{Binding ElementName=MediaControlsControlName, Path=Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <!--<Label Grid.Column="1" HorizontalAlignment="Right">Volume</Label>-->
+                <nmControls:ImageButton Grid.Column="1" Height="40" Width="40" MySource="/Notemaker;component/Images/stock_volume-max.png" Command="{Binding CreateCourseCommand}">
+                </nmControls:ImageButton>
+                <Grid Visibility="Collapsed">
+                    <Image Source="/Notemaker;component/Images/stock_volume-mute.png" Margin="0,0,0,0" Width="33" Height="33" Visibility="{Binding ElementName=MediaControlsControlName, Path=Volume, Converter={StaticResource muteVolumeConverter}}" />
+                    <Image Source="/Notemaker;component/Images/stock_volume-min.png" Margin="0,1,0,0" Width="32" Height="32" Visibility="{Binding ElementName=MediaControlsControlName, Path=Volume, Converter={StaticResource minVolumeConverter}}" />
+                    <Image Source="/Notemaker;component/Images/stock_volume-med.png" Margin="0,1,0,0" Width="32" Height="32" Visibility="{Binding ElementName=MediaControlsControlName, Path=Volume, Converter={StaticResource medVolumeConverter}}" />
+                    <Image Source="/Notemaker;component/Images/stock_volume-max.png" Margin="0,1,0,0" Width="32" Height="32" Visibility="{Binding ElementName=MediaControlsControlName, Path=Volume, Converter={StaticResource maxVolumeConverter}}" />
+                </Grid>
+                <Slider VerticalAlignment="Center" Grid.Column="2" Maximum="100" Minimum="0"  Value="{Binding ElementName=MediaControlsControlName, Path=Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </Grid>
-    </StackPanel>
+    </Grid>
 </UserControl>

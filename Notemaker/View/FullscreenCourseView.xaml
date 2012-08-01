@@ -27,7 +27,7 @@
         <notemakerControl:VideoControl VideoPanelPointer="{Binding VideoPanelPointer, Mode=OneWayToSource}"
                                                            AspectRatio="{Binding CurrentTrackVideoAspectRatio}"
                                                            IsShowingVideo="{Binding IsCurrentTrackVideo}"
-                                                           PlayPauseCommandq="{Binding ToggleFullscreenCommand}"/>
+                                                           PlayPauseCommand="{Binding ToggleFullscreenCommand}"/>
         
     </DockPanel>
 </UserControl>

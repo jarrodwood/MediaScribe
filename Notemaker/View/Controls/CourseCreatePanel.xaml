@@ -31,7 +31,7 @@
         <DockPanel Margin="0 15 0 0">
             <DockPanel DockPanel.Dock="Top">
                 <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
-                <Border DockPanel.Dock="Bottom" BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#DDD">
+                <Border DockPanel.Dock="Bottom" BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#EAEAEA">
                     <StackPanel MinHeight="30">
                         <TextBlock Margin="0 5 0 0"  Text="Please add some tracks!" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
