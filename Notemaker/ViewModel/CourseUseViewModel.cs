@@ -945,6 +945,10 @@ namespace JayDev.Notemaker.ViewModel
 
         private void SelectTrack(Track track)
         {
+            if (null != _currentTrack)
+            {
+                _currentTrack.IsPlaying = false;
+            }
             if (PlayStatus != Common.PlayStatus.Stopped)
             {
                 _player.Stop();
@@ -954,6 +958,8 @@ namespace JayDev.Notemaker.ViewModel
             CurrentTrackName = _currentTrack.StringDisplayValue;
             //Propert
             CurrentTrackTotalLength = track.Length;
+
+            track.IsPlaying = true;
 
             PlayCurrentTrackFromBeginning();
         }

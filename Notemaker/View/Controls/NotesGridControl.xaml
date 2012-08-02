@@ -53,10 +53,22 @@
                     <!-- editing template -->
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <TextBlock Text="{Binding Path=Start.StringDisplayValue}" />
                                 <TextBlock xml:space="preserve"></TextBlock>
-                                <Button Name="setNoteStartTime"  Click="setNoteStartTime_Click">Set</Button>
+                                <!--<Button Name="setNoteStartTime"  Click="setNoteStartTime_Click">Set</Button>-->
+                                <Image Height="15" Width="15" Margin="2 0 0 0" MouseUp="setNoteStartTime_Click">
+                                    <Image.Style>
+                                        <Style TargetType="{x:Type Image}">
+                                            <Setter Property="Source" Value="/Notemaker;component/Images/pencil-15.png"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Source" Value="/Notemaker;component/Images/pencil-15-hover2.png"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Image.Style>
+                                </Image>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
@@ -64,13 +76,19 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <Button Name="playNoteButton" Click="playNoteButton_Click" Height="14">
-                                    <Path x:Name="arrow"
-                                      StrokeThickness = "1"
-                                      Fill            = "ForestGreen"
-                                      Data            = "M 1,6 L 6,3 L 1,0 L 1,6"/>
-                                </Button>
-                                <TextBlock Text="{Binding Path=Start.StringDisplayValue}" />
+                                <Image MouseUp="playNoteButton_Click">
+                                    <Image.Style>
+                                        <Style TargetType="{x:Type Image}">
+                                            <Setter Property="Source" Value="/Notemaker;component/Images/miniplaybutton3.png"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Source" Value="/Notemaker;component/Images/miniplaybutton3-hover.png"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Image.Style>
+                                </Image>
+                                <TextBlock Margin="2 0 0 0" Text="{Binding Path=Start.StringDisplayValue}" />
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

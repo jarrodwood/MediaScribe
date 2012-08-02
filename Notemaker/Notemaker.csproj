@@ -158,6 +158,7 @@
     <Compile Include="Common\PlayStatusVisibilityConverters.cs" />
     <Compile Include="Common\SafeObservable.cs" />
     <Compile Include="Common\SecondsToTimespanConverter.cs" />
+    <Compile Include="Common\TestConverter.cs" />
     <Compile Include="Common\TextListAdorner.cs" />
     <Compile Include="Common\XslsExporter.cs" />
     <Compile Include="Core\DebugTextWriter.cs" />
@@ -416,6 +417,14 @@
     <EmbeddedResource Include="Mappings\TrackTime.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\Letter N blue.ico" />
+    <Resource Include="Images\fullscreen.png" />
+    <Resource Include="Images\two_columns.png" />
+    <Resource Include="Images\view-sort-descending.png" />
+    <Resource Include="Images\miniplaybutton3-hover.png" />
+    <Resource Include="Images\miniplaybutton3.png" />
+    <Resource Include="Images\pencil-15.png" />
+    <Resource Include="Images\pencil-15-hover2.png" />
     <Content Include="log4netoff.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
+using System.Windows;
+using System.ComponentModel;
 
 namespace JayDev.Notemaker
 {
     [DataContract]
     [Serializable]
-    public class Track : ICloneable
+    public class Track : ICloneable, INotifyPropertyChanged
     {
         public virtual int? ID { get; set; }
 
@@ -28,6 +30,9 @@ namespace JayDev.Notemaker
         public virtual Course ParentCourse { get; set; }
 
         public virtual int? OrderNumber { get; set; }
+
+
+        public virtual event PropertyChangedEventHandler PropertyChanged;
 
         public virtual string FileName
         {
@@ -66,6 +71,34 @@ namespace JayDev.Notemaker
             Track clone = new Track();
             this.CopyTo(clone);
             return clone;
+        }
+
+        
+        private bool blah;
+        public virtual bool IsPlaying
+        {
+            get
+            {
+                return blah;
+            }
+            set
+            {
+                blah = value;
+
+                OnPropertyChanged("IsPlaying");
+            }
+        }
+
+
+
+        // Create the OnPropertyChanged method to raise the event
+        public virtual void OnPropertyChanged(string name)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
         }
     }
 }

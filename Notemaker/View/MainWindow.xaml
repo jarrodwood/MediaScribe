@@ -1,7 +1,7 @@
 ﻿<Window x:Class="JayDev.Notemaker.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="300" Width="300" WindowState="Maximized" Icon="/Notemaker;component/Images/icon_512.png">
+        Title="Notemaker" Height="300" Width="300" WindowState="Maximized" Icon="/Notemaker;component/Images/Letter%20N%20blue.ico">
     <Grid>
         
     </Grid>

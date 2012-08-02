@@ -20,14 +20,6 @@
                                     </LinearGradientBrush>
                                 </Setter.Value>
                             </Setter>
-                            <!--<Setter Property="DataGrid.AlternatingRowBackground">
-									    <Setter.Value>
-										    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-											    <GradientStop Color="Black" Offset="0"/>
-											    <GradientStop Color="White" Offset="1"/>
-										    </LinearGradientBrush>
-									    </Setter.Value>
-								    </Setter>-->
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

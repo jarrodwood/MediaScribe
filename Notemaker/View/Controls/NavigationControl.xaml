@@ -41,26 +41,10 @@
                 <Rectangle Height="92" Stroke="#FF75B2DE" VerticalAlignment="Bottom"  StrokeThickness="1" d:LayoutOverrides="HorizontalAlignment">
                     <Rectangle.Fill>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <GradientStop Color="#FF96D1FF" Offset="0.991"/>
-                            <GradientStop Color="#FFE3F3FF" Offset="0.017"/>
+                            <GradientStop Color="#FFA6D9FF" Offset="0.991"/>
                             <GradientStop Color="#FFD2EBFF" Offset="0.759"/>
                             <GradientStop Color="#FFD2EBFF" Offset="0.25"/>
-                        </LinearGradientBrush>
-                    </Rectangle.Fill>
-                </Rectangle>
-                <Rectangle Height="60.01" Margin="1.144,0.544,1.126,0" VerticalAlignment="Top" d:LayoutOverrides="HorizontalAlignment">
-                    <Rectangle.Fill>
-                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <LinearGradientBrush.RelativeTransform>
-                                <TransformGroup>
-                                    <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleY="0.559" ScaleX="1.117"/>
-                                    <SkewTransform AngleY="0" AngleX="0" CenterY="0.5" CenterX="0.5"/>
-                                    <RotateTransform Angle="0" CenterY="0.5" CenterX="0.5"/>
-                                    <TranslateTransform X="0.058" Y="-0.22"/>
-                                </TransformGroup>
-                            </LinearGradientBrush.RelativeTransform>
-                            <GradientStop Color="#AAFFFFFF" Offset="0"/>
-                            <GradientStop Offset="1"/>
+                            <GradientStop Color="#FFA6D9FF" Offset="0.017"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
@@ -161,11 +145,11 @@
                                 <Image Grid.Column="2" Source="/Notemaker;component/Images/system-search-4.png" Height="24" Width="24" />
                             </Grid>
 
-                            <notemakerControls:NavigationButton Grid.Column="10" Text="Fullscreen&#13;Writing"  />
+                            <notemakerControls:NavigationButton Grid.Column="10" Text="Fullscreen&#13;Writing" MySource="/Notemaker;component/Images/fullscreen.png"  />
                             <notemakerControls:NavigationButton Grid.Column="11" Text="Show All&#13;Tracks' Notes" MySource="/Notemaker;component/Images/stock_search.png" IsEnabled="False" />
                             <notemakerControls:NavigationButton Grid.Column="12" Text="Lock Edit" MySource="/Notemaker;component/Images/system-config-rootpassword.png" IsEnabled="False" />
-                            <notemakerControls:NavigationButton Grid.Column="13" Text="Show Two&#13;Lists" MySource="/Notemaker;component/Images/view-list-icon.png" IsEnabled="False" />
-                            <notemakerControls:NavigationButton Grid.Column="14" Text="Sort List" MySource="/Notemaker;component/Images/update-manager.png" IsEnabled="False" />
+                            <notemakerControls:NavigationButton Grid.Column="13" Text="Show Two&#13;Lists" MySource="/Notemaker;component/Images/two_columns.png" IsEnabled="False" />
+                            <notemakerControls:NavigationButton Grid.Column="14" Text="Sort List" MySource="/Notemaker;component/Images/view-sort-descending.png" IsEnabled="False" />
                             <notemakerControls:NavigationButton Grid.Column="15" Text="Filter List" MySource="/Notemaker;component/Images/filter.png" IsEnabled="False" />
                             <notemakerControls:NavigationButton Grid.Column="16" Text="Change List&#13;Font Size" MySource="/Notemaker;component/Images/fonts.png" IsEnabled="False" />
                             <notemakerControls:NavigationButton Grid.Column="17" Text="Change List&#13;Columns" Margin="00 0 10 0" MySource="/Notemaker;component/Images/view-file-columns.png" IsEnabled="False" />

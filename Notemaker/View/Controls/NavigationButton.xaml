@@ -11,6 +11,7 @@
 <UserControl.Resources>
     <Style x:Key="ChangeMyFonts" TargetType="{x:Type TextBlock}">
         <Setter Property="FontSize" Value="11" />
+            <Setter Property="Foreground" Value="#FF3F3F3F" />
         </Style>
 
 

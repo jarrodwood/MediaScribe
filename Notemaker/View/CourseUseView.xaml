@@ -12,6 +12,7 @@
              d:DesignHeight="419" d:DesignWidth="1388">
     <UserControl.Resources>
         <notemakerCommon:GridLengthValueConverter x:Key="gridLengthConverter" />
+        <notemakerCommon:TestConverter x:Key="testConverter" />
         <notemakerCommon:BooleanToVisibilityConverter 
                 x:Key="BooleanToVisibilityConverterTrueIsVisible" 
                 True="Visible" 
@@ -72,16 +73,33 @@
 
                     <DockPanel Grid.Row="2">
                         <TextBlock DockPanel.Dock="Top">Course Track List</TextBlock>
-                        <DataGrid VerticalAlignment="Top" AutoGenerateColumns="False" LoadingRow="DataGrid_LoadingRow" Name="trackGrid" HeadersVisibility="All" CanUserAddRows="False"
-                           CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding Tracks}" Style="{StaticResource DataGridStyle1}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="MouseDoubleClick">
-                                    <cmd:EventToCommand Command="{Binding SelectTrackCommand,Mode=OneWay}"
-                                            CommandParameter="{Binding SelectedItem, ElementName=trackGrid, Mode=OneWay}"
-                                            MustToggleIsEnabledValue="True" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                            <DataGrid.Columns>
+                        <notemakerCommon:DoubleClickableDataGrid VerticalAlignment="Top" AutoGenerateColumns="False" LoadingRow="DataGrid_LoadingRow" x:Name="trackGrid" HeadersVisibility="All" CanUserAddRows="False"
+                           CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding Tracks}" Style="{StaticResource DataGridStyle1}"
+                                                                 RowDoubleClickCommand="{Binding SelectTrackCommand,Mode=OneWay}"
+                                                                 RowDoubleClickCommandParameter="{Binding SelectedItem, ElementName=trackGrid, Mode=OneWay}"
+                                                                 HighlightItem="{Binding CurrentTrackName}">
+                            <!-- Custom bit of logic - when we play a track, we want to highlight it. -->
+                            <DataGrid.CellStyle>
+                                <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellStyle1}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=IsPlaying, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="#FFDAC9FF" Offset="0"/>
+                                                        <GradientStop Color="#FFAC7EFF" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.CellStyle>
+
+
+
+
+                                <DataGrid.Columns>
                                 <DataGridTextColumn Header="Name"
                                             Width="*"
                                            Binding="{Binding StringDisplayValue}" 
@@ -91,7 +109,7 @@
                                            Binding="{Binding Length}" 
                                            IsReadOnly="True"/>
                             </DataGrid.Columns>
-                        </DataGrid>
+                        </notemakerCommon:DoubleClickableDataGrid>
                     </DockPanel>
                 </Grid>
 
