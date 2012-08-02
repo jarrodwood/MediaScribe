@@ -42,17 +42,24 @@
                                 <Grid.Effect>
                                     <DropShadowEffect BlurRadius="5"  ShadowDepth="2"/>
                                 </Grid.Effect>
-                                <Rectangle Stroke="White" StrokeThickness="0.5" Fill="{DynamicResource HuluBack}"/>
-                                <Path Stretch="Fill" Stroke="White" HorizontalAlignment="Center" Margin="20,-1,19.5,-1" VerticalAlignment="Stretch" Width="0.5" Data="M18.875,30.200352 L19.125,40" Grid.Row="1" />
+                                <Rectangle Stroke="#FF3F3F3F" StrokeThickness="1">
+                                    <Rectangle.Fill>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FFDAC9FF" Offset="0"/>
+                                            <GradientStop Color="#FFAC7EFF" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <Path Stretch="Fill" Stroke="#FF3F3F3F" HorizontalAlignment="Center" Margin="20,-1,19.5,-1" VerticalAlignment="Stretch" Width="0.5" Data="M18.875,30.200352 L19.125,40" Grid.Row="1" />
 
-                                <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Uniform" Margin="5">
+                                <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5">
                                     <ContentPresenter  />
                                 </Viewbox>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
-                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Foreground" Value="#FF3F3F3F"/>
             </Style>
         </ResourceDictionary>
 
@@ -146,11 +153,11 @@
                     </Grid.ColumnDefinitions>
                     <DockPanel>
                         <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="20 0 0 0">
-                            <TextBlock Name="currentPlayTime" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=CurrentPlayTime, StringFormat=h\\:mm\\:ss}"/>
-                            <TextBlock HorizontalAlignment="Left" xml:space="preserve"> /</TextBlock>
-                            <TextBlock Name="totalTrackTime" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=MaxPlayTime, StringFormat=h\\:mm\\:ss}"/>
-                            <TextBlock HorizontalAlignment="Left" xml:space="preserve"> -</TextBlock>
-                            <TextBlock HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=TrackTitle, StringFormat=h\\:mm\\:ss, TargetNullValue='No track selected'}"/>
+                        <TextBlock Foreground="#FF3F3F3F" Name="currentPlayTime" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=CurrentPlayTime, StringFormat=h\\:mm\\:ss}"/>
+                        <TextBlock Foreground="#FF3F3F3F" HorizontalAlignment="Left" xml:space="preserve"> /</TextBlock>
+                        <TextBlock Foreground="#FF3F3F3F" Name="totalTrackTime" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=MaxPlayTime, StringFormat=h\\:mm\\:ss}"/>
+                        <TextBlock Foreground="#FF3F3F3F" HorizontalAlignment="Left" xml:space="preserve"> -</TextBlock>
+                        <TextBlock Foreground="#FF3F3F3F" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=TrackTitle, StringFormat=h\\:mm\\:ss, TargetNullValue='No track selected'}"/>
 
 
                         </StackPanel>
