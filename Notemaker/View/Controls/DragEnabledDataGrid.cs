@@ -94,7 +94,10 @@ namespace JayDev.Notemaker.Common
                 List<object> selectedItemsList = new List<object>();
                 foreach (var item in SelectedItems)
                 {
-                    selectedItemsList.Add(item);
+                    if (item.ToString() != Constants.NewItemPlaceholderName)
+                    {
+                        selectedItemsList.Add(item);
+                    }
                 }
                 SetValue(ReadOnlySelectedItemsProperty, selectedItemsList);
             }

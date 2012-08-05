@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using JayDev.Notemaker.ViewModel;
 using JayDev.Notemaker.Common;
+using System.Collections;
 
 namespace JayDev.Notemaker.View
 {
@@ -98,5 +99,28 @@ namespace JayDev.Notemaker.View
 
             return true;
         }
+
+        private void addHotkeyButton_Click(object sender, RoutedEventArgs e)
+        {
+            var hotkeys = (ExtendedObservableCollection<Hotkey>)hotkeyGrid.DataContext;
+            DataGridCell cell = GetCell(hotkeyGrid, hotkeys.Count, 0);
+            if (cell != null)
+            {
+                hotkeyGrid.ScrollIntoView(hotkeyGrid.Items[hotkeyGrid.Items.Count - 1]);
+                cell.Focus();
+                hotkeyGrid.CurrentCell = new DataGridCellInfo(cell);
+                hotkeyGrid.BeginEdit();
+            }
+        }
+
+
+        DataGridCell GetCell(DataGrid dg, int rowIndex, int columnIndex)
+        {
+            var dr = dg.ItemContainerGenerator.ContainerFromIndex(rowIndex) as DataGridRow;
+            var dc = dg.Columns[columnIndex].GetCellContent(dr);
+            return dc.Parent as DataGridCell;
+        }
+
+
     }
 }

@@ -105,6 +105,7 @@
     <Compile Include="Common\Converters\ColourToBrushConverter.cs" />
     <Compile Include="Common\Converters\ColourToNameStringConverter.cs" />
     <Compile Include="Common\Converters\EnumConverters.cs" />
+    <Compile Include="Common\Converters\StringToXamlConverter.cs" />
     <Compile Include="Common\InformationAttribute.cs" />
     <Compile Include="Core\NHibernate\ColorUserType.cs" />
     <Compile Include="Core\NHibernate\BaseUserType.cs" />
@@ -117,6 +118,10 @@
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Page Include="Themes\JarrodBlueButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\JarrodPlusMinusButtons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

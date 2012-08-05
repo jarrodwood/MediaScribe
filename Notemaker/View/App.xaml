@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="/Themes/JarrodGlassButton.xaml"/>
                 <ResourceDictionary Source="/Themes/JarrodToggleButton.xaml"/>
                 <ResourceDictionary Source="/Themes/JarrodBlueButton.xaml"/>
+                <ResourceDictionary Source="/Themes/JarrodPlusMinusButtons.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

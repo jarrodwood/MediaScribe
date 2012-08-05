@@ -25,6 +25,52 @@ namespace JayDev.Notemaker.ViewModel
 
         #region Commands
 
+        private RelayCommand _restoreDefaultHotkeysCommand;
+
+        /// <summary>
+        /// Gets the RestoreDefaultHotkeysCommand.
+        /// </summary>
+        public RelayCommand RestoreDefaultHotkeysCommand
+        {
+            get
+            {
+                return _restoreDefaultHotkeysCommand
+                    ?? (_restoreDefaultHotkeysCommand = new RelayCommand(
+                                          () =>
+                                          {
+                                              //TODO: no messageboxes in viewmodel!
+                                              var result = System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Are you sure you want to replace all hotkeys with the default set?", "Replace hotkey confirmation", System.Windows.MessageBoxButton.YesNo);
+                                              if (result == System.Windows.MessageBoxResult.Yes)
+                                              {
+                                                  _repo.PersistHotkeys(GetDefaultHotkeySet());
+                                                  Hotkeys = new ObservableCollection<Hotkey>(_repo.GetHotkeys());
+                                              }
+                                          }));
+            }
+        }
+
+        #region HotkeysEditCommand
+
+        private RelayCommand _hotkeysEditCommand;
+
+        /// <summary>
+        /// Gets the MaintenanceModeEditCommand.
+        /// </summary>
+        public RelayCommand HotkeysEditCommand
+        {
+            get
+            {
+                return _hotkeysEditCommand
+                    ?? (_hotkeysEditCommand = new RelayCommand(
+                                          () =>
+                                          {
+                                              IsEditingHotkeys = true;
+                                          }));
+            }
+        }
+
+        #endregion
+
         #region NavigateCommand
 
         private RelayCommand<NavigateMessage> _navigateCommand;
@@ -44,9 +90,171 @@ namespace JayDev.Notemaker.ViewModel
 
         #endregion
 
+        //#region AddHotkeyCommand
+
+        //private RelayCommand _addHotkeyCommand;
+
+        ///// <summary>
+        ///// Gets the AddHotkeyCommand.
+        ///// </summary>
+        //public RelayCommand AddHotkeyCommand
+        //{
+        //    get
+        //    {
+        //        return _addHotkeyCommand
+        //            ?? (_addHotkeyCommand = new RelayCommand(
+        //                                  () =>
+        //                                  {
+
+        //                                  }));
+        //    }
+        //}
+
+        //#endregion
+
+        #region DeleteHotkeysCommand
+
+        private RelayCommand _deleteHotkeysCommand;
+
+        /// <summary>
+        /// Gets the DeleteHotkeysCommand.
+        /// </summary>
+        public RelayCommand DeleteHotkeysCommand
+        {
+            get
+            {
+                return _deleteHotkeysCommand
+                    ?? (_deleteHotkeysCommand = new RelayCommand(
+                                          () =>
+                                          {
+                                              foreach (Hotkey hotkey in _selectedHotkeys)
+                                              {
+                                                  Hotkeys.Remove(hotkey);
+                                              }
+                                          },
+                                          () =>
+                                          {
+                                              return _selectedHotkeys != null && _selectedHotkeys.Count() > 0;
+                                          }
+                                          ));
+            }
+        }
+
+        #endregion
+
+        private RelayCommand _cancelCommand;
+
+        /// <summary>
+        /// Gets the CancelCommand.
+        /// </summary>
+        public RelayCommand CancelCommand
+        {
+            get
+            {
+                return _cancelCommand
+                    ?? (_cancelCommand = new RelayCommand(
+                                          () =>
+                                          {
+                                              IsEditingHotkeys = false;
+                                              Hotkeys = new ObservableCollection<Hotkey>(_repo.GetHotkeys());
+                                          }));
+            }
+        }
+
+        #region SaveHotkeysCommand
+
+        private RelayCommand _saveHotkeysCommand;
+
+        /// <summary>
+        /// Gets the SaveHotkeysCommand.
+        /// </summary>
+        public RelayCommand SaveHotkeysCommand
+        {
+            get
+            {
+                return _saveHotkeysCommand
+                    ?? (_saveHotkeysCommand = new RelayCommand(
+                                          () =>
+                                          {
+                                              _repo.PersistHotkeys(Hotkeys.ToList());
+                                              Hotkeys = new ObservableCollection<Hotkey>(_repo.GetHotkeys());
+                                          }));
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Notified Properties
+
+        /// <summary>
+        /// The <see cref="IsEditingHotkeys" /> property's name.
+        /// </summary>
+        public const string IsEditingHotkeysPropertyName = "IsEditingHotkeys";
+
+        private bool _isEditingHotkeys = false;
+
+        /// <summary>
+        /// Sets and gets the IsEditingHotkeys property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public bool IsEditingHotkeys
+        {
+            get
+            {
+                return _isEditingHotkeys;
+            }
+
+            set
+            {
+                if (_isEditingHotkeys == value)
+                {
+                    return;
+                }
+
+                _isEditingHotkeys = value;
+                RaisePropertyChanged(IsEditingHotkeysPropertyName);
+            }
+        }
+
+        #region SelectedHotkeys
+
+        /// <summary>
+        /// The <see cref="SelectedHotkeys" /> property's name.
+        /// </summary>
+        public const string SelectedHotkeysPropertyName = "SelectedHotkeys";
+
+        private List<Hotkey> _selectedHotkeys = null;
+
+        /// <summary>
+        /// Sets and gets the SelectedHotkeys property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public List<object> SelectedHotkeys
+        {
+            //get
+            //{
+            //    return _SelectedHotkeys.Cast<object>().ToList();
+            //}
+
+            set
+            {
+                if (null == value || value is string)
+                {
+                    _selectedHotkeys = null;
+                }
+                else
+                {
+                    _selectedHotkeys = value.Cast<Hotkey>().ToList();
+                }
+                RaisePropertyChanged(SelectedHotkeysPropertyName);
+                //since the selected Hotkeys have changed, we may be able to delete Hotkeys..
+                DeleteHotkeysCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        #endregion
 
         /// <summary>
         /// The <see cref="Hotkeys" /> property's name.
@@ -109,7 +317,7 @@ namespace JayDev.Notemaker.ViewModel
         }
 
 
-        void SaveDefaultHotkeySet()
+        List<Hotkey> GetDefaultHotkeySet()
         {
             List<Hotkey> hotkeys = new List<Hotkey>();
             hotkeys.Add(new Hotkey(HotkeyFunction.ToggleFullscreen, ModifierKeys.Control, Key.F));
@@ -118,10 +326,12 @@ namespace JayDev.Notemaker.ViewModel
             hotkeys.Add(new Hotkey(HotkeyFunction.Seek, ModifierKeys.None, Key.NumPad2) { SeekSeconds = 3, SeekDirection = Direction.Back });
             hotkeys.Add(new Hotkey(HotkeyFunction.Seek, ModifierKeys.None, Key.NumPad2) { SeekSeconds = 10, SeekDirection = Direction.Back });
             hotkeys.Add(new Hotkey(HotkeyFunction.NoteBold, ModifierKeys.Control, Key.B));
+            hotkeys.Add(new Hotkey(HotkeyFunction.NoteBold, ModifierKeys.None, Key.Subtract));
             hotkeys.Add(new Hotkey(HotkeyFunction.NoteItalic, ModifierKeys.Control, Key.I));
+            hotkeys.Add(new Hotkey(HotkeyFunction.NoteItalic, ModifierKeys.None, Key.Add));
             hotkeys.Add(new Hotkey(HotkeyFunction.NoteColour, ModifierKeys.None, Key.NumPad5) { Colour = Color.FromArgb(255, 200, 50, 50) });
             hotkeys.Add(new Hotkey(HotkeyFunction.NoteColour, ModifierKeys.None, Key.NumPad6) { Colour = Color.FromArgb(255, 50, 50, 200) });
-            hotkeys.Add(new Hotkey(HotkeyFunction.NoteColour, ModifierKeys.None, Key.NumPad4) { Colour = Color.FromArgb(255, 150, 150, 150) });
+            hotkeys.Add(new Hotkey(HotkeyFunction.NoteColour, ModifierKeys.None, Key.NumPad4) { Colour = ColorHelper.ApplicationDefaultTextColour });
             hotkeys.Add(new Hotkey(HotkeyFunction.NoteSetStartTime, ModifierKeys.None, Key.Divide));
             hotkeys.Add(new Hotkey(HotkeyFunction.NoteEditBegin, ModifierKeys.None, Key.NumPad7));
             hotkeys.Add(new Hotkey(HotkeyFunction.NoteEditCommit, ModifierKeys.None, Key.NumPad8));
@@ -130,10 +340,7 @@ namespace JayDev.Notemaker.ViewModel
             hotkeys.Add(new Hotkey(HotkeyFunction.NoteRating, ModifierKeys.Control, Key.D2) { Rating = 2 });
             hotkeys.Add(new Hotkey(HotkeyFunction.NoteRating, ModifierKeys.Control, Key.D3) { Rating = 3 });
 
-            foreach (Hotkey hotkey in hotkeys)
-            {
-                _repo.SaveHotkey(hotkey);
-            }
+            return hotkeys;
         }
 
         #endregion

@@ -9,6 +9,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"         
              xmlns:effect="clr-namespace:GrayscaleEffect;assembly=GrayscaleEffect"
+             
              x:Name="CourseMaintenanceViewName"
              d:DesignHeight="368" d:DesignWidth="1380">
     <UserControl.Resources>
@@ -69,58 +70,68 @@
                             </TextBlock>
                         </GroupBox>
                         <GroupBox Header="Courses" Foreground="#FF3F3F3F" BorderBrush="#FF75B2DE" Margin="10 0 10 10" Padding="5">
-                        <DockPanel>
-                        <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
+                            <DockPanel>
+                                <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
                                 <StackPanel DockPanel.Dock="Bottom">
                                     <Border DockPanel.Dock="Bottom" BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#FFFF" Visibility="{Binding AreCoursesExisting, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
-                            <StackPanel MinHeight="30">
-                                <TextBlock Text="Please add a new course!" Margin="0 5 0 0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
-                            </StackPanel>
-                        </Border>
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
+                                        <StackPanel MinHeight="30">
+                                            <TextBlock Text="Please add a new course!" Margin="0 5 0 0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </Border>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
 
-                                    <notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding CreateCourseCommand}" />
 
-                                    <notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteCourseCommand}" CommandParameter="{x:Static notemakerCommon:NavigateMessage.ListCourses}" />
+                                        <Button Focusable="False" Style="{StaticResource minusButtonStyle}"  Command="{Binding DeleteCourseCommand}" CommandParameter="{x:Static notemakerCommon:NavigateMessage.ListCourses}">
+                                            <Path Data="M0,0 L70,0 99,0 99,41 70,41 0,41 z" Margin="0 0 0 0" Stretch="Uniform" Width="13.5" Height="5" Style="{DynamicResource minusStyle}"/>
+                                        </Button>
 
-                                </StackPanel>
+                                        <Button Focusable="False" Margin="5 0 0 0" Style="{StaticResource plusButtonStyle}"  Command="{Binding CreateCourseCommand}">
+                                            <Path Data="M35,0 L70,0 70,30 100,30 100,70 70,70 70,100 30,100 30,70 0,70 0,30 35,30 z" Margin="0 0 0 0" Stretch="Fill" Width="13.5" Height="13" Style="{DynamicResource PlusStyle}"/>
+                                        </Button>
+
+
+                                        <!--<notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding CreateCourseCommand}" />
+
+                                        <notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteCourseCommand}" CommandParameter="{x:Static notemakerCommon:NavigateMessage.ListCourses}" />-->
+
+                                    </StackPanel>
                                 </StackPanel>
                                 <!--</ContentControl>-->
-                            <notemakerCommon:DoubleClickableDataGrid VerticalAlignment="Top" AutoGenerateColumns="False" x:Name="courseGrid" HeadersVisibility="Column" CanUserAddRows="False"                                                                 
+                                <notemakerCommon:DoubleClickableDataGrid VerticalAlignment="Top" AutoGenerateColumns="False" x:Name="courseGrid" HeadersVisibility="Column" CanUserAddRows="False"                                                                 
                                   SelectionMode="Single"
                                   CanUserSortColumns="True" CanUserReorderColumns="False" CanUserResizeRows="False"
                                   ItemsSource="{Binding Courses}"
                                   SelectedItem="{Binding SelectedCourse, Mode=TwoWay}"
                                   RowDoubleClickCommand="{Binding WriteNotesCommand}"  Style="{StaticResource DataGridStyle1}">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Course Name"
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Course Name"
                                             Width="*"
                                             Binding="{Binding Name}" 
                                             SortMemberPath="Name"
                                             CanUserSort="True"
                                             IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="Length"
+                                        <DataGridTextColumn Header="Length"
                                             Width="55"
                                             Binding="{Binding CourseLength}" 
                                             SortMemberPath="CourseLength"
                                             CanUserSort="True"
                                             IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="Files"
+                                        <DataGridTextColumn Header="Files"
                                             Width="55"
                                             Binding="{Binding Path=Tracks.Count}" 
                                             SortMemberPath="Tracks.Count"
                                             CanUserSort="True"
                                             IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="Notes"
+                                        <DataGridTextColumn Header="Notes"
                                             Width="55"
                                             Binding="{Binding Path=Notes.Count}" 
                                             SortMemberPath="Notes.Count"
                                             CanUserSort="True"
                                             IsReadOnly="True"/>
-                                </DataGrid.Columns>
-                            </notemakerCommon:DoubleClickableDataGrid>
-                        </DockPanel>
-                    </GroupBox>
+                                    </DataGrid.Columns>
+                                </notemakerCommon:DoubleClickableDataGrid>
+                            </DockPanel>
+                        </GroupBox>
                     </StackPanel>
                     <!--Empty content control, which 'fills' the dockpanel. As the grid grows, this will shrink away to nothing... and as the grid continues to grow, it'll get scrollbars.-->
                     <ContentControl>
@@ -145,7 +156,7 @@
                                 <StackPanel Name="_viewCoursePanel" Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_ViewVisible}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
 
                                     <TextBlock HorizontalAlignment="Center" Style="{StaticResource HeaderFont}" xml:space="preserve" Text="{Binding SelectedCourseName, TargetNullValue='no name?'}" />
-                       
+
                                     <DockPanel Margin="0 15 0 0">
                                         <notemakerCommon:DragEnabledDataGrid VerticalAlignment="Top"
                                                                              AutoGenerateColumns="False" HeadersVisibility="All" CanUserAddRows="False"
@@ -210,17 +221,26 @@
                                     <DockPanel Margin="0 15 0 0">
                                         <DockPanel DockPanel.Dock="Top">
                                             <StackPanel DockPanel.Dock="Bottom">
-                                            <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
-                                            <Border BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#FFFF"   Visibility="{Binding AreTracksExistingInSelectedCourse, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
-                                                <StackPanel MinHeight="30">
-                                                    <TextBlock Margin="0 5 0 0"  Text="Please add some tracks!" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
-                                                </StackPanel>
-                                            </Border>
+                                                <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
+                                                <Border BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#FFFF"   Visibility="{Binding AreTracksExistingInSelectedCourse, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
+                                                    <StackPanel MinHeight="30">
+                                                        <TextBlock Margin="0 5 0 0"  Text="Please add some tracks!" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
+                                                    </StackPanel>
+                                                </Border>
                                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
 
-                                                    <notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding AddTracksCommand}" />
+                                                    
+                                                    <Button Focusable="False" Style="{StaticResource minusButtonStyle}"  Command="{Binding DeleteTracksCommand}" CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}">
+                                                        <Path Data="M0,0 L70,0 99,0 99,41 70,41 0,41 z" Margin="0 0 0 0" Stretch="Uniform" Width="13.5" Height="5" Style="{DynamicResource minusStyle}"/>
+                                                    </Button>
 
-                                                    <notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteTracksCommand}" CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}" />
+                                                    <Button Focusable="False" Margin="5 0 0 0" Style="{StaticResource plusButtonStyle}"  Command="{Binding AddTracksCommand}">
+                                                        <Path Data="M35,0 L70,0 70,30 100,30 100,70 70,70 70,100 30,100 30,70 0,70 0,30 35,30 z" Margin="0 0 0 0" Stretch="Fill" Width="13.5" Height="13" Style="{DynamicResource PlusStyle}"/>
+                                                    </Button>
+
+                                                    <!--<notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding AddTracksCommand}" />
+
+                                                    <notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteTracksCommand}" CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}" />-->
 
                                                 </StackPanel>
                                             </StackPanel>
@@ -271,8 +291,8 @@
                                                 <TextBlock Margin="0 0 0 0" Foreground="White" FontSize="12" VerticalAlignment="Center"><Run Text="Edit"/></TextBlock>
                                             </Grid>
                                         </Button>-->
-                                        <Button Padding="5 1" Command="{Binding SaveCourseCommand}">Save</Button>
-                                        <Button Margin="10 0 0 0" Command="{Binding CancelCommand}" Padding="5 1">Cancel</Button>
+                                        <Button Command="{Binding CancelCommand}" Padding="5 1">Cancel</Button>
+                                        <Button Padding="5 1" Margin="10 0 0 0" Command="{Binding SaveCourseCommand}">Save</Button>
                                     </StackPanel>
                                 </StackPanel>
 
@@ -295,9 +315,19 @@
                                                 </Border>
                                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
 
-                                                    <notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding AddTracksCommand}" />
 
-                                                    <notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteTracksCommand}" CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}" />
+
+                                                    <Button Focusable="False" Style="{StaticResource minusButtonStyle}"  Command="{Binding DeleteTracksCommand}" CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}">
+                                                        <Path Data="M0,0 L70,0 99,0 99,41 70,41 0,41 z" Margin="0 0 0 0" Stretch="Uniform" Width="13.5" Height="5" Style="{DynamicResource minusStyle}"/>
+                                                    </Button>
+
+                                                    <Button Focusable="False" Margin="5 0 0 0" Style="{StaticResource plusButtonStyle}"  Command="{Binding AddTracksCommand}">
+                                                        <Path Data="M35,0 L70,0 70,30 100,30 100,70 70,70 70,100 30,100 30,70 0,70 0,30 35,30 z" Margin="0 0 0 0" Stretch="Fill" Width="13.5" Height="13" Style="{DynamicResource PlusStyle}"/>
+                                                    </Button>
+
+                                                    <!--<notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding AddTracksCommand}" />
+
+                                                    <notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteTracksCommand}" CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}" />-->
 
                                                 </StackPanel>
                                             </StackPanel>

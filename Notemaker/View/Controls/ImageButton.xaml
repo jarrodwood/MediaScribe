@@ -63,7 +63,8 @@
         </ControlTemplate>
 
     </UserControl.Resources>
-    <Button x:Name="myButton" Template="{StaticResource buttonTemplateWithNoWhiteBorder}" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" Command="{Binding ElementName=ImageButtonName, Path=Command}" CommandParameter="{Binding ElementName=ImageButtonName, Path=CommandParameter}">
+    
+    <Button x:Name="myButton" Template="{StaticResource buttonTemplateWithNoWhiteBorder}" Background="Transparent" BorderThickness="0" BorderBrush="Transparent">
         <Button.Style>
             <Style TargetType="{x:Type Button}">
                 <Style.Triggers>

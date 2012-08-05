@@ -24,6 +24,10 @@
                 x:Key="BooleanToVisibilityConverterFalseIsVisible" 
                 True="Collapsed" 
                 False="Visible" />
+        <notemakerCommon:BooleanToVisibilityConverter 
+                x:Key="BooleanToVisibilityConverterTrueIsVisible" 
+                True="Visible" 
+                False="Collapsed" />
 
         <notemakerConverters:EnumInfoLabelToStringConverter x:Key="EnumInfoLabelToStringConverter" />
         <notemakerConverters:EnumToTooltipTextBlockConverter x:Key="EnumToTooltipTextBlockConverter" />
@@ -219,26 +223,43 @@
                             <DockPanel>
                                 <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
                                 <StackPanel DockPanel.Dock="Bottom">
-                                    <Border DockPanel.Dock="Bottom" BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#FFFF" Visibility="{Binding AreSettingsExisting, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
+                                    <Border BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#FFFF" Visibility="{Binding AreSettingsExisting, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
                                         <StackPanel MinHeight="30">
                                             <TextBlock Text="Please add some hotkeys!" Margin="0 5 0 0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
                                         </StackPanel>
                                     </Border>
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
+                                    <StackPanel Visibility="{Binding IsEditingHotkeys, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
 
-                                        <notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding CreateCourseCommand}" />
 
-                                        <notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteCourseCommand}" CommandParameter="{x:Static notemakerCommon:NavigateMessage.ListCourses}" />
+                                        <Button Focusable="False" Style="{StaticResource minusButtonStyle}"  Command="{Binding DeleteHotkeysCommand}">
+                                            <Path Data="M0,0 L70,0 99,0 99,41 70,41 0,41 z" Margin="0 0 0 0" Stretch="Uniform" Width="13.5" Height="5" Style="{DynamicResource minusStyle}"/>
+                                        </Button>
 
+                                        <Button Focusable="False" Margin="5 0 0 0" Style="{StaticResource plusButtonStyle}"  Click="addHotkeyButton_Click">
+                                            <Path Data="M35,0 L70,0 70,30 100,30 100,70 70,70 70,100 30,100 30,70 0,70 0,30 35,30 z" Margin="0 0 0 0" Stretch="Fill" Width="13.5" Height="13" Style="{DynamicResource PlusStyle}"/>
+                                        </Button>
+
+
+                                    </StackPanel>
+
+                                    <StackPanel Visibility="{Binding IsEditingHotkeys, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 10">
+                                        <Button Padding="5 1" Command="{Binding HotkeysEditCommand}">Edit</Button>
+                                        <Button Margin="10 0 0 0" Padding="5 1" Command="{Binding RestoreDefaultHotkeysCommand}">Restore defaults</Button>
+                                    </StackPanel>
+                                    <StackPanel Visibility="{Binding IsEditingHotkeys, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 10">
+                                        <Button Command="{Binding CancelCommand}" Padding="5 1">Cancel</Button>
+                                        <Button Padding="5 1" Margin="10 0 0 0" Command="{Binding SaveHotkeysCommand}">Save</Button>
                                     </StackPanel>
                                 </StackPanel>
                                 <DockPanel>
                                     <TextBlock DockPanel.Dock="Top" Margin="0 0 0 5" TextWrapping="Wrap" Text="Double-click on the empty row at the bottom to add a new hotkey. Also, you can hover over the 'Function' entries to get a description of what it does, and when it's usable." />
 
-                                    <DataGrid Name="hotkeyGrid" AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top"
-                                              CanUserAddRows="True" HeadersVisibility="Column"
-                                              ItemsSource="{Binding Hotkeys}" 
-                                              Style="{StaticResource DataGridStyle1}">
+                                    <notemakerCommon:DragEnabledDataGrid  x:Name="hotkeyGrid" AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                                                          CanUserAddRows="{Binding IsEditingHotkeys, Mode=OneWay}" HeadersVisibility="Column"
+                                                                          ItemsSource="{Binding Hotkeys}" 
+                                                                          CanDrag="False"
+                                                                          ReadOnlySelectedItems="{Binding SelectedHotkeys, Mode=OneWayToSource}"
+                                                                          Style="{StaticResource DataGridStyle1}">
                                         <DataGrid.Columns>
 
                                             <DataGridTemplateColumn Header="Function" Width="200" SortMemberPath="Function" CanUserSort="True">
@@ -308,7 +329,7 @@
                                                 </DataGridTemplateColumn.CellEditingTemplate>
                                             </DataGridTemplateColumn>
                                         </DataGrid.Columns>
-                                    </DataGrid>
+                                    </notemakerCommon:DragEnabledDataGrid>
                                 </DockPanel>
                             </DockPanel>
                         </GroupBox>

@@ -17,7 +17,7 @@ namespace JayDev.Notemaker.Model
             IList<Hotkey> result;
             using (ISession session = NHibernateHelper.OpenSession())
             {
-                result = session.CreateCriteria<Hotkey>().List<Hotkey>();
+                result = session.CreateCriteria<Hotkey>().AddOrder(Order.Desc("Function")).List<Hotkey>();
             }
 
             return result as List<Hotkey>;
@@ -41,6 +41,53 @@ namespace JayDev.Notemaker.Model
 
         //    return result;
         //}
+
+        public void PersistHotkeys(List<Hotkey> hotkeys)
+        {
+            lock (_destructiveOperationLockToken)
+            {
+                using (ISession session = NHibernateHelper.OpenSession())
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    List<Hotkey> savedhotkeys = GetHotkeys();
+
+                    List<Hotkey> toDelete = new List<Hotkey>();
+                    List<Hotkey> toCreate = new List<Hotkey>();
+                    List<Hotkey> unchanged = new List<Hotkey>();
+                    foreach (Hotkey hotkey in hotkeys)
+                    {
+                        Hotkey existingMatch = savedhotkeys.FirstOrDefault(x => x.Equals(hotkey));
+                        if (null == existingMatch)
+                        {
+                            toCreate.Add(hotkey);
+                        }
+                        else
+                        {
+                            unchanged.Add(hotkey);
+                        }
+                    }
+                    foreach (Hotkey hotkey in savedhotkeys)
+                    {
+                        if (false == unchanged.Contains(hotkey))
+                        {
+                            toDelete.Add(hotkey);
+                        }
+                    }
+
+
+                    foreach (Hotkey hotkey in toDelete)
+                    {
+                        session.Delete(hotkey);
+                    }
+                    foreach (Hotkey hotkey in toCreate)
+                    {
+                        session.SaveOrUpdate(hotkey);
+                    }
+
+                    transaction.Commit();
+                }
+            }
+        }
 
         public void SaveHotkey(Hotkey hotkey)
         {

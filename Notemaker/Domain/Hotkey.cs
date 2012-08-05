@@ -100,5 +100,22 @@ namespace JayDev.Notemaker
             this.SeekDirection = Direction.Back;
             this.SeekSeconds = 3;
         }
+
+        public override bool Equals(object obj)
+        {
+            Hotkey other = obj as Hotkey;
+            if (null == other)
+            {
+                return false;
+            }
+
+            return (this.Function == other.Function
+                && this.Colour == other.Colour
+                && this.ModifierKey == other.ModifierKey
+                && this.Rating == other.Rating
+                && this.SeekDirection == other.SeekDirection
+                && this.SeekSeconds == other.SeekSeconds
+                && this.Key == other.Key);
+        }
     }
 }

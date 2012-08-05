@@ -47,7 +47,7 @@
 
                 <Grid Name="leftGridColumn">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="{Binding Path=LastEmbeddedVideoHeight, Mode=TwoWay, Converter={StaticResource gridLengthConverter}, TargetNullValue='200'}" />
+                        <RowDefinition Height="{Binding Path=VirtualEmbeddedVideoHeight, Mode=TwoWay, Converter={StaticResource gridLengthConverter}, TargetNullValue='200'}" />
                         <RowDefinition Height="6" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>

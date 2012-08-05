@@ -128,7 +128,7 @@ namespace JayDev.Notemaker.ViewModel
 
         #endregion
 
-        #region DeleteCourseCommand
+        #region MaintenanceModeEditCommand
 
         private RelayCommand _maintenanceModeEditCommand;
 
@@ -149,6 +149,10 @@ namespace JayDev.Notemaker.ViewModel
             }
         }
 
+        #endregion
+
+        #region DeleteCourseCommand
+
         private RelayCommand _deleteCourseCommand;
 
         /// <summary>
@@ -164,7 +168,7 @@ namespace JayDev.Notemaker.ViewModel
                                           {
 
                                           },
-                                          () => AreCoursesExisting));
+                                          () => AreCoursesExisting && SelectedCourse != null));
             }
         }
 
@@ -426,6 +430,9 @@ namespace JayDev.Notemaker.ViewModel
                     //when we've selected a course, we may be able to view it
                     MaintenanceMode = Common.MaintenanceMode.View;
                 }
+
+                //flag that we either may or may not be able to trigger the delete course functionality now
+                DeleteCourseCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -577,7 +584,7 @@ namespace JayDev.Notemaker.ViewModel
             {
                 if (null == value)
                 {
-                    _selectedCourseTracks = null;
+                    _selectedCourseSelectedTracks = null;
                 }
                 else
                 {

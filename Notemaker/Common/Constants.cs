@@ -290,9 +290,14 @@ namespace JayDev.Notemaker.Common
         WM_HELP_Before0x0400 = 0x000c, //12
     }
 
-    public static class Constants {
+    static class Constants {
 
-
+        /// <summary>
+        /// used in WPF datagrid, when 'CanUserAddRows' is enabled. WPF adds a blank item to the bottom of the grid, of type
+        /// MS.Internal.NamedObject... and the only way, it seems, to detect if a given row is of one of these types, is by calling
+        /// .ToString() on it - which will return this string here.
+        /// </summary>
+        public const string NewItemPlaceholderName = "{NewItemPlaceholder}";
 
     }
 }

@@ -250,6 +250,41 @@ namespace JayDev.Notemaker.ViewModel
 
         #endregion PlayStatus
 
+        /// <summary>
+        /// The <see cref="VirtualEmbeddedVideoHeight" /> property's name.
+        /// </summary>
+        public const string VirtualEmbeddedVideoHeightPropertyName = "VirtualEmbeddedVideoHeight";
+
+        /// <summary>
+        /// Sets and gets the VirtualEmbeddedVideoHeight property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public double VirtualEmbeddedVideoHeight
+        {
+            get
+            {
+                if (IsCurrentTrackVideo)
+                {
+                    return LastEmbeddedVideoHeight ?? 300;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+
+            set
+            {
+                if (IsCurrentTrackVideo)
+                {
+                    LastEmbeddedVideoHeight = value;
+                }
+                else
+                {
+                }
+            }
+        }
+
         #region LastEmbeddedVideoWidth
 
         /// <summary>
@@ -347,6 +382,11 @@ namespace JayDev.Notemaker.ViewModel
 
                 _isCurrentTrackVideo = value;
                 RaisePropertyChanged(IsCurrentTrackVideoPropertyName);
+
+                //when we change tracks, we show or hide the video control based upon whether the track /has/ video or not.
+                //as such, we need to inform the UI that the height of the video is changed (since we can't literally collapse grid rows in
+                //WPF, we have to set the height to 0)
+                RaisePropertyChanged(VirtualEmbeddedVideoHeightPropertyName);
             }
         }
 
