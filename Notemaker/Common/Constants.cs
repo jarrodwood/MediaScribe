@@ -8,6 +8,61 @@ namespace JayDev.Notemaker.Common
 {
     public enum PlayStatus { Stopped, Playing, Paused }
 
+    public enum MaintenanceMode { View, Create, Edit, None }
+    public enum MessageType { Navigate, RegisterReusableControl }
+    public enum NavigateMessage { ToggleFullscreen, ListCourses, WriteCourseNotes, ReviewCourseNotes, Settings }
+
+    public class NavigateArgs
+    {
+        public Course Course { get; set; }
+        public NavigateMessage Message { get; set; }
+        public NavigateArgs(NavigateMessage message)
+        {
+            this.Message = message;
+        }
+        public NavigateArgs(NavigateMessage message, Course course)
+        {
+            this.Message = message;
+            this.Course = course;
+        }
+    }
+
+
+    #region Hotkey Enums
+
+    public enum Direction { Back, Forward }
+    public enum HotkeyFunction
+    {
+        [Information("Toggle fullscreen", "Toggle between fullscreen mode and normal course mode. You can also toggle fullscreen by double-clicking on the video itself.", "only on the course notes screen.")]
+        ToggleFullscreen,
+        [Information("Toggle pause", "Toggle pausing the video", "only on the course notes screen, and a track has been selected.")]
+        TogglePause,
+        //ToggleMute,
+        //ChangeVolume,
+        [Information("Seek", "Jumps the current play position either forward or back a given of seconds.", "only on the course notes screen.")]
+        Seek,
+        [Information("Note segment bold", "You can either select a segment of text and hit this hotkey to style it bold, or you can hit the hotkey and any text you begin to type will be styled bold", "only when editing a note.")]
+        NoteBold,
+        [Information("Note segment italic", "You can either select a segment of text and hit this hotkey to style it italic, or you can hit the hotkey and any text you begin to type will be styled italic", "only when editing a note.")]
+        NoteItalic,
+        [Information("Note segment colour", "You can either select a segment of text and hit this hotkey to give it a specified colour, or you can hit the hotkey and any text you begin to type will be coloured", "only when editing a note.")]
+        NoteColour,
+        [Information("Note segment colour", "You can either select a segment of text and hit this hotkey to give it a specified colour, or you can hit the hotkey and any text you begin to type will be coloured", "only when editing a note.")]
+        NoteRating,
+        [Information("Note segment colour", "You can either select a segment of text and hit this hotkey to give it a specified colour, or you can hit the hotkey and any text you begin to type will be coloured", "only when editing a note.")]
+        NoteSetStartTime,
+        [Information("Note segment colour", "You can either select a segment of text and hit this hotkey to give it a specified colour, or you can hit the hotkey and any text you begin to type will be coloured", "only when editing a note.")]
+        NoteEditBegin,
+        [Information("Note segment colour", "You can either select a segment of text and hit this hotkey to give it a specified colour, or you can hit the hotkey and any text you begin to type will be coloured", "only when editing a note.")]
+        NoteEditCommit,
+        [Information("Note segment colour", "You can either select a segment of text and hit this hotkey to give it a specified colour, or you can hit the hotkey and any text you begin to type will be coloured", "only when editing a note.")]
+        NoteEditCancel,
+        //NoteSetEndTime,
+        //NoteToggleEndTime,
+    }
+
+    #endregion
+
     public enum WM_Messages
     {
         WM_NULL = 0x0000, //0
@@ -234,27 +289,6 @@ namespace JayDev.Notemaker.Common
         WM_USER = 0x0400, //1024
         WM_HELP_Before0x0400 = 0x000c, //12
     }
-
-    public enum MaintenanceMode { View, Create, Edit, None }
-    public enum MessageType { Navigate, RegisterReusableControl }
-    public enum NavigateMessage { ToggleFullscreen, ListCourses, WriteCourseNotes, ReviewCourseNotes }
-    public enum ReusableControlType { VideoControl, VideoControlsControl, NotesGridControl  }
-
-    public class NavigateArgs
-    {
-        public Course Course { get; set; }
-        public NavigateMessage Message { get; set; }
-        public NavigateArgs(NavigateMessage message)
-        {
-            this.Message = message;
-        }
-        public NavigateArgs(NavigateMessage message, Course course)
-        {
-            this.Message = message;
-            this.Course = course;
-        }
-    }
-
 
     public static class Constants {
 

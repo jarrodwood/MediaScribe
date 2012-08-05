@@ -17,19 +17,27 @@ using LibMPlayerCommon;
 using GalaSoft.MvvmLight.Messaging;
 using JayDev.Notemaker.Common;
 using System.Diagnostics;
+using System.Windows.Interop;
+using Microsoft.Windows.Shell;
 
 namespace JayDev.Notemaker.View
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         public MainWindow()
         {
             InitializeComponent();
 
             Controller.Singleton.Initialize(this);
+
+            this.SourceInitialized += new EventHandler(MainWindow_SourceInitialized);
+        }
+
+        void MainWindow_SourceInitialized(object sender, EventArgs e)
+        {
         }
 
 
@@ -67,11 +75,41 @@ namespace JayDev.Notemaker.View
             {
                 var a = new Discover(track);
                 Console.WriteLine("Length: {0}, is video: {1}, title: {2}", a.Length, a.Video, a.Title);
-                currentCourse.Tracks.Add(new Track() { FilePath = track, Length = new TimeSpan(0, 0, a.Length), IsVideo = a.Video? 1 : 0, AspectRatio = a.AspectRatio });
+                currentCourse.Tracks.Add(new Track() { FilePath = track, Length = new TimeSpan(0, 0, a.Length), IsVideo = a.Video, AspectRatio = a.AspectRatio });
             }
+
+            
 
             result.Add(currentCourse);
             //repo.SaveCourseList(result);
         }
+
+
+
+
+
+        private void _OnStandardChromeClicked(object sender, RoutedEventArgs e)
+        {
+            this.Style = null;
+        }
+
+        private void _OnGradientChromeClicked(object sender, RoutedEventArgs e)
+        {
+            var style = (Style)Resources["GradientStyle"];
+            this.Style = style;
+        }
+
+        private void _OnGlassyChromeClicked(object sender, RoutedEventArgs e)
+        {
+            var style = (Style)Resources["GlassStyle"];
+            this.Style = style;
+        }
+
+        private void _OnSystemCommandCloseWindow(object sender, ExecutedRoutedEventArgs e)
+        {
+            SystemCommands.CloseWindow((Window)e.Parameter);
+        }
+
+
     }
 }

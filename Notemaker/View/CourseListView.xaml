@@ -10,7 +10,7 @@
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"         
              xmlns:effect="clr-namespace:GrayscaleEffect;assembly=GrayscaleEffect"
              x:Name="CourseMaintenanceViewName"
-             d:DesignHeight="319" d:DesignWidth="1388">
+             d:DesignHeight="368" d:DesignWidth="1380">
     <UserControl.Resources>
         <notemakerCommon:GridLengthValueConverter x:Key="gridLengthConverter" />
         <notemakerCommon:BooleanToVisibilityConverter 
@@ -37,10 +37,11 @@
         </Style>
     </UserControl.Resources>
     <!--<Grid Background="#FFEFF5FF">-->
-    <Grid Background="#FFEFF5FF">
+    <Grid Background="#FFEEF6FF">
         <DockPanel Name="windowContents">
-            <notemakerControl:NavigationControl DockPanel.Dock="Top"
+            <notemakerControl:NavigationControl2 DockPanel.Dock="Top"
                                                 NavigateCommand="{Binding NavigateCommand}"
+                                                
                                                 />
             <Grid Name="mainGrid">
                 <Grid.ColumnDefinitions>
@@ -50,12 +51,32 @@
                 </Grid.ColumnDefinitions>
 
                 <DockPanel Grid.Column="0">
-
-                    <DockPanel DockPanel.Dock="Top">
+                    <StackPanel DockPanel.Dock="Top">
+                        <GroupBox Header="Welcome to Notemaker!"  Foreground="#FF3F3F3F" Margin="10 10 10 10" Padding="10" BorderBrush="#FF75B2DE">
+                            <TextBlock TextWrapping="Wrap">
+                                To get started, create a course in the list below, by clicking in the + button. You can type in a name,
+                                select the tracks for the course (Notemaker supports virtually any type of video or audio files), then once
+                                you save you can click on the 'Go To Course' button to begin writing notes for your course.
+                                <LineBreak />
+                                <LineBreak />
+                                You may also want to check out the 'Settings' in the menu above - you can configure a variety of hotkeys to
+                                allow for quicker note writing, quick-seeking (i.e. jumping back a few seconds to repeat what was just said)
+                                and also to style your notes with bolding, italics, and user-defined colours.
+                                <LineBreak />
+                                <LineBreak />
+                                This is a pre-release version of the app, and while the core functionality is here, there <Italic>are</Italic>
+                                bugs and many features which are yet to be implemented. Please write suggestions to jwood@galt.co.nz. Cheers!
+                            </TextBlock>
+                        </GroupBox>
+                        <GroupBox Header="Courses" Foreground="#FF3F3F3F" BorderBrush="#FF75B2DE" Margin="10 0 10 10" Padding="5">
+                        <DockPanel>
                         <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
-                        <Border DockPanel.Dock="Bottom" BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#EAEAEA">
+                                <StackPanel DockPanel.Dock="Bottom">
+                                    <Border DockPanel.Dock="Bottom" BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#FFFF" Visibility="{Binding AreCoursesExisting, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
                             <StackPanel MinHeight="30">
-                                <TextBlock Text="Please add a new course!" Margin="0 5 0 0" HorizontalAlignment="Center"  VerticalAlignment="Center" Visibility="{Binding AreCoursesExisting, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}" />
+                                <TextBlock Text="Please add a new course!" Margin="0 5 0 0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Border>
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
 
                                     <notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding CreateCourseCommand}" />
@@ -63,61 +84,44 @@
                                     <notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteCourseCommand}" CommandParameter="{x:Static notemakerCommon:NavigateMessage.ListCourses}" />
 
                                 </StackPanel>
-                            </StackPanel>
-                        </Border>
-                        <!--</ContentControl>-->
-                        <notemakerCommon:DoubleClickableDataGrid VerticalAlignment="Top" AutoGenerateColumns="False" x:Name="courseGrid" HeadersVisibility="Column" CanUserAddRows="False"                                                                 
+                                </StackPanel>
+                                <!--</ContentControl>-->
+                            <notemakerCommon:DoubleClickableDataGrid VerticalAlignment="Top" AutoGenerateColumns="False" x:Name="courseGrid" HeadersVisibility="Column" CanUserAddRows="False"                                                                 
                                   SelectionMode="Single"
                                   CanUserSortColumns="True" CanUserReorderColumns="False" CanUserResizeRows="False"
                                   ItemsSource="{Binding Courses}"
-                                  SelectedItem="{Binding SelectedCourse}"
+                                  SelectedItem="{Binding SelectedCourse, Mode=TwoWay}"
                                   RowDoubleClickCommand="{Binding WriteNotesCommand}"  Style="{StaticResource DataGridStyle1}">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Course Name"
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Course Name"
                                             Width="*"
                                             Binding="{Binding Name}" 
                                             SortMemberPath="Name"
                                             CanUserSort="True"
                                             IsReadOnly="True"/>
-                                <DataGridTextColumn Header="Length"
+                                    <DataGridTextColumn Header="Length"
                                             Width="55"
                                             Binding="{Binding CourseLength}" 
                                             SortMemberPath="CourseLength"
                                             CanUserSort="True"
                                             IsReadOnly="True"/>
-                                <DataGridTextColumn Header="Files"
+                                    <DataGridTextColumn Header="Files"
                                             Width="55"
                                             Binding="{Binding Path=Tracks.Count}" 
                                             SortMemberPath="Tracks.Count"
                                             CanUserSort="True"
                                             IsReadOnly="True"/>
-                                <DataGridTextColumn Header="Notes"
+                                    <DataGridTextColumn Header="Notes"
                                             Width="55"
                                             Binding="{Binding Path=Notes.Count}" 
                                             SortMemberPath="Notes.Count"
                                             CanUserSort="True"
                                             IsReadOnly="True"/>
-                                <DataGridTextColumn Header="Created"
-                                            Width="85"
-                                            Binding="{Binding Path=CourseLength}" 
-                                            SortMemberPath="CourseLength"
-                                            CanUserSort="True"
-                                            IsReadOnly="True"/>
-                                <DataGridTextColumn Header="Modified"
-                                            Width="85"
-                                            Binding="{Binding CourseLength}" 
-                                            SortMemberPath="CourseLength"
-                                            CanUserSort="True"
-                                            IsReadOnly="True"/>
-                                <DataGridTextColumn Header="Viewed"
-                                            Width="85"
-                                            Binding="{Binding CourseLength}" 
-                                            SortMemberPath="CourseLength"
-                                            CanUserSort="True"
-                                            IsReadOnly="True"/>
-                            </DataGrid.Columns>
-                        </notemakerCommon:DoubleClickableDataGrid>
-                    </DockPanel>
+                                </DataGrid.Columns>
+                            </notemakerCommon:DoubleClickableDataGrid>
+                        </DockPanel>
+                    </GroupBox>
+                    </StackPanel>
                     <!--Empty content control, which 'fills' the dockpanel. As the grid grows, this will shrink away to nothing... and as the grid continues to grow, it'll get scrollbars.-->
                     <ContentControl>
                     </ContentControl>
@@ -126,31 +130,31 @@
 
                 <DockPanel Grid.Column="2" LastChildFill="True">
                     <DockPanel DockPanel.Dock="Top">
-                    <Border DockPanel.Dock="Bottom" BorderBrush="#B9C9DA" BorderThickness="1" Margin="15" Background="#E3ECF6" Padding="15">
-                        <StackPanel>
+                        <GroupBox DockPanel.Dock="Bottom" Header="Selected Course" Foreground="#FF3F3F3F" Margin="15" Padding="15" BorderBrush="#FF75B2DE">
+                            <StackPanel>
 
 
-                            <!-- The XAML for 'when no course is selected' panel -->
-                            <StackPanel Name="_noneCoursePanel" Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_NoneVisible}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Style="{StaticResource HeaderFont}" xml:space="preserve" Text="Please select a course on the left." />
+                                <!-- The XAML for 'when no course is selected' panel -->
+                                <StackPanel Name="_noneCoursePanel" Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_NoneVisible}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
+
+                                    <TextBlock HorizontalAlignment="Center" Style="{StaticResource HeaderFont}" xml:space="preserve" FontSize="12" Text="Please select a course on the left." />
                                 </StackPanel>
-                            </StackPanel>
 
 
-                            <!-- The XAML for the 'view a course' panel -->
-                            <StackPanel Name="_viewCoursePanel" Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_ViewVisible}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Style="{StaticResource HeaderFont}" xml:space="preserve" Text="{Binding SelectedCourseName, TargetNullValue='no name?'}" />
-                                </StackPanel>
-                                <DockPanel Margin="0 15 0 0">
+                                <!-- The XAML for the 'view a course' panel -->
+                                <StackPanel Name="_viewCoursePanel" Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_ViewVisible}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
+
+                                    <TextBlock HorizontalAlignment="Center" Style="{StaticResource HeaderFont}" xml:space="preserve" Text="{Binding SelectedCourseName, TargetNullValue='no name?'}" />
+                       
+                                    <DockPanel Margin="0 15 0 0">
                                         <notemakerCommon:DragEnabledDataGrid VerticalAlignment="Top"
-                                                                             AutoGenerateColumns="False" HeadersVisibility="Column" CanUserAddRows="False"
+                                                                             AutoGenerateColumns="False" HeadersVisibility="All" CanUserAddRows="False"
                                CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks, Mode=TwoWay}"
                                                                              OnDragDisplayPropertyName="StringDisplayValue"
                                                                              CanDrag="False"
                                                                              ReadOnlySelectedItems="{Binding SelectedCourseSelectedTracks, Mode=OneWayToSource}"
-                                                                             MoveItemsCommand="{Binding Path=MoveItemsCommand}" Style="{StaticResource DataGridStyle1}">
+                                                                             MoveItemsCommand="{Binding Path=MoveItemsCommand}" Style="{StaticResource DataGridStyle1}"
+                                                                             notemakerCommon:DataGridExtensions.ShowRowNumbersInHeader="True">
                                             <DataGrid.Columns>
                                                 <DataGridTextColumn Header="Name"
                                                 Width="*"
@@ -162,33 +166,56 @@
                                                IsReadOnly="True"/>
                                             </DataGrid.Columns>
                                         </notemakerCommon:DragEnabledDataGrid>
-                                </DockPanel>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 0">
-                                    <Button Padding="5 1" Command="{Binding MaintenanceModeEditCommand}">Edit</Button>
-                                    <Button Margin="10 0 0 0" Padding="5 1" Command="{Binding WriteNotesCommand}">Go To Course</Button>
+                                    </DockPanel>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 0">
+
+                                        <!--<Button Grid.Column="3" Height="25" Width="40" Margin="0 0 0 0" Style="{DynamicResource JarrodBlueButton}" VerticalAlignment="Center"
+                              Command="{Binding MaintenanceModeEditCommand}">
+                                            <Grid>
+                                                <TextBlock Margin="0 0 0 0" Foreground="#FF00388D" FontSize="12" VerticalAlignment="Center"><TextBlock.Effect> 
+								<BlurEffect Radius="4" RenderingBias="Quality" />  
+							</TextBlock.Effect><Run Text="Edit"/></TextBlock>
+                                                <TextBlock Margin="0 0 0 0" Foreground="White" FontSize="12" VerticalAlignment="Center"><Run Text="Edit"/></TextBlock>
+                                            </Grid>
+                                        </Button>
+
+                                        <Button Margin="10 0 0 0" Grid.Column="3" Height="25" Width="90"  Style="{DynamicResource JarrodBlueButton}" VerticalAlignment="Center"
+                              Command="{Binding WriteNotesCommand}">
+                                            <Grid>
+                                                <TextBlock Margin="0 0 0 0" Foreground="#FF00388D" FontSize="12" VerticalAlignment="Center"><TextBlock.Effect> 
+								<BlurEffect Radius="4" RenderingBias="Quality" />  
+							</TextBlock.Effect><Run Text="Go To Course"/></TextBlock>
+                                                <TextBlock Margin="0 0 0 0" Foreground="White" FontSize="12" VerticalAlignment="Center"><Run Text="Go To Course"/></TextBlock>
+                                            </Grid>
+                                        </Button>-->
+                                        <Button Padding="5 1" Command="{Binding MaintenanceModeEditCommand}">Edit</Button>
+                                        <Button Margin="10 0 0 0" Padding="5 1" Command="{Binding WriteNotesCommand}">Go To Course</Button>
+
+                                    </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
-                            
-                            
-                            
-                            
-                            
-                            <!-- The XAML for the 'create a course' panel -->
-                            <StackPanel Name="_createCoursePanel" Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_CreateVisible}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Style="{StaticResource HeaderFont}" xml:space="preserve">Create a new course: </TextBlock>
-                                    <TextBox HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Text="{Binding SelectedCourseName, UpdateSourceTrigger=PropertyChanged}">
-                                        <notemakerCommon:WatermarkService.Watermark>
-                                            <TextBlock>Course name...</TextBlock>
-                                        </notemakerCommon:WatermarkService.Watermark>
-                                    </TextBox>
-                                </StackPanel>
-                                <DockPanel Margin="0 15 0 0">
-                                    <DockPanel DockPanel.Dock="Top">
-                                        <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
-                                        <Border DockPanel.Dock="Bottom" BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#EAEAEA">
-                                            <StackPanel MinHeight="30">
-                                                <TextBlock Margin="0 5 0 0"  Text="Please add some tracks!" HorizontalAlignment="Center" VerticalAlignment="Bottom"  Visibility="{Binding AreTracksExistingInSelectedCourse, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}" />
+
+
+
+
+
+                                <!-- The XAML for the 'create a course' panel -->
+                                <StackPanel Name="_createCoursePanel" Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_CreateVisible}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
+                                    <Grid>
+                                        <TextBox  VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding SelectedCourseName, UpdateSourceTrigger=PropertyChanged}">
+                                            <notemakerCommon:WatermarkService.Watermark>
+                                                <TextBlock>Course name...</TextBlock>
+                                            </notemakerCommon:WatermarkService.Watermark>
+                                        </TextBox>
+                                    </Grid>
+                                    <DockPanel Margin="0 15 0 0">
+                                        <DockPanel DockPanel.Dock="Top">
+                                            <StackPanel DockPanel.Dock="Bottom">
+                                            <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
+                                            <Border BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#FFFF"   Visibility="{Binding AreTracksExistingInSelectedCourse, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
+                                                <StackPanel MinHeight="30">
+                                                    <TextBlock Margin="0 5 0 0"  Text="Please add some tracks!" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
+                                                </StackPanel>
+                                            </Border>
                                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
 
                                                     <notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding AddTracksCommand}" />
@@ -197,63 +224,75 @@
 
                                                 </StackPanel>
                                             </StackPanel>
-                                        </Border>
-                                        <notemakerCommon:DragEnabledDataGrid VerticalAlignment="Top"
+                                            <notemakerCommon:DragEnabledDataGrid VerticalAlignment="Top"
                                                                              AutoGenerateColumns="False"  x:Name="trackGrid" HeadersVisibility="Column" CanUserAddRows="False"
                                CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks, Mode=TwoWay}"
                                                                              OnDragDisplayPropertyName="StringDisplayValue"
                                                                              CanDrag="True"
                                                                              ReadOnlySelectedItems="{Binding SelectedCourseSelectedTracks, Mode=OneWayToSource}"
-                                                                             MoveItemsCommand="{Binding Path=MoveItemsCommand}" Style="{StaticResource DataGridStyle1}">
-                                            <DataGrid.ContextMenu>
-                                                <ContextMenu>
-                                                    <MenuItem Header="Remove Track" Command="Delete" />
-                                                </ContextMenu>
-                                            </DataGrid.ContextMenu>
-                                            <!--<i:Interaction.Triggers>
+                                                                             MoveItemsCommand="{Binding Path=MoveItemsCommand}" Style="{StaticResource DataGridStyle1}"
+                                                                             notemakerCommon:DataGridExtensions.ShowRowNumbersInHeader="False">
+                                                <DataGrid.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Remove Track" Command="Delete" />
+                                                    </ContextMenu>
+                                                </DataGrid.ContextMenu>
+                                                <!--<i:Interaction.Triggers>
                                             <i:EventTrigger EventName="MouseDoubleClick">
                                                 <cmd:EventToCommand Command="{Binding SelectTrackCommand,Mode=OneWay}"
                                                 CommandParameter="{Binding SelectedItem, ElementName=trackGrid, Mode=OneWay}"
                                                 MustToggleIsEnabledValue="True" />
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>-->
-                                            <DataGrid.Columns>
-                                                <DataGridTextColumn Header="Name"
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn Header="Name"
                                                 Width="*"
                                                Binding="{Binding StringDisplayValue}" 
                                                IsReadOnly="True"/>
-                                                <DataGridTextColumn Header="Length"
+                                                    <DataGridTextColumn Header="Length"
                                                 Width="55"
                                                Binding="{Binding Length}" 
                                                IsReadOnly="True"/>
-                                            </DataGrid.Columns>
-                                        </notemakerCommon:DragEnabledDataGrid>
+                                                </DataGrid.Columns>
+                                            </notemakerCommon:DragEnabledDataGrid>
+                                        </DockPanel>
+                                        <!--Empty content control, which 'fills' the dockpanel. As the grid grows, this will shrink away to nothing... and as the grid continues to grow, it'll get scrollbars.-->
+                                        <ContentControl>
+                                        </ContentControl>
                                     </DockPanel>
-                                    <!--Empty content control, which 'fills' the dockpanel. As the grid grows, this will shrink away to nothing... and as the grid continues to grow, it'll get scrollbars.-->
-                                    <ContentControl>
-                                    </ContentControl>
-                                </DockPanel>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 0">
-                                    <Button Padding="5 1" Command="{Binding SaveCourseCommand}">Save</Button>
-                                    <Button Margin="10 0 0 0" Padding="5 1">Cancel</Button>
-                                    <Button Margin="10 0 0 0" Padding="5 1">Go To Course</Button>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 0">
+
+                                        <!--<Button Grid.Column="3" Height="25" Width="40" Margin="0 0 0 0" Style="{DynamicResource JarrodBlueButton}" VerticalAlignment="Center" IsEnabled="False"
+                              Command="{Binding MaintenanceModeEditCommand}">
+                                            <Grid>
+                                                <TextBlock Margin="0 0 0 0" Foreground="#FF00388D" FontSize="12" VerticalAlignment="Center"><TextBlock.Effect> 
+								<BlurEffect Radius="4" RenderingBias="Quality" />  
+							</TextBlock.Effect><Run Text="Edit"/></TextBlock>
+                                                <TextBlock Margin="0 0 0 0" Foreground="White" FontSize="12" VerticalAlignment="Center"><Run Text="Edit"/></TextBlock>
+                                            </Grid>
+                                        </Button>-->
+                                        <Button Padding="5 1" Command="{Binding SaveCourseCommand}">Save</Button>
+                                        <Button Margin="10 0 0 0" Command="{Binding CancelCommand}" Padding="5 1">Cancel</Button>
+                                    </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
 
 
 
 
-                            <!-- The XAML for the 'edit a course' panel -->
-                            <StackPanel Name="_editCoursePanel" Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_EditVisible}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBox HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Text="{Binding SelectedCourseName, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-                                <DockPanel Margin="0 15 0 0">
-                                    <DockPanel DockPanel.Dock="Top">
-                                        <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
-                                        <Border DockPanel.Dock="Bottom" BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#EAEAEA">
-                                            <StackPanel MinHeight="30">
-                                                <TextBlock Margin="0 5 0 0"  Text="Please add some tracks!" HorizontalAlignment="Center" VerticalAlignment="Bottom"  Visibility="{Binding AreTracksExistingInSelectedCourse, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}" />
+                                <!-- The XAML for the 'edit a course' panel -->
+                                <StackPanel Name="_editCoursePanel" Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_EditVisible}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBox HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Text="{Binding SelectedCourseName, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <DockPanel Margin="0 15 0 0">
+                                        <DockPanel DockPanel.Dock="Top">
+                                            <StackPanel DockPanel.Dock="Bottom">
+                                                <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
+                                                <Border BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#EAEAEA"  Visibility="{Binding AreTracksExistingInSelectedCourse, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}" >
+                                                    <StackPanel MinHeight="30">
+                                                        <TextBlock Margin="0 5 0 0"  Text="Please add some tracks!" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
+                                                    </StackPanel>
+                                                </Border>
                                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
 
                                                     <notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding AddTracksCommand}" />
@@ -262,54 +301,54 @@
 
                                                 </StackPanel>
                                             </StackPanel>
-                                        </Border>
-                                        <notemakerCommon:DragEnabledDataGrid VerticalAlignment="Top"
+                                            <notemakerCommon:DragEnabledDataGrid VerticalAlignment="Top"
                                                                              AutoGenerateColumns="False" HeadersVisibility="Column" CanUserAddRows="False"
                                CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks, Mode=TwoWay}"
                                                                              OnDragDisplayPropertyName="StringDisplayValue"
                                                                              CanDrag="True"
                                                                              ReadOnlySelectedItems="{Binding SelectedCourseSelectedTracks, Mode=OneWayToSource}"
-                                                                             MoveItemsCommand="{Binding Path=MoveItemsCommand}" Style="{StaticResource DataGridStyle1}">
-                                            <DataGrid.ContextMenu>
-                                                <ContextMenu>
-                                                    <MenuItem Header="Remove Track" Command="Delete" />
-                                                </ContextMenu>
-                                            </DataGrid.ContextMenu>
-                                            <!--<i:Interaction.Triggers>
+                                                                             MoveItemsCommand="{Binding Path=MoveItemsCommand}" Style="{StaticResource DataGridStyle1}"
+                                                                                 notemakerCommon:DataGridExtensions.ShowRowNumbersInHeader="False">
+                                                <DataGrid.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Remove Track" Command="Delete" />
+                                                    </ContextMenu>
+                                                </DataGrid.ContextMenu>
+                                                <!--<i:Interaction.Triggers>
                                             <i:EventTrigger EventName="MouseDoubleClick">
                                                 <cmd:EventToCommand Command="{Binding SelectTrackCommand,Mode=OneWay}"
                                                 CommandParameter="{Binding SelectedItem, ElementName=trackGrid, Mode=OneWay}"
                                                 MustToggleIsEnabledValue="True" />
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>-->
-                                            <DataGrid.Columns>
-                                                <DataGridTextColumn Header="Name"
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn Header="Name"
                                                 Width="*"
                                                Binding="{Binding StringDisplayValue}" 
                                                IsReadOnly="True"/>
-                                                <DataGridTextColumn Header="Length"
+                                                    <DataGridTextColumn Header="Length"
                                                 Width="55"
                                                Binding="{Binding Length}" 
                                                IsReadOnly="True"/>
-                                            </DataGrid.Columns>
-                                        </notemakerCommon:DragEnabledDataGrid>
+                                                </DataGrid.Columns>
+                                            </notemakerCommon:DragEnabledDataGrid>
+                                        </DockPanel>
+                                        <!--Empty content control, which 'fills' the dockpanel. As the grid grows, this will shrink away to nothing... and as the grid continues to grow, it'll get scrollbars.-->
+                                        <ContentControl>
+                                        </ContentControl>
                                     </DockPanel>
-                                    <!--Empty content control, which 'fills' the dockpanel. As the grid grows, this will shrink away to nothing... and as the grid continues to grow, it'll get scrollbars.-->
-                                    <ContentControl>
-                                    </ContentControl>
-                                </DockPanel>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 0">
-                                    <Button Padding="5 1" Command="{Binding SaveCourseCommand}">Save</Button>
-                                    <Button Margin="10 0 0 0" Padding="5 1">Cancel</Button>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 0">
+                                        <Button Padding="5 1" Command="{Binding SaveCourseCommand}">Save</Button>
+                                        <Button Margin="10 0 0 0" Command="{Binding CancelCommand}" Padding="5 1">Cancel</Button>
+                                    </StackPanel>
                                 </StackPanel>
+
+
+
                             </StackPanel>
 
 
-
-                        </StackPanel>
-                        
-                        
-                        <!--<StackPanel Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_ViewVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
+                            <!--<StackPanel Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_ViewVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
                                 <TextBlock Grid.Row="0" HorizontalAlignment="Center" Style="{StaticResource HeaderFont}">Heston's Feast</TextBlock>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -346,7 +385,7 @@
                                     </DataGrid.Columns>
                                 </DataGrid>
                             </StackPanel>-->
-                    </Border>
+                        </GroupBox>
                     </DockPanel>
                     <!--<DataGrid DockPanel.Dock="Bottom" VerticalAlignment="Top" AutoGenerateColumns="False"  Name="trackGrid" HeadersVisibility="All" CanUserAddRows="False"
                            CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks}">

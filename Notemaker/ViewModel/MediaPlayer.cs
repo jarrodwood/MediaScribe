@@ -13,10 +13,11 @@ namespace JayDev.Notemaker.ViewModel
     public class MediaPlayer : ViewModelBase
     {
         private Discover _videoSettings;
-        private MPlayer _play;
+        private static MPlayer _play;
         private string _filePath;
         private bool disposed = false; // to detect redundant calls
-        private Timer _playPositionTimer;
+        private static Timer _playPositionTimer = new Timer();
+        private IntPtr _handle;
 
         #region CurrentPlayPosition
 
@@ -51,112 +52,144 @@ namespace JayDev.Notemaker.ViewModel
         }
 
         #endregion CurrentPlayPosition
-		
+
+
+        public MediaPlayer(IntPtr handle)
+        {
+            if (null == _play)
+            {
+                this._handle = handle;
+
+                MplayerBackends backend;
+                System.PlatformID runningPlatform = System.Environment.OSVersion.Platform;
+                if (runningPlatform == System.PlatformID.Unix)
+                {
+                    backend = MplayerBackends.GL2;
+                }
+                else if (runningPlatform == PlatformID.MacOSX)
+                {
+                    backend = MplayerBackends.OpenGL;
+                }
+                else
+                {
+                    backend = MplayerBackends.Direct3D;
+                }
+
+                _play = new MPlayer((int)handle, backend);
+                _play.Init();
+
+                _playPositionTimer = new Timer();
+                _playPositionTimer.Interval = 500;
+                _playPositionTimer.Elapsed += new ElapsedEventHandler(_playPositionTimer_Elapsed);
+                _playPositionTimer.Start();
+            }
+        }
 
         public PlayStatus PlayingStatus
         {
             get
             {
-                if (this._play == null || this._play.CurrentStatus == MediaStatus.Stopped)
+                if (_play == null || _play.CurrentStatus == MediaStatus.Stopped)
                     return PlayStatus.Stopped;
-                if (this._play.CurrentStatus == MediaStatus.Playing)
+                if (_play.CurrentStatus == MediaStatus.Playing)
                     return PlayStatus.Playing;
-                if (this._play.CurrentStatus == MediaStatus.Paused)
+                if (_play.CurrentStatus == MediaStatus.Paused)
                     return PlayStatus.Paused;
                 throw new Exception("error: unexpected playing status?");
             }
         }
 
-        public void TogglePause()
+        public void ToggleMute()
         {
-            if (null != this._play)
+            if (null != _play)
             {
-                //note the current playing status, because it takes a little while to update after we tell mplayer to pause...
-                PlayStatus now = PlayingStatus;
-                if (now == PlayStatus.Playing)
-                {
-                    _playPositionTimer.Stop();
-                }
-
-                this._play.Pause();
-
-                if (now == PlayStatus.Paused || now == PlayStatus.Stopped)
-                {
-                    _playPositionTimer.Start();
-                }
+                _play.Mute();
             }
         }
+
+        public void TogglePause()
+        {
+            if (null != _play)
+            {
+
+                _play.Pause();
+            }
+        }
+
         public void Seek(int time)
         {
-            this._play.Seek(time, LibMPlayerCommon.Seek.Absolute);
+            _play.Seek(time, LibMPlayerCommon.Seek.Absolute);
             //set the play position, to instantly update the trackbar... instead of waiting for the timer to tick.
             //TODO: the timer still makes it jump back for some reason - mplayer's returning the old time for a second or two ?
             this.CurrentPlayPosition = new TimeSpan(0, 0, time);
         }
         public void SeekRelative(int relativeTime)
         {
-            this._play.Seek(relativeTime, LibMPlayerCommon.Seek.Relative);
+            _play.Seek(relativeTime, LibMPlayerCommon.Seek.Relative);
+            if (relativeTime >= 0)
+            {
+                this.CurrentPlayPosition = this.CurrentPlayPosition.Add(new TimeSpan(0, 0, relativeTime));
+            }
+            else
+            {
+                this.CurrentPlayPosition = this.CurrentPlayPosition.Subtract(new TimeSpan(0, 0, Math.Abs(relativeTime)));
+            }
         }
 
         public void Volume(double volumePercent)
         {
-            if (null != this._play)
+            if (null != _play)
             {
-                this._play.Volume((int)volumePercent, true);
+                _play.Volume((int)volumePercent, true);
             }
         }
 
         public void Stop()
         {
-            if (null != this._play)
+            if (null != _play)
             {
-                _playPositionTimer.Stop();
-                this._play.Stop();
+                _play.Stop();
 
             }
         }
 
-        public void Play(string filePath, IntPtr handle)
+        string currentFilePath = null;
+        public void PlayFile2(string filePath, TimeSpan time, bool instantPause)
         {
-            this._filePath = filePath;
-            if (this._filePath == String.Empty || this._filePath == null)
-            {
-                MessageBox.Show("You must select a video file.", "Select a file", MessageBoxButton.OK, MessageBoxImage.Information);
+            this.CurrentPlayPosition = time;
+            if (instantPause)
                 return;
-            }
 
-            _videoSettings = new Discover(this._filePath);
-
-
-            MplayerBackends backend;
-            System.PlatformID runningPlatform = System.Environment.OSVersion.Platform;
-            if (runningPlatform == System.PlatformID.Unix)
+            if (filePath != currentFilePath)
             {
-                backend = MplayerBackends.GL2;
-            }
-            else if (runningPlatform == PlatformID.MacOSX)
-            {
-                backend = MplayerBackends.OpenGL;
-            }
-            else
-            {
-                backend = MplayerBackends.Direct3D;
+                _play.Stop();
+                _play.LoadFile(filePath);
+                currentFilePath = filePath;
             }
 
-            this._play = new MPlayer((int)handle, backend);
-            this._play.Play(this._filePath);
-            //TODO: make the following work in its new home
-            //SetPanelSizeForAspectRatio();
+            if (time != TimeSpan.Zero)
+            {
+                _play.Seek(Convert.ToInt32(time.TotalSeconds), LibMPlayerCommon.Seek.Absolute);
+                //set the play position, to instantly update the trackbar... instead of waiting for the timer to tick.
+                //TODO: the timer still makes it jump back for some reason - mplayer's returning the old time for a second or two ?
+                this.CurrentPlayPosition = time;
+            }
 
-            _playPositionTimer = new Timer();
-            _playPositionTimer.Interval = 500;
-            _playPositionTimer.Elapsed += new ElapsedEventHandler(_playPositionTimer_Elapsed);
-            _playPositionTimer.Start();
         }
+
 
         void _playPositionTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            CurrentPlayPosition = new TimeSpan(0,0,_play.CurrentPosition());
+            if (_play.CurrentStatus == MediaStatus.Playing)
+            {
+                TimeSpan newTime = new TimeSpan(0, 0, _play.CurrentPosition());
+                if (Math.Abs(newTime.TotalSeconds - CurrentPlayPosition.TotalSeconds) <= 5)
+                {
+                    CurrentPlayPosition = newTime;
+                }
+            }
+
+            System.Diagnostics.Debug.WriteLine("ELAPZED " + DateTime.Now.ToLongTimeString());
         }
     }
 }

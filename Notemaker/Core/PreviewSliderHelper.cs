@@ -89,42 +89,42 @@ namespace JayDev.Notemaker.Core
 
         static void item_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            Slider slider = sender as Slider;
-            ContentAdorner popup = GetPopupAdorner(slider);
-            popup.Visibility = Visibility.Collapsed;
+            //Slider slider = sender as Slider;
+            //ContentAdorner popup = GetPopupAdorner(slider);
+            //popup.Visibility = Visibility.Collapsed;
         }
 
         static void item_PreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            Slider slider = sender as Slider;
+        //    Slider slider = sender as Slider;
 
-            ContentAdorner popup = GetPopupAdorner(slider);
-            if (popup == null)
-            {
-                Style style = GetContentStyle(slider);
-                popup = new ContentAdorner(slider, style);
-                slider.SetValue(PopupAdornerProperty, popup);
-                AdornerLayer layer = AdornerLayer.GetAdornerLayer(slider);
-                layer.Add(popup);
-            }
+        //    ContentAdorner popup = GetPopupAdorner(slider);
+        //    if (popup == null)
+        //    {
+        //        Style style = GetContentStyle(slider);
+        //        popup = new ContentAdorner(slider, style);
+        //        slider.SetValue(PopupAdornerProperty, popup);
+        //        AdornerLayer layer = AdornerLayer.GetAdornerLayer(slider);
+        //        layer.Add(popup);
+        //    }
 
-            popup.Visibility = Visibility.Visible;
+        //    popup.Visibility = Visibility.Visible;
 
-            System.Windows.Controls.Primitives.Track _track = slider.Template.FindName("PART_Track", slider) as System.Windows.Controls.Primitives.Track;
+        //    System.Windows.Controls.Primitives.Track _track = slider.Template.FindName("PART_Track", slider) as System.Windows.Controls.Primitives.Track;
 
-            Point position = e.MouseDevice.GetPosition(_track) ;
+        //    Point position = e.MouseDevice.GetPosition(_track) ;
 
-            double value = _track.ValueFromPoint(position);
+        //    double value = _track.ValueFromPoint(position);
 
-            if (slider.SmallChange != 0.0)
-            {
-                double diff = value % slider.SmallChange;
-                value -= diff;
-            }
-            popup.Content = Math.Max(slider.Minimum, Math.Min(slider.Maximum, value));
-            position = e.GetPosition(slider);
-            position.Y = slider.ActualHeight/2.0;
-            popup.PlacementOffset = position;
+        //    if (slider.SmallChange != 0.0)
+        //    {
+        //        double diff = value % slider.SmallChange;
+        //        value -= diff;
+        //    }
+        //    popup.Content = Math.Max(slider.Minimum, Math.Min(slider.Maximum, value));
+        //    position = e.GetPosition(slider);
+        //    position.Y = slider.ActualHeight/2.0;
+        //    popup.PlacementOffset = position;
         }
 
 

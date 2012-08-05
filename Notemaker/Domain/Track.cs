@@ -23,7 +23,7 @@ namespace JayDev.Notemaker
         [DataMember]
         public virtual string FilePath { get; set; }
         [DataMember]
-        public virtual int IsVideo { get; set; }
+        public virtual bool IsVideo { get; set; }
         [DataMember]
         public virtual float? AspectRatio { get; set; }
 

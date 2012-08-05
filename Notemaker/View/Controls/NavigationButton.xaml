@@ -20,16 +20,6 @@
                 <ContentPresenter RecognizesAccessKey="True" Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" Margin="{TemplateBinding Control.Padding}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
             </notemakerCommon:CustomButtonChrome>
             <ControlTemplate.Triggers>
-                <!--<Trigger Property="Chrome.IsEnabled">
-                    <Setter Property="Chrome.BorderBrush">
-                        <Setter.Value>
-                            <SolidColorBrush>#F00</SolidColorBrush>
-                        </Setter.Value>
-                    </Setter>
-                    <Trigger.Value>
-                        <s:Boolean>False</s:Boolean>
-                    </Trigger.Value>
-                </Trigger>-->
                 <Trigger Property="UIElement.IsKeyboardFocused">
                     <Setter Property="mwt:ButtonChrome.RenderDefaulted" TargetName="Chrome">
                         <Setter.Value>
@@ -76,12 +66,12 @@
                 </Style>
             </Button.Style>
             <StackPanel>
-                <Image x:Name="myImage" Source="{Binding ElementName=NavigationButtonName, Path=MySource, Mode=TwoWay}" Height="48" Width="48">
+                <Image x:Name="myImage" Source="{Binding ElementName=NavigationButtonName, Path=MySource, Mode=TwoWay}" Height="32" Width="32">
                     <Image.Effect>
                         <effect:GrayscaleEffect DesaturationFactor="{Binding ElementName=myButton, Path=IsEnabled}"/>
                     </Image.Effect>
                 </Image>
-                <TextBlock Style="{StaticResource ChangeMyFonts}" Margin="0 5 0 0" HorizontalAlignment="Center" TextAlignment="Center" Text="{Binding ElementName=NavigationButtonName, Path=Text}" LineHeight="8pt" LineStackingStrategy="BlockLineHeight" TextOptions.TextFormattingMode="Display" />
+                <!--<TextBlock Style="{StaticResource ChangeMyFonts}" Margin="0 5 0 0" HorizontalAlignment="Center" TextAlignment="Center" Text="{Binding ElementName=NavigationButtonName, Path=Text}" LineHeight="8pt" LineStackingStrategy="BlockLineHeight" TextOptions.TextFormattingMode="Display" />-->
             </StackPanel>
         </Button>
     </Grid>

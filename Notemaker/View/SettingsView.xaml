@@ -1,0 +1,106 @@
+﻿<UserControl x:Class="JayDev.Notemaker.View.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"
+             xmlns:notemakerControl="clr-namespace:JayDev.Notemaker.View.Controls"
+             xmlns:notemakerCommon="clr-namespace:JayDev.Notemaker.Common"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"         
+             xmlns:effect="clr-namespace:GrayscaleEffect;assembly=GrayscaleEffect"
+             x:Name="SettingsViewName"
+             d:DesignHeight="368" d:DesignWidth="1380">
+    <UserControl.Resources>
+
+        <notemakerCommon:BooleanToVisibilityConverter 
+                x:Key="BooleanToVisibilityConverterFalseIsVisible" 
+                True="Collapsed" 
+                False="Visible" />
+        
+    </UserControl.Resources>
+    <Grid Background="#FFEEF6FF">
+        <DockPanel Name="windowContents">
+            <notemakerControl:NavigationControl2 DockPanel.Dock="Top"
+                                                NavigateCommand="{Binding NavigateCommand}"
+                                                />
+            <Grid Name="mainGrid">
+
+
+                <DockPanel Grid.Column="1">
+                    <StackPanel DockPanel.Dock="Top" MaxWidth="800">
+                        <GroupBox Header="Application Settings"  Foreground="#FF3F3F3F" Margin="10 10 10 10" Padding="10" BorderBrush="#FF75B2DE">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="250" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Row="0" Grid.Column="0" TextWrapping="Wrap">Load last course when the application starts:</TextBlock>
+                                <CheckBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"></CheckBox>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Header="Hotkeys" Foreground="#FF3F3F3F" BorderBrush="#FF75B2DE" Margin="10 0 10 10" Padding="5">
+                            <DockPanel>
+                                <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
+                                <StackPanel DockPanel.Dock="Bottom">
+                                    <Border DockPanel.Dock="Bottom" BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#FFFF" Visibility="{Binding AreSettingsExisting, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
+                                        <StackPanel MinHeight="30">
+                                            <TextBlock Text="Please add some hotkeys!" Margin="0 5 0 0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </Border>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
+
+                                        <notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding CreateCourseCommand}" />
+
+                                        <notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteCourseCommand}" CommandParameter="{x:Static notemakerCommon:NavigateMessage.ListCourses}" />
+
+                                    </StackPanel>
+                                </StackPanel>
+                                <!--</ContentControl>-->
+                                <StackPanel>
+                                    <TextBlock Text="Hover over the hotkey type to get a description of what it does, and when it's usable" />
+                                    <notemakerCommon:DoubleClickableDataGrid VerticalAlignment="Top" AutoGenerateColumns="False" x:Name="courseGrid" HeadersVisibility="Column" CanUserAddRows="False"                                                                 
+                                  SelectionMode="Single"
+                                  CanUserSortColumns="True" CanUserReorderColumns="False" CanUserResizeRows="False"
+                                  ItemsSource="{Binding Courses}"
+                                  SelectedItem="{Binding SelectedCourse, Mode=TwoWay}"
+                                  RowDoubleClickCommand="{Binding WriteNotesCommand}"  Style="{StaticResource DataGridStyle1}">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Course Name"
+                                            Width="*"
+                                            Binding="{Binding Name}" 
+                                            SortMemberPath="Name"
+                                            CanUserSort="True"
+                                            IsReadOnly="True"/>
+                                            <DataGridTextColumn Header="Length"
+                                            Width="55"
+                                            Binding="{Binding CourseLength}" 
+                                            SortMemberPath="CourseLength"
+                                            CanUserSort="True"
+                                            IsReadOnly="True"/>
+                                            <DataGridTextColumn Header="Files"
+                                            Width="55"
+                                            Binding="{Binding Path=Tracks.Count}" 
+                                            SortMemberPath="Tracks.Count"
+                                            CanUserSort="True"
+                                            IsReadOnly="True"/>
+                                            <DataGridTextColumn Header="Notes"
+                                            Width="55"
+                                            Binding="{Binding Path=Notes.Count}" 
+                                            SortMemberPath="Notes.Count"
+                                            CanUserSort="True"
+                                            IsReadOnly="True"/>
+                                        </DataGrid.Columns>
+                                    </notemakerCommon:DoubleClickableDataGrid>
+                                </StackPanel>
+                            </DockPanel>
+                        </GroupBox>
+                    </StackPanel>
+                    <!--Empty content control, which 'fills' the dockpanel. As the grid grows, this will shrink away to nothing... and as the grid continues to grow, it'll get scrollbars.-->
+                    <ContentControl>
+                    </ContentControl>
+                </DockPanel>
+            </Grid>
+        </DockPanel>
+    </Grid>
+</UserControl>

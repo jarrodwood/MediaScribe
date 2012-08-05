@@ -35,6 +35,14 @@ namespace JayDev.Notemaker.ViewModel
 
         #region Public Properties & Backing Fields
 
+        public NavigateMessage CurrentPage
+        {
+            get
+            {
+                return NavigateMessage.WriteCourseNotes;
+            }
+        }
+
         #region Notes
 
         private ObservableCollection<Note> _notes;
@@ -446,6 +454,40 @@ namespace JayDev.Notemaker.ViewModel
 
         #endregion Volume
 
+        #region IsMuted
+
+        /// <summary>
+        /// The <see cref="IsMuted" /> property's name.
+        /// </summary>
+        public const string IsMutedPropertyName = "IsMuted";
+
+        private bool _isMuted = false;
+
+        /// <summary>
+        /// Sets and gets the IsMuted property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public bool IsMuted
+        {
+            get
+            {
+                return _isMuted;
+            }
+
+            set
+            {
+                if (_isMuted == value)
+                {
+                    return;
+                }
+
+                _isMuted = value;
+                RaisePropertyChanged(IsMutedPropertyName);
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Commands
@@ -620,7 +662,7 @@ namespace JayDev.Notemaker.ViewModel
                     ?? (_playNoteCommand = new RelayCommand<Note>(
                                           (Note context) =>
                                           {
-                                              PlayGivenTrackFromTime(context.Start.Track, context.Start.Time);
+                                              PlayFile(context.Start.Track, context.Start.Time, false);
                                           },
                                           (Note context) => true));
             }
@@ -662,7 +704,10 @@ namespace JayDev.Notemaker.ViewModel
                     ?? (_seekToCommand = new RelayCommand<TimeSpan>(
                                           (TimeSpan time) =>
                                           {
-                                              SeekCurrentTrackToTime(time);
+                                              if (null != _currentTrack)
+                                              {
+                                                  PlayFile(_currentTrack, time, false);
+                                              }
                                           },
                                           (TimeSpan time) => true
                                           ));
@@ -670,8 +715,23 @@ namespace JayDev.Notemaker.ViewModel
         }
 
 
-        //public RelayCommand PlayCommand { get; private set; }
-        public RelayCommand<Track> SelectTrackCommand { get; private set; }
+        private RelayCommand<Track> _selectTrackCommand;
+
+        /// <summary>
+        /// Gets the SelectTrackCommand.
+        /// </summary>
+        public RelayCommand<Track> SelectTrackCommand
+        {
+            get
+            {
+                return _selectTrackCommand
+                    ?? (_selectTrackCommand = new RelayCommand<Track>(
+                                          (Track track) =>
+                                          {
+                                              PlayFile(track, TimeSpan.Zero, false);
+                                          }));
+            }
+        }
 
 
         private RelayCommand _toggleFullscreenCommand;
@@ -706,6 +766,10 @@ namespace JayDev.Notemaker.ViewModel
                     ?? (_navigateCommand = new RelayCommand<NavigateMessage>(
                                           (NavigateMessage message) =>
                                           {
+                                              //save the current track and position for next time... do this BEFORE we stop playing.
+                                              SaveCourse();
+                                              //stop playing any media. ^^
+                                              Stop();
                                               Messenger.Default.Send(new NavigateArgs(message, _currentCourse), MessageType.Navigate);
                                           }));
             }
@@ -786,6 +850,25 @@ namespace JayDev.Notemaker.ViewModel
             }
         }
 
+        private RelayCommand _toggleMuteCommand;
+
+        /// <summary>
+        /// Gets the ToggleMuteCommand.
+        /// </summary>
+        public RelayCommand ToggleMuteCommand
+        {
+            get
+            {
+                return _toggleMuteCommand
+                    ?? (_toggleMuteCommand = new RelayCommand(
+                                          () =>
+                                          {
+                                              IsMuted = !IsMuted;
+                                              _player.ToggleMute();
+                                          }));
+            }
+        }
+
         #endregion
 
         #region Constructor
@@ -793,13 +876,8 @@ namespace JayDev.Notemaker.ViewModel
         public CourseUseViewModel(CourseRepository repo)
         {
             _repo = repo;
-            //PlayCommand = new RelayCommand(Play, CanPlay);
-            SelectTrackCommand = new RelayCommand<Track>(SelectTrack);
 
             _uiDispatcher = Dispatcher.CurrentDispatcher;
-
-            _player = new MediaPlayer();
-            _player.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(_player_PropertyChanged);
 
             this.PropertyChanged += new PropertyChangedEventHandler(CourseUseViewModel_PropertyChanged);
 
@@ -830,15 +908,37 @@ namespace JayDev.Notemaker.ViewModel
         {
             if (e.PropertyName == VolumePropertyName)
             {
-                if (Math.Abs(System.DateTime.Now.Millisecond - lastUpdatedAtMillisecond) > volUpdateGap)
+                if (null != _player)
                 {
-                    lastUpdatedAtMillisecond = System.DateTime.Now.Millisecond;
-                    _player.Volume(_volume);
+                    if (Math.Abs(System.DateTime.Now.Millisecond - lastUpdatedAtMillisecond) > volUpdateGap)
+                    {
+                        lastUpdatedAtMillisecond = System.DateTime.Now.Millisecond;
+                        _player.Volume(_volume);
+                    }
+                    else
+                    {
+                        _updateVolumeTimer.Stop();
+                        _updateVolumeTimer.Start();
+                    }
                 }
-                else
+            }
+
+            if (e.PropertyName == VideoPanelPointerPropertyName)
+            {
+                _player = new MediaPlayer(VideoPanelPointer);
+                _player.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(_player_PropertyChanged);
+                //the volume will have been given an initial value before this event is raised
+                _player.Volume(_volume);
+
+                //auto-load the appropriate file
+                if (null != _currentCourse.LastPlayedTrack)
                 {
-                    _updateVolumeTimer.Stop();
-                    _updateVolumeTimer.Start();
+                    //JDW: track may have been removed
+                    if (_currentCourse.Tracks.Any(x => x.FilePath == _currentCourse.LastPlayedTrack.FilePath))
+                    {
+                        SelectTrack2(_currentCourse.LastPlayedTrack);
+                        CurrentTrackPlayPosition = _currentCourse.LastPlayedTrackPosition;
+                    }
                 }
             }
         }
@@ -927,32 +1027,23 @@ namespace JayDev.Notemaker.ViewModel
             _tracks = new ObservableCollection<Track>(course.Tracks);
             _lastEmbeddedVideoHeight = course.EmbeddedVideoHeight;
             _lastEmbeddedVideoWidth = course.EmbeddedVideoWidth;
-
-            if (null != course.LastPlayedTrack)
-            {
-                //JDW: track may have been removed
-                if (course.Tracks.Any(x => x.FilePath == course.LastPlayedTrack.FilePath))
-                {
-                    SelectTrack(course.LastPlayedTrack);
-                    CurrentTrackPlayPosition = course.LastPlayedTrackPosition;
-                }
-            }
         }
 
 
         private bool _isLoading = false;
         private bool _isBusy = false;
 
-        private void SelectTrack(Track track)
+        private void SelectTrack2(Track track)
         {
+            if (null != _currentTrack && track.FilePath == _currentTrack.FilePath)
+            {
+                return;
+            }
             if (null != _currentTrack)
             {
                 _currentTrack.IsPlaying = false;
             }
-            if (PlayStatus != Common.PlayStatus.Stopped)
-            {
-                _player.Stop();
-            }
+
             _currentTrack = track;
             CurrentTrackPlayPosition = new TimeSpan();
             CurrentTrackName = _currentTrack.StringDisplayValue;
@@ -961,9 +1052,15 @@ namespace JayDev.Notemaker.ViewModel
 
             track.IsPlaying = true;
 
-            PlayCurrentTrackFromBeginning();
+            IsCurrentTrackVideo = track.IsVideo;
         }
 
+
+        private void PlayFile(Track track, TimeSpan position, bool instantPause)
+        {
+            SelectTrack2(track);
+            _player.PlayFile2(track.FilePath, position, instantPause);
+        }
 
         private void PlayPause()
         {
@@ -971,66 +1068,18 @@ namespace JayDev.Notemaker.ViewModel
             {
                 if (null == Tracks || Tracks.Count == 0)
                 {
-                    throw new Exception("what to play?");
+                    //do nothing
                 }
                 else
                 {
                     Track firstTrack = Tracks.First();
-                    SelectTrack(firstTrack);
-                    PlayCurrentTrackFromBeginning();
+                    PlayFile(_currentTrack, TimeSpan.Zero, false);
                 }
             }
             else
             {
-                if (_player.PlayingStatus == Common.PlayStatus.Stopped)
-                {
-                    //If we have no play position, start from the beginning. otherwise, start at that spot
-                    if (CurrentTrackPlayPosition == new TimeSpan())
-                    {
-                        PlayCurrentTrackFromBeginning();
-                    }
-                    else
-                    {
-                        PlayCurrentTrackFromBeginning();
-                        SeekCurrentTrackToTime(CurrentTrackPlayPosition);
-                    }
-                }
-                else
-                {
-                    if (_player.PlayingStatus == Common.PlayStatus.Paused)
-                    {
-                        PlayStatus = Common.PlayStatus.Playing;
-                    }
-                    else if (_player.PlayingStatus == Common.PlayStatus.Playing)
-                    {
-                        PlayStatus = Common.PlayStatus.Paused;
-                    }
-                    _player.TogglePause();
-                }
+                _player.TogglePause();
             }
-        }
-        private void PlayCurrentTrackFromBeginning()
-        {
-            _player.Play(_currentTrack.FilePath, VideoPanelPointer);
-            PlayStatus = Common.PlayStatus.Playing;
-        }
-        private void PlayGivenTrackFromTime(Track track, TimeSpan time)
-        {
-            if (null == _currentTrack || track.FilePath != _currentTrack.FilePath)
-            {
-                _player.Stop();
-                SelectTrack(track);
-            }
-            if (PlayStatus == Common.PlayStatus.Stopped || PlayStatus == Common.PlayStatus.Paused)
-            {
-                _player.Play(track.FilePath, VideoPanelPointer);
-            }
-            PlayStatus = Common.PlayStatus.Playing;
-            _player.Seek(Convert.ToInt32(time.TotalSeconds));
-        }
-        private void SeekCurrentTrackToTime(TimeSpan time)
-        {
-            _player.Seek(Convert.ToInt32(time.TotalSeconds));
         }
 
         private void SaveCourse()
@@ -1047,7 +1096,6 @@ namespace JayDev.Notemaker.ViewModel
         }
         private void Stop()
         {
-            PlayStatus = Common.PlayStatus.Stopped;
             CurrentTrackPlayPosition = new TimeSpan();
             _player.Stop();
         }

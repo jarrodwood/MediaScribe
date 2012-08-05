@@ -19,14 +19,11 @@
                 False="Collapsed" />
     </UserControl.Resources>
     <!--<Grid Background="#FFEFF5FF">-->
-    <Grid Background="#FFEFF5FF">
+    <Grid Background="Transparent">
         <DockPanel Name="windowContents">
-            <notemakerControl:NavigationControl DockPanel.Dock="Top"
-                                                NavigateCommand="{Binding NavigateCommand}"
-                                                ExportCommand="{Binding ExportCommand}"
-                                                />
+            <notemakerControl:NavigationControl2 x:Name="navi"
+                                                DockPanel.Dock="Top" />
             
-
             <notemakerControl:MediaControlsControl x:Name="mediaControls"
                                                    DockPanel.Dock="Bottom"
                                                    CurrentPlayTime="{Binding CurrentTrackPlayPosition}"
@@ -35,8 +32,12 @@
                                                    SeekToCommand="{Binding SeekToCommand}"
                                                    TrackTitle="{Binding CurrentTrackName}"
                                                    PlayStatus="{Binding PlayStatus}"
-                                                   Volume="{Binding Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                   Volume="{Binding Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                   ToggleMuteCommand="{Binding ToggleMuteCommand}"
+                                                   IsMuted="{Binding IsMuted}"
+                                                   />
 
+            <Border Background="#FFEEF6FF">
             <Grid Name="mainGrid">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{Binding Path=LastEmbeddedVideoWidth, Mode=TwoWay, Converter={StaticResource gridLengthConverter}, TargetNullValue='300'}"/>
@@ -72,7 +73,7 @@
             Margin="0" DragCompleted="GridSplitter_DragCompleted_1"  Visibility="{Binding IsCurrentTrackVideo, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}" />
 
                     <DockPanel Grid.Row="2">
-                        <TextBlock DockPanel.Dock="Top">Course Track List</TextBlock>
+                        <!--<TextBlock Foreground="#FF3F3F3F" DockPanel.Dock="Top" Margin="5 0 0 5">Course Track List</TextBlock>-->
                         <notemakerCommon:DoubleClickableDataGrid VerticalAlignment="Top" AutoGenerateColumns="False" LoadingRow="DataGrid_LoadingRow" x:Name="trackGrid" HeadersVisibility="All" CanUserAddRows="False"
                            CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding Tracks}" Style="{StaticResource DataGridStyle1}"
                                                                  RowDoubleClickCommand="{Binding SelectTrackCommand,Mode=OneWay}"
@@ -100,7 +101,7 @@
 
 
                                 <DataGrid.Columns>
-                                <DataGridTextColumn Header="Name"
+                                <DataGridTextColumn Header="Track"
                                             Width="*"
                                            Binding="{Binding StringDisplayValue}" 
                                            IsReadOnly="True"/>
@@ -126,6 +127,7 @@
                     </notemakerControl:NotesGridControl>
                 </DockPanel>
             </Grid>
+            </Border>
         </DockPanel>
     </Grid>
 </UserControl>

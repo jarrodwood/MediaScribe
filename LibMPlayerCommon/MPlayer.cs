@@ -103,7 +103,6 @@ namespace LibMPlayerCommon
             this.MplayerRunning = false;
             this._mplayerBackend = backend;
             MediaPlayer = new System.Diagnostics.Process();
-
         }
 
         /// <summary>
@@ -219,7 +218,41 @@ namespace LibMPlayerCommon
 			
 			return backend;
 		}
-		
+
+
+        /// <summary>
+        /// Initializes MPlayer, which CAN (but doesn't have to be) performed before trying to play a file.
+        /// </summary>
+        public void Init()
+        {
+            MediaPlayer.StartInfo.CreateNoWindow = true;
+            MediaPlayer.StartInfo.UseShellExecute = false;
+            MediaPlayer.StartInfo.ErrorDialog = false;
+            MediaPlayer.StartInfo.RedirectStandardOutput = true;
+            MediaPlayer.StartInfo.RedirectStandardInput = true;
+            MediaPlayer.StartInfo.RedirectStandardError = true;
+
+
+            string backend = MplayerBackend();
+            MediaPlayer.StartInfo.Arguments = string.Format("-slave -quiet -idle -aspect 4/3 -v -vo {0} -wid {1}", backend, this._wid);
+            MediaPlayer.StartInfo.FileName = BackendPrograms.MPlayer;
+
+            MediaPlayer.Start();
+
+            this.CurrentStatus = MediaStatus.Stopped;
+
+            this.MplayerRunning = true;
+            this.mplayerProcessID = MediaPlayer.Id;
+
+            //System.IO.StreamWriter mw = MediaPlayer.StandardInput;
+            //mw.AutoFlush = true;
+
+            MediaPlayer.OutputDataReceived += HandleMediaPlayerOutputDataReceived;
+            MediaPlayer.ErrorDataReceived += HandleMediaPlayerErrorDataReceived;
+            MediaPlayer.BeginErrorReadLine();
+            MediaPlayer.BeginOutputReadLine();
+        }
+
         /// <summary>
         /// Load and start playing a video.
         /// </summary>
@@ -312,6 +345,15 @@ namespace LibMPlayerCommon
             string LoadCommand = @"" + string.Format("loadfile \"{0}\"", PrepareFilePath(filePath));
             MediaPlayer.StandardInput.WriteLine(LoadCommand);
             //MediaPlayer.StandardInput.WriteLine("play");
+            MediaPlayer.StandardInput.Flush();
+            this.LoadCurrentPlayingFileLength();
+            this.CurrentStatus = MediaStatus.Playing;
+        }
+
+        public void FrameStep()
+        {
+            string LoadCommand = @"frame_step";
+            MediaPlayer.StandardInput.WriteLine(LoadCommand);
             MediaPlayer.StandardInput.Flush();
             this.LoadCurrentPlayingFileLength();
         }
@@ -469,7 +511,7 @@ namespace LibMPlayerCommon
             MediaPlayer.StandardInput.Flush();
 
             // This is to give the HandleMediaPlayerOutputDataReceived enought time to process and set the currentPosition.
-            System.Threading.Thread.Sleep(100);
+            System.Threading.Thread.Sleep(150);
             return this._currentPosition;
         }
 

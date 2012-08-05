@@ -19,17 +19,6 @@ using System.Collections;
 
 namespace JayDev.Notemaker.Common
 {
-    public class MoveItemsCommandParameter
-    {
-        public int InsertToIndex { get; set; }
-        public List<object> ObjectsToInsert { get; set; }
-
-        public MoveItemsCommandParameter(int insertToIndex, List<object> objectsToInsert)
-        {
-            this.InsertToIndex = insertToIndex;
-            this.ObjectsToInsert = objectsToInsert;
-        }
-    }
 
     public class DragEnabledDataGrid : DataGrid
     {
@@ -78,6 +67,8 @@ namespace JayDev.Notemaker.Common
         // Using a DependencyProperty as the backing store for OnDragDisplayPropertyName.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty OnDragDisplayPropertyNameProperty =
             DependencyProperty.Register("OnDragDisplayPropertyName", typeof(string), typeof(DragEnabledDataGrid), new UIPropertyMetadata(null));
+
+
 
         
 

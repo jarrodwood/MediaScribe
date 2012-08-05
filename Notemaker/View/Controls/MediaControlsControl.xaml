@@ -8,7 +8,7 @@
              xmlns:nmCommon="clr-namespace:JayDev.Notemaker.Common"
              xmlns:nmControls="clr-namespace:JayDev.Notemaker.View.Controls"
             xmlns:local="clr-namespace:JayDev.Notemaker.Core"
-             x:Name="MediaControlsControlName">
+             x:Name="MediaControlsControlName" Background="Transparent">
     <UserControl.Resources>
         <ResourceDictionary>
             <nmCommon:TimeSpanToSecondsConverter x:Key="timespanConverter" />
@@ -67,15 +67,18 @@
     
 
         <Grid Name="BottomBar"  Height="75" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="auto">
-            <Viewbox Stretch="Fill" Margin="0,4,0,0">
+
+        <Rectangle Fill="#CEd3ecff" Height="5" VerticalAlignment="Top">
+        </Rectangle>
+        <Viewbox Stretch="Fill" Margin="0,4,0,0">
                 <Grid Height="60" Width="1832">
 
-                    <Rectangle Height="60" Stroke="#FF75B2DE" VerticalAlignment="Center"  StrokeThickness="1" d:LayoutOverrides="HorizontalAlignment">
+                    <Rectangle Height="60" Stroke="#AA75B2DE" VerticalAlignment="Center"  StrokeThickness="1" d:LayoutOverrides="HorizontalAlignment">
                         <Rectangle.Fill>
                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                <GradientStop Color="#FF8CCDFD" Offset="1"/>
-                                <GradientStop Color="#FFE3F3FF" Offset="0.017"/>
-                                <GradientStop Color="#FFB8E1FF" Offset="0.487"/>
+                                <GradientStop Color="#AA8CCDFD" Offset="1"/>
+                                <GradientStop Color="#AAE3F3FF" Offset="0.017"/>
+                                <GradientStop Color="#AAB8E1FF" Offset="0.487"/>
                             </LinearGradientBrush>
                         </Rectangle.Fill>
                     </Rectangle>
@@ -123,6 +126,7 @@
                 </Grid>
             </Viewbox>
 
+            <!-- NOTE: margin of -3 on top brings the controls BAM next to everything else... but it feels like something's missing then.-->
             <Grid x:Name="TrackBar" Margin="0 0 0 0" Height="12" VerticalAlignment="Top">
                 <Slider Name="timeSlider" SmallChange="0.5" IsSnapToTickEnabled="True" TickFrequency="0.5" Height="15"
                     Style="{DynamicResource JarrodSlider}" PreviewMouseLeftButtonUp="timeSlider_PreviewMouseLeftButtonUp"
@@ -156,7 +160,7 @@
                         <TextBlock Foreground="#FF3F3F3F" Name="currentPlayTime" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=CurrentPlayTime, StringFormat=h\\:mm\\:ss}"/>
                         <TextBlock Foreground="#FF3F3F3F" HorizontalAlignment="Left" xml:space="preserve"> /</TextBlock>
                         <TextBlock Foreground="#FF3F3F3F" Name="totalTrackTime" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=MaxPlayTime, StringFormat=h\\:mm\\:ss}"/>
-                        <TextBlock Foreground="#FF3F3F3F" HorizontalAlignment="Left" xml:space="preserve"> -</TextBlock>
+                        <TextBlock Foreground="#FF3F3F3F" HorizontalAlignment="Left" xml:space="preserve"> - </TextBlock>
                         <TextBlock Foreground="#FF3F3F3F" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=TrackTitle, StringFormat=h\\:mm\\:ss, TargetNullValue='No track selected'}"/>
 
 
@@ -281,9 +285,9 @@
                 </Grid.ColumnDefinitions>
                 <!--<Button Grid.Column="0" Template="{StaticResource SpeakerIcon}"/>-->
                 <!--<Label Grid.Column="1" HorizontalAlignment="Right">Volume</Label>-->
-                <nmControls:ImageButton Grid.Column="1" Height="40" Width="40" MySource="/Notemaker;component/Images/stock_volume-max.png" Command="{Binding CreateCourseCommand}">
-                </nmControls:ImageButton>
-                <Grid Visibility="Collapsed">
+                <!--<nmControls:ImageButton Grid.Column="1" Height="40" Width="40" MySource="/Notemaker;component/Images/stock_volume-max.png" Command="{Binding CreateCourseCommand}">
+                </nmControls:ImageButton>-->
+                <Grid Grid.Column="1">
                     <Image Source="/Notemaker;component/Images/stock_volume-mute.png" Margin="0,0,0,0" Width="33" Height="33" Visibility="{Binding ElementName=MediaControlsControlName, Path=Volume, Converter={StaticResource muteVolumeConverter}}" />
                     <Image Source="/Notemaker;component/Images/stock_volume-min.png" Margin="0,1,0,0" Width="32" Height="32" Visibility="{Binding ElementName=MediaControlsControlName, Path=Volume, Converter={StaticResource minVolumeConverter}}" />
                     <Image Source="/Notemaker;component/Images/stock_volume-med.png" Margin="0,1,0,0" Width="32" Height="32" Visibility="{Binding ElementName=MediaControlsControlName, Path=Volume, Converter={StaticResource medVolumeConverter}}" />

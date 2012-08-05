@@ -18,7 +18,6 @@ namespace JayDev.Notemaker.ViewModel
 
         private CourseRepository _repo;
         private Dispatcher _uiDispatcher;
-        private int? _selectedCourseID;
 
         #endregion
 
@@ -58,9 +57,9 @@ namespace JayDev.Notemaker.ViewModel
                     ?? (_createCourseCommand = new RelayCommand(
                                           () =>
                                           {
+                                              SelectedCourse = null;
                                               //Prepare bindable data for a new course
                                               SelectedCourseName = null;
-                                              _selectedCourseID = null;
                                               SelectedCourseTracks = new ObservableCollection<Track>();
                                               MaintenanceMode = MaintenanceMode.Create;
                                           },
@@ -211,7 +210,7 @@ namespace JayDev.Notemaker.ViewModel
                                                               FilePath = file,
                                                               Title = discoverer.Title,
                                                               Length = new TimeSpan(0, 0, discoverer.Length),
-                                                              IsVideo = discoverer.Video? 1 : 0,
+                                                              IsVideo = discoverer.Video,
                                                               AspectRatio = discoverer.Video ? (float?)discoverer.AspectRatio : null
                                                           };
                                                           ThreadHelper.ExecuteAsyncUI(_uiDispatcher, delegate
@@ -310,9 +309,43 @@ namespace JayDev.Notemaker.ViewModel
 
         #endregion
 
+        private RelayCommand _cancelCommand;
+
+        /// <summary>
+        /// Gets the CancelCommand.
+        /// </summary>
+        public RelayCommand CancelCommand
+        {
+            get
+            {
+                return _cancelCommand
+                    ?? (_cancelCommand = new RelayCommand(
+                                          () =>
+                                          {
+                                              //if (SelectedCourse == null)
+                                              //{
+                                              SelectedCourse = null;
+                                                  MaintenanceMode = Common.MaintenanceMode.None;
+                                              //}
+                                              //else
+                                              //{
+                                              //    MaintenanceMode = Common.MaintenanceMode.View;
+                                              //}
+                                          }));
+            }
+        }
+
         #endregion
 
         #region Notified Properties
+
+        public NavigateMessage CurrentPage
+        {
+            get
+            {
+                return NavigateMessage.ListCourses;
+            }
+        }
 
         #region Courses
 
@@ -376,13 +409,23 @@ namespace JayDev.Notemaker.ViewModel
                     return;
                 }
 
+
                 _selectedCourse = value;
                 RaisePropertyChanged(SelectedCoursePropertyName);
 
-                SelectedCourseName = _selectedCourse.Name;
-                SelectedCourseTracks = new ObservableCollection<Track>(_selectedCourse.Tracks);
-                //when we've selected a course, we may be able to view it
-                MaintenanceMode = Common.MaintenanceMode.View;
+                if (null == SelectedCourse)
+                {
+                    SelectedCourseName = null;
+                    SelectedCourseTracks = null;
+                    MaintenanceMode = Common.MaintenanceMode.None;
+                }
+                else
+                {
+                    SelectedCourseName = _selectedCourse.Name;
+                    SelectedCourseTracks = new ObservableCollection<Track>(_selectedCourse.Tracks);
+                    //when we've selected a course, we may be able to view it
+                    MaintenanceMode = Common.MaintenanceMode.View;
+                }
             }
         }
 
@@ -489,10 +532,22 @@ namespace JayDev.Notemaker.ViewModel
                     return;
                 }
 
+                if (null != _selectedCourseTracks)
+                {
+                    _selectedCourseTracks.CollectionChanged -= _selectedCourseTracks_CollectionChanged;
+                }
+
                 _selectedCourseTracks = value;
                 RaisePropertyChanged(SelectedCourseTracksPropertyName);
-                _selectedCourseTracks.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(_selectedCourseTracks_CollectionChanged);
                 RaisePropertyChanged(AreTracksExistingInSelectedCoursePropertyName);
+
+                if (null == _selectedCourseTracks)
+                {
+                }
+                else
+                {
+                    _selectedCourseTracks.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(_selectedCourseTracks_CollectionChanged);
+                }
             }
         }
 

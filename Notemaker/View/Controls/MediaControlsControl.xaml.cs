@@ -146,8 +146,34 @@ namespace JayDev.Notemaker.View.Controls
             DependencyProperty.Register("Volume", typeof(double), typeof(MediaControlsControl), new UIPropertyMetadata(0d));
 
         #endregion
-        
 
+
+
+        public bool IsMuted
+        {
+            get { return (bool)GetValue(IsMutedProperty); }
+            set { SetValue(IsMutedProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsMuted.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsMutedProperty =
+            DependencyProperty.Register("IsMuted", typeof(bool), typeof(MediaControlsControl), new UIPropertyMetadata(null));
+
+
+
+
+
+        public ICommand ToggleMuteCommand
+        {
+            get { return (ICommand)GetValue(ToggleMuteCommandProperty); }
+            set { SetValue(ToggleMuteCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ToggleMuteCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ToggleMuteCommandProperty =
+            DependencyProperty.Register("ToggleMuteCommand", typeof(ICommand), typeof(MediaControlsControl), new UIPropertyMetadata(null));
+
+        
         
         
 

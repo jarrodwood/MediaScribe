@@ -57,7 +57,9 @@
                                 <TextBlock Text="{Binding Path=Start.StringDisplayValue}" />
                                 <TextBlock xml:space="preserve"></TextBlock>
                                 <!--<Button Name="setNoteStartTime"  Click="setNoteStartTime_Click">Set</Button>-->
+                                
                                 <Image Height="15" Width="15" Margin="2 0 0 0" MouseUp="setNoteStartTime_Click">
+                                    
                                     <Image.Style>
                                         <Style TargetType="{x:Type Image}">
                                             <Setter Property="Source" Value="/Notemaker;component/Images/pencil-15.png"/>

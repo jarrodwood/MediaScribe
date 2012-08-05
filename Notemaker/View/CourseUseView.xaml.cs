@@ -15,6 +15,7 @@ using System.Windows.Controls.Primitives;
 using JayDev.Notemaker.ViewModel;
 using System.Windows.Threading;
 using JayDev.Notemaker.Common;
+using System.Timers;
 
 namespace JayDev.Notemaker.View
 {

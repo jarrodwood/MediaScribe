@@ -21,6 +21,7 @@ namespace JayDev.Notemaker.View
         private static Microsoft.Practices.Unity.UnityContainer _container = new Microsoft.Practices.Unity.UnityContainer();
         private static CourseUseViewModel courseUseViewModel;
         private static CourseListViewModel courseListViewModel;
+        private static SettingsViewModel settingsViewModel;
         private static UserControl currentView;
 
         private static Controller _instance;
@@ -50,6 +51,7 @@ namespace JayDev.Notemaker.View
             CourseRepository repo = new CourseRepository();
             courseUseViewModel = new CourseUseViewModel(repo);
             courseListViewModel = new CourseListViewModel(repo);
+            settingsViewModel = new SettingsViewModel(repo);
             var blah = repo.GetCourseList();
 
             if (blah.Count == 0)
@@ -149,6 +151,11 @@ namespace JayDev.Notemaker.View
                     CourseListView courseListView = new CourseListView(courseListViewModel);
                     currentView = courseListView;
                     _mainWindow.Content = currentView;
+                    break;
+                case NavigateMessage.Settings:
+                    SettingsView settingsView = new SettingsView(settingsViewModel);
+                    currentView = settingsView;
+                    _mainWindow.Content = settingsView;
                     break;
             }
 
