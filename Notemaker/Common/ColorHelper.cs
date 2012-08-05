@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Media;
 using System.Reflection;
+using System.Globalization;
 
 namespace JayDev.Notemaker.Common
 {
-    static class ColorExtensions
+    static class ColorHelper
     {
         //Value: #FF3F3F3F
         public static Color ApplicationDefaultTextColour = Color.FromRgb(63, 63, 63);
@@ -37,6 +38,24 @@ namespace JayDev.Notemaker.Common
             {
                 return match;
             }
+        }
+
+        public static Color FromArgbString(string argbString)
+        {
+            if (null == argbString)
+                return new Color();
+
+            string hex = argbString[0] == '#' ? argbString.Substring(1) : argbString;
+            byte[] values = Enumerable.Range(0, hex.Length / 2).Select(x => Byte.Parse(hex.Substring(2 * x, 2), NumberStyles.HexNumber)).ToArray();
+
+            Color result = new Color()
+            {
+                A = values[0],
+                R = values[1],
+                G = values[2],
+                B = values[3]
+            };
+            return result;
         }
 
         static readonly Dictionary<string, Color> _knownColors = GetKnownColors();

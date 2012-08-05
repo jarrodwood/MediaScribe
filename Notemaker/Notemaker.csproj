@@ -96,15 +96,22 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\WPF Toolkit\v3.5.50211.1\WPFToolkit.dll</HintPath>
     </Reference>
+    <Reference Include="WPFToolkit.Extended">
+      <HintPath>..\..\WPFToolkitExtended\WPFToolkit.Extended.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\ColorExtensions.cs" />
+    <Compile Include="Common\ColorHelper.cs" />
     <Compile Include="Common\Converters\ColourToBrushConverter.cs" />
     <Compile Include="Common\Converters\ColourToNameStringConverter.cs" />
     <Compile Include="Common\Converters\EnumConverters.cs" />
     <Compile Include="Common\InformationAttribute.cs" />
-    <Compile Include="Common\Hotkey.cs" />
+    <Compile Include="Core\NHibernate\ColorUserType.cs" />
+    <Compile Include="Core\NHibernate\BaseUserType.cs" />
+    <Compile Include="Domain\Hotkey.cs" />
+    <Compile Include="Model\SettingRepository.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
+    <Compile Include="View\Controls\UndecoratedButton.cs" />
     <Compile Include="View\Controls\ComboBoxItemWithTooltip.cs" />
     <Compile Include="View\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
@@ -142,10 +149,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ExpressionDark.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\ExpressionDarkDG.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -206,7 +209,6 @@
     <Compile Include="Core\PreviewSliderHelper.cs" />
     <Compile Include="View\Controls\DragEnabledDataGrid.cs" />
     <Compile Include="Core\SqliteConnectionProvider.cs" />
-    <Compile Include="ViewModel\CourseListaaViewModel.cs" />
     <Compile Include="ViewModel\CourseListViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer.cs" />
     <Compile Include="View\Controller.cs" />
@@ -455,6 +457,7 @@
     <EmbeddedResource Include="Mappings\TrackTime.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Mappings\Hotkey.hbm.xml" />
     <Resource Include="Images\Letter N blue.ico" />
     <Resource Include="Images\fullscreen.png" />
     <Resource Include="Images\two_columns.png" />

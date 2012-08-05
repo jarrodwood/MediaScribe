@@ -117,11 +117,11 @@
                                 <TextBlock Margin="18 0 0 0" Foreground="White" FontSize="14" VerticalAlignment="Center"><Run Text="Export"/></TextBlock>
                             </Grid>
                             </Button>-->
-                            <Button Width="179" Margin="10 0 0 0" Height="35" Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton2}" HorizontalAlignment="Right">
+                            <!--<Button Width="179" Margin="10 0 0 0" Height="35" Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton2}" HorizontalAlignment="Right">
                                 <StackPanel HorizontalAlignment="Left" Width="Auto" Height="Auto" Orientation="Horizontal">
                                     <TextBlock VerticalAlignment="Center" FontSize="12" Text="Internet Explorer" TextWrapping="Wrap"/>
                                 </StackPanel>
-                            </Button>
+                            </Button>-->
                         </StackPanel>
                     </Border>
                 </StackPanel>

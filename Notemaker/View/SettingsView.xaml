@@ -6,9 +6,16 @@
              mc:Ignorable="d"
              xmlns:notemakerControl="clr-namespace:JayDev.Notemaker.View.Controls"
              xmlns:notemakerCommon="clr-namespace:JayDev.Notemaker.Common"
+             xmlns:notemakerConverters="clr-namespace:JayDev.Notemaker.Common.Converters"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"         
              xmlns:effect="clr-namespace:GrayscaleEffect;assembly=GrayscaleEffect"
+             
+                xmlns:sysControls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
+                xmlns:sysWinInput="clr-namespace:System.Windows.Input;assembly=WindowsBase"
+                xmlns:System="clr-namespace:System;assembly=mscorlib"
+                xmlns:wpfx="clr-namespace:Xceed.Wpf.Toolkit;assembly=WPFToolkit.Extended"
+             
              x:Name="SettingsViewName"
              d:DesignHeight="368" d:DesignWidth="1380">
     <UserControl.Resources>
@@ -17,7 +24,176 @@
                 x:Key="BooleanToVisibilityConverterFalseIsVisible" 
                 True="Collapsed" 
                 False="Visible" />
-        
+
+        <notemakerConverters:EnumInfoLabelToStringConverter x:Key="EnumInfoLabelToStringConverter" />
+        <notemakerConverters:EnumToTooltipTextBlockConverter x:Key="EnumToTooltipTextBlockConverter" />
+        <notemakerConverters:EnumToStringConverter x:Key="EnumToStringConverter" />
+        <notemakerConverters:ColourToBrushConverter x:Key="ColourToBrushConverter" />
+        <notemakerConverters:ColourToNameStringConverter x:Key="ColourToNameStringConverter" />
+
+
+
+        <ObjectDataProvider x:Key="dataFromHotkeyFunctionEnum"
+       MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="notemakerCommon:HotkeyFunction"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <ObjectDataProvider x:Key="dataFromDirectionEnum"
+       MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="notemakerCommon:Direction"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <ObjectDataProvider x:Key="dataFromModifierKeysEnum"
+       MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="sysWinInput:ModifierKeys"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <ObjectDataProvider x:Key="dataFromKeyEnum"
+       MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="sysWinInput:Key"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+
+        <DataTemplate x:Key="DefaultTemplate">
+        </DataTemplate>
+
+        <DataTemplate x:Key="SeekViewTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Path=Direction}" />
+                <TextBlock Text=" " xml:space="preserve" />
+                <TextBlock Text="{Binding Path=Seconds}" />
+                <TextBlock Text=" seconds" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="SeekEditTemplate">
+            <StackPanel Orientation="Horizontal">
+                <ComboBox ItemsSource="{Binding Source={StaticResource dataFromDirectionEnum}}"
+                          SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=SelectedItem.MyDirection}">
+                </ComboBox>
+                <TextBlock Text=" " xml:space="preserve" />
+                <TextBox Text="{Binding Path=Seconds}" PreviewTextInput="TextBox_PreviewTextInput" />
+                <TextBlock Text=" seconds" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ColourViewTemplate">
+            <StackPanel Orientation="Horizontal">
+                <Rectangle Height="12" Width="12" Margin="4 0 0 0" Stroke="Black" StrokeThickness="0.5" Fill="{Binding Colour, Converter={StaticResource ColourToBrushConverter}}" />
+                <TextBlock Text=" " xml:space="preserve" />
+                <TextBlock Text="{Binding Path=Colour, Converter={StaticResource ColourToNameStringConverter}}" />
+
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="ColourEditTemplate">
+            <StackPanel Orientation="Horizontal">
+                <wpfx:ColorPicker Name="ColorPicker1" Height="20" DisplayColorAndName="True" Width="150" SelectedColor="{Binding Path=Colour}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <Style TargetType="TextBox" x:Key="controlledTextBox">
+            <EventSetter Event="PreviewTextInput" Handler="TextBox_PreviewTextInput" />
+        </Style>
+
+        <Style TargetType="DataGridCell" x:Key="dynamicCellBasedOnFunctionType" BasedOn="{StaticResource DataGridCellStyle1}">
+            <Style.Triggers>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Function}" Value="{x:Static notemakerCommon:HotkeyFunction.Seek}" />
+                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEditing}" Value="False" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Path=SeekDirection}" />
+                                    <TextBlock Text=" " xml:space="preserve" />
+                                    <TextBlock Text="{Binding Path=SeekSeconds}" />
+                                    <TextBlock Text=" seconds" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Function}" Value="{x:Static notemakerCommon:HotkeyFunction.Seek}" />
+                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEditing}" Value="True" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <ComboBox ItemsSource="{Binding Source={StaticResource dataFromDirectionEnum}}"
+                          SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=SelectedItem.SeekDirection}">
+                                    </ComboBox>
+                                    <TextBlock Text=" " xml:space="preserve" />
+                                    <TextBox Text="{Binding Path=SeekSeconds}" Style="{StaticResource controlledTextBox}" />
+                                    <TextBlock Text=" seconds" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Function}" Value="{x:Static notemakerCommon:HotkeyFunction.NoteColour}" />
+                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEditing}" Value="False" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Rectangle Height="12" Width="12" Margin="4 0 0 0" Stroke="Black" StrokeThickness="0.5" Fill="{Binding Colour, Converter={StaticResource ColourToBrushConverter}}" />
+                                    <TextBlock Text=" " xml:space="preserve" />
+                                    <TextBlock Text="{Binding Path=Colour, Converter={StaticResource ColourToNameStringConverter}}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Function}" Value="{x:Static notemakerCommon:HotkeyFunction.NoteColour}" />
+                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEditing}" Value="True" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <wpfx:ColorPicker Name="ColorPicker1" Height="20" DisplayColorAndName="True" Width="150" SelectedColor="{Binding Path=Colour}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiDataTrigger>
+            </Style.Triggers>
+            <Style.Setters>
+                <Setter Property="ContentTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <ContentControl />
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
+        </Style>
+
+
+
+        <Style TargetType="ComboBox" x:Key="selectionChangedHandledComboBox">
+            <EventSetter Event="SelectionChanged" Handler="ComboBox_SelectionChanged" />
+        </Style>
+
+
     </UserControl.Resources>
     <Grid Background="#FFEEF6FF">
         <DockPanel Name="windowContents">
@@ -56,43 +232,84 @@
 
                                     </StackPanel>
                                 </StackPanel>
-                                <!--</ContentControl>-->
-                                <StackPanel>
-                                    <TextBlock Text="Hover over the hotkey type to get a description of what it does, and when it's usable" />
-                                    <notemakerCommon:DoubleClickableDataGrid VerticalAlignment="Top" AutoGenerateColumns="False" x:Name="courseGrid" HeadersVisibility="Column" CanUserAddRows="False"                                                                 
-                                  SelectionMode="Single"
-                                  CanUserSortColumns="True" CanUserReorderColumns="False" CanUserResizeRows="False"
-                                  ItemsSource="{Binding Courses}"
-                                  SelectedItem="{Binding SelectedCourse, Mode=TwoWay}"
-                                  RowDoubleClickCommand="{Binding WriteNotesCommand}"  Style="{StaticResource DataGridStyle1}">
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Top" Margin="0 0 0 5" TextWrapping="Wrap" Text="Double-click on the empty row at the bottom to add a new hotkey. Also, you can hover over the 'Function' entries to get a description of what it does, and when it's usable." />
+
+                                    <DataGrid Name="hotkeyGrid" AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                              CanUserAddRows="True" HeadersVisibility="Column"
+                                              ItemsSource="{Binding Hotkeys}" 
+                                              Style="{StaticResource DataGridStyle1}">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Header="Course Name"
-                                            Width="*"
-                                            Binding="{Binding Name}" 
-                                            SortMemberPath="Name"
-                                            CanUserSort="True"
-                                            IsReadOnly="True"/>
-                                            <DataGridTextColumn Header="Length"
-                                            Width="55"
-                                            Binding="{Binding CourseLength}" 
-                                            SortMemberPath="CourseLength"
-                                            CanUserSort="True"
-                                            IsReadOnly="True"/>
-                                            <DataGridTextColumn Header="Files"
-                                            Width="55"
-                                            Binding="{Binding Path=Tracks.Count}" 
-                                            SortMemberPath="Tracks.Count"
-                                            CanUserSort="True"
-                                            IsReadOnly="True"/>
-                                            <DataGridTextColumn Header="Notes"
-                                            Width="55"
-                                            Binding="{Binding Path=Notes.Count}" 
-                                            SortMemberPath="Notes.Count"
-                                            CanUserSort="True"
-                                            IsReadOnly="True"/>
+
+                                            <DataGridTemplateColumn Header="Function" Width="200" SortMemberPath="Function" CanUserSort="True">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Function, Converter={StaticResource EnumInfoLabelToStringConverter}}" ToolTip="{Binding Function, Converter={StaticResource EnumToTooltipTextBlockConverter}}" />
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                                <DataGridTemplateColumn.CellEditingTemplate>
+                                                    <DataTemplate>
+                                                        <ComboBox Text="Select Hotkey Function..." x:Name="functionComboBox" ItemsSource="{Binding Source={StaticResource dataFromHotkeyFunctionEnum}}"
+                                      SelectedItem="{Binding Function, Mode=TwoWay}" Style="{StaticResource selectionChangedHandledComboBox}">
+                                                            <ComboBox.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <!-- JDW NOTE: there's a problem with trying to have a tooltip on a comboboxitem, which interferes
+                                                                    with clicking on the CONTENTS of the comboboxitem - it doesn't register the click, unless you click
+                                                                    in the white space around the contents (i.e. next to the textblock, instead of on it). To make it
+                                                                    clickable, we set IsHitTestVisible=False... but then it doesn't receive mouse events, and the
+                                                                    tooltip won't show up. So I've made a custom ComboBoxItem type which sets the tooltip of the PARENT
+                                                                    BORDER object, to the bound tooltip... this means the PARENT will show the tooltip correctly, and we
+                                                                    can leave the comboboxitem with IsHitTestVisible=False! :D -->
+                                                                    <notemakerControl:ComboBoxItemWithTooltip IsHitTestVisible="False" ToolTip="{Binding Path=., Converter={StaticResource EnumToTooltipTextBlockConverter}}">
+                                                                        <notemakerControl:ComboBoxItemWithTooltip.Content>
+                                                                            <TextBlock  Text="{Binding Path=., Converter={StaticResource EnumInfoLabelToStringConverter}, Mode=TwoWay}"  />
+                                                                        </notemakerControl:ComboBoxItemWithTooltip.Content>
+                                                                    </notemakerControl:ComboBoxItemWithTooltip>
+                                                                </DataTemplate>
+                                                            </ComboBox.ItemTemplate>
+                                                        </ComboBox>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellEditingTemplate>
+                                            </DataGridTemplateColumn>
+
+                                            <DataGridTemplateColumn Header="Parameter" Width="165" CanUserSort="False" CellStyle="{StaticResource dynamicCellBasedOnFunctionType}" />
+
+                                            <DataGridTemplateColumn Header="Modifier" Width="105" SortMemberPath="ModifierKey" CanUserSort="True">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding ModifierKey, Converter={StaticResource EnumToStringConverter}}" />
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                                <DataGridTemplateColumn.CellEditingTemplate>
+                                                    <DataTemplate>
+                                                        <ComboBox Text="Select modifier..." ItemsSource="{Binding Source={StaticResource dataFromModifierKeysEnum}}"
+                                      SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=SelectedItem.ModifierKey, Mode=TwoWay}">
+                                                        </ComboBox>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellEditingTemplate>
+                                            </DataGridTemplateColumn>
+
+                                            <DataGridTemplateColumn Header="Key" Width="*" SortMemberPath="Key" CanUserSort="True">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Key, Converter={StaticResource EnumToStringConverter}}" />
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                                <DataGridTemplateColumn.CellEditingTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <!--FocusManager.FocusedElement="{Binding ElementName=hitTextbox}"-->
+                                                            <ComboBox MinWidth="110" Text="Select key..." ItemsSource="{Binding Source={StaticResource dataFromKeyEnum}}"
+                                          SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=SelectedItem.Key, Mode=TwoWay}">
+                                                            </ComboBox>
+                                                            <TextBox Margin="5 0 0 0" Text="Click here &amp; Press key" PreviewKeyDown="TextBox_PreviewKeyDown" Name="hitTextbox"></TextBox>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellEditingTemplate>
+                                            </DataGridTemplateColumn>
                                         </DataGrid.Columns>
-                                    </notemakerCommon:DoubleClickableDataGrid>
-                                </StackPanel>
+                                    </DataGrid>
+                                </DockPanel>
                             </DockPanel>
                         </GroupBox>
                     </StackPanel>

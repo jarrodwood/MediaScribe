@@ -8,7 +8,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="MyHuluStyle.xaml"/>
                 <!--<ResourceDictionary Source="ExpressionDark.xaml"/>-->
-                <ResourceDictionary Source="ExpressionDarkDG.xaml"/>
                 <ResourceDictionary Source="/Themes/JarrodDatagrid.xaml"/>
                 <ResourceDictionary Source="/Themes/JarrodSlider.xaml"/>
                 <ResourceDictionary Source="/Themes/JarrodGlassButton.xaml"/>

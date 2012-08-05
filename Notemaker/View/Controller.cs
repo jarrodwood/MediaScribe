@@ -51,15 +51,9 @@ namespace JayDev.Notemaker.View
             CourseRepository repo = new CourseRepository();
             courseUseViewModel = new CourseUseViewModel(repo);
             courseListViewModel = new CourseListViewModel(repo);
-            settingsViewModel = new SettingsViewModel(repo);
+            settingsViewModel = new SettingsViewModel(new SettingRepository());
             var blah = repo.GetCourseList();
 
-            if (blah.Count == 0)
-            {
-                throw new Exception("todo");
-                //CreateDayGameCourse(repo);
-                blah = repo.GetCourseList();
-            }
             var currentCourse = blah.First(x => x.Name == "Daygame");
             courseUseViewModel.SetCurrentCourse(currentCourse);
             CourseUseView courseUseView = new CourseUseView(courseUseViewModel);

@@ -149,7 +149,7 @@
                                     <DockPanel Margin="0 15 0 0">
                                         <notemakerCommon:DragEnabledDataGrid VerticalAlignment="Top"
                                                                              AutoGenerateColumns="False" HeadersVisibility="All" CanUserAddRows="False"
-                               CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks, Mode=TwoWay}"
+                                                CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks, Mode=TwoWay}"
                                                                              OnDragDisplayPropertyName="StringDisplayValue"
                                                                              CanDrag="False"
                                                                              ReadOnlySelectedItems="{Binding SelectedCourseSelectedTracks, Mode=OneWayToSource}"

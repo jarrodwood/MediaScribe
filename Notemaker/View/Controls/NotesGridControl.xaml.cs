@@ -296,6 +296,5 @@ namespace JayDev.Notemaker.View.Controls
                 Keyboard.Focus(textbox);
             }
         }
-
     }
 }

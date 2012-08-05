@@ -8,6 +8,7 @@
              xmlns:atb="clr-namespace:AvalonTextBox;assembly=AvalonTextBox"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
              xmlns:GalaSoft_MvvmLight_Command="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
+             xmlns:local="clr-namespace:JayDev.Notemaker.View.Controls"
              x:Name="NotesGridControlName">
     <Grid>
         <DataGrid
@@ -56,9 +57,9 @@
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <TextBlock Text="{Binding Path=Start.StringDisplayValue}" />
                                 <TextBlock xml:space="preserve"></TextBlock>
-                                <!--<Button Name="setNoteStartTime"  Click="setNoteStartTime_Click">Set</Button>-->
-                                
-                                <Image Height="15" Width="15" Margin="2 0 0 0" MouseUp="setNoteStartTime_Click">
+
+                                <local:UndecoratedButton Margin="2 0 0 0" VerticalAlignment="Center" Click="setNoteStartTime_Click">
+                                <Image Height="15" Width="15">
                                     
                                     <Image.Style>
                                         <Style TargetType="{x:Type Image}">
@@ -70,26 +71,31 @@
                                             </Style.Triggers>
                                         </Style>
                                     </Image.Style>
-                                </Image>
+                                    </Image>
+                                </local:UndecoratedButton>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                     <!-- standard template -->
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
+
+
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <Image MouseUp="playNoteButton_Click">
-                                    <Image.Style>
-                                        <Style TargetType="{x:Type Image}">
-                                            <Setter Property="Source" Value="/Notemaker;component/Images/miniplaybutton3.png"/>
-                                            <Style.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="Source" Value="/Notemaker;component/Images/miniplaybutton3-hover.png"/>
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Image.Style>
-                                </Image>
+                                <local:UndecoratedButton VerticalAlignment="Center" Click="playNoteButton_Click">
+                                    <Image>
+                                        <Image.Style>
+                                            <Style TargetType="{x:Type Image}">
+                                                <Setter Property="Source" Value="/Notemaker;component/Images/miniplaybutton3.png"/>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Source" Value="/Notemaker;component/Images/miniplaybutton3-hover.png"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                </local:UndecoratedButton>
                                 <TextBlock Margin="2 0 0 0" Text="{Binding Path=Start.StringDisplayValue}" />
                             </StackPanel>
                         </DataTemplate>
