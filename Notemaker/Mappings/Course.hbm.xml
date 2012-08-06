@@ -17,17 +17,19 @@
     </property>
     <property name="EmbeddedVideoHeight" />
     <property name="EmbeddedVideoWidth" />
-    <many-to-one name="LastPlayedTrack" fetch="join" class="Track" column="LastPlayedTrackID" cascade="All" />
+    <many-to-one name="LastPlayedTrack" fetch="join" class="Track" column="LastPlayedTrackID" cascade="All"  />
     <property name="LastPlayedTrackPosition" />
     <!--<one-to-many name="Notes" class="Note" />-->
     <bag name="Notes" table="Notes" fetch="select" batch-size="50" lazy="false" cascade="none" inverse="true">
       <key column="CourseID"/>
       <one-to-many class="Note"/>
     </bag>
-    <bag name="Tracks" table="Tracks" fetch="select" batch-size="50" lazy="false" inverse="true" order-by="OrderNumber">
+    <bag name="Tracks" table="Tracks" fetch="select" batch-size="50" lazy="false" inverse="true" order-by="OrderNumber" cascade="none">
       <key column="CourseID"/>
       <one-to-many class="Track"/>
     </bag>
+    <property name="DateCreated" />
+    <property name="DateViewed" />
   </class>
 
 </hibernate-mapping>

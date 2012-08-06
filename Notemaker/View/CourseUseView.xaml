@@ -16,6 +16,10 @@
                 x:Key="BooleanToVisibilityConverterTrueIsVisible" 
                 True="Visible" 
                 False="Collapsed" />
+        <notemakerCommon:BooleanToVisibilityConverter 
+                x:Key="BooleanToVisibilityConverterTrueIsVisibleFalseIsHidden" 
+                True="Visible" 
+                False="Hidden" />
     </UserControl.Resources>
     <!--<Grid Background="#FFEFF5FF">-->
     <Grid Background="Transparent">
@@ -49,11 +53,11 @@
 
                 <Grid Name="leftGridColumn">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="{Binding Path=VirtualEmbeddedVideoHeight, Mode=TwoWay, Converter={StaticResource gridLengthConverter}, TargetNullValue='200'}" />
+                        <RowDefinition Height="{Binding Path=VirtualEmbeddedVideoHeight, Mode=TwoWay, Converter={StaticResource gridLengthConverter}, TargetNullValue='300'}" />
                         <RowDefinition Height="6" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <DockPanel Grid.Row="0" Background="LightGray" DockPanel.Dock="Top"  LastChildFill="True" Visibility="{Binding IsCurrentTrackVideo, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
+                        <DockPanel Grid.Row="0" Background="LightGray" DockPanel.Dock="Top"  LastChildFill="True" Visibility="{Binding IsCurrentTrackVideo, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisibleFalseIsHidden}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
                         <!--<TextBlock DockPanel.Dock="Top">Video</TextBlock>
                         <DockPanel Name="videoControlHolder">-->
                             <notemakerControl:VideoControl x:Name="videoControl"

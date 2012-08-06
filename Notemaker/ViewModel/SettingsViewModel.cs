@@ -11,6 +11,7 @@ using LibMPlayerCommon;
 using System.Windows.Threading;
 using System.Windows.Input;
 using System.Windows.Media;
+using JayDev.Notemaker.View;
 
 namespace JayDev.Notemaker.ViewModel
 {
@@ -44,6 +45,9 @@ namespace JayDev.Notemaker.ViewModel
                                               {
                                                   _repo.PersistHotkeys(GetDefaultHotkeySet());
                                                   Hotkeys = new ObservableCollection<Hotkey>(_repo.GetHotkeys());
+
+                                                  //let the controller know that the application's hotkeys have changed.
+                                                  Controller.Singleton.RegisterHotkeys(Hotkeys.ToList());
                                               }
                                           }));
             }
@@ -178,6 +182,9 @@ namespace JayDev.Notemaker.ViewModel
                                           {
                                               _repo.PersistHotkeys(Hotkeys.ToList());
                                               Hotkeys = new ObservableCollection<Hotkey>(_repo.GetHotkeys());
+
+                                              //let the controller know that the application's hotkeys have changed.
+                                              Controller.Singleton.RegisterHotkeys(Hotkeys.ToList());
                                           }));
             }
         }

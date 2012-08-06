@@ -35,6 +35,8 @@ namespace JayDev.Notemaker.View
             }
         }
 
+        bool startAtLastCourse = false;
+
         public void Initialize(MainWindow mainWindow)
         {
             _mainWindow = mainWindow;
@@ -52,29 +54,41 @@ namespace JayDev.Notemaker.View
             courseUseViewModel = new CourseUseViewModel(repo);
             courseListViewModel = new CourseListViewModel(repo);
             settingsViewModel = new SettingsViewModel(new SettingRepository());
-            var blah = repo.GetCourseList();
 
-            var currentCourse = blah.First(x => x.Name == "Daygame");
-            courseUseViewModel.SetCurrentCourse(currentCourse);
-            CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
-            _mainWindow.Content = courseUseView;
-            currentView = courseUseView;
             Messenger.Default.Register<NavigateArgs>(Singleton, MessageType.Navigate, (message) => Navigate(message));
             Messenger.Default.Register<string>(Singleton, "errors", (error) => MessageBox.Show(error));
 
             _mainWindow.Closing += new System.ComponentModel.CancelEventHandler(_mainWindow_Closing);
+
+
+            bool loadedLastCourse = false;
+            if (startAtLastCourse)
+            {
+                var courses = repo.GetCourseList();
+                var currentCourse = courses.OrderBy(x => x.DateViewed).FirstOrDefault();
+                if (null != currentCourse)
+                {
+                    courseUseViewModel.SetCurrentCourse(currentCourse);
+                    CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
+                    _mainWindow.Content = courseUseView;
+                    currentView = courseUseView;
+                    loadedLastCourse = true;
+                }
+            }
+            if (false == loadedLastCourse)
+            {
+                Navigate(new NavigateArgs(NavigateMessage.ListCourses));
+            }
+
         }
 
         void _mainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            try
+            //if we're closing the application, and we're on one of the course screens... we need to persist it's 'last' details to the db
+            //(not valid if we're on list page, because we saved these details when we left the course screen)
+            if (currentView is CourseUseView || currentView is FullscreenCourseView)
             {
-                //save the course -- specifically intended for the embedded video height/width.
-                courseUseViewModel.SaveCourseCommand.Execute(null);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
+                courseUseViewModel.LeavingViewModel();
             }
         }
 
@@ -98,7 +112,8 @@ namespace JayDev.Notemaker.View
 
         private static void Navigate(NavigateArgs args)
         {
-            switch(args.Message) {
+            switch (args.Message)
+            {
                 case NavigateMessage.ToggleFullscreen:
                     if (currentView is CourseUseView)
                     {
@@ -145,6 +160,8 @@ namespace JayDev.Notemaker.View
                     CourseListView courseListView = new CourseListView(courseListViewModel);
                     currentView = courseListView;
                     _mainWindow.Content = currentView;
+                    courseListViewModel.Init();
+
                     break;
                 case NavigateMessage.Settings:
                     SettingsView settingsView = new SettingsView(settingsViewModel);
@@ -152,7 +169,10 @@ namespace JayDev.Notemaker.View
                     _mainWindow.Content = settingsView;
                     break;
             }
+        }
 
+        public void RegisterHotkeys(List<Hotkey> hotkeys)
+        {
         }
     }
 }

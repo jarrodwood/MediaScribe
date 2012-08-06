@@ -46,13 +46,13 @@
                                                 />
             <Grid Name="mainGrid">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="900"/>
-                    <ColumnDefinition Width="5"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="5px"/>
+                    <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
-
-                <DockPanel Grid.Column="0">
-                    <StackPanel DockPanel.Dock="Top">
+                <DockPanel>
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
                         <GroupBox Header="Welcome to Notemaker!"  Foreground="#FF3F3F3F" Margin="10 10 10 10" Padding="10" BorderBrush="#FF75B2DE">
                             <TextBlock TextWrapping="Wrap">
                                 To get started, create a course in the list below, by clicking in the + button. You can type in a name,
@@ -70,6 +70,7 @@
                             </TextBlock>
                         </GroupBox>
                         <GroupBox Header="Courses" Foreground="#FF3F3F3F" BorderBrush="#FF75B2DE" Margin="10 0 10 10" Padding="5">
+
                             <DockPanel>
                                 <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
                                 <StackPanel DockPanel.Dock="Bottom">
@@ -128,26 +129,36 @@
                                             SortMemberPath="Notes.Count"
                                             CanUserSort="True"
                                             IsReadOnly="True"/>
+                                        <DataGridTextColumn Header="Date Created"
+                                            Width="135"
+                                            Binding="{Binding Path=DateCreated}" 
+                                            SortMemberPath="DateCreated"
+                                            CanUserSort="True"
+                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Header="Last Viewed"
+                                            Width="135"
+                                            Binding="{Binding Path=DateViewed}" 
+                                            SortMemberPath="DateViewed"
+                                            CanUserSort="True"
+                                            IsReadOnly="True"/>
                                     </DataGrid.Columns>
                                 </notemakerCommon:DoubleClickableDataGrid>
                             </DockPanel>
                         </GroupBox>
                     </StackPanel>
-                    <!--Empty content control, which 'fills' the dockpanel. As the grid grows, this will shrink away to nothing... and as the grid continues to grow, it'll get scrollbars.-->
-                    <ContentControl>
-                    </ContentControl>
+                    </ScrollViewer>
                 </DockPanel>
                 <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
 
                 <DockPanel Grid.Column="2" LastChildFill="True">
-                    <DockPanel DockPanel.Dock="Top">
-                        <GroupBox DockPanel.Dock="Bottom" Header="Selected Course" Foreground="#FF3F3F3F" Margin="15" Padding="15" BorderBrush="#FF75B2DE">
+                    <ScrollViewer DockPanel.Dock="Top" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Width="auto">
+                        <GroupBox Header="Selected Course" Foreground="#FF3F3F3F" Margin="15" Padding="15" BorderBrush="#FF75B2DE">
                             <StackPanel>
 
 
                                 <!-- The XAML for 'when no course is selected' panel -->
                                 <StackPanel Name="_noneCoursePanel" Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_NoneVisible}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
-
+                                    <Canvas DockPanel.Dock="Right" />
                                     <TextBlock HorizontalAlignment="Center" Style="{StaticResource HeaderFont}" xml:space="preserve" FontSize="12" Text="Please select a course on the left." />
                                 </StackPanel>
 
@@ -229,7 +240,7 @@
                                                 </Border>
                                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
 
-                                                    
+
                                                     <Button Focusable="False" Style="{StaticResource minusButtonStyle}"  Command="{Binding DeleteTracksCommand}" CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}">
                                                         <Path Data="M0,0 L70,0 99,0 99,41 70,41 0,41 z" Margin="0 0 0 0" Stretch="Uniform" Width="13.5" Height="5" Style="{DynamicResource minusStyle}"/>
                                                     </Button>
@@ -416,7 +427,7 @@
                                 </DataGrid>
                             </StackPanel>-->
                         </GroupBox>
-                    </DockPanel>
+                    </ScrollViewer>
                     <!--<DataGrid DockPanel.Dock="Bottom" VerticalAlignment="Top" AutoGenerateColumns="False"  Name="trackGrid" HeadersVisibility="All" CanUserAddRows="False"
                            CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks}">
 

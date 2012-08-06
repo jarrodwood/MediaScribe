@@ -6,6 +6,7 @@
              mc:Ignorable="d"
              xmlns:notemakerControl="clr-namespace:JayDev.Notemaker.View.Controls"
              xmlns:notemakerCommon="clr-namespace:JayDev.Notemaker.Common"
+             xmlns:notemakerConverters="clr-namespace:JayDev.Notemaker.Common.Converters"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"         
              xmlns:effect="clr-namespace:GrayscaleEffect;assembly=GrayscaleEffect"

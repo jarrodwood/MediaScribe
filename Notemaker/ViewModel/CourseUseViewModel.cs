@@ -743,7 +743,10 @@ namespace JayDev.Notemaker.ViewModel
                     ?? (_playNoteCommand = new RelayCommand<Note>(
                                           (Note context) =>
                                           {
-                                              PlayFile(context.Start.Track, context.Start.Time, false);
+                                              if (null != context && null != context.Start)
+                                              {
+                                                  PlayFile(context.Start.Track, context.Start.Time, false);
+                                              }
                                           },
                                           (Note context) => true));
             }
@@ -849,8 +852,7 @@ namespace JayDev.Notemaker.ViewModel
                                           {
                                               //save the current track and position for next time... do this BEFORE we stop playing.
                                               SaveCourse();
-                                              //stop playing any media. ^^
-                                              Stop();
+                                              LeavingViewModel();
                                               Messenger.Default.Send(new NavigateArgs(message, _currentCourse), MessageType.Navigate);
                                           }));
             }
@@ -1177,11 +1179,19 @@ namespace JayDev.Notemaker.ViewModel
             _currentCourse.EmbeddedVideoWidth = LastEmbeddedVideoWidth;
             _currentCourse.LastPlayedTrack = _currentTrack;
             _currentCourse.LastPlayedTrackPosition = _currentTrackPlayPosition;
+            _currentCourse.DateViewed = DateTime.Now;
             _repo.SaveCourse(_currentCourse);
         }
         private void Stop()
         {
             _player.Stop();
+        }
+
+
+        public void LeavingViewModel()
+        {
+            SaveCourse();
+            Stop();
         }
     }
 }

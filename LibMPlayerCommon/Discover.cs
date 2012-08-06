@@ -209,7 +209,8 @@ namespace LibMPlayerCommon
             handle.StartInfo.RedirectStandardError = true;
 
             handle.StartInfo.FileName = BackendPrograms.MPlayer;
-            handle.StartInfo.Arguments = string.Format("-loop 1 -identify -ao null -vo null -frames 0 {0} \"{1}\"", nframes.ToString(), filePath);
+            //noautosub disables subtiles... which were causing mplayer to go into an infinite loop. not cool.
+            handle.StartInfo.Arguments = string.Format("-loop 1 -noautosub -identify -ao null -vo null -frames 0 {0} \"{1}\"", nframes.ToString(), filePath);
             handle.Start();
             string line = "";
             StringReader strReader = new StringReader(handle.StandardOutput.ReadToEnd());

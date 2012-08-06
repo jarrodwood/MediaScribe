@@ -105,6 +105,7 @@
     <Compile Include="Common\Converters\ColourToNameStringConverter.cs" />
     <Compile Include="Common\Converters\EnumConverters.cs" />
     <Compile Include="Common\Converters\InverseBooleanConverter.cs" />
+    <Compile Include="Common\Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Common\Converters\StringToXamlConverter.cs" />
     <Compile Include="Common\InformationAttribute.cs" />
     <Compile Include="Core\NHibernate\ColorUserType.cs" />

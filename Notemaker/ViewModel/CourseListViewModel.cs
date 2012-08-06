@@ -112,12 +112,14 @@ namespace JayDev.Notemaker.ViewModel
                                               //{
                                                   Courses = new ObservableCollection<Course>(_repo.GetCourseList());
                                                   //ensure that the row can be selected in the datagrid
-                                                  SelectedCourse = Courses.First(x => x.Name == SelectedCourseName);
+                                                  SelectedCourse = Courses.First(x => x.ID == courseToSave.ID);
                                               //}
 
                                               MaintenanceMode = Common.MaintenanceMode.View;
 
                                               Courses = new ObservableCollection<Course>(_repo.GetCourseList());
+                                              SelectedCourse = Courses.First(x => x.ID == courseToSave.ID);
+                                              SelectedCourseTracks = new ObservableCollection<Track>(SelectedCourse.Tracks);
                                           },
                                           () => //can save if there is a name, and tracks.
                                               false == string.IsNullOrWhiteSpace(SelectedCourseName)
@@ -166,7 +168,12 @@ namespace JayDev.Notemaker.ViewModel
                     ?? (_deleteCourseCommand = new RelayCommand(
                                           () =>
                                           {
-
+                                              var openResult = System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Are you sure you want to delete the selected course?", "Delete course confirmation", System.Windows.MessageBoxButton.YesNo);
+                                              if (openResult == System.Windows.MessageBoxResult.Yes)
+                                              {
+                                                  _repo.DeleteCourse(SelectedCourse);
+                                                  Courses = new ObservableCollection<Course>(_repo.GetCourseList());
+                                              }
                                           },
                                           () => AreCoursesExisting && SelectedCourse != null));
             }
@@ -341,6 +348,24 @@ namespace JayDev.Notemaker.ViewModel
 
         #endregion
 
+        private RelayCommand _updateCourseListCommand;
+
+        /// <summary>
+        /// Gets the UpdateCourseListCommand.
+        /// </summary>
+        public RelayCommand UpdateCourseListCommand
+        {
+            get
+            {
+                return _updateCourseListCommand
+                    ?? (_updateCourseListCommand = new RelayCommand(
+                                          () =>
+                                          {
+                                              Courses = new ObservableCollection<Course>(_repo.GetCourseList());
+                                          }));
+            }
+        }
+
         #region Notified Properties
 
         public NavigateMessage CurrentPage
@@ -353,8 +378,45 @@ namespace JayDev.Notemaker.ViewModel
 
         #region Courses
 
-        private ObservableCollection<Course> _courses = new ObservableCollection<Course>();
-        public ObservableCollection<Course> Courses { get { return _courses; } set { _courses = value; } }
+        /// <summary>
+        /// The <see cref="Courses" /> property's name.
+        /// </summary>
+        public const string CoursesPropertyName = "Courses";
+
+        private ObservableCollection<Course> _courses = null;
+
+        /// <summary>
+        /// Sets and gets the Courses property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public ObservableCollection<Course> Courses
+        {
+            get
+            {
+                return _courses;
+            }
+
+            set
+            {
+                if (_courses == value)
+                {
+                    return;
+                }
+
+                if (null != _courses)
+                {
+                    _courses.CollectionChanged -= _courses_CollectionChanged;
+                }
+
+                _courses = value;
+                RaisePropertyChanged(CoursesPropertyName);
+
+                if (null != _courses)
+                {
+                    _courses.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(_courses_CollectionChanged);
+                }
+            }
+        }
 
         #endregion
 
@@ -607,7 +669,7 @@ namespace JayDev.Notemaker.ViewModel
             _repo = repo;
             _uiDispatcher = Dispatcher.CurrentDispatcher;
 
-            _courses.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(_courses_CollectionChanged);
+            Courses = new ObservableCollection<Course>();
 
             List<Course> courseList = _repo.GetCourseList();
             Courses = new ObservableCollection<Course>(courseList);
@@ -630,5 +692,10 @@ namespace JayDev.Notemaker.ViewModel
         }
 
         #endregion
+
+        public void Init()
+        {
+            SelectedCourse = null;
+        }
     }
 }

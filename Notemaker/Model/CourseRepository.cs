@@ -40,8 +40,11 @@ namespace JayDev.Notemaker.Model
         {
             Course result;
             using (ISession session = NHibernateHelper.OpenSession())
+            using (ITransaction transaction = session.BeginTransaction())
             {
                 result = session.Get<Course>(courseID);
+
+                transaction.Commit();
             }
 
             foreach (Note note in result.Notes)
@@ -79,11 +82,12 @@ namespace JayDev.Notemaker.Model
                     //save changes to the course
                     if (null == course.ID)
                     {
+                        course.DateCreated = DateTime.Now;
                         session.Save(course);
                     }
                     else
                     {
-                        course = session.Merge<Course>(course);
+                        session.Update(course);
                     }
 
                     IList<Track> savedTracks = session.CreateCriteria<Track>().Add(Expression.Where<Track>(x => x.ParentCourse.ID == course.ID)).List<Track>();
@@ -138,8 +142,6 @@ namespace JayDev.Notemaker.Model
                         {
                             Track mergedTrack = session.Merge<Track>(track);
                             mergedTracks.Add(mergedTrack);
-                            //session.Update(track);
-                            //mergedTracks.Add(track);
                         }
                     }
 
@@ -209,6 +211,41 @@ namespace JayDev.Notemaker.Model
                     if (null != note.End)
                         session.Delete(note.End);
                     session.Delete(note);
+
+                    transaction.Commit();
+                }
+            }
+        }
+
+        public void DeleteCourse(Course course)
+        {
+            //make sure we have all the notes and stuff.
+            course = GetCourse(course.ID.Value);
+            lock (_destructiveOperationLockToken)
+            {
+                using (ISession session = NHibernateHelper.OpenSession())
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    foreach (Note note in course.Notes)
+                    {
+                        session.Delete(note);
+                        if (null != note.Start)
+                        {
+                            session.Delete(note.Start);
+                        }
+                        if (null != note.End)
+                        {
+                            session.Delete(note.End);
+                        }
+                    }
+
+                    foreach (Track track in course.Tracks)
+                    {
+                        session.Delete(track);
+                    }
+
+                    session.Delete(course);
+
 
                     transaction.Commit();
                 }

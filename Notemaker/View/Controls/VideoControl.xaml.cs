@@ -114,7 +114,6 @@ namespace JayDev.Notemaker.View.Controls
         {
 
             Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen), MessageType.Navigate);
-            //PlayPauseCommand.Execute(null);
         }
 
 

@@ -13,7 +13,7 @@
 
     <property name="FilePath" />
     <!--<property name="ParentCourseID" column="CourseID" insert="false"/>-->
-    <many-to-one name="ParentCourse" class="Course" column="CourseID" cascade="none" />
+    <many-to-one name="ParentCourse" class="Course" column="CourseID" cascade="none" update="false" />
     <property name="Length" />
     <property name="IsVideo" />
     <property name="Title" />

@@ -32,6 +32,9 @@ namespace JayDev.Notemaker
         [DataMember]
         public TimeSpan LastPlayedTrackPosition { get; set; }
 
+        public DateTime DateCreated { get; set; }
+        public DateTime DateViewed { get; set; }
+
         public TimeSpan CourseLength
         {
             get

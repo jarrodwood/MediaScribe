@@ -205,6 +205,7 @@ namespace JayDev.Notemaker.ViewModel
             this.currentFilePath = filePath;
             this.CurrentPlayPosition = time;
 
+            bool isChangingFile = loadedFilePath != currentFilePath;
             PlayStatus playStatusAtMethodCall = PlayStatus;
             if (filePath != loadedFilePath)
             {
@@ -222,7 +223,10 @@ namespace JayDev.Notemaker.ViewModel
                 }
 
 
-                if (time != TimeSpan.Zero)
+                //NOTE: if we're on the SAME FILE, and we want to seek to the start... we should be able to. if we're changing file... it
+                //will start off at the beginning, so seeking will just make it stutter.
+                if ((isChangingFile && time != TimeSpan.Zero)
+                    || (false == isChangingFile))
                 {
                     _play.Seek(Convert.ToInt32(time.TotalSeconds), LibMPlayerCommon.Seek.Absolute);
                 }
