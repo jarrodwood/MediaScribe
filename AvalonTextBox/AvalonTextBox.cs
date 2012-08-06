@@ -57,8 +57,6 @@ namespace AvalonTextBox
             this.LostFocus += new RoutedEventHandler(AvalonTextBox_LostFocus);
             //we set 'ShowBoxForControlCharacters' to false, to stop a vertical gray line showing up about half way across the textbox
             this.Options.ShowBoxForControlCharacters = false;
-            this.KeyDown += new System.Windows.Input.KeyEventHandler(AvalonTextBox_KeyDown);
-
             this.Loaded += new RoutedEventHandler(AvalonTextBox_Loaded);
 
         }
@@ -484,33 +482,33 @@ namespace AvalonTextBox
             }
         }
 
-        void AvalonTextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            switch (e.Key)
-            {
-                case Key.D1:
-                    e.Handled = true;
-                    ApplyColour(Colors.GreenYellow);
-                    break;
-                case Key.D2:
-                    e.Handled = true;
-                    ApplyColour(Colors.Indigo);
-                    break;
-                case Key.D3:
-                    e.Handled = true;
-                    ApplyColour(ColorHelper.ApplicationDefaultTextColour);
-                    break;
-                case Key.D4:
-                    e.Handled = true;
-                    ApplyBold();
-                    break;
-                case Key.D5:
-                    e.Handled = true;
-                    ApplyItalics();
-                    break;
-            }
+        //void AvalonTextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        //{
+        //    switch (e.Key)
+        //    {
+        //        case Key.D1:
+        //            e.Handled = true;
+        //            ApplyColour(Colors.GreenYellow);
+        //            break;
+        //        case Key.D2:
+        //            e.Handled = true;
+        //            ApplyColour(Colors.Indigo);
+        //            break;
+        //        case Key.D3:
+        //            e.Handled = true;
+        //            ApplyColour(ColorHelper.ApplicationDefaultTextColour);
+        //            break;
+        //        case Key.D4:
+        //            e.Handled = true;
+        //            ApplyBold();
+        //            break;
+        //        case Key.D5:
+        //            e.Handled = true;
+        //            ApplyItalics();
+        //            break;
+        //    }
 
-        }
+        //}
 
         #endregion
     }

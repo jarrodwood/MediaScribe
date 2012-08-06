@@ -9,6 +9,7 @@ using GalaSoft.MvvmLight.Messaging;
 using System.Collections.ObjectModel;
 using LibMPlayerCommon;
 using System.Windows.Threading;
+using JayDev.Notemaker.Core;
 
 namespace JayDev.Notemaker.ViewModel
 {

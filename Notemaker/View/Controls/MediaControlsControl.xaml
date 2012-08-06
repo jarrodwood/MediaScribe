@@ -7,21 +7,22 @@
              d:DesignHeight="102" d:DesignWidth="916"
              xmlns:nmCommon="clr-namespace:JayDev.Notemaker.Common"
              xmlns:nmControls="clr-namespace:JayDev.Notemaker.View.Controls"
-            xmlns:local="clr-namespace:JayDev.Notemaker.Core"
+             xmlns:nmConverters="clr-namespace:JayDev.Notemaker.Converters"
+             xmlns:local="clr-namespace:JayDev.Notemaker.Core"
              x:Name="MediaControlsControlName" Background="Transparent">
     <UserControl.Resources>
         <ResourceDictionary>
-            <nmCommon:TimeSpanToSecondsConverter x:Key="timespanConverter" />
-            <nmCommon:SecondsToTimeSpanConverter x:Key="secondsConverter" />
-            <nmCommon:PlayButtonVisibilityConverter x:Key="playButtonConverter" />
-            <nmCommon:PauseButtonVisibilityConverter x:Key="pauseButtonConverter" />
-            <nmCommon:NumericRangeVisibilityConverter x:Key="muteVolumeConverter" 
+            <nmConverters:TimeSpanToSecondsConverter x:Key="timespanConverter" />
+            <nmConverters:SecondsToTimeSpanConverter x:Key="secondsConverter" />
+            <nmConverters:PlayButtonVisibilityConverter x:Key="playButtonConverter" />
+            <nmConverters:PauseButtonVisibilityConverter x:Key="pauseButtonConverter" />
+            <nmConverters:NumericRangeVisibilityConverter x:Key="muteVolumeConverter" 
                 VisibleFrom="0" VisibleTo="0" />
-            <nmCommon:NumericRangeVisibilityConverter x:Key="minVolumeConverter" 
+            <nmConverters:NumericRangeVisibilityConverter x:Key="minVolumeConverter" 
                 VisibleFrom="1" VisibleTo="32" />
-            <nmCommon:NumericRangeVisibilityConverter x:Key="medVolumeConverter" 
+            <nmConverters:NumericRangeVisibilityConverter x:Key="medVolumeConverter" 
                 VisibleFrom="33" VisibleTo="66" />
-            <nmCommon:NumericRangeVisibilityConverter x:Key="maxVolumeConverter" 
+            <nmConverters:NumericRangeVisibilityConverter x:Key="maxVolumeConverter" 
                 VisibleFrom="67" VisibleTo="100" />
             <DataTemplate x:Key="PreviewDataTemplate">
                 <TextBlock Text="{Binding StringFormat=\{0:00.00\}, Converter={StaticResource secondsConverter}}"/>

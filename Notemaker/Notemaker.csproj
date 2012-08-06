@@ -100,21 +100,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\ColorHelper.cs" />
-    <Compile Include="Common\Converters\ColourToBrushConverter.cs" />
-    <Compile Include="Common\Converters\ColourToNameStringConverter.cs" />
-    <Compile Include="Common\Converters\EnumConverters.cs" />
-    <Compile Include="Common\Converters\InverseBooleanConverter.cs" />
-    <Compile Include="Common\Converters\NullToVisibilityConverter.cs" />
-    <Compile Include="Common\Converters\StringToXamlConverter.cs" />
-    <Compile Include="Common\InformationAttribute.cs" />
+    <Compile Include="Converters\ColourToBrushConverter.cs" />
+    <Compile Include="Converters\ColourToNameStringConverter.cs" />
+    <Compile Include="Converters\EnumConverters.cs" />
+    <Compile Include="Converters\GridLengthConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
+    <Compile Include="Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="Converters\StringToXamlConverter.cs" />
+    <Compile Include="Core\NavigationHelper.cs" />
     <Compile Include="Core\NHibernate\ColorUserType.cs" />
     <Compile Include="Core\NHibernate\BaseUserType.cs" />
     <Compile Include="Domain\Hotkey.cs" />
     <Compile Include="Model\SettingRepository.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
-    <Compile Include="View\Controls\UndecoratedButton.cs" />
-    <Compile Include="View\Controls\ComboBoxItemWithTooltip.cs" />
+    <Compile Include="View\Controls\Base\UndecoratedButton.cs" />
+    <Compile Include="View\Controls\Base\ComboBoxItemWithTooltip.cs" />
     <Compile Include="View\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
@@ -127,10 +129,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\JarrodToggleButton.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Controls\CourseCreatePanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -182,44 +180,36 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Common\Converters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Common\Converters\NavigationConverter.cs" />
-    <Compile Include="Common\DataGridExtensions.cs" />
-    <Compile Include="View\Controls\DelayedDataGridTextColumn.cs" />
-    <Compile Include="View\Controls\DoubleClickableDataGrid.cs" />
-    <Compile Include="View\Controls\ExtendedObservableCollection.cs" />
-    <Compile Include="Common\Converters\NumericRangeVisibilityConverter.cs" />
-    <Compile Include="Common\Converters\PlayStatusVisibilityConverters.cs" />
-    <Compile Include="Common\SafeObservable.cs" />
-    <Compile Include="Common\Converters\SecondsToTimespanConverter.cs" />
-    <Compile Include="Common\TextListAdorner.cs" />
-    <Compile Include="View\Controls\UntoggleableToggleButton.cs" />
-    <Compile Include="Common\GlassEffect.cs" />
-    <Compile Include="Common\XslsExporter.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\NavigationConverter.cs" />
+    <Compile Include="Core\DataGridExtensions.cs" />
+    <Compile Include="View\Controls\Base\DelayedDataGridTextColumn.cs" />
+    <Compile Include="View\Controls\Base\DoubleClickableDataGrid.cs" />
+    <Compile Include="View\Controls\Base\ExtendedObservableCollection.cs" />
+    <Compile Include="Converters\NumericRangeVisibilityConverter.cs" />
+    <Compile Include="Converters\PlayStatusVisibilityConverters.cs" />
+    <Compile Include="Converters\SecondsToTimespanConverter.cs" />
+    <Compile Include="View\Controls\Base\TextListAdorner.cs" />
+    <Compile Include="View\Controls\Base\UntoggleableToggleButton.cs" />
+    <Compile Include="Core\GlassEffect.cs" />
+    <Compile Include="Core\XslsExporter.cs" />
     <Compile Include="Core\DebugTextWriter.cs" />
-    <Compile Include="Core\EnumConverter.cs" />
+    <Compile Include="Converters\EnumConverter.cs" />
     <Compile Include="Core\ExtensionMethods.cs" />
     <Compile Include="Core\LambdaComparer.cs" />
     <Compile Include="Core\NHibernateHelper.cs" />
     <Compile Include="Core\WatermarkAdorner.cs" />
     <Compile Include="Core\WatermarkService.cs" />
-    <Compile Include="Common\Converters\MaintenanceModeToVisibilityConverter.cs" />
-    <Compile Include="Core\CustomButtonChrome.cs" />
-    <Compile Include="Common\GridLengthConverter.cs" />
-    <Compile Include="Common\ThreadHelper.cs" />
-    <Compile Include="Common\Converters\TimeSpanToSecondsConverter.cs" />
-    <Compile Include="Common\Commands.cs" />
-    <Compile Include="Common\WPFHelpers.cs" />
-    <Compile Include="Core\ContentAdorner.cs" />
+    <Compile Include="Converters\MaintenanceModeToVisibilityConverter.cs" />
+    <Compile Include="View\Controls\Base\CustomButtonChrome.cs" />
+    <Compile Include="Converters\TimeSpanToSecondsConverter.cs" />
+    <Compile Include="View\Controls\Base\ContentAdorner.cs" />
     <Compile Include="Core\PreviewSliderHelper.cs" />
-    <Compile Include="View\Controls\DragEnabledDataGrid.cs" />
+    <Compile Include="View\Controls\Base\DragEnabledDataGrid.cs" />
     <Compile Include="Core\SqliteConnectionProvider.cs" />
     <Compile Include="ViewModel\CourseListViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer.cs" />
     <Compile Include="View\Controller.cs" />
-    <Compile Include="View\Controls\CourseCreatePanel.xaml.cs">
-      <DependentUpon>CourseCreatePanel.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\Controls\NavigationButton.xaml.cs">
       <DependentUpon>NavigationButton.xaml</DependentUpon>
     </Compile>
@@ -237,7 +227,7 @@
     </Compile>
     <Compile Include="Domain\CourseList.cs" />
     <Compile Include="Model\CourseRepository.cs" />
-    <Compile Include="Common\DataAccess.cs" />
+    <Compile Include="Core\DataAccess.cs" />
     <Compile Include="Domain\Course.cs" />
     <Compile Include="Core\SingleInstance.cs" />
     <Page Include="View\Controls\VideoControl.xaml">
@@ -262,8 +252,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Common\Constants.cs" />
-    <Compile Include="View\Controls\MediaPlayerWPFDisplayControl.cs" />
+    <Compile Include="View\Controls\Base\MediaPlayerWPFDisplayControl.cs" />
     <Compile Include="Domain\Note.cs" />
     <Compile Include="Domain\Track.cs" />
     <Compile Include="Domain\TrackTime.cs" />
@@ -274,8 +263,6 @@
     <Compile Include="View\Controls\VideoControl.xaml.cs">
       <DependentUpon>VideoControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Common\Exceptions.cs" />
-    <Compile Include="Common\Utility.cs" />
     <Compile Include="View\CourseListView.xaml.cs">
       <DependentUpon>CourseListView.xaml</DependentUpon>
     </Compile>
@@ -333,8 +320,13 @@
       <Project>{5D3616D0-160D-4601-AB67-E1ED9111C676}</Project>
       <Name>LibMPlayerCommon</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Notemaker.Common\Notemaker.Common.csproj">
+      <Project>{7BE13DBC-C110-469E-92E7-49720938A62E}</Project>
+      <Name>Notemaker.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Converters\Converters\" />
     <Folder Include="Styles\" />
   </ItemGroup>
   <ItemGroup>
@@ -453,6 +445,7 @@
   <ItemGroup>
     <None Include="hibernate.cfg.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>

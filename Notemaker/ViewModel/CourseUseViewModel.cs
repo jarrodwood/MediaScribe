@@ -12,6 +12,8 @@ using System.Windows.Threading;
 using System.ComponentModel;
 using System.Timers;
 using System.Runtime.InteropServices;
+using JayDev.Notemaker.View.Controls;
+using JayDev.Notemaker.Core;
 
 namespace JayDev.Notemaker.ViewModel
 {

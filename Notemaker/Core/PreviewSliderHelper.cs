@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Shapes;
+using JayDev.Notemaker.View.Controls;
 
 namespace JayDev.Notemaker.Core
 {

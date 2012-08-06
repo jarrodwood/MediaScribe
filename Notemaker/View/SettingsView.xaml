@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d"
-             xmlns:notemakerControl="clr-namespace:JayDev.Notemaker.View.Controls"
-             xmlns:notemakerCommon="clr-namespace:JayDev.Notemaker.Common"
-             xmlns:notemakerConverters="clr-namespace:JayDev.Notemaker.Common.Converters"
+             xmlns:nmControls="clr-namespace:JayDev.Notemaker.View.Controls"
+             xmlns:nmCommon="clr-namespace:JayDev.Notemaker.Common;assembly=Notemaker.Common"
+             xmlns:nmConverters="clr-namespace:JayDev.Notemaker.Converters"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"         
              xmlns:effect="clr-namespace:GrayscaleEffect;assembly=GrayscaleEffect"
@@ -20,36 +20,36 @@
              d:DesignHeight="368" d:DesignWidth="1380">
     <UserControl.Resources>
 
-        <notemakerCommon:BooleanToVisibilityConverter 
+        <nmConverters:BooleanToVisibilityConverter 
                 x:Key="BooleanToVisibilityConverterFalseIsVisible" 
                 True="Collapsed" 
                 False="Visible" />
-        <notemakerCommon:BooleanToVisibilityConverter 
+        <nmConverters:BooleanToVisibilityConverter 
                 x:Key="BooleanToVisibilityConverterTrueIsVisible" 
                 True="Visible" 
                 False="Collapsed" />
-        <notemakerConverters:InverseBooleanConverter 
+        <nmConverters:InverseBooleanConverter 
                 x:Key="InverseBooleanConverter"  />
 
-        <notemakerConverters:EnumInfoLabelToStringConverter x:Key="EnumInfoLabelToStringConverter" />
-        <notemakerConverters:EnumToTooltipTextBlockConverter x:Key="EnumToTooltipTextBlockConverter" />
-        <notemakerConverters:EnumToStringConverter x:Key="EnumToStringConverter" />
-        <notemakerConverters:ColourToBrushConverter x:Key="ColourToBrushConverter" />
-        <notemakerConverters:ColourToNameStringConverter x:Key="ColourToNameStringConverter" />
+        <nmConverters:EnumInfoLabelToStringConverter x:Key="EnumInfoLabelToStringConverter" />
+        <nmConverters:EnumToTooltipTextBlockConverter x:Key="EnumToTooltipTextBlockConverter" />
+        <nmConverters:EnumToStringConverter x:Key="EnumToStringConverter" />
+        <nmConverters:ColourToBrushConverter x:Key="ColourToBrushConverter" />
+        <nmConverters:ColourToNameStringConverter x:Key="ColourToNameStringConverter" />
 
 
 
         <ObjectDataProvider x:Key="dataFromHotkeyFunctionEnum"
        MethodName="GetValues" ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="notemakerCommon:HotkeyFunction"/>
+                <x:Type TypeName="nmCommon:HotkeyFunction"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
 
         <ObjectDataProvider x:Key="dataFromDirectionEnum"
        MethodName="GetValues" ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="notemakerCommon:Direction"/>
+                <x:Type TypeName="nmCommon:Direction"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
 
@@ -113,7 +113,7 @@
             <Style.Triggers>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding Function}" Value="{x:Static notemakerCommon:HotkeyFunction.Seek}" />
+                        <Condition Binding="{Binding Function}" Value="{x:Static nmCommon:HotkeyFunction.Seek}" />
                         <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEditing}" Value="False" />
                     </MultiDataTrigger.Conditions>
                     <Setter Property="ContentTemplate">
@@ -131,7 +131,7 @@
                 </MultiDataTrigger>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding Function}" Value="{x:Static notemakerCommon:HotkeyFunction.Seek}" />
+                        <Condition Binding="{Binding Function}" Value="{x:Static nmCommon:HotkeyFunction.Seek}" />
                         <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEditing}" Value="True" />
                     </MultiDataTrigger.Conditions>
                     <Setter Property="ContentTemplate">
@@ -151,7 +151,7 @@
                 </MultiDataTrigger>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding Function}" Value="{x:Static notemakerCommon:HotkeyFunction.NoteColour}" />
+                        <Condition Binding="{Binding Function}" Value="{x:Static nmCommon:HotkeyFunction.NoteColour}" />
                         <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEditing}" Value="False" />
                     </MultiDataTrigger.Conditions>
                     <Setter Property="ContentTemplate">
@@ -168,7 +168,7 @@
                 </MultiDataTrigger>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding Function}" Value="{x:Static notemakerCommon:HotkeyFunction.NoteColour}" />
+                        <Condition Binding="{Binding Function}" Value="{x:Static nmCommon:HotkeyFunction.NoteColour}" />
                         <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEditing}" Value="True" />
                     </MultiDataTrigger.Conditions>
                     <Setter Property="ContentTemplate">
@@ -203,7 +203,7 @@
     </UserControl.Resources>
     <Grid Background="#FFEEF6FF">
         <DockPanel Name="windowContents">
-            <notemakerControl:NavigationControl2 DockPanel.Dock="Top"
+            <nmControls:NavigationControl2 DockPanel.Dock="Top"
                                                 NavigateCommand="{Binding NavigateCommand}"
                                                 />
             <Grid Name="mainGrid">
@@ -257,7 +257,7 @@
                                     <DockPanel>
                                         <TextBlock DockPanel.Dock="Top" Margin="0 0 0 5" TextWrapping="Wrap" Text="Double-click on the empty row at the bottom to add a new hotkey. Also, you can hover over the 'Function' entries to get a description of what it does, and when it's usable." />
 
-                                        <notemakerCommon:DragEnabledDataGrid  x:Name="hotkeyGrid" AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                        <nmControls:DragEnabledDataGrid  x:Name="hotkeyGrid" AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top"
                                                                           CanUserAddRows="{Binding IsEditingHotkeys, Mode=OneWay}" HeadersVisibility="Column"
                                                                           ItemsSource="{Binding Hotkeys}" 
                                                                           CanDrag="False"
@@ -285,11 +285,11 @@
                                                                     tooltip won't show up. So I've made a custom ComboBoxItem type which sets the tooltip of the PARENT
                                                                     BORDER object, to the bound tooltip... this means the PARENT will show the tooltip correctly, and we
                                                                     can leave the comboboxitem with IsHitTestVisible=False! :D -->
-                                                                        <notemakerControl:ComboBoxItemWithTooltip IsHitTestVisible="False" ToolTip="{Binding Path=., Converter={StaticResource EnumToTooltipTextBlockConverter}}">
-                                                                            <notemakerControl:ComboBoxItemWithTooltip.Content>
+                                                                        <nmControls:ComboBoxItemWithTooltip IsHitTestVisible="False" ToolTip="{Binding Path=., Converter={StaticResource EnumToTooltipTextBlockConverter}}">
+                                                                            <nmControls:ComboBoxItemWithTooltip.Content>
                                                                                 <TextBlock  Text="{Binding Path=., Converter={StaticResource EnumInfoLabelToStringConverter}, Mode=TwoWay}"  />
-                                                                            </notemakerControl:ComboBoxItemWithTooltip.Content>
-                                                                        </notemakerControl:ComboBoxItemWithTooltip>
+                                                                            </nmControls:ComboBoxItemWithTooltip.Content>
+                                                                        </nmControls:ComboBoxItemWithTooltip>
                                                                     </DataTemplate>
                                                                 </ComboBox.ItemTemplate>
                                                             </ComboBox>
@@ -333,7 +333,7 @@
                                                     </DataGridTemplateColumn.CellEditingTemplate>
                                                 </DataGridTemplateColumn>
                                             </DataGrid.Columns>
-                                        </notemakerCommon:DragEnabledDataGrid>
+                                            </nmControls:DragEnabledDataGrid>
                                     </DockPanel>
                                 </DockPanel>
                             </GroupBox>

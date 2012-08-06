@@ -4,8 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d"
-             xmlns:notemakerControl="clr-namespace:JayDev.Notemaker.View.Controls"
-             xmlns:notemakerCommon="clr-namespace:JayDev.Notemaker.Common"
+             xmlns:nmControls="clr-namespace:JayDev.Notemaker.View.Controls"
+             xmlns:nmCommon="clr-namespace:JayDev.Notemaker.Common;assembly=Notemaker.Common"
+             xmlns:nmCore="clr-namespace:JayDev.Notemaker.Core"
+             xmlns:nmConverters="clr-namespace:JayDev.Notemaker.Converters"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"         
              xmlns:effect="clr-namespace:GrayscaleEffect;assembly=GrayscaleEffect"
@@ -13,23 +15,23 @@
              x:Name="CourseMaintenanceViewName"
              d:DesignHeight="368" d:DesignWidth="1380">
     <UserControl.Resources>
-        <notemakerCommon:GridLengthValueConverter x:Key="gridLengthConverter" />
-        <notemakerCommon:BooleanToVisibilityConverter 
+        <nmConverters:GridLengthValueConverter x:Key="gridLengthConverter" />
+        <nmConverters:BooleanToVisibilityConverter 
                 x:Key="BooleanToVisibilityConverterFalseIsVisible" 
                 True="Collapsed" 
                 False="Visible" />
-        <notemakerCommon:MaintenanceModeToVisibilityConverter 
+        <nmConverters:MaintenanceModeToVisibilityConverter 
                 x:Key="MaintenanceModeConverter_NoneVisible" 
-                VisibleValue="{x:Static notemakerCommon:MaintenanceMode.None}" />
-        <notemakerCommon:MaintenanceModeToVisibilityConverter 
+                VisibleValue="{x:Static nmCommon:MaintenanceMode.None}" />
+        <nmConverters:MaintenanceModeToVisibilityConverter 
                 x:Key="MaintenanceModeConverter_ViewVisible" 
-                VisibleValue="{x:Static notemakerCommon:MaintenanceMode.View}" />
-        <notemakerCommon:MaintenanceModeToVisibilityConverter 
+                VisibleValue="{x:Static nmCommon:MaintenanceMode.View}" />
+        <nmConverters:MaintenanceModeToVisibilityConverter 
                 x:Key="MaintenanceModeConverter_CreateVisible" 
-                VisibleValue="{x:Static notemakerCommon:MaintenanceMode.Create}" />
-        <notemakerCommon:MaintenanceModeToVisibilityConverter 
+                VisibleValue="{x:Static nmCommon:MaintenanceMode.Create}" />
+        <nmConverters:MaintenanceModeToVisibilityConverter 
                 x:Key="MaintenanceModeConverter_EditVisible" 
-                VisibleValue="{x:Static notemakerCommon:MaintenanceMode.Edit}" />
+                VisibleValue="{x:Static nmCommon:MaintenanceMode.Edit}" />
         <Style x:Key="HeaderFont" TargetType="{x:Type TextBlock}">
             <Setter Property="FontSize" Value="16" />
         </Style>
@@ -40,7 +42,7 @@
     <!--<Grid Background="#FFEFF5FF">-->
     <Grid Background="#FFEEF6FF">
         <DockPanel Name="windowContents">
-            <notemakerControl:NavigationControl2 DockPanel.Dock="Top"
+            <nmControls:NavigationControl2 DockPanel.Dock="Top"
                                                 NavigateCommand="{Binding NavigateCommand}"
                                                 
                                                 />
@@ -82,7 +84,7 @@
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
 
 
-                                        <Button Focusable="False" Style="{StaticResource minusButtonStyle}"  Command="{Binding DeleteCourseCommand}" CommandParameter="{x:Static notemakerCommon:NavigateMessage.ListCourses}">
+                                        <Button Focusable="False" Style="{StaticResource minusButtonStyle}"  Command="{Binding DeleteCourseCommand}" CommandParameter="{x:Static nmCommon:NavigateMessage.ListCourses}">
                                             <Path Data="M0,0 L70,0 99,0 99,41 70,41 0,41 z" Margin="0 0 0 0" Stretch="Uniform" Width="13.5" Height="5" Style="{DynamicResource minusStyle}"/>
                                         </Button>
 
@@ -91,14 +93,14 @@
                                         </Button>
 
 
-                                        <!--<notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding CreateCourseCommand}" />
+                                        <!--<nmControls:ImageButton MySource="/Notemaker;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding CreateCourseCommand}" />
 
-                                        <notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteCourseCommand}" CommandParameter="{x:Static notemakerCommon:NavigateMessage.ListCourses}" />-->
+                                        <nmControls:ImageButton MySource="/Notemaker;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteCourseCommand}" CommandParameter="{x:Static nmCommon:NavigateMessage.ListCourses}" />-->
 
                                     </StackPanel>
                                 </StackPanel>
                                 <!--</ContentControl>-->
-                                <notemakerCommon:DoubleClickableDataGrid VerticalAlignment="Top" AutoGenerateColumns="False" x:Name="courseGrid" HeadersVisibility="Column" CanUserAddRows="False"                                                                 
+                                <nmControls:DoubleClickableDataGrid VerticalAlignment="Top" AutoGenerateColumns="False" x:Name="courseGrid" HeadersVisibility="Column" CanUserAddRows="False"                                                                 
                                   SelectionMode="Single"
                                   CanUserSortColumns="True" CanUserReorderColumns="False" CanUserResizeRows="False"
                                   ItemsSource="{Binding Courses}"
@@ -142,7 +144,7 @@
                                             CanUserSort="True"
                                             IsReadOnly="True"/>
                                     </DataGrid.Columns>
-                                </notemakerCommon:DoubleClickableDataGrid>
+                                    </nmControls:DoubleClickableDataGrid>
                             </DockPanel>
                         </GroupBox>
                     </StackPanel>
@@ -169,14 +171,14 @@
                                     <TextBlock HorizontalAlignment="Center" Style="{StaticResource HeaderFont}" xml:space="preserve" Text="{Binding SelectedCourseName, TargetNullValue='no name?'}" />
 
                                     <DockPanel Margin="0 15 0 0">
-                                        <notemakerCommon:DragEnabledDataGrid VerticalAlignment="Top"
+                                        <nmControls:DragEnabledDataGrid VerticalAlignment="Top"
                                                                              AutoGenerateColumns="False" HeadersVisibility="All" CanUserAddRows="False"
                                                 CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks, Mode=TwoWay}"
                                                                              OnDragDisplayPropertyName="StringDisplayValue"
                                                                              CanDrag="False"
                                                                              ReadOnlySelectedItems="{Binding SelectedCourseSelectedTracks, Mode=OneWayToSource}"
                                                                              MoveItemsCommand="{Binding Path=MoveItemsCommand}" Style="{StaticResource DataGridStyle1}"
-                                                                             notemakerCommon:DataGridExtensions.ShowRowNumbersInHeader="True">
+                                                                             nmCore:DataGridExtensions.ShowRowNumbersInHeader="True">
                                             <DataGrid.Columns>
                                                 <DataGridTextColumn Header="Name"
                                                 Width="*"
@@ -187,7 +189,7 @@
                                                Binding="{Binding Length}" 
                                                IsReadOnly="True"/>
                                             </DataGrid.Columns>
-                                        </notemakerCommon:DragEnabledDataGrid>
+                                        </nmControls:DragEnabledDataGrid>
                                     </DockPanel>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 0">
 
@@ -224,9 +226,9 @@
                                 <StackPanel Name="_createCoursePanel" Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_CreateVisible}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
                                     <Grid>
                                         <TextBox  VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding SelectedCourseName, UpdateSourceTrigger=PropertyChanged}">
-                                            <notemakerCommon:WatermarkService.Watermark>
+                                            <nmCore:WatermarkService.Watermark>
                                                 <TextBlock>Course name...</TextBlock>
-                                            </notemakerCommon:WatermarkService.Watermark>
+                                            </nmCore:WatermarkService.Watermark>
                                         </TextBox>
                                     </Grid>
                                     <DockPanel Margin="0 15 0 0">
@@ -249,20 +251,20 @@
                                                         <Path Data="M35,0 L70,0 70,30 100,30 100,70 70,70 70,100 30,100 30,70 0,70 0,30 35,30 z" Margin="0 0 0 0" Stretch="Fill" Width="13.5" Height="13" Style="{DynamicResource PlusStyle}"/>
                                                     </Button>
 
-                                                    <!--<notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding AddTracksCommand}" />
+                                                    <!--<nmControls:ImageButton MySource="/Notemaker;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding AddTracksCommand}" />
 
-                                                    <notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteTracksCommand}" CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}" />-->
+                                                    <nmControls:ImageButton MySource="/Notemaker;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteTracksCommand}" CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}" />-->
 
                                                 </StackPanel>
                                             </StackPanel>
-                                            <notemakerCommon:DragEnabledDataGrid VerticalAlignment="Top"
+                                            <nmControls:DragEnabledDataGrid VerticalAlignment="Top"
                                                                              AutoGenerateColumns="False"  x:Name="trackGrid" HeadersVisibility="Column" CanUserAddRows="False"
                                CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks, Mode=TwoWay}"
                                                                              OnDragDisplayPropertyName="StringDisplayValue"
                                                                              CanDrag="True"
                                                                              ReadOnlySelectedItems="{Binding SelectedCourseSelectedTracks, Mode=OneWayToSource}"
                                                                              MoveItemsCommand="{Binding Path=MoveItemsCommand}" Style="{StaticResource DataGridStyle1}"
-                                                                             notemakerCommon:DataGridExtensions.ShowRowNumbersInHeader="False">
+                                                                             nmCore:DataGridExtensions.ShowRowNumbersInHeader="False">
                                                 <DataGrid.ContextMenu>
                                                     <ContextMenu>
                                                         <MenuItem Header="Remove Track" Command="Delete" />
@@ -285,7 +287,7 @@
                                                Binding="{Binding Length}" 
                                                IsReadOnly="True"/>
                                                 </DataGrid.Columns>
-                                            </notemakerCommon:DragEnabledDataGrid>
+                                            </nmControls:DragEnabledDataGrid>
                                         </DockPanel>
                                         <!--Empty content control, which 'fills' the dockpanel. As the grid grows, this will shrink away to nothing... and as the grid continues to grow, it'll get scrollbars.-->
                                         <ContentControl>
@@ -336,20 +338,20 @@
                                                         <Path Data="M35,0 L70,0 70,30 100,30 100,70 70,70 70,100 30,100 30,70 0,70 0,30 35,30 z" Margin="0 0 0 0" Stretch="Fill" Width="13.5" Height="13" Style="{DynamicResource PlusStyle}"/>
                                                     </Button>
 
-                                                    <!--<notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding AddTracksCommand}" />
+                                                    <!--<nmControls:ImageButton MySource="/Notemaker;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding AddTracksCommand}" />
 
-                                                    <notemakerControl:ImageButton MySource="/Notemaker;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteTracksCommand}" CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}" />-->
+                                                    <nmControls:ImageButton MySource="/Notemaker;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteTracksCommand}" CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}" />-->
 
                                                 </StackPanel>
                                             </StackPanel>
-                                            <notemakerCommon:DragEnabledDataGrid VerticalAlignment="Top"
+                                            <nmControls:DragEnabledDataGrid VerticalAlignment="Top"
                                                                              AutoGenerateColumns="False" HeadersVisibility="Column" CanUserAddRows="False"
                                CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks, Mode=TwoWay}"
                                                                              OnDragDisplayPropertyName="StringDisplayValue"
                                                                              CanDrag="True"
                                                                              ReadOnlySelectedItems="{Binding SelectedCourseSelectedTracks, Mode=OneWayToSource}"
                                                                              MoveItemsCommand="{Binding Path=MoveItemsCommand}" Style="{StaticResource DataGridStyle1}"
-                                                                                 notemakerCommon:DataGridExtensions.ShowRowNumbersInHeader="False">
+                                                                                 nmCore:DataGridExtensions.ShowRowNumbersInHeader="False">
                                                 <DataGrid.ContextMenu>
                                                     <ContextMenu>
                                                         <MenuItem Header="Remove Track" Command="Delete" />
@@ -372,7 +374,7 @@
                                                Binding="{Binding Length}" 
                                                IsReadOnly="True"/>
                                                 </DataGrid.Columns>
-                                            </notemakerCommon:DragEnabledDataGrid>
+                                            </nmControls:DragEnabledDataGrid>
                                         </DockPanel>
                                         <!--Empty content control, which 'fills' the dockpanel. As the grid grows, this will shrink away to nothing... and as the grid continues to grow, it'll get scrollbars.-->
                                         <ContentControl>

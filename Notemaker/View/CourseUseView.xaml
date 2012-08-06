@@ -4,19 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d"
-             xmlns:notemakerControl="clr-namespace:JayDev.Notemaker.View.Controls"
+             xmlns:nmControls="clr-namespace:JayDev.Notemaker.View.Controls"
              xmlns:notemakerCommon="clr-namespace:JayDev.Notemaker.Common"
+             xmlns:nmConverters="clr-namespace:JayDev.Notemaker.Converters"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
              x:Name="CourseUseViewName"
              d:DesignHeight="419" d:DesignWidth="1388">
     <UserControl.Resources>
-        <notemakerCommon:GridLengthValueConverter x:Key="gridLengthConverter" />
-        <notemakerCommon:BooleanToVisibilityConverter 
+        <nmConverters:GridLengthValueConverter x:Key="gridLengthConverter" />
+        <nmConverters:BooleanToVisibilityConverter 
                 x:Key="BooleanToVisibilityConverterTrueIsVisible" 
                 True="Visible" 
                 False="Collapsed" />
-        <notemakerCommon:BooleanToVisibilityConverter 
+        <nmConverters:BooleanToVisibilityConverter 
                 x:Key="BooleanToVisibilityConverterTrueIsVisibleFalseIsHidden" 
                 True="Visible" 
                 False="Hidden" />
@@ -24,10 +25,10 @@
     <!--<Grid Background="#FFEFF5FF">-->
     <Grid Background="Transparent">
         <DockPanel Name="windowContents">
-            <notemakerControl:NavigationControl2 x:Name="navi"
+            <nmControls:NavigationControl2 x:Name="navi"
                                                 DockPanel.Dock="Top" />
             
-            <notemakerControl:MediaControlsControl x:Name="mediaControls"
+            <nmControls:MediaControlsControl x:Name="mediaControls"
                                                    DockPanel.Dock="Bottom"
                                                    CurrentPlayTime="{Binding CurrentTrackPlayPosition}"
                                                    MaxPlayTime="{Binding CurrentTrackTotalLength}"
@@ -60,7 +61,7 @@
                         <DockPanel Grid.Row="0" Background="LightGray" DockPanel.Dock="Top"  LastChildFill="True" Visibility="{Binding IsCurrentTrackVideo, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisibleFalseIsHidden}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
                         <!--<TextBlock DockPanel.Dock="Top">Video</TextBlock>
                         <DockPanel Name="videoControlHolder">-->
-                            <notemakerControl:VideoControl x:Name="videoControl"
+                            <nmControls:VideoControl x:Name="videoControl"
                                                            VideoPanelPointer="{Binding VideoPanelPointer, Mode=OneWayToSource}"
                                                            AspectRatio="{Binding CurrentTrackVideoAspectRatio}"
                                                            IsShowingVideo="{Binding IsCurrentTrackVideo}"
@@ -80,7 +81,7 @@
 
                     <DockPanel Grid.Row="2">
                         <!--<TextBlock Foreground="#FF3F3F3F" DockPanel.Dock="Top" Margin="5 0 0 5">Course Track List</TextBlock>-->
-                        <notemakerCommon:DoubleClickableDataGrid VerticalAlignment="Top" AutoGenerateColumns="False" LoadingRow="DataGrid_LoadingRow" x:Name="trackGrid" HeadersVisibility="All" CanUserAddRows="False"
+                            <nmControls:DoubleClickableDataGrid VerticalAlignment="Top" AutoGenerateColumns="False" LoadingRow="DataGrid_LoadingRow" x:Name="trackGrid" HeadersVisibility="All" CanUserAddRows="False"
                            CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding Tracks}" Style="{StaticResource DataGridStyle1}"
                                                                  SelectionMode="Single"
                                                                  RowDoubleClickCommand="{Binding SelectTrackCommand,Mode=OneWay}"
@@ -117,21 +118,21 @@
                                            Binding="{Binding Length}" 
                                            IsReadOnly="True"/>
                             </DataGrid.Columns>
-                        </notemakerCommon:DoubleClickableDataGrid>
+                            </nmControls:DoubleClickableDataGrid>
                     </DockPanel>
                 </Grid>
 
                 <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" DragCompleted="GridSplitter_DragCompleted" />
 
                 <DockPanel Grid.Column="2" VerticalAlignment="Top">
-                    <notemakerControl:NotesGridControl x:Name="notesGrid"
+                    <nmControls:NotesGridControl x:Name="notesGrid"
                                                        PrepareNoteForEditCommand="{Binding PrepareNoteForEditCommand}"
                                                        NoteSavedCommand="{Binding NoteSavedCommand}"
                                                        Notes="{ Binding Notes, Mode=TwoWay}"
                                                        PlayNoteCommand="{Binding PlayNoteCommand}"
                                                        SetNoteStartTimeCommand="{Binding SetNoteStartTimeCommand}"
                                                        NoteEditCompletedCommand="{Binding NoteEditCompletedCommand}">
-                    </notemakerControl:NotesGridControl>
+                    </nmControls:NotesGridControl>
                 </DockPanel>
             </Grid>
             </Border>

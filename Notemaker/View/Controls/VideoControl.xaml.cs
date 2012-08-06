@@ -18,6 +18,7 @@ using System.Timers;
 using JayDev.Notemaker.Common;
 using System.ComponentModel;
 using GalaSoft.MvvmLight.Messaging;
+using JayDev.Notemaker.Core;
 
 namespace JayDev.Notemaker.View.Controls
 {

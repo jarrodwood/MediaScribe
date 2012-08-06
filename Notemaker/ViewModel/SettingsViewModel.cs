@@ -12,6 +12,7 @@ using System.Windows.Threading;
 using System.Windows.Input;
 using System.Windows.Media;
 using JayDev.Notemaker.View;
+using JayDev.Notemaker.Core;
 
 namespace JayDev.Notemaker.ViewModel
 {

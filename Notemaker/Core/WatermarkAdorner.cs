@@ -4,7 +4,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace JayDev.Notemaker.Common
+namespace JayDev.Notemaker.Core
 {
     /// <summary>
     /// Adorner for the watermark

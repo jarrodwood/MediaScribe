@@ -9,11 +9,11 @@
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
              xmlns:GalaSoft_MvvmLight_Command="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
              xmlns:local="clr-namespace:JayDev.Notemaker.View.Controls"
-             xmlns:notemakerConverters="clr-namespace:JayDev.Notemaker.Common.Converters"
+             xmlns:nmConverters="clr-namespace:JayDev.Notemaker.Converters"
              xmlns:syswin="clr-namespace:System.Windows;assembly=PresentationCore"
              x:Name="NotesGridControlName">
     <UserControl.Resources>
-        <!--<notemakerConverters:NullToVisibilityConverter 
+        <!--<nmConverters:NullToVisibilityConverter 
                 x:Key="NullToVisibilityConverterNotNullIsVisible" 
                 NullValue="Collapsed" 
                 NotNullValue="Visible" />-->
@@ -131,6 +131,7 @@
                                                FontFamily="Verdana"
                                                FontSize="11"
                                                TextOptions.TextFormattingMode="Display"
+                                               
                                                Width="auto" WordWrap="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>

@@ -15,6 +15,7 @@ using GalaSoft.MvvmLight.Command;
 using JayDev.Notemaker.Common;
 using System.Timers;
 using System.Windows.Threading;
+using JayDev.Notemaker.Converters;
 
 namespace JayDev.Notemaker.View.Controls
 {
