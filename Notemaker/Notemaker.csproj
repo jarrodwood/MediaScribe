@@ -191,7 +191,6 @@
     <Compile Include="Common\Converters\PlayStatusVisibilityConverters.cs" />
     <Compile Include="Common\SafeObservable.cs" />
     <Compile Include="Common\Converters\SecondsToTimespanConverter.cs" />
-    <Compile Include="Common\TestConverter.cs" />
     <Compile Include="Common\TextListAdorner.cs" />
     <Compile Include="View\Controls\UntoggleableToggleButton.cs" />
     <Compile Include="Common\GlassEffect.cs" />
@@ -325,7 +324,7 @@
       <Project>{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}</Project>
       <Name>Microsoft.Windows.Shell</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\AvalonTextBox\AvalonTextBox.csproj">
+    <ProjectReference Include="..\AvalonTextBox\AvalonTextBox.csproj">
       <Project>{CA7E4D71-3858-48F2-AF68-7E6DA88F79C9}</Project>
       <Name>AvalonTextBox</Name>
     </ProjectReference>

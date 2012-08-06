@@ -17,7 +17,7 @@ namespace JayDev.Notemaker.Core
                                           .NullSafeGet(dr, names[0]));
             if (null != colorString)
             {
-                Color color = ColorHelper.FromArgbString(colorString);
+                Color color = ColorHelper.FromString(colorString);
                 return color;
             }
             else

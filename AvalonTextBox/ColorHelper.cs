@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Media;
-using System.Reflection;
 using System.Globalization;
+using System.Reflection;
 
-namespace JayDev.Notemaker.Common
+namespace AvalonTextBox
 {
     static class ColorHelper
     {
