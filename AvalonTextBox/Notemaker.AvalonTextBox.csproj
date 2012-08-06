@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AvalonTextBox</RootNamespace>
-    <AssemblyName>AvalonTextBox</AssemblyName>
+    <AssemblyName>Notemaker.AvalonTextBox</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -32,6 +32,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1673db7d5906b0ad, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\Program Files (x86)\Laurent Bugnion (GalaSoft)\Mvvm Light Toolkit\Binaries\WPF4\GalaSoft.MvvmLight.Extras.WPF4.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=63eb5c012e0b3c1c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\Program Files (x86)\Laurent Bugnion (GalaSoft)\Mvvm Light Toolkit\Binaries\WPF4\GalaSoft.MvvmLight.WPF4.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.AvalonEdit, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Program Files (x86)\SharpDevelop\5.0\bin\ICSharpCode.AvalonEdit.dll</HintPath>
@@ -54,7 +62,6 @@
   <ItemGroup>
     <Compile Include="AvalonTextBox.cs" />
     <Compile Include="BindableTextBlock.cs" />
-    <Compile Include="ColorHelper.cs" />
     <Compile Include="Converters\MarkedupTextToInlineListConverter.cs" />
     <Compile Include="Converters\MarkedupTextToNoteSectionsConverter.cs" />
     <Compile Include="Converters\NoteSectionsToInlineListConverter.cs" />
@@ -63,6 +70,12 @@
     <Compile Include="MarkupColorizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Section.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Notemaker.Common\Notemaker.Common.csproj">
+      <Project>{7BE13DBC-C110-469E-92E7-49720938A62E}</Project>
+      <Name>Notemaker.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

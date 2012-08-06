@@ -312,13 +312,13 @@
       <Project>{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}</Project>
       <Name>Microsoft.Windows.Shell</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AvalonTextBox\AvalonTextBox.csproj">
+    <ProjectReference Include="..\AvalonTextBox\Notemaker.AvalonTextBox.csproj">
       <Project>{CA7E4D71-3858-48F2-AF68-7E6DA88F79C9}</Project>
-      <Name>AvalonTextBox</Name>
+      <Name>Notemaker.AvalonTextBox</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LibMPlayerCommon\LibMPlayerCommon.csproj">
+    <ProjectReference Include="..\LibMPlayerCommon\Notemaker.LibMPlayerCommon.csproj">
       <Project>{5D3616D0-160D-4601-AB67-E1ED9111C676}</Project>
-      <Name>LibMPlayerCommon</Name>
+      <Name>Notemaker.LibMPlayerCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\Notemaker.Common\Notemaker.Common.csproj">
       <Project>{7BE13DBC-C110-469E-92E7-49720938A62E}</Project>

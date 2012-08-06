@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Data;
 using System.Globalization;
 using System.Windows.Documents;
+using JayDev.Notemaker.Common;
 
 namespace AvalonTextBox.Converters
 {
