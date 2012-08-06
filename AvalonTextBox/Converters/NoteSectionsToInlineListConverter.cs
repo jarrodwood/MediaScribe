@@ -31,22 +31,7 @@ namespace AvalonTextBox.Converters
                 Inline inline = new Run(section.Text);
                 if (section.Colour != lastSection.Colour)
                 {
-                    if (section.Colour != "Default")
-                    {
-                        //TODO: handle all colours
-                        switch (section.Colour)
-                        {
-                            case "Red":
-                                inline.Foreground = Brushes.Red;
-                                break;
-                            case "Grey":
-                                inline.Foreground = Brushes.Gray;
-                                break;
-                            case "Blue":
-                                inline.Foreground = Brushes.Blue;
-                                break;
-                        }
-                    }
+                    inline.Foreground = new SolidColorBrush(section.Colour);
                 }
                 if (section.Style != lastSection.Style)
                 {

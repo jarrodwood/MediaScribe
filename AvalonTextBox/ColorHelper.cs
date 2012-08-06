@@ -12,6 +12,7 @@ namespace AvalonTextBox
     {
         //Value: #FF3F3F3F
         public static Color ApplicationDefaultTextColour = Color.FromRgb(63, 63, 63);
+        const string DefaultString = "Default";
 
         public static string GetColorName(this Color color)
         {
@@ -40,41 +41,50 @@ namespace AvalonTextBox
             }
         }
 
-        public static Color FromString(string rgbOrArgbString)
+        public static Color FromString(string input)
         {
-            if (null == rgbOrArgbString)
-                return new Color();
-
-            string hex = rgbOrArgbString[0] == '#' ? rgbOrArgbString.Substring(1) : rgbOrArgbString;
-            byte[] values = Enumerable.Range(0, hex.Length / 2).Select(x => Byte.Parse(hex.Substring(2 * x, 2), NumberStyles.HexNumber)).ToArray();
-
-            Color result;
-            if (values.Length == 3)
+            if (input == DefaultString)
             {
-                result = new Color()
-                {
-                    A = byte.MaxValue,
-                    R = values[0],
-                    G = values[1],
-                    B = values[2]
-                };
-            }
-            else if (values.Length == 4)
-            {
-                result = new Color()
-                {
-                    A = values[0],
-                    R = values[1],
-                    G = values[2],
-                    B = values[3]
-                };
-            }
-            else
-            {
-                throw new Exception("Error - invalid number of hex values in color string");
+                return ColorHelper.ApplicationDefaultTextColour;
             }
 
-            return result;
+            return (Color)ColorConverter.ConvertFromString(input);
+
+            #region sigh, there's always an easier way... ^^
+            //if (null == rgbOrArgbString)
+            //    return new Color();
+
+            //string hex = rgbOrArgbString[0] == '#' ? rgbOrArgbString.Substring(1) : rgbOrArgbString;
+            //byte[] values = Enumerable.Range(0, hex.Length / 2).Select(x => Byte.Parse(hex.Substring(2 * x, 2), NumberStyles.HexNumber)).ToArray();
+
+            //Color result;
+            //if (values.Length == 3)
+            //{
+            //    result = new Color()
+            //    {
+            //        A = byte.MaxValue,
+            //        R = values[0],
+            //        G = values[1],
+            //        B = values[2]
+            //    };
+            //}
+            //else if (values.Length == 4)
+            //{
+            //    result = new Color()
+            //    {
+            //        A = values[0],
+            //        R = values[1],
+            //        G = values[2],
+            //        B = values[3]
+            //    };
+            //}
+            //else
+            //{
+            //    throw new Exception("Error - invalid number of hex values in color string");
+            //}
+
+            //return result;
+            #endregion
         }
 
         static readonly Dictionary<string, Color> _knownColors = GetKnownColors();

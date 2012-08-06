@@ -106,30 +106,8 @@ namespace JayDev.Notemaker.Common
                     var excelChunk = ws.Cells[currentRow, 3].RichText.Add(hackedText);
                     excelChunk.Italic = currentSection.Style == NoteStyle.Italic ? true : false;
                     excelChunk.Bold = currentSection.Weight == NoteWeight.Bold ? true : false;
-                    switch (currentSection.Colour)
-                    {
-                        case "Red":
-                            excelChunk.Color = Color.Red;
-                            break;
-                        case "Blue":
-                            excelChunk.Color = Color.Blue;
-                            break;
-                        case "Gray":
-                            excelChunk.Color = Color.Gray;
-                            break;
-                        case "Grey":
-                            excelChunk.Color = Color.Gray;
-                            break;
-                        case "Default":
-                            excelChunk.Color = Color.Black;
-                            break;
-                        default:
-                            excelChunk.Color = Color.Black;
-                            break;
-                    }
-                    //excelChunk.Color = System.Drawing.Color.FromArgb(255, 0, 0);
-                    //excelChunk.Bold = true;
-                    //excelChunk.Italic = true;
+                    System.Drawing.Color drawingcolor = System.Drawing.Color.FromArgb(currentSection.Colour.A, currentSection.Colour.R, currentSection.Colour.G, currentSection.Colour.B);
+                    excelChunk.Color = drawingcolor;
                 }
 
                 ws.Cells[currentRow, 4].Value = notes[i].Rating;

@@ -85,7 +85,7 @@ namespace AvalonTextBox
             Apply(false, true, null);
         }
 
-        public void ApplyColour(string colour)
+        public void ApplyColour(Color? colour)
         {
             Apply(false, false, colour);
         }
@@ -135,24 +135,24 @@ namespace AvalonTextBox
             return _cachedMarkedupText;
         }
 
-        Section ApplyHelper(Section section, bool isStyleAppliedAlready, bool toggleBold, bool toggleItalics, string colour)
+        Section ApplyHelper(Section section, bool isStyleAppliedAlready, bool toggleBold, bool toggleItalics, Color? colour)
         {
             if (isStyleAppliedAlready)
             {
                 if (toggleItalics) section.Style = NoteStyle.Normal;
                 if (toggleBold) section.Weight = NoteWeight.Normal;
-                if (null != colour) section.Colour = "Default";
+                if (null != colour) section.Colour = ColorHelper.ApplicationDefaultTextColour;
             }
             else
             {
                 if (toggleItalics) section.Style = NoteStyle.Italic;
                 if (toggleBold) section.Weight = NoteWeight.Bold;
-                if (null != colour) section.Colour = colour;
+                if (null != colour) section.Colour = colour.Value;
             }
             return section;
         }
 
-        void Apply(bool toggleBold, bool toggleItalics, string colour)
+        void Apply(bool toggleBold, bool toggleItalics, Color? colour)
         {
             _isTextUpdatedSinceCachedMarkedupText = true;
 
@@ -490,15 +490,15 @@ namespace AvalonTextBox
             {
                 case Key.D1:
                     e.Handled = true;
-                    ApplyColour("Red");
+                    ApplyColour(Colors.GreenYellow);
                     break;
                 case Key.D2:
                     e.Handled = true;
-                    ApplyColour("Blue");
+                    ApplyColour(Colors.Indigo);
                     break;
                 case Key.D3:
                     e.Handled = true;
-                    ApplyColour("Default");
+                    ApplyColour(ColorHelper.ApplicationDefaultTextColour);
                     break;
                 case Key.D4:
                     e.Handled = true;

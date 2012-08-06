@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Data;
 using System.Globalization;
+using System.Windows.Media;
 
 namespace AvalonTextBox.Converters
 {
@@ -26,7 +27,7 @@ namespace AvalonTextBox.Converters
             {
                 return new List<Section>(new[] { 
                     new Section() {
-                        Colour = "Default",
+                        Colour = ColorHelper.ApplicationDefaultTextColour,
                         Text = string.Empty }});
             }
 
@@ -34,7 +35,7 @@ namespace AvalonTextBox.Converters
             List<Section> sections = new List<Section>();
             Section currentSection = new Section()
             {
-                Colour = "Default"
+                Colour = ColorHelper.ApplicationDefaultTextColour
             };
             for (int i = 0; i < markedupText.Length; i++)
             {
@@ -95,7 +96,7 @@ namespace AvalonTextBox.Converters
                             case 'c':
                                 if (isEndingElement)
                                 {
-                                    currentSection.Colour = "Default";
+                                    currentSection.Colour = ColorHelper.ApplicationDefaultTextColour;
                                     //skip past the end of the tag
                                     Assert(markedupText[i + offset] != '>', "expecting end of tag, but didn't find it!");
                                     offset++;
@@ -106,7 +107,8 @@ namespace AvalonTextBox.Converters
                                     int colourStartIndex = i + offset + 1;
                                     int colourEndIndex = markedupText.IndexOf('>', colourStartIndex);
                                     if (colourEndIndex == -1) throw new Exception("error in markup - no end tag for <>");
-                                    string colour = markedupText.Substring(colourStartIndex, colourEndIndex - colourStartIndex);
+                                    string colourString = markedupText.Substring(colourStartIndex, colourEndIndex - colourStartIndex);
+                                    Color colour = ColorHelper.FromString(colourString);
                                     currentSection.Colour = colour;
                                     //skip past the end of the tag
                                     offset += colourEndIndex - colourStartIndex + 2;

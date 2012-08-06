@@ -64,22 +64,7 @@ namespace AvalonTextBox
                             //TODO: highlighting doesn't remove colour yet...
                             if (element.TextRunProperties.ForegroundBrush != _avalonEditControl.TextArea.SelectionForeground)
                             {
-                                //TODO: handle all colours
-                                switch (currentSection.Colour)
-                                {
-                                    case "Red":
-                                        element.TextRunProperties.SetForegroundBrush(Brushes.Red);
-                                        break;
-                                    case "Grey":
-                                        element.TextRunProperties.SetForegroundBrush(Brushes.Gray);
-                                        break;
-                                    case "Default":
-                                        element.TextRunProperties.SetForegroundBrush(_defaultTextColour);
-                                        break;
-                                    case "Blue":
-                                        element.TextRunProperties.SetForegroundBrush(Brushes.Blue);
-                                        break;
-                                }
+                                element.TextRunProperties.SetForegroundBrush(new SolidColorBrush(currentSection.Colour));
                             }
                         });
                     //if this takes us to the end of the line, break out.

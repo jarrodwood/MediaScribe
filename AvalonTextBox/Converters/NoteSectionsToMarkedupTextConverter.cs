@@ -23,12 +23,12 @@ namespace AvalonTextBox.Converters
 
             List<Section> sections = value as List<Section>;
             StringBuilder builder = new StringBuilder();
-            Section lastSection = new Section() { Colour = "Default" };
+            Section lastSection = new Section() { Colour = ColorHelper.ApplicationDefaultTextColour };
             foreach (Section section in sections)
             {
                 if (section.Colour != lastSection.Colour)
                 {
-                    if (section.Colour != "Default")
+                    if (section.Colour != ColorHelper.ApplicationDefaultTextColour)
                     {
                         builder.Append("<c=");
                         builder.Append(section.Colour);
