@@ -12,10 +12,14 @@ namespace JayDev.Notemaker.ViewModel
 {
     public class MediaPlayer : ViewModelBase
     {
-        private Discover _videoSettings;
+        /// <summary>
+        /// The maximum number of seconds difference between the time WE know we should be at, and the time that mplayer returns. If the
+        /// difference is bigger than this number, we will stop updating the currentPlayPosition until it gets within this zone.
+        /// </summary>
+        private const int MAX_TIME_DIFFERENCE_SECONDS = 10;
+        private const int PLAY_POSITION_UPDATE_INTERVAL_MILLISECONDS = 500;
         private static MPlayer _play;
         private string _filePath;
-        private bool disposed = false; // to detect redundant calls
         private static Timer _playPositionTimer = new Timer();
         private IntPtr _handle;
 
@@ -53,7 +57,10 @@ namespace JayDev.Notemaker.ViewModel
 
         #endregion CurrentPlayPosition
 
-
+        /// <summary>
+        /// Creates the wrapper for the mplayer library.
+        /// </summary>
+        /// <param name="handle">pointer to the panel where the video needs to be displayed</param>
         public MediaPlayer(IntPtr handle)
         {
             if (null == _play)
@@ -78,25 +85,52 @@ namespace JayDev.Notemaker.ViewModel
                 _play = new MPlayer((int)handle, backend);
                 _play.Init();
 
+                //configure the timer that will check the current position twice every second, until the end of time.
                 _playPositionTimer = new Timer();
-                _playPositionTimer.Interval = 500;
+                _playPositionTimer.Interval = PLAY_POSITION_UPDATE_INTERVAL_MILLISECONDS;
                 _playPositionTimer.Elapsed += new ElapsedEventHandler(_playPositionTimer_Elapsed);
                 _playPositionTimer.Start();
             }
         }
 
-        public PlayStatus PlayingStatus
+        /// <summary>
+        /// The <see cref="PlayStatus" /> property's name.
+        /// </summary>
+        public const string PlayStatusPropertyName = "PlayStatus";
+
+        private PlayStatus _playStatus = PlayStatus.Stopped;
+
+        /// <summary>
+        /// Sets and gets the PlayStatus property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public PlayStatus PlayStatus
         {
             get
             {
-                if (_play == null || _play.CurrentStatus == MediaStatus.Stopped)
-                    return PlayStatus.Stopped;
-                if (_play.CurrentStatus == MediaStatus.Playing)
-                    return PlayStatus.Playing;
-                if (_play.CurrentStatus == MediaStatus.Paused)
-                    return PlayStatus.Paused;
-                throw new Exception("error: unexpected playing status?");
+                return _playStatus;
             }
+
+            set
+            {
+                if (_playStatus == value)
+                {
+                    return;
+                }
+
+                _playStatus = value;
+                RaisePropertyChanged(PlayStatusPropertyName);
+            }
+        }
+
+        void SetPlayStatus()
+        {
+            if (_play == null || _play.CurrentStatus == MediaStatus.Stopped)
+                PlayStatus = PlayStatus.Stopped;
+            if (_play.CurrentStatus == MediaStatus.Playing)
+                PlayStatus = PlayStatus.Playing;
+            if (_play.CurrentStatus == MediaStatus.Paused)
+                PlayStatus = PlayStatus.Paused;
         }
 
         public void ToggleMute()
@@ -111,8 +145,15 @@ namespace JayDev.Notemaker.ViewModel
         {
             if (null != _play)
             {
-
-                _play.Pause();
+                if (PlayStatus == Common.PlayStatus.Stopped)
+                {
+                    PlayFile2(currentFilePath, CurrentPlayPosition, PlayAction.Play);
+                }
+                else
+                {
+                    _play.Pause();
+                    SetPlayStatus();
+                }
             }
         }
 
@@ -149,32 +190,47 @@ namespace JayDev.Notemaker.ViewModel
             if (null != _play)
             {
                 _play.Stop();
-
+                SetPlayStatus();
+                this.CurrentPlayPosition = TimeSpan.Zero;
             }
         }
 
+        string loadedFilePath = null;
         string currentFilePath = null;
-        public void PlayFile2(string filePath, TimeSpan time, bool instantPause)
+        public enum PlayAction { DontPlay, Play, MaintainStatus }
+        public void PlayFile2(string filePath, TimeSpan time, PlayAction action)
         {
+            this.currentFilePath = filePath;
             this.CurrentPlayPosition = time;
-            if (instantPause)
-                return;
 
-            if (filePath != currentFilePath)
+            PlayStatus playStatusAtMethodCall = PlayStatus;
+            if (filePath != loadedFilePath)
             {
-                _play.Stop();
-                _play.LoadFile(filePath);
-                currentFilePath = filePath;
+                Stop();
             }
 
-            if (time != TimeSpan.Zero)
+            if (action == PlayAction.Play || (action == PlayAction.MaintainStatus && playStatusAtMethodCall == Common.PlayStatus.Playing))
             {
-                _play.Seek(Convert.ToInt32(time.TotalSeconds), LibMPlayerCommon.Seek.Absolute);
-                //set the play position, to instantly update the trackbar... instead of waiting for the timer to tick.
-                //TODO: the timer still makes it jump back for some reason - mplayer's returning the old time for a second or two ?
-                this.CurrentPlayPosition = time;
+                //'loadfile' is a bad method name -- it actually PLAYS the file, too.
+                if (filePath != loadedFilePath
+                    || playStatusAtMethodCall == Common.PlayStatus.Stopped)
+                {
+                    _play.LoadFile(filePath);
+                    loadedFilePath = filePath;
+                }
+
+
+                if (time != TimeSpan.Zero)
+                {
+                    _play.Seek(Convert.ToInt32(time.TotalSeconds), LibMPlayerCommon.Seek.Absolute);
+                }
             }
 
+
+            SetPlayStatus();
+            //set the play position, to instantly update the trackbar... instead of waiting for the timer to tick.
+            //TODO: the timer still makes it jump back for some reason - mplayer's returning the old time for a second or two ?
+            this.CurrentPlayPosition = time;
         }
 
 
@@ -183,13 +239,11 @@ namespace JayDev.Notemaker.ViewModel
             if (_play.CurrentStatus == MediaStatus.Playing)
             {
                 TimeSpan newTime = new TimeSpan(0, 0, _play.CurrentPosition());
-                if (Math.Abs(newTime.TotalSeconds - CurrentPlayPosition.TotalSeconds) <= 5)
+                if (Math.Abs(newTime.TotalSeconds - CurrentPlayPosition.TotalSeconds) <= MAX_TIME_DIFFERENCE_SECONDS)
                 {
                     CurrentPlayPosition = newTime;
                 }
             }
-
-            System.Diagnostics.Debug.WriteLine("ELAPZED " + DateTime.Now.ToLongTimeString());
         }
     }
 }

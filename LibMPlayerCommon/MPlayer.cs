@@ -421,7 +421,7 @@ namespace LibMPlayerCommon
         /// <param name="type"></param>
         public void Seek(int value, Seek type)
         {
-            MediaPlayer.StandardInput.WriteLine(string.Format("pausing_keep seek {0} {1}", value, (int)type));
+            MediaPlayer.StandardInput.WriteLine(string.Format("pausing_keep_force seek {0} {1}", value, (int)type));
             MediaPlayer.StandardInput.Flush();
         }
 

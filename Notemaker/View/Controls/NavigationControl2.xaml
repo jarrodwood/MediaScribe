@@ -61,6 +61,10 @@
         <Border BorderThickness="0,0,0,1" BorderBrush="#FF75B2DE" Margin="0,0,0,1" SnapsToDevicePixels="True">
                         <Grid Visibility="Visible" DockPanel.Dock="Top" Height="50">
 
+                <Grid >
+                    <TextBlock FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding CourseName}" MaxWidth="450" />
+
+                </Grid>
                 <StackPanel Orientation="Horizontal">
 
                     <Border>
@@ -71,10 +75,10 @@
                                   ToolTip="Return to the course list">
                             <Grid>
                                 <Image Width="16" Height="16" Source="/Notemaker;component/Images/mp_viewer.png" Stretch="Fill" Margin="0 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <TextBlock Margin="18 0 0 0" Foreground="#FF00388D" FontSize="14" VerticalAlignment="Center"><TextBlock.Effect> 
+                                <TextBlock Margin="18 0 0 0" Foreground="White" FontSize="14" VerticalAlignment="Center"><TextBlock.Effect> 
 								    <BlurEffect Radius="4" RenderingBias="Quality" />  
 							    </TextBlock.Effect><Run Text="Course List"/></TextBlock>
-                                <TextBlock Margin="18 0 0 0" Foreground="White" FontSize="14" VerticalAlignment="Center"><Run Text="Course List"/></TextBlock>
+                                    <TextBlock Margin="18 0 0 0" Foreground="#F111" FontSize="14" VerticalAlignment="Center"><Run Text="Course List"/></TextBlock>
                             </Grid>
                         </notemakerCommon:UntoggleableToggleButton>
                     
@@ -85,10 +89,10 @@
                                     ToolTip="Configure various application settings">
                             <Grid>
                                 <Image Width="16" Height="16" Source="/Notemaker;component/Images/system-settings-2.png" Stretch="Fill" Margin="0 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <TextBlock Margin="18 0 0 0" Foreground="#FF00388D" FontSize="14" VerticalAlignment="Center"><TextBlock.Effect> 
+                                    <TextBlock Margin="18 0 0 0" Foreground="White" FontSize="14" VerticalAlignment="Center"><TextBlock.Effect> 
 								    <BlurEffect Radius="4" RenderingBias="Quality" />  
 							    </TextBlock.Effect><Run Text="Settings"/></TextBlock>
-                                <TextBlock Margin="18 0 0 0" Foreground="White" FontSize="14" VerticalAlignment="Center"><Run Text="Settings"/></TextBlock>
+                                    <TextBlock Margin="18 0 0 0" Foreground="#F111" FontSize="14" VerticalAlignment="Center"><Run Text="Settings"/></TextBlock>
                             </Grid>
                         </notemakerCommon:UntoggleableToggleButton>
 
@@ -98,10 +102,10 @@
                                   Visibility="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationVisibilityConverter}, ConverterParameter={x:Static notemakerCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}">
                             <Grid>
                                 <Image Width="16" Height="16" Source="/Notemaker;component/Images/preferences-composer.png" Stretch="Fill" Margin="0 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <TextBlock Margin="18 0 0 0" Foreground="#FF00388D" FontSize="14" VerticalAlignment="Center"><TextBlock.Effect> 
+                                <TextBlock Margin="18 0 0 0" Foreground="White" FontSize="14" VerticalAlignment="Center"><TextBlock.Effect> 
 								    <BlurEffect Radius="4" RenderingBias="Quality" />  
 							    </TextBlock.Effect><Run Text="Write Notes"/></TextBlock>
-                                <TextBlock Margin="18 0 0 0" Foreground="White" FontSize="14" VerticalAlignment="Center"><Run Text="Write Notes"/></TextBlock>
+                                    <TextBlock Margin="18 0 0 0" Foreground="#F111" FontSize="14" VerticalAlignment="Center"><Run Text="Write Notes"/></TextBlock>
                             </Grid>
                         </notemakerCommon:UntoggleableToggleButton>
 
@@ -153,8 +157,8 @@
                             <!--<notemakerControls:NavigationButton Grid.Column="8" Text="Export" MySource="/Notemaker;component/Images/archive-insert-2.png"
                                                             Command="{Binding ExportCommand}" />-->
 
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 80 0">
-                    <Grid Margin="00 0 10 0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 0 0">
+                    <!--<Grid Margin="00 0 10 0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="70"/>
                                     <ColumnDefinition Width="*"/>
@@ -163,27 +167,31 @@
                                 </Grid.ColumnDefinitions>
                                 <TextBox Grid.Column="1" Width="250" VerticalAlignment="Center" Foreground="LightGray" Text="Search notes..." HorizontalAlignment="Right" />
                                 <Image Grid.Column="2" Source="/Notemaker;component/Images/system-search-4.png" Height="24" Width="24" />
-                            </Grid>
+                            </Grid>-->
 
-                    <notemakerControls:NavigationButton Margin="00 0 10 0" Text="Fullscreen&#13;Writing" MySource="/Notemaker;component/Images/fullscreen.png" 
+                    <notemakerControls:NavigationButton Margin="00 0 10 0" Text="Fullscreen&#13;Writing" MySource="/Notemaker;component/Images/fullscreen.png" Height="50"
                                                                 Visibility="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationVisibilityConverter}, ConverterParameter={x:Static notemakerCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}"
                                                                 Command="{Binding ToggleFullscreenCommand}"
                                                                 ToolTip="Go to Fullscreen mode" />
                     
-                    <notemakerControls:NavigationButton Margin="00 0 10 0" Text="Show All&#13;Tracks' Notes" MySource="/Notemaker;component/Images/filter.png" IsEnabled="False"
+                    <!--<notemakerControls:NavigationButton Margin="00 0 10 0" Text="Show All&#13;Tracks' Notes" MySource="/Notemaker;component/Images/filter.png" IsEnabled="False"
                                                                 Visibility="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationVisibilityConverter}, ConverterParameter={x:Static notemakerCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}"
                                                                 ToolTip="Toggle between showing notes for the entire course, or only the selected track"/>
                     <notemakerControls:NavigationButton Margin="00 0 10 0" Text="Lock Edit" MySource="/Notemaker;component/Images/system-config-rootpassword.png" IsEnabled="False"
-                                                                Visibility="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationVisibilityConverter}, ConverterParameter={x:Static notemakerCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}"/>
+                                                                Visibility="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationVisibilityConverter}, ConverterParameter={x:Static notemakerCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}"/>-->
+                            
+                            
                     <!--<notemakerControls:NavigationButton Margin="00 0 10 0" Text="Show Two&#13;Lists" MySource="/Notemaker;component/Images/two_columns.png" IsEnabled="False"
                                                                 Visibility="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationVisibilityConverter}, ConverterParameter={x:Static notemakerCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}"/>-->
                             <!--<notemakerControls:NavigationButton Grid.Column="14" Text="Sort List" MySource="/Notemaker;component/Images/view-sort-descending.png" IsEnabled="False" />
                             <notemakerControls:NavigationButton Grid.Column="15" Text="Filter List" MySource="/Notemaker;component/Images/filter.png" IsEnabled="False" />
                             <notemakerControls:NavigationButton Grid.Column="16" Text="Change List&#13;Font Size" MySource="/Notemaker;component/Images/fonts.png" IsEnabled="False" />-->
-                    <notemakerControls:NavigationButton Margin="00 0 10 0" Text="Change List&#13;Columns" MySource="/Notemaker;component/Images/view-file-columns.png" IsEnabled="False"
-                                                                Visibility="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationVisibilityConverter}, ConverterParameter={x:Static notemakerCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}"/>
+                            
+                    <!--<notemakerControls:NavigationButton Margin="00 0 10 0" Text="Change List&#13;Columns" MySource="/Notemaker;component/Images/view-file-columns.png" IsEnabled="False"
+                                                                Visibility="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationVisibilityConverter}, ConverterParameter={x:Static notemakerCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}"/>-->
                     <ContentControl Margin="0 0 5 0" />
                 </StackPanel>
+
                         </Grid>
                     </Border>
     </Grid>

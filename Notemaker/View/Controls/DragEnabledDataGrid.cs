@@ -149,10 +149,15 @@ namespace JayDev.Notemaker.Common
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 DataGridRow row = UIHelpers.TryFindFromPoint<DataGridRow>((UIElement)this, e.GetPosition(this));
-                if (row != null && SelectedItems.Contains(row.Item))
+                //ONLY allow dragging of rows, when we're NOT in edit mode. If we're in edit mode, obviously the user's trying to change a
+                //field value, not drag stuff...
+                if (false == row.IsEditing)
                 {
-                    e.Handled = true;
-                    _isClickingDownOnSelectedItem = true;
+                    if (row != null && SelectedItems.Contains(row.Item))
+                    {
+                        e.Handled = true;
+                        _isClickingDownOnSelectedItem = true;
+                    }
                 }
             }
         }

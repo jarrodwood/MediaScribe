@@ -102,8 +102,9 @@ namespace JayDev.Notemaker.View
 
         private void addHotkeyButton_Click(object sender, RoutedEventArgs e)
         {
-            var hotkeys = (ExtendedObservableCollection<Hotkey>)hotkeyGrid.DataContext;
-            DataGridCell cell = GetCell(hotkeyGrid, hotkeys.Count, 0);
+            //commit any edit, so that it will pop up a new blank placeholder row down the bottom
+            hotkeyGrid.CommitEdit();
+            DataGridCell cell = GetCell(hotkeyGrid, hotkeyGrid.Items.Count-1, 0);
             if (cell != null)
             {
                 hotkeyGrid.ScrollIntoView(hotkeyGrid.Items[hotkeyGrid.Items.Count - 1]);

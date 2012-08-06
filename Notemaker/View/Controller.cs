@@ -10,7 +10,7 @@ using GalaSoft.MvvmLight.Messaging;
 using System.Diagnostics;
 using System.Windows.Input;
 using System.Windows.Controls;
-using log4net.Config;
+//using log4net.Config;
 using JayDev.Notemaker.Core;
 
 namespace JayDev.Notemaker.View
@@ -40,11 +40,11 @@ namespace JayDev.Notemaker.View
             _mainWindow = mainWindow;
             _mainWindow.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
 
-            var logconfig = new System.IO.FileInfo("log4net.xml");
-            if (logconfig.Exists)
-            {
-                log4net.Config.XmlConfigurator.ConfigureAndWatch(logconfig);
-            }  
+            //var logconfig = new System.IO.FileInfo("log4net.xml");
+            //if (logconfig.Exists)
+            //{
+            //    log4net.Config.XmlConfigurator.ConfigureAndWatch(logconfig);
+            //}  
 
             Console.SetOut(new DebugTextWriter());
 

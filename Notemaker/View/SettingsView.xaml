@@ -28,6 +28,8 @@
                 x:Key="BooleanToVisibilityConverterTrueIsVisible" 
                 True="Visible" 
                 False="Collapsed" />
+        <notemakerConverters:InverseBooleanConverter 
+                x:Key="InverseBooleanConverter"  />
 
         <notemakerConverters:EnumInfoLabelToStringConverter x:Key="EnumInfoLabelToStringConverter" />
         <notemakerConverters:EnumToTooltipTextBlockConverter x:Key="EnumToTooltipTextBlockConverter" />
@@ -209,7 +211,7 @@
 
                 <DockPanel Grid.Column="1">
                     <StackPanel DockPanel.Dock="Top" MaxWidth="800">
-                        <GroupBox Header="Application Settings"  Foreground="#FF3F3F3F" Margin="10 10 10 10" Padding="10" BorderBrush="#FF75B2DE">
+                        <GroupBox Visibility="Collapsed" Header="Application Settings"  Foreground="#FF3F3F3F" Margin="10 10 10 0" Padding="10" BorderBrush="#FF75B2DE">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="250" />
@@ -219,7 +221,7 @@
                                 <CheckBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"></CheckBox>
                             </Grid>
                         </GroupBox>
-                        <GroupBox Header="Hotkeys" Foreground="#FF3F3F3F" BorderBrush="#FF75B2DE" Margin="10 0 10 10" Padding="5">
+                        <GroupBox Header="Hotkeys" Foreground="#FF3F3F3F" BorderBrush="#FF75B2DE" Margin="10 10 10 10" Padding="5">
                             <DockPanel>
                                 <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
                                 <StackPanel DockPanel.Dock="Bottom">
@@ -258,6 +260,7 @@
                                                                           CanUserAddRows="{Binding IsEditingHotkeys, Mode=OneWay}" HeadersVisibility="Column"
                                                                           ItemsSource="{Binding Hotkeys}" 
                                                                           CanDrag="False"
+                                                                          IsReadOnly="{Binding IsEditingHotkeys, Converter={StaticResource InverseBooleanConverter}}"
                                                                           ReadOnlySelectedItems="{Binding SelectedHotkeys, Mode=OneWayToSource}"
                                                                           Style="{StaticResource DataGridStyle1}">
                                         <DataGrid.Columns>

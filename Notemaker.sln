@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvalonTextBox", "..\AvalonT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Windows.Shell", "..\..\examples\shell integration library\Microsoft.Windows.Shell\Microsoft.Windows.Shell.csproj", "{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "NotemakerSetup", "NotemakerSetup\NotemakerSetup.vdproj", "{7E101C97-B58B-4F55-B105-2BBB445C5B95}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -363,6 +365,48 @@ Global
 		{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}.SL40-Release|Mixed Platforms.Build.0 = Release|x86
 		{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}.SL40-Release|x86.ActiveCfg = Release|x86
 		{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}.SL40-Release|x86.Build.0 = Release|x86
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.Debug|Any CPU.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.Debug|x86.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.MONO26-Debug|Any CPU.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.MONO26-Debug|Mixed Platforms.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.MONO26-Debug|x86.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.MONO26-Release|Any CPU.ActiveCfg = Release
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.MONO26-Release|Mixed Platforms.ActiveCfg = Release
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.MONO26-Release|x86.ActiveCfg = Release
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.MONO28-Debug|Any CPU.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.MONO28-Debug|Mixed Platforms.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.MONO28-Debug|x86.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.MONO28-Release|Any CPU.ActiveCfg = Release
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.MONO28-Release|Mixed Platforms.ActiveCfg = Release
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.MONO28-Release|x86.ActiveCfg = Release
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.NET35-Debug|Any CPU.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.NET35-Debug|Mixed Platforms.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.NET35-Debug|x86.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.NET35-Release|Any CPU.ActiveCfg = Release
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.NET35-Release|Mixed Platforms.ActiveCfg = Release
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.NET35-Release|x86.ActiveCfg = Release
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.NET40-Debug|Any CPU.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.NET40-Debug|Mixed Platforms.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.NET40-Debug|x86.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.NET40-Release|Any CPU.ActiveCfg = Release
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.NET40-Release|Mixed Platforms.ActiveCfg = Release
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.NET40-Release|x86.ActiveCfg = Release
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.Release|Any CPU.ActiveCfg = Release
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.Release|Mixed Platforms.ActiveCfg = Release
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.Release|x86.ActiveCfg = Release
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.SL30-Debug|Any CPU.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.SL30-Debug|Mixed Platforms.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.SL30-Debug|x86.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.SL30-Release|Any CPU.ActiveCfg = Release
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.SL30-Release|Mixed Platforms.ActiveCfg = Release
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.SL30-Release|x86.ActiveCfg = Release
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.SL40-Debug|Any CPU.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.SL40-Debug|Mixed Platforms.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.SL40-Debug|x86.ActiveCfg = Debug
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.SL40-Release|Any CPU.ActiveCfg = Release
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.SL40-Release|Mixed Platforms.ActiveCfg = Release
+		{7E101C97-B58B-4F55-B105-2BBB445C5B95}.SL40-Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

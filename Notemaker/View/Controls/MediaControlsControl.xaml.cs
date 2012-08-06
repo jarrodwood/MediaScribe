@@ -173,7 +173,33 @@ namespace JayDev.Notemaker.View.Controls
         public static readonly DependencyProperty ToggleMuteCommandProperty =
             DependencyProperty.Register("ToggleMuteCommand", typeof(ICommand), typeof(MediaControlsControl), new UIPropertyMetadata(null));
 
+
+
+
+        public ICommand NextTrackCommand
+        {
+            get { return (ICommand)GetValue(NextTrackCommandProperty); }
+            set { SetValue(NextTrackCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for NextTrackCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty NextTrackCommandProperty =
+            DependencyProperty.Register("NextTrackCommand", typeof(ICommand), typeof(MediaControlsControl), new UIPropertyMetadata(null));
+
+
+        public ICommand PrevTrackCommand
+        {
+            get { return (ICommand)GetValue(PrevTrackCommandProperty); }
+            set { SetValue(PrevTrackCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for PrevTrackCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PrevTrackCommandProperty =
+            DependencyProperty.Register("PrevTrackCommand", typeof(ICommand), typeof(MediaControlsControl), new UIPropertyMetadata(null));
+
         
+
+
         
         
 

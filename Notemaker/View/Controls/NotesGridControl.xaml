@@ -16,6 +16,7 @@
             VirtualizingStackPanel.IsVirtualizing="True"
             EnableColumnVirtualization="True"
             EnableRowVirtualization="True"
+            SelectionMode="Single"
             AutoGenerateColumns="False" Name="noteDataGrid" HeadersVisibility="Column" CanUserSortColumns="True" CanUserResizeRows="False" CanUserAddRows="True"
             CanUserDeleteRows="True" RowEditEnding="noteDataGrid_RowEditEnding" BeginningEdit="noteDataGrid_BeginningEdit"
             PreparingCellForEdit="noteDataGrid_PreparingCellForEdit"

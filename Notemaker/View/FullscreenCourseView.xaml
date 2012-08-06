@@ -13,7 +13,15 @@
                                                    MaxPlayTime="{Binding CurrentTrackTotalLength}"
                                                    PlayPauseCommand="{Binding PlayPauseCommand}"
                                                    SeekToCommand="{Binding SeekToCommand}"
-                                                   TrackTitle="{Binding CurrentTrackName}"/>
+                                                   TrackTitle="{Binding CurrentTrackName}"
+                                                   PlayStatus="{Binding PlayStatus}"
+                                                   Volume="{Binding Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                   ToggleMuteCommand="{Binding ToggleMuteCommand}"
+                                                   IsMuted="{Binding IsMuted}"
+                                                   StopCommand="{Binding StopCommand}"
+                                                   NextTrackCommand="{Binding NextTrackCommand}"
+                                                   PrevTrackCommand="{Binding PrevTrackCommand}"
+                                               />
 
         <notemakerControl:NotesGridControl x:Name="notesGrid" DockPanel.Dock="Right" Width="600"
                                            VerticalAlignment="Top"

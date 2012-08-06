@@ -11,8 +11,7 @@
     <RootNamespace>JayDev.Notemaker</RootNamespace>
     <AssemblyName>Notemaker</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -105,6 +104,7 @@
     <Compile Include="Common\Converters\ColourToBrushConverter.cs" />
     <Compile Include="Common\Converters\ColourToNameStringConverter.cs" />
     <Compile Include="Common\Converters\EnumConverters.cs" />
+    <Compile Include="Common\Converters\InverseBooleanConverter.cs" />
     <Compile Include="Common\Converters\StringToXamlConverter.cs" />
     <Compile Include="Common\InformationAttribute.cs" />
     <Compile Include="Core\NHibernate\ColorUserType.cs" />
@@ -462,7 +462,9 @@
     <EmbeddedResource Include="Mappings\TrackTime.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Mappings\Hotkey.hbm.xml" />
+    <EmbeddedResource Include="Mappings\Hotkey.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Resource Include="Images\Letter N blue.ico" />
     <Resource Include="Images\fullscreen.png" />
     <Resource Include="Images\two_columns.png" />
