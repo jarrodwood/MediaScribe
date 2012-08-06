@@ -93,21 +93,6 @@ namespace JayDev.Notemaker.View.Controls
         public VideoControl()
         {
             InitializeComponent();
-           
-
-            //this.play.VideoExited += new MplayerEventHandler(play_VideoExited);
-
-            //// Set fullscreen
-            //if (fullScreen == true && (this.WindowState != FormWindowState.Maximized))
-            //{
-            //    this.ToggleFormFullScreen();
-            //}
-
-            //// start playing mmediately
-            //if (playNow == true && this.filePath != "")
-            //{
-            //    btnPlay_Click(new object(), new EventArgs());
-            //}
 
             var mPlayerWPFControl1 = MediaPlayerWPFDisplayControl.Instance;
             this.videoPlaceholder.Content = mPlayerWPFControl1;

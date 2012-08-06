@@ -7,6 +7,7 @@ using JayDev.Notemaker.Common;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using System.Timers;
+using System.Diagnostics;
 
 namespace JayDev.Notemaker.ViewModel
 {
@@ -20,7 +21,7 @@ namespace JayDev.Notemaker.ViewModel
         private const int PLAY_POSITION_UPDATE_INTERVAL_MILLISECONDS = 500;
         private static MPlayer _play;
         private string _filePath;
-        private static Timer _playPositionTimer = new Timer();
+        private Timer _playPositionTimer = new Timer();
         private IntPtr _handle;
 
         #region CurrentPlayPosition
@@ -63,6 +64,7 @@ namespace JayDev.Notemaker.ViewModel
         /// <param name="handle">pointer to the panel where the video needs to be displayed</param>
         public MediaPlayer(IntPtr handle)
         {
+            //we only initialize mplayer once.
             if (null == _play)
             {
                 this._handle = handle;
@@ -84,13 +86,12 @@ namespace JayDev.Notemaker.ViewModel
 
                 _play = new MPlayer((int)handle, backend);
                 _play.Init();
-
-                //configure the timer that will check the current position twice every second, until the end of time.
-                _playPositionTimer = new Timer();
-                _playPositionTimer.Interval = PLAY_POSITION_UPDATE_INTERVAL_MILLISECONDS;
-                _playPositionTimer.Elapsed += new ElapsedEventHandler(_playPositionTimer_Elapsed);
-                _playPositionTimer.Start();
             }
+
+            //configure the timer that will check the current position twice every second, until the end of time.
+            _playPositionTimer = new Timer();
+            _playPositionTimer.Interval = PLAY_POSITION_UPDATE_INTERVAL_MILLISECONDS;
+            _playPositionTimer.Elapsed += new ElapsedEventHandler(_playPositionTimer_Elapsed);
         }
 
         /// <summary>
@@ -192,6 +193,7 @@ namespace JayDev.Notemaker.ViewModel
                 _play.Stop();
                 SetPlayStatus();
                 this.CurrentPlayPosition = TimeSpan.Zero;
+                _playPositionTimer.Stop();
             }
         }
 
@@ -224,6 +226,8 @@ namespace JayDev.Notemaker.ViewModel
                 {
                     _play.Seek(Convert.ToInt32(time.TotalSeconds), LibMPlayerCommon.Seek.Absolute);
                 }
+
+                _playPositionTimer.Start();
             }
 
 
@@ -239,6 +243,7 @@ namespace JayDev.Notemaker.ViewModel
             if (_play.CurrentStatus == MediaStatus.Playing)
             {
                 TimeSpan newTime = new TimeSpan(0, 0, _play.CurrentPosition());
+                Debug.WriteLine("Ticker. recorded position: {0}, mplayer position: {1}. Within scope: {2}", CurrentPlayPosition.ToString(), newTime.ToString(), Math.Abs(newTime.TotalSeconds - CurrentPlayPosition.TotalSeconds) <= MAX_TIME_DIFFERENCE_SECONDS);
                 if (Math.Abs(newTime.TotalSeconds - CurrentPlayPosition.TotalSeconds) <= MAX_TIME_DIFFERENCE_SECONDS)
                 {
                     CurrentPlayPosition = newTime;

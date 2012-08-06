@@ -169,7 +169,11 @@
                                 <Image Grid.Column="2" Source="/Notemaker;component/Images/system-search-4.png" Height="24" Width="24" />
                             </Grid>-->
 
-                    <notemakerControls:NavigationButton Margin="00 0 10 0" Text="Fullscreen&#13;Writing" MySource="/Notemaker;component/Images/fullscreen.png" Height="50"
+                    <notemakerControls:NavigationButton Margin="00 -3 5 0" MySource="/Notemaker;component/Images/archive-insert-2.png" Height="48" Width="50"
+                                                        Visibility="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationVisibilityConverter}, ConverterParameter={x:Static notemakerCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}"
+                                                        Command="{Binding ExportCommand}" CommandParameter="{x:Static notemakerCommon:NavigateMessage.ListCourses}"
+                                                        ToolTip="Export all notes for the course as an Excel spreadsheet" />
+                    <notemakerControls:NavigationButton Margin="00 -3 5 0" MySource="/Notemaker;component/Images/fullscreen.png" Height="48" Width="50"
                                                                 Visibility="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationVisibilityConverter}, ConverterParameter={x:Static notemakerCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}"
                                                                 Command="{Binding ToggleFullscreenCommand}"
                                                                 ToolTip="Go to Fullscreen mode" />
