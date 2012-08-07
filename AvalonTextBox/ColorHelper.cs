@@ -18,7 +18,7 @@ namespace AvalonTextBox
         {
             if (color == ApplicationDefaultTextColour)
             {
-                return "Notemaker default";
+                return "MediaScribe default";
             }
             string match = _knownColors
                 .Where(kvp => kvp.Value.Equals(color))

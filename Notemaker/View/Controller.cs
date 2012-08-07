@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using JayDev.Notemaker.Common;
-using JayDev.Notemaker.ViewModel;
-using JayDev.Notemaker.Model;
+using JayDev.MediaScribe.Common;
+using JayDev.MediaScribe.ViewModel;
+using JayDev.MediaScribe.Model;
 using GalaSoft.MvvmLight.Messaging;
 using System.Diagnostics;
 using System.Windows.Input;
 using System.Windows.Controls;
 //using log4net.Config;
-using JayDev.Notemaker.Core;
-using Notemaker.Common;
+using JayDev.MediaScribe.Core;
+using MediaScribe.Common;
+using NHibernate;
+using NHibernate.Cfg;
 
-namespace JayDev.Notemaker.View
+namespace JayDev.MediaScribe.View
 {
     public class Controller
     {
@@ -38,7 +40,9 @@ namespace JayDev.Notemaker.View
             }
         }
 
-        bool startAtLastCourse = false;
+        private static Course _lastCourse;
+
+        const bool startAtLastCourse = true;
 
         public void Initialize(MainWindow mainWindow)
         {
@@ -74,11 +78,7 @@ namespace JayDev.Notemaker.View
                 var currentCourse = courses.OrderBy(x => x.DateViewed).FirstOrDefault();
                 if (null != currentCourse)
                 {
-                    courseUseViewModel.SetCurrentCourse(currentCourse);
-                    CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
-                    _mainWindow.Content = courseUseView;
-                    currentView = courseUseView;
-                    currentViewModel = courseUseViewModel;
+                    Navigate(new NavigateArgs(NavigateMessage.WriteCourseNotes, currentCourse));
                     loadedLastCourse = true;
                 }
             }
@@ -164,11 +164,20 @@ namespace JayDev.Notemaker.View
                     break;
                 case NavigateMessage.WriteCourseNotes:
                     {
+                        if (null == args.Course && null == _lastCourse)
+                        {
+                            throw new ApplicationException("Error - can't write course notes, when we haven't been provided a course to write notes for!");
+                        }
+
+                        Course courseToLoad = args.Course ?? _lastCourse;
                         CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
                         currentView = courseUseView;
                         currentViewModel = courseUseViewModel;
                         _mainWindow.Content = currentView;
-                        courseUseViewModel.SetCurrentCourse(args.Course);
+                        courseUseViewModel.SetCurrentCourse(courseToLoad);
+
+                        //note the last course we had viewed
+                        _lastCourse = args.Course;
                     }
                     break;
                 case NavigateMessage.ListCourses:

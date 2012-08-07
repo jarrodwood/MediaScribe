@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace JayDev.Notemaker.View.Controls
+namespace JayDev.MediaScribe.View.Controls
 {
     /// <summary>
     /// Interaction logic for NavigationControl.xaml

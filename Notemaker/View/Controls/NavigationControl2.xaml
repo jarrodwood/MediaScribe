@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="JayDev.Notemaker.View.Controls.NavigationControl2"
+﻿<UserControl x:Class="JayDev.MediaScribe.View.Controls.NavigationControl2"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,9 +6,9 @@
              mc:Ignorable="d" 
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
              xmlns:mwt="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
-             xmlns:nmCommon="clr-namespace:JayDev.Notemaker.Common;assembly=Notemaker.Common"
-             xmlns:nmControls="clr-namespace:JayDev.Notemaker.View.Controls"
-             xmlns:nmConverters="clr-namespace:JayDev.Notemaker.Converters"
+             xmlns:nmCommon="clr-namespace:JayDev.MediaScribe.Common;assembly=MediaScribe.Common"
+             xmlns:nmControls="clr-namespace:JayDev.MediaScribe.View.Controls"
+             xmlns:nmConverters="clr-namespace:JayDev.MediaScribe.Converters"
              x:Name="NavigationControlName"
              d:DesignHeight="90" d:DesignWidth="1300">
     <UserControl.Resources>
@@ -54,7 +54,7 @@
         <Viewbox Stretch="Fill" Margin="0,-6,0,0" RenderTransformOrigin="0.5,0.5" Height="72" VerticalAlignment="Top" Visibility="Collapsed">
             <Grid Height="60" Width="1832">
                 <Border BorderBrush="#FF75B2DE" BorderThickness="1">
-                <Image Source="/Notemaker;component/Images/bar.png" Stretch="Fill" />
+                <Image Source="/MediaScribe;component/Images/bar.png" Stretch="Fill" />
                 </Border>
             </Grid>
         </Viewbox>
@@ -75,7 +75,7 @@
                                   IsChecked="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationCheckedConverter}, ConverterParameter={x:Static nmCommon:NavigateMessage.ListCourses}, UpdateSourceTrigger=PropertyChanged}"
                                   ToolTip="Return to the course list">
                             <Grid>
-                                <Image Width="16" Height="16" Source="/Notemaker;component/Images/mp_viewer.png" Stretch="Fill" Margin="0 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <Image Width="16" Height="16" Source="/MediaScribe;component/Images/mp_viewer.png" Stretch="Fill" Margin="0 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                 <TextBlock Margin="18 0 0 0" Foreground="White" FontSize="14" VerticalAlignment="Center"><TextBlock.Effect> 
 								    <BlurEffect Radius="4" RenderingBias="Quality" />  
 							    </TextBlock.Effect><Run Text="Course List"/></TextBlock>
@@ -89,7 +89,7 @@
                                   IsChecked="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationCheckedConverter}, ConverterParameter={x:Static nmCommon:NavigateMessage.Settings}, UpdateSourceTrigger=PropertyChanged}"
                                     ToolTip="Configure various application settings">
                             <Grid>
-                                <Image Width="16" Height="16" Source="/Notemaker;component/Images/system-settings-2.png" Stretch="Fill" Margin="0 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <Image Width="16" Height="16" Source="/MediaScribe;component/Images/system-settings-2.png" Stretch="Fill" Margin="0 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                     <TextBlock Margin="18 0 0 0" Foreground="White" FontSize="14" VerticalAlignment="Center"><TextBlock.Effect> 
 								    <BlurEffect Radius="4" RenderingBias="Quality" />  
 							    </TextBlock.Effect><Run Text="Settings"/></TextBlock>
@@ -98,11 +98,10 @@
                             </nmControls:UntoggleableToggleButton>
 
                             <nmControls:UntoggleableToggleButton Grid.Column="3" Height="35" Width="110" Margin="10 0 0 0" Style="{DynamicResource JarrodToggleButton}" VerticalAlignment="Center"
-                                  Command="{Binding NavigateCommand}" CommandParameter="{x:Static nmCommon:NavigateMessage.ListCourses}"
-                                  IsChecked="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationCheckedConverter}, ConverterParameter={x:Static nmCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}"
-                                  Visibility="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationVisibilityConverter}, ConverterParameter={x:Static nmCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}">
+                                  Command="{Binding NavigateCommand}" CommandParameter="{x:Static nmCommon:NavigateMessage.WriteCourseNotes}"
+                                  IsChecked="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationCheckedConverter}, ConverterParameter={x:Static nmCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}">
                             <Grid>
-                                <Image Width="16" Height="16" Source="/Notemaker;component/Images/preferences-composer.png" Stretch="Fill" Margin="0 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <Image Width="16" Height="16" Source="/MediaScribe;component/Images/preferences-composer.png" Stretch="Fill" Margin="0 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                 <TextBlock Margin="18 0 0 0" Foreground="White" FontSize="14" VerticalAlignment="Center"><TextBlock.Effect> 
 								    <BlurEffect Radius="4" RenderingBias="Quality" />  
 							    </TextBlock.Effect><Run Text="Write Notes"/></TextBlock>
@@ -115,7 +114,7 @@
                                   Visibility="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationVisibilityConverter}, ConverterParameter={x:Static nmCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}"
                                     ToolTip="Export all notes for the course as an Excel spreadsheet">
                             <Grid>
-                                <Image Width="16" Height="16" Source="/Notemaker;component/Images/archive-insert-2.png" Stretch="Fill" Margin="0 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <Image Width="16" Height="16" Source="/MediaScribe;component/Images/archive-insert-2.png" Stretch="Fill" Margin="0 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                 <TextBlock Margin="18 0 0 0" Foreground="#FF00388D" FontSize="14" VerticalAlignment="Center"><TextBlock.Effect> 
 								    <BlurEffect Radius="4" RenderingBias="Quality" />  
 							    </TextBlock.Effect><Run Text="Export"/></TextBlock>
@@ -132,7 +131,7 @@
                 </StackPanel>
                             <!--" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" Command="{Binding NavigateCommand}" CommandParameter="{x:Static nmCommon:NavigateMessage.MaintainCourse}">
                         <StackPanel>
-                            <Image Source="/Notemaker;component/Images/system-settings-2.png" Height="48" Width="48" />
+                            <Image Source="/MediaScribe;component/Images/system-settings-2.png" Height="48" Width="48" />
                             <TextBlock HorizontalAlignment="Center" Style="{StaticResource ChangeMyFonts}">Settings</TextBlock>
                         </StackPanel>
                         </Button>-->
@@ -146,7 +145,7 @@
                             </ContentControl>-->
 
 
-                <!--<nmControls:NavigationButton Grid.Column="4" Text="Review&#13;Notes" MySource="/Notemaker;component/Images/text-x-generic.png" IsEnabled="False" />-->
+                <!--<nmControls:NavigationButton Grid.Column="4" Text="Review&#13;Notes" MySource="/MediaScribe;component/Images/text-x-generic.png" IsEnabled="False" />-->
                             <!--<ContentControl Grid.Column="5">
                                 <Separator Margin="0 10" Style="{StaticResource MySeparatorStyle}">
                                     <Separator.LayoutTransform>
@@ -154,8 +153,8 @@
                                     </Separator.LayoutTransform>
                                 </Separator>
                             </ContentControl>-->
-                            <!--<nmControls:NavigationButton Grid.Column="7" Text="Configure&#13;Tags" MySource="/Notemaker;component/Images/seahorse.png" IsEnabled="False" />-->
-                            <!--<nmControls:NavigationButton Grid.Column="8" Text="Export" MySource="/Notemaker;component/Images/archive-insert-2.png"
+                            <!--<nmControls:NavigationButton Grid.Column="7" Text="Configure&#13;Tags" MySource="/MediaScribe;component/Images/seahorse.png" IsEnabled="False" />-->
+                            <!--<nmControls:NavigationButton Grid.Column="8" Text="Export" MySource="/MediaScribe;component/Images/archive-insert-2.png"
                                                             Command="{Binding ExportCommand}" />-->
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 0 0">
@@ -167,35 +166,35 @@
                                     <ColumnDefinition Width="20"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBox Grid.Column="1" Width="250" VerticalAlignment="Center" Foreground="LightGray" Text="Search notes..." HorizontalAlignment="Right" />
-                                <Image Grid.Column="2" Source="/Notemaker;component/Images/system-search-4.png" Height="24" Width="24" />
+                                <Image Grid.Column="2" Source="/MediaScribe;component/Images/system-search-4.png" Height="24" Width="24" />
                             </Grid>-->
 
-                    <nmControls:NavigationButton Margin="00 -3 5 0" MySource="/Notemaker;component/Images/archive-insert-2.png" Height="48" Width="50"
+                    <nmControls:NavigationButton Margin="00 -3 5 0" MySource="/MediaScribe;component/Images/archive-insert-2.png" Height="48" Width="50"
                                                         Visibility="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationVisibilityConverter}, ConverterParameter={x:Static nmCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}"
                                                         Command="{Binding ExportCommand}" CommandParameter="{x:Static nmCommon:NavigateMessage.ListCourses}"
                                                         ToolTip="Export all notes for the course as an Excel spreadsheet" />
-                    <nmControls:NavigationButton Margin="00 -3 5 0" MySource="/Notemaker;component/Images/fullscreen.png" Height="48" Width="50"
+                    <nmControls:NavigationButton Margin="00 -3 5 0" MySource="/MediaScribe;component/Images/fullscreen.png" Height="48" Width="50"
                                                                 Visibility="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationVisibilityConverter}, ConverterParameter={x:Static nmCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}"
                                                                 Command="{Binding ToggleFullscreenCommand}"
                                                                 ToolTip="Go to Fullscreen mode" />
-                    <nmControls:NavigationButton Margin="00 -3 5 0" MySource="/Notemaker;component/Images/info32.png" Height="48" Width="50"
+                    <nmControls:NavigationButton Margin="00 -3 5 0" MySource="/MediaScribe;component/Images/info32.png" Height="48" Width="50"
                                                                 Command="{Binding ShowAboutDialog}"
                                                                 ToolTip="About" />
                     
-                    <!--<nmControls:NavigationButton Margin="00 0 10 0" Text="Show All&#13;Tracks' Notes" MySource="/Notemaker;component/Images/filter.png" IsEnabled="False"
+                    <!--<nmControls:NavigationButton Margin="00 0 10 0" Text="Show All&#13;Tracks' Notes" MySource="/MediaScribe;component/Images/filter.png" IsEnabled="False"
                                                                 Visibility="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationVisibilityConverter}, ConverterParameter={x:Static nmCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}"
                                                                 ToolTip="Toggle between showing notes for the entire course, or only the selected track"/>
-                    <nmControls:NavigationButton Margin="00 0 10 0" Text="Lock Edit" MySource="/Notemaker;component/Images/system-config-rootpassword.png" IsEnabled="False"
+                    <nmControls:NavigationButton Margin="00 0 10 0" Text="Lock Edit" MySource="/MediaScribe;component/Images/system-config-rootpassword.png" IsEnabled="False"
                                                                 Visibility="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationVisibilityConverter}, ConverterParameter={x:Static nmCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}"/>-->
                             
                             
-                    <!--<nmControls:NavigationButton Margin="00 0 10 0" Text="Show Two&#13;Lists" MySource="/Notemaker;component/Images/two_columns.png" IsEnabled="False"
+                    <!--<nmControls:NavigationButton Margin="00 0 10 0" Text="Show Two&#13;Lists" MySource="/MediaScribe;component/Images/two_columns.png" IsEnabled="False"
                                                                 Visibility="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationVisibilityConverter}, ConverterParameter={x:Static nmCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}"/>-->
-                            <!--<nmControls:NavigationButton Grid.Column="14" Text="Sort List" MySource="/Notemaker;component/Images/view-sort-descending.png" IsEnabled="False" />
-                            <nmControls:NavigationButton Grid.Column="15" Text="Filter List" MySource="/Notemaker;component/Images/filter.png" IsEnabled="False" />
-                            <nmControls:NavigationButton Grid.Column="16" Text="Change List&#13;Font Size" MySource="/Notemaker;component/Images/fonts.png" IsEnabled="False" />-->
+                            <!--<nmControls:NavigationButton Grid.Column="14" Text="Sort List" MySource="/MediaScribe;component/Images/view-sort-descending.png" IsEnabled="False" />
+                            <nmControls:NavigationButton Grid.Column="15" Text="Filter List" MySource="/MediaScribe;component/Images/filter.png" IsEnabled="False" />
+                            <nmControls:NavigationButton Grid.Column="16" Text="Change List&#13;Font Size" MySource="/MediaScribe;component/Images/fonts.png" IsEnabled="False" />-->
                             
-                    <!--<nmControls:NavigationButton Margin="00 0 10 0" Text="Change List&#13;Columns" MySource="/Notemaker;component/Images/view-file-columns.png" IsEnabled="False"
+                    <!--<nmControls:NavigationButton Margin="00 0 10 0" Text="Change List&#13;Columns" MySource="/MediaScribe;component/Images/view-file-columns.png" IsEnabled="False"
                                                                 Visibility="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationVisibilityConverter}, ConverterParameter={x:Static nmCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}"/>-->
                     <ContentControl Margin="0 0 5 0" />
                 </StackPanel>

@@ -8,9 +8,9 @@ using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Documents;
 using System.ComponentModel;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 
-namespace JayDev.Notemaker.Converters
+namespace JayDev.MediaScribe.Converters
 {
     public class EnumToStringConverter : IValueConverter
     {

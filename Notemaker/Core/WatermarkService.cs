@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 
-namespace JayDev.Notemaker.Core
+namespace JayDev.MediaScribe.Core
 {
 
     /// <summary>

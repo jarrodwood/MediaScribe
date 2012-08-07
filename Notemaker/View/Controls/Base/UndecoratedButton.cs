@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Controls.Primitives;
 
-namespace JayDev.Notemaker.View.Controls
+namespace JayDev.MediaScribe.View.Controls
 {
 	public class UndecoratedButton : ButtonBase
 	{

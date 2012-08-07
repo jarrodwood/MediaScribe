@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LibMPlayerCommon;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using System.Timers;
 using System.Diagnostics;
 
-namespace JayDev.Notemaker.ViewModel
+namespace JayDev.MediaScribe.ViewModel
 {
     public class MediaPlayer : ViewModelBase
     {

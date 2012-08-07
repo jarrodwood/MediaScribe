@@ -12,13 +12,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Controls.Primitives;
-using JayDev.Notemaker.ViewModel;
+using JayDev.MediaScribe.ViewModel;
 using System.Windows.Threading;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 using System.Timers;
-using Notemaker.Common;
+using MediaScribe.Common;
 
-namespace JayDev.Notemaker.View
+namespace JayDev.MediaScribe.View
 {
     /// <summary>
     /// Interaction logic for CourseUseView.xaml

@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using System.Windows;
 using System.ComponentModel;
 
-namespace JayDev.Notemaker
+namespace JayDev.MediaScribe
 {
     [DataContract]
     [Serializable]
@@ -31,6 +31,7 @@ namespace JayDev.Notemaker
 
         public virtual int? OrderNumber { get; set; }
 
+        public virtual long? FileSize { get; set; }
 
         public virtual event PropertyChangedEventHandler PropertyChanged;
 

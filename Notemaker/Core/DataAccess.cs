@@ -6,16 +6,16 @@ using System.Runtime.Serialization;
 using System.IO;
 using System.Xml;
 using System.Text.RegularExpressions;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 using System.Data.SQLite;
 
-namespace JayDev.Notemaker
+namespace JayDev.MediaScribe
 {
     public static class DataAccess
     {
         #region Constants
 
-        private static readonly string ApplicationFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Notemaker";
+        private static readonly string ApplicationFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\MediaScribe";
         private static readonly string GenericFilePath = ApplicationFolderPath + @"\{0}";
         private static readonly string CourseListFileName = "CourseList.xml";
         private static readonly string CourseListFilePath = string.Format(GenericFilePath, CourseListFileName);
@@ -153,7 +153,7 @@ namespace JayDev.Notemaker
 
             //if (null == conn)
             //{
-            //    string dbFilePath = string.Format(GenericFilePath, "NotemakerTest.db");
+            //    string dbFilePath = string.Format(GenericFilePath, "MediaScribeTest.db");
             //    conn = new SQLiteConnection(@"Data Source=" + dbFilePath + ";Version=3;");
             //}
 

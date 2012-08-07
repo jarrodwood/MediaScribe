@@ -1,14 +1,14 @@
-﻿<UserControl x:Class="JayDev.Notemaker.View.Controls.MediaControlsControl"
+﻿<UserControl x:Class="JayDev.MediaScribe.View.Controls.MediaControlsControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="102" d:DesignWidth="916"
-             xmlns:nmCommon="clr-namespace:JayDev.Notemaker.Common"
-             xmlns:nmControls="clr-namespace:JayDev.Notemaker.View.Controls"
-             xmlns:nmConverters="clr-namespace:JayDev.Notemaker.Converters"
-             xmlns:local="clr-namespace:JayDev.Notemaker.Core"
+             xmlns:nmCommon="clr-namespace:JayDev.MediaScribe.Common"
+             xmlns:nmControls="clr-namespace:JayDev.MediaScribe.View.Controls"
+             xmlns:nmConverters="clr-namespace:JayDev.MediaScribe.Converters"
+             xmlns:local="clr-namespace:JayDev.MediaScribe.Core"
              x:Name="MediaControlsControlName" Background="Transparent">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -288,13 +288,13 @@
                 </Grid.ColumnDefinitions>
                 <!--<Button Grid.Column="0" Template="{StaticResource SpeakerIcon}"/>-->
                 <!--<Label Grid.Column="1" HorizontalAlignment="Right">Volume</Label>-->
-                <!--<nmControls:ImageButton Grid.Column="1" Height="40" Width="40" MySource="/Notemaker;component/Images/stock_volume-max.png" Command="{Binding CreateCourseCommand}">
+                <!--<nmControls:ImageButton Grid.Column="1" Height="40" Width="40" MySource="/MediaScribe;component/Images/stock_volume-max.png" Command="{Binding CreateCourseCommand}">
                 </nmControls:ImageButton>-->
                 <Grid Grid.Column="1">
-                    <Image Source="/Notemaker;component/Images/stock_volume-mute.png" Margin="0,0,0,0" Width="33" Height="33" Visibility="{Binding ElementName=MediaControlsControlName, Path=Volume, Converter={StaticResource muteVolumeConverter}}" />
-                    <Image Source="/Notemaker;component/Images/stock_volume-min.png" Margin="0,1,0,0" Width="32" Height="32" Visibility="{Binding ElementName=MediaControlsControlName, Path=Volume, Converter={StaticResource minVolumeConverter}}" />
-                    <Image Source="/Notemaker;component/Images/stock_volume-med.png" Margin="0,1,0,0" Width="32" Height="32" Visibility="{Binding ElementName=MediaControlsControlName, Path=Volume, Converter={StaticResource medVolumeConverter}}" />
-                    <Image Source="/Notemaker;component/Images/stock_volume-max.png" Margin="0,1,0,0" Width="32" Height="32" Visibility="{Binding ElementName=MediaControlsControlName, Path=Volume, Converter={StaticResource maxVolumeConverter}}" />
+                    <Image Source="/MediaScribe;component/Images/stock_volume-mute.png" Margin="0,0,0,0" Width="33" Height="33" Visibility="{Binding ElementName=MediaControlsControlName, Path=Volume, Converter={StaticResource muteVolumeConverter}}" />
+                    <Image Source="/MediaScribe;component/Images/stock_volume-min.png" Margin="0,1,0,0" Width="32" Height="32" Visibility="{Binding ElementName=MediaControlsControlName, Path=Volume, Converter={StaticResource minVolumeConverter}}" />
+                    <Image Source="/MediaScribe;component/Images/stock_volume-med.png" Margin="0,1,0,0" Width="32" Height="32" Visibility="{Binding ElementName=MediaControlsControlName, Path=Volume, Converter={StaticResource medVolumeConverter}}" />
+                    <Image Source="/MediaScribe;component/Images/stock_volume-max.png" Margin="0,1,0,0" Width="32" Height="32" Visibility="{Binding ElementName=MediaControlsControlName, Path=Volume, Converter={StaticResource maxVolumeConverter}}" />
                 </Grid>
                 <Slider VerticalAlignment="Center" Grid.Column="2" Maximum="100" Minimum="0"  Value="{Binding ElementName=MediaControlsControlName, Path=Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>

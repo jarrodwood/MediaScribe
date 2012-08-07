@@ -6,14 +6,14 @@ using System.Linq;
 using System.Windows;
 using Microsoft.Shell;
 
-namespace JayDev.Notemaker
+namespace JayDev.MediaScribe
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application, ISingleInstanceApp
     {
-        private const string Unique = "Notemaker";
+        private const string Unique = "MediaScribe";
 
         [STAThread]
         public static void Main()

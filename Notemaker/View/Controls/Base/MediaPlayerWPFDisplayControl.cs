@@ -3,13 +3,13 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Diagnostics;
 using System;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 using System.Windows;
 using GalaSoft.MvvmLight.Messaging;
 using System.Timers;
-using JayDev.Notemaker.Core;
+using JayDev.MediaScribe.Core;
 
-namespace JayDev.Notemaker.View.Controls
+namespace JayDev.MediaScribe.View.Controls
 {
     /// <summary>
     /// Visualiztion control

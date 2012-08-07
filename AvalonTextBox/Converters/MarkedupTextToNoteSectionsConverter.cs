@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Data;
 using System.Globalization;
 using System.Windows.Media;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 
 namespace AvalonTextBox.Converters
 {

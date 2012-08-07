@@ -16,10 +16,10 @@ using System.Linq;
 using System.Diagnostics;
 using System.ComponentModel;
 using System.Collections;
-using JayDev.Notemaker.Core;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Core;
+using JayDev.MediaScribe.Common;
 
-namespace JayDev.Notemaker.View.Controls
+namespace JayDev.MediaScribe.View.Controls
 {
 
     public class DragEnabledDataGrid : DataGrid

@@ -7,7 +7,7 @@ using System.Windows.Media;
 using System.Globalization;
 using System.Windows;
 
-namespace JayDev.Notemaker.Converters
+namespace JayDev.MediaScribe.Converters
 {
     public class NullConverter<T> : IValueConverter
     {

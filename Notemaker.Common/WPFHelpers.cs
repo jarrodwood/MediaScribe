@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace JayDev.Notemaker.Common
+namespace JayDev.MediaScribe.Common
 {
   /// <summary>
   /// Common UI related helper methods.

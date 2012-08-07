@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace JayDev.Notemaker.View.Controls
+namespace JayDev.MediaScribe.View.Controls
 {
     public class DelayedDataGridTextColumn : DataGridTextColumn
     {

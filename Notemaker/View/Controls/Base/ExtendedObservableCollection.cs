@@ -4,7 +4,7 @@ using System.Collections;
 using System;
 using System.Windows.Threading;
 
-namespace JayDev.Notemaker.View.Controls
+namespace JayDev.MediaScribe.View.Controls
 {
     /// <summary>
     /// supports bulks adding. ref: http://stackoverflow.com/questions/7687000/fast-performing-and-thread-safe-observable-collection

@@ -5,11 +5,11 @@ using System.Text;
 using GalaSoft.MvvmLight.Command;
 using System.Windows;
 using System.Windows.Media;
-using JayDev.Notemaker.View.Controls;
+using JayDev.MediaScribe.View.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Forms;
 
-namespace JayDev.Notemaker.ViewModel
+namespace JayDev.MediaScribe.ViewModel
 {
     public class ViewModelBase : GalaSoft.MvvmLight.ViewModelBase
     {

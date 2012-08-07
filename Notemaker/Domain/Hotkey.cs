@@ -12,11 +12,11 @@ using System.Globalization;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 
-namespace JayDev.Notemaker
+namespace JayDev.MediaScribe
 {
-    public class Hotkey : JayDev.Notemaker.Common.HotkeyBase, INotifyPropertyChanged
+    public class Hotkey : JayDev.MediaScribe.Common.HotkeyBase, INotifyPropertyChanged
     {
 
         public virtual int? ID { get; set; }

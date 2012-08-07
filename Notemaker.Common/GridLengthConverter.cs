@@ -6,7 +6,7 @@ using System.Windows.Data;
 using System.Windows;
 using System.Globalization;
 
-namespace JayDev.Notemaker.Common
+namespace JayDev.MediaScribe.Common
 {
     /// <summary>
     /// Used to set the value of WPF grid column widths or row heights - ref http://stackoverflow.com/questions/147908/how-do-i-databind-a-columndefinitions-width-or-rowdefinitions-height

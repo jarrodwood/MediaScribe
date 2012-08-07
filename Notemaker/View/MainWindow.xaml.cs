@@ -10,23 +10,32 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using JayDev.Notemaker.ViewModel;
-using JayDev.Notemaker.Model;
+using JayDev.MediaScribe.ViewModel;
+using JayDev.MediaScribe.Model;
 using System.Collections.ObjectModel;
 using LibMPlayerCommon;
 using GalaSoft.MvvmLight.Messaging;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 using System.Diagnostics;
 using System.Windows.Interop;
 using Microsoft.Windows.Shell;
 
-namespace JayDev.Notemaker.View
+namespace JayDev.MediaScribe.View
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow
     {
+        private const string DEFAULT_TITLE = "MediaScribe";
+        public string DefaultTitle
+        {
+            get
+            {
+                return DEFAULT_TITLE;
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();

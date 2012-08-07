@@ -3,7 +3,7 @@ using System.Runtime;
 using System.Reflection;
 using System.Linq;
 
-namespace JayDev.Notemaker.Common
+namespace JayDev.MediaScribe.Common
 {
     public static class Extensions
     {

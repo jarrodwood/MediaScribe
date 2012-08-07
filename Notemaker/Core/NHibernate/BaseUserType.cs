@@ -2,7 +2,7 @@
 using NHibernate.UserTypes;
 using System.Data;
 
-namespace JayDev.Notemaker.Core
+namespace JayDev.MediaScribe.Core
 {
     public abstract class BaseUserType<T> : IUserType
     {

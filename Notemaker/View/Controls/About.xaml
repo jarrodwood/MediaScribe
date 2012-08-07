@@ -1,11 +1,11 @@
-﻿<Window x:Class="JayDev.Notemaker.View.Controls.About"
+﻿<Window x:Class="JayDev.MediaScribe.View.Controls.About"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500"
-             xmlns:local="clr-namespace:JayDev.Notemaker.View.Controls"
+             xmlns:local="clr-namespace:JayDev.MediaScribe.View.Controls"
         >
 
     <Grid x:Name="LayoutRoot">
@@ -25,7 +25,7 @@
             <Grid>
             <StackPanel HorizontalAlignment="Center">
                 <TextBlock FontSize="16" Margin="0 65 0 0" HorizontalAlignment="Center" Foreground="#FF3F3F3F">
-                Media Notemaker
+                MediaScribe
                 </TextBlock>
                 <Separator Margin="0 10 0 0" Width="200"></Separator>
                 <TextBlock FontSize="12" Margin="0 25 0 0" HorizontalAlignment="Center" Foreground="#FF3F3F3F">
@@ -35,7 +35,7 @@
                 Please find updates at
                 </TextBlock>
                 <TextBlock FontSize="12" Margin="0 0 0 0" HorizontalAlignment="Center" Foreground="#FF3F3F3F">
-				<Hyperlink>www.jarrod.co.nz/MediaNotemaker/</Hyperlink>
+				<Hyperlink>www.jarrod.co.nz/MediaScribe/</Hyperlink>
                 </TextBlock>
                 <TextBlock FontSize="12" Margin="0 25 0 0" HorizontalAlignment="Center" Foreground="#FF3F3F3F">
                 Copyright © 2012 by Jarrod Wood

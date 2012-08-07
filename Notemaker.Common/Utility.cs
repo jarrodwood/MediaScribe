@@ -8,7 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Runtime.Serialization;
 
-namespace JayDev.Notemaker.Common
+namespace JayDev.MediaScribe.Common
 {
 
     public static class Utility

@@ -7,7 +7,7 @@ using System.IO;
 using AvalonTextBox;
 using System.Drawing;
 
-namespace JayDev.Notemaker.Core
+namespace JayDev.MediaScribe.Core
 {
     public class XslsExporter
     {
@@ -25,7 +25,7 @@ namespace JayDev.Notemaker.Core
         public void CreateSpreadsheet(Stream streamToSaveTo, List<Track> tracks, List<Note> notes)
         {
             ExcelPackage package = new ExcelPackage(streamToSaveTo);
-            ExcelWorksheet ws = CreateSheet(package, "Notemaker Export");
+            ExcelWorksheet ws = CreateSheet(package, "MediaScribe Export");
             ws.Cells[1, 1].Style.Font.Size = 13;
             ws.Cells[1, 1].Value = "Tracks:";
             ws.Cells[2, 1].Value = "Track Number";

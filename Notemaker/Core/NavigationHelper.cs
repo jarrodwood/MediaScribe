@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 
-namespace JayDev.Notemaker.Core
+namespace JayDev.MediaScribe.Core
 {
     class NavigationHelper
     {

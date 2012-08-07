@@ -5,9 +5,9 @@ using System.Text;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Globalization;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 
-namespace JayDev.Notemaker.Converters
+namespace JayDev.MediaScribe.Converters
 {
     class ColourToNameStringConverter : IValueConverter
     {

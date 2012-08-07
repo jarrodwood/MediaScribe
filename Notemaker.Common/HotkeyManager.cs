@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 using GalaSoft.MvvmLight.Messaging;
 using System.Windows.Input;
 
-namespace Notemaker.Common
+namespace MediaScribe.Common
 {
     public class HotkeyManager
     {

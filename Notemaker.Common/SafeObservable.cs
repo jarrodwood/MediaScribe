@@ -6,7 +6,7 @@ using System.Collections.Specialized;
 using System.Threading;
 using System.Windows.Threading;
 
-namespace JayDev.Notemaker.Common
+namespace JayDev.MediaScribe.Common
 {
     /// <summary>
     /// A threadsafe observable collection. ref: http://www.deanchalk.me.uk/post/Thread-Safe-Dispatcher-Safe-Observable-Collection-for-WPF.aspx

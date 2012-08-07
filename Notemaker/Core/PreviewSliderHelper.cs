@@ -8,9 +8,9 @@ using System.Windows.Media;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Shapes;
-using JayDev.Notemaker.View.Controls;
+using JayDev.MediaScribe.View.Controls;
 
-namespace JayDev.Notemaker.Core
+namespace JayDev.MediaScribe.Core
 {
    public static class SliderPreviewHelper
     {

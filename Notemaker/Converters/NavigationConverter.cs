@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Data;
 using System.Windows;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 
-namespace JayDev.Notemaker.Converters
+namespace JayDev.MediaScribe.Converters
 {
     public class NavigationCheckedConverter : IValueConverter
     {

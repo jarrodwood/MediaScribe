@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using JayDev.Notemaker.Model;
+using JayDev.MediaScribe.Model;
 using GalaSoft.MvvmLight.Command;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections.ObjectModel;
 using LibMPlayerCommon;
 using System.Windows.Threading;
 using System.Windows.Input;
 using System.Windows.Media;
-using JayDev.Notemaker.View;
-using JayDev.Notemaker.Core;
-using Notemaker.Common;
+using JayDev.MediaScribe.View;
+using JayDev.MediaScribe.Core;
+using MediaScribe.Common;
 
-namespace JayDev.Notemaker.ViewModel
+namespace JayDev.MediaScribe.ViewModel
 {
     public class SettingsViewModel : ViewModelBase
     {

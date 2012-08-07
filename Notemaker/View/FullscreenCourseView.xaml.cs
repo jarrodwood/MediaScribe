@@ -11,18 +11,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using JayDev.Notemaker.ViewModel;
+using JayDev.MediaScribe.ViewModel;
 using System.Timers;
-using JayDev.Notemaker.View.Controls;
+using JayDev.MediaScribe.View.Controls;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Command;
 using System.Diagnostics;
-using JayDev.Notemaker.Common;
-using JayDev.Notemaker.Core;
-using Notemaker.Common;
+using JayDev.MediaScribe.Common;
+using JayDev.MediaScribe.Core;
+using MediaScribe.Common;
 
-namespace JayDev.Notemaker.View
+namespace JayDev.MediaScribe.View
 {
     /// <summary>
     /// Interaction logic for FullscreenCourseView.xaml

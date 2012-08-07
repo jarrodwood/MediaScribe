@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-namespace JayDev.Notemaker.Core
+namespace JayDev.MediaScribe.Core
 {
     public static class AnonymousComparer
     {

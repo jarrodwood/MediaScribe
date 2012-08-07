@@ -11,9 +11,9 @@ using ICSharpCode.AvalonEdit;
 using System.Windows.Documents;
 using AvalonTextBox.Converters;
 using System.Windows.Input;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 using GalaSoft.MvvmLight.Messaging;
-using Notemaker.Common;
+using MediaScribe.Common;
 
 namespace AvalonTextBox
 {

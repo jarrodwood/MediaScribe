@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace JayDev.Notemaker
+namespace JayDev.MediaScribe
 {
     [DataContract]
     public class Tag

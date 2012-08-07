@@ -5,10 +5,10 @@ using System.Text;
 using System.Windows.Data;
 using System.Globalization;
 using System.Windows;
-using JayDev.Notemaker.Core;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Core;
+using JayDev.MediaScribe.Common;
 
-namespace JayDev.Notemaker.Converters
+namespace JayDev.MediaScribe.Converters
 {
 
     public class PauseButtonVisibilityConverter : IValueConverter

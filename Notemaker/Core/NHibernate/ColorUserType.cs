@@ -4,9 +4,9 @@ using System.Data;
 using System.Windows.Media;
 using System.Text;
 using System;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 
-namespace JayDev.Notemaker.Core
+namespace JayDev.MediaScribe.Core
 {
     public class ColorUserType : BaseUserType<Color>
     {

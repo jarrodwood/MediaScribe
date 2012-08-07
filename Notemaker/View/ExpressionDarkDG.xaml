@@ -8,7 +8,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
                     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
-                        xmlns:notemakerCommon="clr-namespace:JayDev.Notemaker.Common"
+                        xmlns:MediaScribeCommon="clr-namespace:JayDev.MediaScribe.Common"
                     xmlns:primitives="clr-namespace:System.Windows.Controls.Primitives;assembly=PresentationFramework"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     >
@@ -411,7 +411,7 @@
 
 
     <!--DataGrid -->
-    <Style TargetType='{x:Type notemakerCommon:DragEnabledDataGrid}'>
+    <Style TargetType='{x:Type MediaScribeCommon:DragEnabledDataGrid}'>
 
         <Setter Property="Foreground" Value="#333" />
         <Setter Property='ScrollViewer.CanContentScroll' Value='False' />

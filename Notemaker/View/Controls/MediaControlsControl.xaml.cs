@@ -12,12 +12,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using GalaSoft.MvvmLight.Command;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 using System.Timers;
 using System.Windows.Threading;
-using JayDev.Notemaker.Converters;
+using JayDev.MediaScribe.Converters;
 
-namespace JayDev.Notemaker.View.Controls
+namespace JayDev.MediaScribe.View.Controls
 {
     /// <summary>
     /// Interaction logic for MediaControlsControl.xaml

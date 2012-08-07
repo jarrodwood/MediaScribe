@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 using System.ComponentModel;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 using System.Reflection;
 using System.Collections.ObjectModel;
 
-namespace JayDev.Notemaker
+namespace JayDev.MediaScribe
 {
     [Serializable]
     public class Note : INotifyPropertyChanged, IEditableObject, ICloneable

@@ -1,13 +1,13 @@
-﻿<UserControl x:Class="JayDev.Notemaker.View.CourseListView"
+﻿<UserControl x:Class="JayDev.MediaScribe.View.CourseListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d"
-             xmlns:nmControls="clr-namespace:JayDev.Notemaker.View.Controls"
-             xmlns:nmCommon="clr-namespace:JayDev.Notemaker.Common;assembly=Notemaker.Common"
-             xmlns:nmCore="clr-namespace:JayDev.Notemaker.Core"
-             xmlns:nmConverters="clr-namespace:JayDev.Notemaker.Converters"
+             xmlns:nmControls="clr-namespace:JayDev.MediaScribe.View.Controls"
+             xmlns:nmCommon="clr-namespace:JayDev.MediaScribe.Common;assembly=MediaScribe.Common"
+             xmlns:nmCore="clr-namespace:JayDev.MediaScribe.Core"
+             xmlns:nmConverters="clr-namespace:JayDev.MediaScribe.Converters"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"         
              xmlns:effect="clr-namespace:GrayscaleEffect;assembly=GrayscaleEffect"
@@ -55,10 +55,10 @@
                 <DockPanel>
                     <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                     <StackPanel>
-                        <GroupBox Header="Welcome to Notemaker!"  Foreground="#FF3F3F3F" Margin="10 10 10 10" Padding="10" BorderBrush="#FF75B2DE">
+                        <GroupBox Header="Welcome to MediaScribe!"  Foreground="#FF3F3F3F" Margin="10 10 10 10" Padding="10" BorderBrush="#FF75B2DE">
                             <TextBlock TextWrapping="Wrap">
                                 To get started, create a course in the list below, by clicking in the + button. You can type in a name,
-                                select the tracks for the course (Notemaker supports virtually any type of video or audio files), then once
+                                select the tracks for the course (MediaScribe supports virtually any type of video or audio files), then once
                                 you save you can click on the 'Go To Course' button to begin writing notes for your course.
                                 <LineBreak />
                                 <LineBreak />
@@ -93,9 +93,9 @@
                                         </Button>
 
 
-                                        <!--<nmControls:ImageButton MySource="/Notemaker;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding CreateCourseCommand}" />
+                                        <!--<nmControls:ImageButton MySource="/MediaScribe;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding CreateCourseCommand}" />
 
-                                        <nmControls:ImageButton MySource="/Notemaker;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteCourseCommand}" CommandParameter="{x:Static nmCommon:NavigateMessage.ListCourses}" />-->
+                                        <nmControls:ImageButton MySource="/MediaScribe;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteCourseCommand}" CommandParameter="{x:Static nmCommon:NavigateMessage.ListCourses}" />-->
 
                                     </StackPanel>
                                 </StackPanel>
@@ -251,9 +251,9 @@
                                                         <Path Data="M35,0 L70,0 70,30 100,30 100,70 70,70 70,100 30,100 30,70 0,70 0,30 35,30 z" Margin="0 0 0 0" Stretch="Fill" Width="13.5" Height="13" Style="{DynamicResource PlusStyle}"/>
                                                     </Button>
 
-                                                    <!--<nmControls:ImageButton MySource="/Notemaker;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding AddTracksCommand}" />
+                                                    <!--<nmControls:ImageButton MySource="/MediaScribe;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding AddTracksCommand}" />
 
-                                                    <nmControls:ImageButton MySource="/Notemaker;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteTracksCommand}" CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}" />-->
+                                                    <nmControls:ImageButton MySource="/MediaScribe;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteTracksCommand}" CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}" />-->
 
                                                 </StackPanel>
                                             </StackPanel>
@@ -338,9 +338,9 @@
                                                         <Path Data="M35,0 L70,0 70,30 100,30 100,70 70,70 70,100 30,100 30,70 0,70 0,30 35,30 z" Margin="0 0 0 0" Stretch="Fill" Width="13.5" Height="13" Style="{DynamicResource PlusStyle}"/>
                                                     </Button>
 
-                                                    <!--<nmControls:ImageButton MySource="/Notemaker;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding AddTracksCommand}" />
+                                                    <!--<nmControls:ImageButton MySource="/MediaScribe;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding AddTracksCommand}" />
 
-                                                    <nmControls:ImageButton MySource="/Notemaker;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteTracksCommand}" CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}" />-->
+                                                    <nmControls:ImageButton MySource="/MediaScribe;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteTracksCommand}" CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}" />-->
 
                                                 </StackPanel>
                                             </StackPanel>

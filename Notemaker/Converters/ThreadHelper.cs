@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Threading;
 using System.ComponentModel;
 
-namespace JayDev.Notemaker.Common
+namespace JayDev.MediaScribe.Common
 {
     public enum ExecuteBehaviour { Sync, Async }
     public static class ThreadHelper

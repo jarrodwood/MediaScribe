@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 
-namespace JayDev.Notemaker.Core
+namespace JayDev.MediaScribe.Core
 {
     public class DebugTextWriter : StreamWriter
     {

@@ -17,10 +17,10 @@ using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Windows.Controls.Primitives;
 using System.ComponentModel;
 using System.Diagnostics;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 using GalaSoft.MvvmLight.Command;
 
-namespace JayDev.Notemaker.View.Controls
+namespace JayDev.MediaScribe.View.Controls
 {
     /// <summary>
     /// Interaction logic for NotesGridControl.xaml

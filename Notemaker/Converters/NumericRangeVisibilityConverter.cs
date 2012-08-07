@@ -6,7 +6,7 @@ using System.Windows.Data;
 using System.Globalization;
 using System.Windows;
 
-namespace JayDev.Notemaker.Converters
+namespace JayDev.MediaScribe.Converters
 {
     public class NumericRangeVisibilityConverter : IValueConverter
     {

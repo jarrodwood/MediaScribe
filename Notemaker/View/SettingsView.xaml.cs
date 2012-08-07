@@ -11,11 +11,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using JayDev.Notemaker.ViewModel;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.ViewModel;
+using JayDev.MediaScribe.Common;
 using System.Collections;
 
-namespace JayDev.Notemaker.View
+namespace JayDev.MediaScribe.View
 {
     /// <summary>
     /// Interaction logic for SettingsView.xaml

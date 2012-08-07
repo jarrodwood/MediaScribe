@@ -16,9 +16,9 @@ using System.Linq;
 using System.Diagnostics;
 using System.ComponentModel;
 using System.Collections;
-using JayDev.Notemaker.View.Controls;
+using JayDev.MediaScribe.View.Controls;
 
-namespace JayDev.Notemaker.Core
+namespace JayDev.MediaScribe.Core
 {
     public class MoveItemsCommandParameter
     {

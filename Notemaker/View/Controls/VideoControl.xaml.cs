@@ -15,12 +15,12 @@ using GalaSoft.MvvmLight.Command;
 using System.Diagnostics;
 using System.Timers;
 
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 using System.ComponentModel;
 using GalaSoft.MvvmLight.Messaging;
-using JayDev.Notemaker.Core;
+using JayDev.MediaScribe.Core;
 
-namespace JayDev.Notemaker.View.Controls
+namespace JayDev.MediaScribe.View.Controls
 {
     /// <summary>
     /// Interaction logic for VideoControl.xaml

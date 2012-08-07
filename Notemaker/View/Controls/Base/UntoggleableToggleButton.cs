@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Controls.Primitives;
 
-namespace JayDev.Notemaker.View.Controls
+namespace JayDev.MediaScribe.View.Controls
 {
     public class UntoggleableToggleButton : ToggleButton
     {

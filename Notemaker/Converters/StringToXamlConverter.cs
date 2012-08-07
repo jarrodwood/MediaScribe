@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Windows.Markup;
 using System.IO;
 
-namespace JayDev.Notemaker.Converters
+namespace JayDev.MediaScribe.Converters
 {
     class StringToXamlConverter :IValueConverter
     {

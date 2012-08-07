@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using JayDev.Notemaker.Core;
+using JayDev.MediaScribe.Core;
 using NHibernate;
 using NHibernate.Criterion;
 
-namespace JayDev.Notemaker.Model
+namespace JayDev.MediaScribe.Model
 {
     public class CourseRepository
     {
@@ -83,6 +83,7 @@ namespace JayDev.Notemaker.Model
                     if (null == course.ID)
                     {
                         course.DateCreated = DateTime.Now;
+                        course.DateViewed = DateTime.Now;
                         session.Save(course);
                     }
                     else

@@ -12,9 +12,9 @@ using System.Globalization;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 
-namespace JayDev.Notemaker.Common
+namespace JayDev.MediaScribe.Common
 {
     public class HotkeyBase
     {

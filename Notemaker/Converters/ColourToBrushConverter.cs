@@ -6,7 +6,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Globalization;
 
-namespace JayDev.Notemaker.Converters
+namespace JayDev.MediaScribe.Converters
 {
     class ColourToBrushConverter : IValueConverter
     {

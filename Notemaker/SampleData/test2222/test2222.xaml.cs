@@ -27,7 +27,7 @@ namespace Expression.Blend.SampleData.test2222
 		{
 			try
 			{
-				System.Uri resourceUri = new System.Uri("/Notemaker;component/SampleData/test2222/test2222.xaml", System.UriKind.Relative);
+				System.Uri resourceUri = new System.Uri("/MediaScribe;component/SampleData/test2222/test2222.xaml", System.UriKind.Relative);
 				if (System.Windows.Application.GetResourceStream(resourceUri) != null)
 				{
 					System.Windows.Application.LoadComponent(this, resourceUri);

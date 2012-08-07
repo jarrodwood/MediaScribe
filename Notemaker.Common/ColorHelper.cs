@@ -6,7 +6,7 @@ using System.Windows.Media;
 using System.Reflection;
 using System.Globalization;
 
-namespace JayDev.Notemaker.Common
+namespace JayDev.MediaScribe.Common
 {
     public static class ColorHelper
     {
@@ -18,7 +18,7 @@ namespace JayDev.Notemaker.Common
         {
             if (color == ApplicationDefaultTextColour)
             {
-                return "Notemaker default";
+                return "MediaScribe default";
             }
             string match = _knownColors
                 .Where(kvp => kvp.Value.Equals(color))

@@ -5,7 +5,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Collections.ObjectModel;
 
-namespace JayDev.Notemaker
+namespace JayDev.MediaScribe
 {
     [DataContract]
     public class Course

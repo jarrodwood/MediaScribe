@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using JayDev.Notemaker.Model;
+using JayDev.MediaScribe.Model;
 using GalaSoft.MvvmLight.Command;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.Common;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections.ObjectModel;
 using LibMPlayerCommon;
 using System.Windows.Threading;
-using JayDev.Notemaker.Core;
+using JayDev.MediaScribe.Core;
+using System.IO;
 
-namespace JayDev.Notemaker.ViewModel
+namespace JayDev.MediaScribe.ViewModel
 {
     public class CourseListViewModel : ViewModelBase
     {
@@ -146,6 +147,14 @@ namespace JayDev.Notemaker.ViewModel
                     ?? (_maintenanceModeEditCommand = new RelayCommand(
                                           () =>
                                           {
+                                              if (SelectedCourse.Notes.Count > 0)
+                                              {
+                                                  var openResult = System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Are you sure you want to edit the tracks? Unless you're adding them on the end, this may up your note locations.", "Edit course track list confirmation", System.Windows.MessageBoxButton.YesNo);
+                                                  if (openResult == System.Windows.MessageBoxResult.No)
+                                                  {
+                                                      return;
+                                                  }
+                                              }
                                               MaintenanceMode = Common.MaintenanceMode.Edit;
                                               SaveCourseCommand.RaiseCanExecuteChanged();
                                           }));
@@ -216,6 +225,7 @@ namespace JayDev.Notemaker.ViewModel
                                                   {
                                                       foreach (String file in dlg.FileNames)
                                                       {
+                                                          FileInfo fi = new FileInfo(file);
                                                           Discover discoverer = new Discover(file);
                                                           Track track = new Track()
                                                           {
@@ -223,6 +233,7 @@ namespace JayDev.Notemaker.ViewModel
                                                               Title = discoverer.Title,
                                                               Length = new TimeSpan(0, 0, discoverer.Length),
                                                               IsVideo = discoverer.Video,
+                                                              FileSize = fi.Length,
                                                               AspectRatio = discoverer.Video ? (float?)discoverer.AspectRatio : null
                                                           };
                                                           ThreadHelper.ExecuteAsyncUI(_uiDispatcher, delegate
@@ -610,6 +621,7 @@ namespace JayDev.Notemaker.ViewModel
                 _selectedCourseTracks = value;
                 RaisePropertyChanged(SelectedCourseTracksPropertyName);
                 RaisePropertyChanged(AreTracksExistingInSelectedCoursePropertyName);
+                RaisePropertyChanged(AreCoursesExistingPropertyName);
 
                 if (null == _selectedCourseTracks)
                 {

@@ -21,7 +21,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Interop;
 
 
-namespace JayDev.Notemaker.Core
+namespace JayDev.MediaScribe.Core
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct MARGINS

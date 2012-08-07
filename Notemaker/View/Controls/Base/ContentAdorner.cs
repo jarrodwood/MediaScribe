@@ -7,7 +7,7 @@ using System.Windows.Documents;
 using System.Windows;
 using System.Windows.Media;
 
-namespace JayDev.Notemaker.View.Controls
+namespace JayDev.MediaScribe.View.Controls
 {
     public class ContentAdorner : Adorner
     {

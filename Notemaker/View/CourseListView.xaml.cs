@@ -11,10 +11,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using JayDev.Notemaker.ViewModel;
-using JayDev.Notemaker.Common;
+using JayDev.MediaScribe.ViewModel;
+using JayDev.MediaScribe.Common;
 
-namespace JayDev.Notemaker.View
+namespace JayDev.MediaScribe.View
 {
     /// <summary>
     /// Interaction logic for CourseMaintenanceView.xaml

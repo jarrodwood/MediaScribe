@@ -8,8 +8,8 @@
     <ProjectGuid>{7BE13DBC-C110-469E-92E7-49720938A62E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Notemaker.Common</RootNamespace>
-    <AssemblyName>Notemaker.Common</AssemblyName>
+    <RootNamespace>MediaScribe.Common</RootNamespace>
+    <AssemblyName>MediaScribe.Common</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>

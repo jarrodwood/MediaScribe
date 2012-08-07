@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Controls;
 
-namespace JayDev.Notemaker.Common
+namespace JayDev.MediaScribe.Common
 {
     public enum PlayStatus { Stopped, Playing, Paused }
 
