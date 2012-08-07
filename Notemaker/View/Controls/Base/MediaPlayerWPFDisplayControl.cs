@@ -100,16 +100,19 @@ namespace JayDev.MediaScribe.View.Controls
 
             SetValue(VideoPanelHandlePropertyProperty, _source.Handle);
             return new HandleRef(null, _source.Handle);
+
+            jayCountdown = COUNTDOWN_DEFAULT;
         }
+        const int COUNTDOWN_DEFAULT = 2;
+        int jayCountdown = COUNTDOWN_DEFAULT;
 
         void hoverTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             Messenger.Default.Send("hide", 12345);
             Debug.WriteLine("HIDING NOW");
-            countDown = 4;
+            jayCountdown = COUNTDOWN_DEFAULT;
         }
 
-        int countDown = 0;
         Timer hoverTimer;
         int lastMoveLocation = 0;
         protected override IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
@@ -126,25 +129,26 @@ namespace JayDev.MediaScribe.View.Controls
                 int currentMoveLocation = lParam.ToInt32();
                 if (currentMoveLocation != lastMoveLocation)
                 {
-                    //NOTE: when we hide the controls, the panel gets resized... and that seems to trigger the 'move' event just ONCE. so we
-                    //have a 'countdown' variable, which allows us to have ONE buffer move-event before we re-show the controls.
-                    if (countDown <= 0)
-                    {
-                        Debug.WriteLine("SHOW - from timer");
-                        Messenger.Default.Send("show", 12345);
-                        hoverTimer.Stop();
-                        hoverTimer.Start();
-                    }
-                    else
-                    {
-                        countDown--;
-                    }
+                    jayCountdown = COUNTDOWN_DEFAULT;
+                    hoverTimer.Stop();
+                    ////NOTE: when we hide the controls, the panel gets resized... and that seems to trigger the 'move' event just ONCE. so we
+                    ////have a 'countdown' variable, which allows us to have ONE buffer move-event before we re-show the controls.
+                    //if (jayCountdown <= 0)
+                    //{
+                    //    Debug.WriteLine("SHOW - from timer");
+                    //    Messenger.Default.Send("show", 12345);
+                    //    hoverTimer.Stop();
+                    //}
+                    //else
+                    //{
+                    //    if(hoverTimer.
+                    //    countDown--;
+                    //}
                     lastMoveLocation = currentMoveLocation;
                 }
             }
             if (msg == (int)WM_Messages.WM_MOUSELEAVE)
             {
-                countDown = 4;
                 hoverTimer.Stop();
             }
             else if (msg == (int)WM_Messages.WM_LBUTTONDBLCLK)

@@ -27,7 +27,7 @@ namespace JayDev.MediaScribe.View
         private static SettingsViewModel settingsViewModel;
 
         private static UserControl currentView;
-        private static ViewModelBase currentViewModel;
+        private static ViewModelBase currentViewModel = new ViewModelBase();
 
         private static Controller _instance;
         public static Controller Singleton
@@ -164,6 +164,7 @@ namespace JayDev.MediaScribe.View
                     break;
                 case NavigateMessage.WriteCourseNotes:
                     {
+                        currentViewModel.ViewModelBlur();
                         if (null == args.Course && null == _lastCourse)
                         {
                             throw new ApplicationException("Error - can't write course notes, when we haven't been provided a course to write notes for!");
@@ -175,24 +176,30 @@ namespace JayDev.MediaScribe.View
                         currentViewModel = courseUseViewModel;
                         _mainWindow.Content = currentView;
                         courseUseViewModel.SetCurrentCourse(courseToLoad);
-
+                        
                         //note the last course we had viewed
                         _lastCourse = courseToLoad;
+
+                        currentViewModel.ViewModelFocus();
                     }
                     break;
                 case NavigateMessage.ListCourses:
+                    currentViewModel.ViewModelBlur();
                     CourseListView courseListView = new CourseListView(courseListViewModel);
                     currentView = courseListView;
                     currentViewModel = courseListViewModel;
                     _mainWindow.Content = currentView;
-                    courseListViewModel.Init();
 
+                    currentViewModel.ViewModelFocus();
                     break;
                 case NavigateMessage.Settings:
+                    currentViewModel.ViewModelBlur();
                     SettingsView settingsView = new SettingsView(settingsViewModel);
                     currentView = settingsView;
                     currentViewModel = settingsViewModel;
                     _mainWindow.Content = settingsView;
+
+                    currentViewModel.ViewModelFocus();
                     break;
             }
         }

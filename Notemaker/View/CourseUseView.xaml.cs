@@ -169,6 +169,14 @@ namespace JayDev.MediaScribe.View
                                 e.Handled = true;
                             }
                             break;
+                        case HotkeyFunction.NoteDelete:
+                            if (IsVisible)
+                            {
+                                Note currentNote = notesGrid.CurrentNote;
+                                notesGrid.DeleteSelectedNote.Execute(currentNote);
+                                e.Handled = true;
+                            }
+                            break;
                     }
                 }
             }

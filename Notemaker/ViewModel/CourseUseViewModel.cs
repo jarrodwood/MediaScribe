@@ -959,7 +959,7 @@ namespace JayDev.MediaScribe.ViewModel
 
         #region Constructor
 
-        public CourseUseViewModel(CourseRepository repo)
+        public CourseUseViewModel(CourseRepository repo) : base()
         {
             _repo = repo;
 

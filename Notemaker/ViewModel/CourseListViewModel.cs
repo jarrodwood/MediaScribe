@@ -677,15 +677,12 @@ namespace JayDev.MediaScribe.ViewModel
 
         #region Constructor
 
-        public CourseListViewModel(CourseRepository repo)
+        public CourseListViewModel(CourseRepository repo) : base()
         {
             _repo = repo;
             _uiDispatcher = Dispatcher.CurrentDispatcher;
 
-            Courses = new ObservableCollection<Course>();
-
-            List<Course> courseList = _repo.GetCourseList();
-            Courses = new ObservableCollection<Course>(courseList);
+            LoadCoursesBackground();
         }
 
         #endregion
@@ -706,9 +703,15 @@ namespace JayDev.MediaScribe.ViewModel
 
         #endregion
 
-        public void Init()
+        public override void ViewModelFocus()
         {
-            SelectedCourse = null;
+            LoadCoursesBackground();
+        }
+
+        private void LoadCoursesBackground()
+        {
+            List<Course> courseList = _repo.GetCourseList();
+            Courses = new ObservableCollection<Course>(courseList);
         }
     }
 }

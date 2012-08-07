@@ -22,7 +22,6 @@ namespace JayDev.MediaScribe.ViewModel
         #region Private Members
 
         private SettingRepository _repo;
-        private Dispatcher _uiDispatcher;
 
         #endregion
 
@@ -316,10 +315,9 @@ namespace JayDev.MediaScribe.ViewModel
 
         #region Constructor
 
-        public SettingsViewModel(SettingRepository repo)
+        public SettingsViewModel(SettingRepository repo) : base()
         {
             _repo = repo;
-            _uiDispatcher = Dispatcher.CurrentDispatcher;
 
             var hotkeys = _repo.GetHotkeys();
             Hotkeys = new ObservableCollection<Hotkey>(hotkeys);

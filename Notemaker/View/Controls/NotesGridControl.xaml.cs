@@ -114,7 +114,7 @@ namespace JayDev.MediaScribe.View.Controls
                     ?? (_doNothing = new RelayCommand(
                                           () =>
                                           {
-                                              
+                                              int a = 5;
                                           }));
             }
         }
@@ -183,6 +183,8 @@ namespace JayDev.MediaScribe.View.Controls
             _uiDispatcher = Dispatcher.CurrentDispatcher;
             this.IsVisibleChanged += new DependencyPropertyChangedEventHandler(NotesGridControl_IsVisibleChanged);
            
+
+            
         }
 
 

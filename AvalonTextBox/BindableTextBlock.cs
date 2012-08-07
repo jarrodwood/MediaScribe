@@ -6,12 +6,12 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows;
 using AvalonTextBox.Converters;
+using System.Windows.Media;
 
 namespace AvalonTextBox
 {
     public class BindableTextBlock : TextBlock
     {
-
 
         public string MarkedupText
         {
@@ -22,7 +22,7 @@ namespace AvalonTextBox
         // Using a DependencyProperty as the backing store for MarkedupText.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MarkedupTextProperty =
             DependencyProperty.Register("MarkedupText", typeof(string), typeof(BindableTextBlock), new UIPropertyMetadata(new PropertyChangedCallback((sender, args) => {
-                if (null == args.NewValue)
+                if (null == args.NewValue || string.IsNullOrEmpty((string)args.NewValue))
                 {
                     BindableTextBlock textBlock = sender as BindableTextBlock;
                     textBlock.Text = "Double-click here to write a note...";
@@ -78,5 +78,36 @@ namespace AvalonTextBox
                             textBlock.Inlines.AddRange(inlines);
                     }
                 })));
+
+
+
+
+        public string DefaultText
+        {
+            get { return (string)GetValue(DefaultTextProperty); }
+            set { SetValue(DefaultTextProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for DefaultText.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DefaultTextProperty =
+            DependencyProperty.Register("DefaultText", typeof(string), typeof(BindableTextBlock), new UIPropertyMetadata(OnDefaultTextChanged));
+
+
+
+        public static void OnDefaultTextChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        {
+            string text = args.NewValue as string;
+            if (null != text && false == string.IsNullOrEmpty(text))
+            {
+                BindableTextBlock textblock = (BindableTextBlock)obj;
+                if (null != text && textblock.Inlines.Count == 0)
+                {
+                    Run run = new Run(text);
+                    run.Foreground = new SolidColorBrush(Color.FromArgb(255, 180, 180, 180));
+                    Italic italic = new Italic(run);
+                    textblock.Inlines.Add(italic);
+                }
+            }
+        }
     }
 }

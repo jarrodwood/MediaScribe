@@ -8,12 +8,14 @@ using System.Windows.Media;
 using JayDev.MediaScribe.View.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Forms;
+using System.Windows.Threading;
 
 namespace JayDev.MediaScribe.ViewModel
 {
     public class ViewModelBase : GalaSoft.MvvmLight.ViewModelBase
     {
         private RelayCommand _showAboutDialog;
+        protected Dispatcher _uiDispatcher;
 
         /// <summary>
         /// Gets the ShowAboutDialog.
@@ -48,9 +50,17 @@ namespace JayDev.MediaScribe.ViewModel
             }
         }
 
+        public ViewModelBase() : base()
+        {
+            _uiDispatcher = Dispatcher.CurrentDispatcher;
+        }
 
         public virtual void HandleWindowKeypress(object sender, System.Windows.Input.KeyEventArgs e)
         {
         }
+
+        public virtual void ViewModelFocus() { }
+
+        public virtual void ViewModelBlur() { }
     }
 }
