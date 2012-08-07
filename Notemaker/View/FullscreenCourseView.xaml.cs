@@ -127,6 +127,7 @@ namespace JayDev.Notemaker.View
                         this.mediaControls.Visibility = System.Windows.Visibility.Visible;
                         this.notesGrid.Visibility = System.Windows.Visibility.Visible;
                         Mouse.OverrideCursor = null;
+                        Debug.WriteLine(DateTime.Now.ToLongTimeString() + " override - show");
                     });
                 }
             }
@@ -139,6 +140,7 @@ namespace JayDev.Notemaker.View
                         this.mediaControls.Visibility = System.Windows.Visibility.Collapsed;
                         this.notesGrid.Visibility = System.Windows.Visibility.Collapsed;
                         Mouse.OverrideCursor = Cursors.None;
+                        Debug.WriteLine(DateTime.Now.ToLongTimeString() + " override - none");
                     });
                 }
             }

@@ -106,7 +106,7 @@ namespace JayDev.Notemaker.View.Controls
         {
             Messenger.Default.Send("hide", 12345);
             Debug.WriteLine("HIDING NOW");
-            countDown = 10;
+            countDown = 2;
         }
 
         int countDown = 0;

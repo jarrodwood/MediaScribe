@@ -1009,7 +1009,9 @@ namespace JayDev.Notemaker.ViewModel
                 }
             }
 
-            if (e.PropertyName == VideoPanelPointerPropertyName)
+            //we only want to execute this once, when the video panel pointer is initially set... not afterwrds.
+            if (e.PropertyName == VideoPanelPointerPropertyName
+                && (int)VideoPanelPointer != 0)
             {
                 _player = new MediaPlayer(VideoPanelPointer);
                 _player.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(_player_PropertyChanged);

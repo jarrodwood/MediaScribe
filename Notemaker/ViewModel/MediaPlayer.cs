@@ -247,7 +247,7 @@ namespace JayDev.Notemaker.ViewModel
             if (_play.CurrentStatus == MediaStatus.Playing)
             {
                 TimeSpan newTime = new TimeSpan(0, 0, _play.CurrentPosition());
-                Debug.WriteLine("Ticker. recorded position: {0}, mplayer position: {1}. Within scope: {2}", CurrentPlayPosition.ToString(), newTime.ToString(), Math.Abs(newTime.TotalSeconds - CurrentPlayPosition.TotalSeconds) <= MAX_TIME_DIFFERENCE_SECONDS);
+                Debug.WriteLine(DateTime.Now.ToLongTimeString() + " Ticker. recorded position: {0}, mplayer position: {1}. Within scope: {2}", CurrentPlayPosition.ToString(), newTime.ToString(), Math.Abs(newTime.TotalSeconds - CurrentPlayPosition.TotalSeconds) <= MAX_TIME_DIFFERENCE_SECONDS);
                 if (Math.Abs(newTime.TotalSeconds - CurrentPlayPosition.TotalSeconds) <= MAX_TIME_DIFFERENCE_SECONDS)
                 {
                     CurrentPlayPosition = newTime;

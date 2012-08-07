@@ -143,6 +143,7 @@ namespace JayDev.Notemaker.View
                         }
                         _mainWindow.WindowStyle = System.Windows.WindowStyle.None;
                         _mainWindow.WindowState = System.Windows.WindowState.Maximized;
+                        
                     }
                     else
                     {
@@ -155,8 +156,9 @@ namespace JayDev.Notemaker.View
                         _mainWindow.Topmost = false;
                         _mainWindow.WindowState = preFullscreenWindowState;
 
-                        //ensure that the mouse cursor is visible. this is a bit of a hack, since interacting with the win32 control is a PITA... and if the cursor was hidden when we left fullscreen,
-                        //it'll stay hidden until it moves back over the win32 control.
+                        //ensure that the mouse cursor is visible. this is a bit of a hack, since interacting with the win32 control is a
+                        //PITA... and if the cursor was hidden when we left fullscreen, it'll stay hidden until it moves back over the win32
+                        //control.
                         Mouse.OverrideCursor = null;
                     }
                     break;
