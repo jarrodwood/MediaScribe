@@ -216,7 +216,6 @@ namespace JayDev.MediaScribe.View.Controls
 
             TimeSpan result = (TimeSpan)(new TimeSpanToSecondsConverter()).ConvertBack(seekTo, typeof(TimeSpan), null, null);
             SeekToCommand.Execute(result);
-            suspend = false;
         }
     }
 }
