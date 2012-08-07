@@ -178,6 +178,9 @@
                                                                 Visibility="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationVisibilityConverter}, ConverterParameter={x:Static nmCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}"
                                                                 Command="{Binding ToggleFullscreenCommand}"
                                                                 ToolTip="Go to Fullscreen mode" />
+                    <nmControls:NavigationButton Margin="00 -3 5 0" MySource="/Notemaker;component/Images/info32.png" Height="48" Width="50"
+                                                                Command="{Binding ShowAboutDialog}"
+                                                                ToolTip="About" />
                     
                     <!--<nmControls:NavigationButton Margin="00 0 10 0" Text="Show All&#13;Tracks' Notes" MySource="/Notemaker;component/Images/filter.png" IsEnabled="False"
                                                                 Visibility="{Binding CurrentPage, Mode=OneWay, Converter={StaticResource NavigationVisibilityConverter}, ConverterParameter={x:Static nmCommon:NavigateMessage.WriteCourseNotes}, UpdateSourceTrigger=PropertyChanged}"

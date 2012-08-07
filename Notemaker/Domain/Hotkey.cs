@@ -16,7 +16,7 @@ using JayDev.Notemaker.Common;
 
 namespace JayDev.Notemaker
 {
-    public class Hotkey : INotifyPropertyChanged
+    public class Hotkey : JayDev.Notemaker.Common.HotkeyBase, INotifyPropertyChanged
     {
 
         public virtual int? ID { get; set; }
@@ -25,7 +25,7 @@ namespace JayDev.Notemaker
 
 
         private Key _key;
-        public virtual Key Key
+        public override Key Key
         {
             get
             {
@@ -41,11 +41,11 @@ namespace JayDev.Notemaker
                 }
             }
         }
-        public virtual ModifierKeys ModifierKey { get; set; }
+        public override ModifierKeys ModifierKey { get; set; }
 
         private HotkeyFunction _function;
 
-        public virtual HotkeyFunction Function
+        public override HotkeyFunction Function
         {
             get { return _function; }
             set
@@ -62,12 +62,12 @@ namespace JayDev.Notemaker
             }
         }
 
-        public virtual int SeekSeconds { get; set; }
-        public virtual Direction SeekDirection { get; set; }
+        public override int SeekSeconds { get; set; }
+        public override Direction SeekDirection { get; set; }
 
-        public virtual Color Colour { get; set; }
+        public override Color Colour { get; set; }
 
-        public virtual int Rating { get; set; }
+        public override int Rating { get; set; }
 
         public Hotkey()
         {

@@ -1,0 +1,59 @@
+﻿<Window x:Class="JayDev.Notemaker.View.Controls.About"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="500"
+             xmlns:local="clr-namespace:JayDev.Notemaker.View.Controls"
+        >
+
+    <Grid x:Name="LayoutRoot">
+        <Border Width="400" Height="300" CornerRadius="15" Background="Black">
+            <Border.Effect>
+                <BlurEffect Radius="15" RenderingBias="Quality" />
+            </Border.Effect>
+        </Border>
+        <Border Width="400" Height="300" CornerRadius="15">
+            <Border.Background>
+                <RadialGradientBrush GradientOrigin="0.684,1.13" RadiusY="0.69" RadiusX="0.709" Center="0.564,0.503">
+                    <GradientStop Color="#FF8CCDFD" Offset="1"/>
+                    <GradientStop Color="#FFE3F3FF"/>
+                    <GradientStop Color="#FFB8E1FF" Offset="0.487"/>
+                </RadialGradientBrush>
+            </Border.Background>
+            <Grid>
+            <StackPanel HorizontalAlignment="Center">
+                <TextBlock FontSize="16" Margin="0 65 0 0" HorizontalAlignment="Center" Foreground="#FF3F3F3F">
+                Media Notemaker
+                </TextBlock>
+                <Separator Margin="0 10 0 0" Width="200"></Separator>
+                <TextBlock FontSize="12" Margin="0 25 0 0" HorizontalAlignment="Center" Foreground="#FF3F3F3F">
+                Version 0.9, 08/08/2012
+                </TextBlock>
+                <TextBlock FontSize="12" Margin="0 0 0 0" HorizontalAlignment="Center" Foreground="#FF3F3F3F">
+                Please find updates at
+                </TextBlock>
+                <TextBlock FontSize="12" Margin="0 0 0 0" HorizontalAlignment="Center" Foreground="#FF3F3F3F">
+				<Hyperlink>www.jarrod.co.nz/MediaNotemaker/</Hyperlink>
+                </TextBlock>
+                <TextBlock FontSize="12" Margin="0 25 0 0" HorizontalAlignment="Center" Foreground="#FF3F3F3F">
+                Copyright © 2012 by Jarrod Wood
+                </TextBlock>
+                <TextBlock FontSize="12" Margin="0 0 0 0" HorizontalAlignment="Center" Foreground="#FF3F3F3F">
+				<Hyperlink>www.jarrod.co.nz</Hyperlink>
+                </TextBlock>
+            </StackPanel>
+
+            <local:UndecoratedButton Margin="0,10,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="18" Height="18" Click="UndecoratedButton_Click">
+                <Grid>
+                    <!-- need an almost-invisible rectangle here to capture clicks-->
+                        <Rectangle Width="18" Height="18" Fill="White" Opacity="0.01" />
+                        <Path Data="M0,0 L1,1" Margin="3" Fill="White" Height="8" Stretch="Fill" Stroke="White" Width="8" RenderTransformOrigin="-8.917,7.5"/>
+                    <Path Data="M0,1 L1,0" Margin="3" Fill="White" Height="8" Stretch="Fill" Stroke="White" Width="8"/>
+                </Grid>
+            </local:UndecoratedButton>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

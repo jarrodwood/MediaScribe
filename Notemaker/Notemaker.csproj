@@ -115,6 +115,10 @@
     <Compile Include="Domain\Hotkey.cs" />
     <Compile Include="Model\SettingRepository.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
+    <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\Controls\About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Controls\Base\UndecoratedButton.cs" />
     <Compile Include="View\Controls\Base\ComboBoxItemWithTooltip.cs" />
     <Compile Include="View\SettingsView.xaml.cs">
@@ -129,6 +133,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\JarrodToggleButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -326,7 +334,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Converters\Converters\" />
     <Folder Include="Styles\" />
   </ItemGroup>
   <ItemGroup>
@@ -467,6 +474,8 @@
     <Resource Include="Images\pencil-15.png" />
     <Resource Include="Images\pencil-15-hover2.png" />
     <Resource Include="Images\bar.png" />
+    <Resource Include="Images\help32.png" />
+    <Resource Include="Images\info32.png" />
     <Content Include="log4netoff.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

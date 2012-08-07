@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Controls;
 //using log4net.Config;
 using JayDev.Notemaker.Core;
+using Notemaker.Common;
 
 namespace JayDev.Notemaker.View
 {
@@ -50,10 +51,11 @@ namespace JayDev.Notemaker.View
 
             Console.SetOut(new DebugTextWriter());
 
-            CourseRepository repo = new CourseRepository();
-            courseUseViewModel = new CourseUseViewModel(repo);
-            courseListViewModel = new CourseListViewModel(repo);
-            settingsViewModel = new SettingsViewModel(new SettingRepository());
+            CourseRepository courseRepo = new CourseRepository();
+            courseUseViewModel = new CourseUseViewModel(courseRepo);
+            courseListViewModel = new CourseListViewModel(courseRepo);
+            SettingRepository settingsRepo = new SettingRepository();
+            settingsViewModel = new SettingsViewModel(settingsRepo);
 
             Messenger.Default.Register<NavigateArgs>(Singleton, MessageType.Navigate, (message) => Navigate(message));
             Messenger.Default.Register<string>(Singleton, "errors", (error) => MessageBox.Show(error));
@@ -61,10 +63,12 @@ namespace JayDev.Notemaker.View
             _mainWindow.Closing += new System.ComponentModel.CancelEventHandler(_mainWindow_Closing);
 
 
+            HotkeyManager.HandleHotkeyRegistration(new List<HotkeyBase>(settingsRepo.GetHotkeys()));
+
             bool loadedLastCourse = false;
             if (startAtLastCourse)
             {
-                var courses = repo.GetCourseList();
+                var courses = courseRepo.GetCourseList();
                 var currentCourse = courses.OrderBy(x => x.DateViewed).FirstOrDefault();
                 if (null != currentCourse)
                 {
@@ -171,8 +175,5 @@ namespace JayDev.Notemaker.View
             }
         }
 
-        public void RegisterHotkeys(List<Hotkey> hotkeys)
-        {
-        }
     }
 }

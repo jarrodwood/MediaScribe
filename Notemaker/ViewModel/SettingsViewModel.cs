@@ -16,7 +16,7 @@ using JayDev.Notemaker.Core;
 
 namespace JayDev.Notemaker.ViewModel
 {
-    public class SettingsViewModel : GalaSoft.MvvmLight.ViewModelBase
+    public class SettingsViewModel : ViewModelBase
     {
         #region Private Members
 
@@ -48,7 +48,7 @@ namespace JayDev.Notemaker.ViewModel
                                                   Hotkeys = new ObservableCollection<Hotkey>(_repo.GetHotkeys());
 
                                                   //let the controller know that the application's hotkeys have changed.
-                                                  Controller.Singleton.RegisterHotkeys(Hotkeys.ToList());
+                                                  Messenger.Default.Send(new List<HotkeyBase>(Hotkeys), MessageType.HotkeyRegistration);
                                               }
                                           }));
             }
@@ -184,8 +184,8 @@ namespace JayDev.Notemaker.ViewModel
                                               _repo.PersistHotkeys(Hotkeys.ToList());
                                               Hotkeys = new ObservableCollection<Hotkey>(_repo.GetHotkeys());
 
-                                              //let the controller know that the application's hotkeys have changed.
-                                              Controller.Singleton.RegisterHotkeys(Hotkeys.ToList());
+                                              //broadcast the new hotkeys
+                                              Messenger.Default.Send(new List<HotkeyBase>(Hotkeys), MessageType.HotkeyRegistration);
                                           }));
             }
         }

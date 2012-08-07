@@ -13,7 +13,7 @@ using JayDev.Notemaker.Core;
 
 namespace JayDev.Notemaker.ViewModel
 {
-    public class CourseListViewModel : GalaSoft.MvvmLight.ViewModelBase
+    public class CourseListViewModel : ViewModelBase
     {
         #region Private Members
 

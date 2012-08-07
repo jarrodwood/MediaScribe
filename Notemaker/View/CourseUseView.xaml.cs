@@ -16,6 +16,7 @@ using JayDev.Notemaker.ViewModel;
 using System.Windows.Threading;
 using JayDev.Notemaker.Common;
 using System.Timers;
+using Notemaker.Common;
 
 namespace JayDev.Notemaker.View
 {
@@ -36,6 +37,34 @@ namespace JayDev.Notemaker.View
             _viewModel = viewModel;
             this.DataContext = _viewModel;
             notesGrid.Loaded += new RoutedEventHandler(notesGrid_Loaded);
+
+            this.PreviewKeyDown += new KeyEventHandler(CourseUseView_PreviewKeyDown);
+        }
+
+        void CourseUseView_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            var matches = HotkeyManager.CheckHotkey(e);
+
+            if (null != matches && matches.Count > 0)
+            {
+                //foreach (var match in matches)
+                //{
+                //    switch (match.Function)
+                //    {
+                //        case HotkeyFunction.NoteColour:
+                //            ApplyColour(match.Colour);
+                //            break;
+                //        case HotkeyFunction.NoteItalic:
+                //            ApplyItalics();
+                //            break;
+                //        case HotkeyFunction.NoteBold:
+                //            ApplyBold();
+                //            break;
+                //    }
+
+                //    e.Handled = true;
+                //}
+            }
         }
 
         void notesGrid_Loaded(object sender, RoutedEventArgs e)

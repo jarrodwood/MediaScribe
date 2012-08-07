@@ -12,6 +12,8 @@ using System.Windows.Documents;
 using AvalonTextBox.Converters;
 using System.Windows.Input;
 using JayDev.Notemaker.Common;
+using GalaSoft.MvvmLight.Messaging;
+using Notemaker.Common;
 
 namespace AvalonTextBox
 {
@@ -68,6 +70,7 @@ namespace AvalonTextBox
         {
             this.Document.Changed -= Document_Changed;
             this.Document.Changed += new EventHandler<DocumentChangeEventArgs>(Document_Changed);
+            this.PreviewKeyDown += new KeyEventHandler(AvalonTextBox_PreviewKeyDown);
         }
 
         #endregion
@@ -92,6 +95,7 @@ namespace AvalonTextBox
         #endregion
 
         #region Protected Methods
+
 
         void SetMarkedupText(string markedupText)
         {
@@ -483,33 +487,54 @@ namespace AvalonTextBox
             }
         }
 
-        //void AvalonTextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        //{
-        //    switch (e.Key)
-        //    {
-        //        case Key.D1:
-        //            e.Handled = true;
-        //            ApplyColour(Colors.GreenYellow);
-        //            break;
-        //        case Key.D2:
-        //            e.Handled = true;
-        //            ApplyColour(Colors.Indigo);
-        //            break;
-        //        case Key.D3:
-        //            e.Handled = true;
-        //            ApplyColour(ColorHelper.ApplicationDefaultTextColour);
-        //            break;
-        //        case Key.D4:
-        //            e.Handled = true;
-        //            ApplyBold();
-        //            break;
-        //        case Key.D5:
-        //            e.Handled = true;
-        //            ApplyItalics();
-        //            break;
-        //    }
+        void AvalonTextBox_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            var matches = HotkeyManager.CheckHotkey(e);
 
-        //}
+            if (null != matches && matches.Count > 0)
+            {
+                foreach (var match in matches)
+                {
+                    switch (match.Function)
+                    {
+                        case HotkeyFunction.NoteColour:
+                            ApplyColour(match.Colour);
+                            break;
+                        case HotkeyFunction.NoteItalic:
+                            ApplyItalics();
+                            break;
+                        case HotkeyFunction.NoteBold:
+                            ApplyBold();
+                            break;
+                    }
+
+                    e.Handled = true;
+                }
+            }
+            //switch (e.Key)
+            //{
+            //    case Key.D1:
+            //        e.Handled = true;
+            //        ApplyColour(Colors.GreenYellow);
+            //        break;
+            //    case Key.D2:
+            //        e.Handled = true;
+            //        ApplyColour(Colors.Indigo);
+            //        break;
+            //    case Key.D3:
+            //        e.Handled = true;
+            //        ApplyColour(ColorHelper.ApplicationDefaultTextColour);
+            //        break;
+            //    case Key.D4:
+            //        e.Handled = true;
+            //        ApplyBold();
+            //        break;
+            //    case Key.D5:
+            //        e.Handled = true;
+            //        ApplyItalics();
+            //        break;
+            //}
+        }
 
         #endregion
     }

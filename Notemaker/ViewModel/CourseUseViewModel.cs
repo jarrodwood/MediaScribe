@@ -17,7 +17,7 @@ using JayDev.Notemaker.Core;
 
 namespace JayDev.Notemaker.ViewModel
 {
-    public class CourseUseViewModel : GalaSoft.MvvmLight.ViewModelBase
+    public class CourseUseViewModel : ViewModelBase
     {
         #region Private Local Variables, Constants
 

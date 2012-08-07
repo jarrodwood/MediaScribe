@@ -3,15 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace JayDev.Notemaker.Common
 {
     public enum PlayStatus { Stopped, Playing, Paused }
 
     public enum MaintenanceMode { View, Create, Edit, None }
-    public enum MessageType { Navigate, RegisterReusableControl }
+    public enum MessageType { Navigate, RegisterReusableControl, HotkeyRegistration }
     public enum NavigateMessage { ToggleFullscreen, ListCourses, WriteCourseNotes, ReviewCourseNotes, Settings }
 
+    public struct HotkeyMessage
+    {
+        public HotkeyFunction Function { get; set; }
+        public Direction SeekDirection { get; set; }
+        public int SeekSeconds { get; set; }
+        public Color Colour { get; set; }
+        public int Rating { get; set; }
+    }
 
     #region Hotkey Enums
 
