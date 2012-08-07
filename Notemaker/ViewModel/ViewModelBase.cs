@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Media;
 using JayDev.Notemaker.View.Controls;
 using System.Windows.Media.Animation;
+using System.Windows.Forms;
 
 namespace JayDev.Notemaker.ViewModel
 {
@@ -34,7 +35,7 @@ namespace JayDev.Notemaker.ViewModel
                                                   ShowInTaskbar = false,
                                                   ResizeMode = ResizeMode.NoResize,
                                                   WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                                                  Owner = Application.Current.MainWindow
+                                                  Owner = System.Windows.Application.Current.MainWindow
                                               };
 
                                               DoubleAnimation animFadeIn = new DoubleAnimation();
@@ -43,10 +44,13 @@ namespace JayDev.Notemaker.ViewModel
                                               animFadeIn.Duration = new Duration(TimeSpan.FromSeconds(0.5));
                                               about.BeginAnimation(Window.OpacityProperty, animFadeIn);
                                               about.ShowDialog();
-
-                                              //darkwindow.Close();
                                           }));
             }
+        }
+
+
+        public virtual void HandleWindowKeypress(object sender, System.Windows.Input.KeyEventArgs e)
+        {
         }
     }
 }

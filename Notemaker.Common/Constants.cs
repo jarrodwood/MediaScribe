@@ -39,6 +39,8 @@ namespace JayDev.Notemaker.Common
         NoteRating,
         [Information("Set note start time", "Sets the selected note's (or notes') start time, to the current track's current position.", "only on the course notes screen.")]
         NoteSetStartTime,
+        [Information("Delete note", "Deletes the note.", "only on the course notes screen.")]
+        NoteDelete,
         [Information("Note segment - bold", "You can either select a segment of text and hit this hotkey to style it bold, or you can hit the hotkey and any text you begin to type will be styled bold", "only when editing a note.")]
         NoteBold,
         [Information("Note segment - italic", "You can either select a segment of text and hit this hotkey to style it italic, or you can hit the hotkey and any text you begin to type will be styled italic", "only when editing a note.")]

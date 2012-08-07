@@ -27,6 +27,7 @@ namespace JayDev.Notemaker.View
     {
         private CourseUseViewModel _viewModel;
 
+        private readonly Dispatcher _currentDispatcher;
 
 
 
@@ -36,36 +37,10 @@ namespace JayDev.Notemaker.View
 
             _viewModel = viewModel;
             this.DataContext = _viewModel;
+            _currentDispatcher = Dispatcher.CurrentDispatcher;
             notesGrid.Loaded += new RoutedEventHandler(notesGrid_Loaded);
-
-            this.PreviewKeyDown += new KeyEventHandler(CourseUseView_PreviewKeyDown);
         }
 
-        void CourseUseView_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            var matches = HotkeyManager.CheckHotkey(e);
-
-            if (null != matches && matches.Count > 0)
-            {
-                //foreach (var match in matches)
-                //{
-                //    switch (match.Function)
-                //    {
-                //        case HotkeyFunction.NoteColour:
-                //            ApplyColour(match.Colour);
-                //            break;
-                //        case HotkeyFunction.NoteItalic:
-                //            ApplyItalics();
-                //            break;
-                //        case HotkeyFunction.NoteBold:
-                //            ApplyBold();
-                //            break;
-                //    }
-
-                //    e.Handled = true;
-                //}
-            }
-        }
 
         void notesGrid_Loaded(object sender, RoutedEventArgs e)
         {
@@ -103,5 +78,66 @@ namespace JayDev.Notemaker.View
 
         #endregion
 
+        public void HandleWindowKeypress(object sender, KeyEventArgs e)
+        {
+            var matches = HotkeyManager.CheckHotkey(e);
+
+            if (null != matches && matches.Count > 0)
+            {
+                foreach (var match in matches)
+                {
+                    switch (match.Function)
+                    {
+                        case HotkeyFunction.NoteEditBegin:
+                            ThreadHelper.ExecuteAsyncUI(_currentDispatcher, delegate
+                            {
+                                if (notesGrid.IsEditing)
+                                {
+                                    notesGrid.CommitEdit();
+                                }
+
+                                notesGrid.BeginEditNewNote();
+                            });
+                            e.Handled = true;
+                            break;
+                        case HotkeyFunction.NoteEditCommit:
+                            //commit the current edit, and hide the controls
+                            if (notesGrid.IsEditing)
+                            {
+                                notesGrid.CommitEdit();
+                            }
+                            e.Handled = true;
+                            break;
+                        case HotkeyFunction.NoteEditCancel:
+                            //cancel the current edit, and hide the controls
+                            if (notesGrid.IsEditing)
+                            {
+                                notesGrid.CancelEdit();
+                            }
+                            e.Handled = true;
+                            break;
+                        case HotkeyFunction.NoteSetStartTime:
+                            if (this.IsVisible)
+                            {
+                                Note currentNote = notesGrid.CurrentNote;
+                                _viewModel.SetNoteStartTimeCommand.Execute(currentNote);
+                                if (false == notesGrid.IsEditing)
+                                {
+                                    notesGrid.CommitEdit();
+                                }
+                                e.Handled = true;
+                            }
+                            break;
+                        case HotkeyFunction.NoteDelete:
+                            ThreadHelper.ExecuteAsyncUI(_currentDispatcher, delegate
+                            {
+                                notesGrid.DeleteSelectedNote.Execute(null);
+                            });
+                            e.Handled = true;
+                            break;
+                    }
+                }
+            }
+        }
     }
 }

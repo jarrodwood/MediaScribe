@@ -79,9 +79,17 @@ namespace JayDev.Notemaker.Model
                     {
                         session.Delete(hotkey);
                     }
-                    foreach (Hotkey hotkey in toCreate)
+                    for(int i = 0; i < toCreate.Count; i++)
                     {
-                        session.SaveOrUpdate(hotkey);
+                        Hotkey hotkey = toCreate[i];
+                        if (null == hotkey.ID)
+                        {
+                            session.SaveOrUpdate(hotkey);
+                        }
+                        else
+                        {
+                            hotkey = (Hotkey)session.Merge(hotkey);
+                        }
                     }
 
                     transaction.Commit();

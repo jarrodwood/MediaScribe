@@ -19,6 +19,8 @@ using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Command;
 using System.Diagnostics;
 using JayDev.Notemaker.Common;
+using JayDev.Notemaker.Core;
+using Notemaker.Common;
 
 namespace JayDev.Notemaker.View
 {
@@ -39,70 +41,64 @@ namespace JayDev.Notemaker.View
             _currentDispatcher = Dispatcher.CurrentDispatcher;
 
             Messenger.Default.Register<string>(this, 12345, (message) => HandleMessage(message));
-
-            this.KeyDown += new KeyEventHandler(FullscreenCourseView_KeyDown);
         }
 
-        public void HandleKeypress(object sender, KeyEventArgs e)
+        public void HandleWindowKeypress(object sender, KeyEventArgs e)
         {
-            switch (e.Key)
+            var matches = HotkeyManager.CheckHotkey(e);
+
+            if (null != matches && matches.Count > 0)
             {
-                case Key.NumPad7:
-                    ThreadHelper.ExecuteAsyncUI(_currentDispatcher, delegate
+                foreach (var match in matches)
+                {
+                    switch (match.Function)
                     {
-                        if (notesGrid.IsEditing)
-                        {
-                            notesGrid.CommitEdit();
-                        }
+                        case HotkeyFunction.NoteEditBegin:
+                            ThreadHelper.ExecuteAsyncUI(_currentDispatcher, delegate
+                            {
+                                if (notesGrid.IsEditing)
+                                {
+                                    notesGrid.CommitEdit();
+                                }
 
-                        HandleMessage("show");
+                                HandleMessage("show");
 
-                        notesGrid.BeginEditNewNote();
-                    });
-                    e.Handled = true;
-                    break;
-                case Key.NumPad8:
-                    //commit the current edit, and hide the controls
-                    if (notesGrid.IsEditing)
-                    {
-                        notesGrid.CommitEdit();
+                                notesGrid.BeginEditNewNote();
+                            });
+                            e.Handled = true;
+                            break;
+                        case HotkeyFunction.NoteEditCommit:
+                            //commit the current edit, and hide the controls
+                            if (notesGrid.IsEditing)
+                            {
+                                notesGrid.CommitEdit();
+                            }
+                            HandleMessage("hide");
+                            e.Handled = true;
+                            break;
+                        case HotkeyFunction.NoteEditCancel:
+                            //cancel the current edit, and hide the controls
+                            if (notesGrid.IsEditing)
+                            {
+                                notesGrid.CancelEdit();
+                            }
+                            HandleMessage("hide");
+                            e.Handled = true;
+                            break;
+                        case HotkeyFunction.NoteSetStartTime:
+                            if (this.IsVisible)
+                            {
+                                Note currentNote = notesGrid.CurrentNote;
+                                _viewModel.SetNoteStartTimeCommand.Execute(currentNote);
+                                if (false == notesGrid.IsEditing)
+                                {
+                                    notesGrid.CommitEdit();
+                                }
+                                e.Handled = true;
+                            }
+                            break;
                     }
-                    HandleMessage("hide");
-                    e.Handled = true;
-                    break;
-                case Key.NumPad9:
-                    //cancel the current edit, and hide the controls
-                    if (notesGrid.IsEditing)
-                    {
-                        notesGrid.CancelEdit();
-                    }
-                    HandleMessage("hide");
-                    e.Handled = true;
-                    break;
-                case Key.Divide:
-                    if (this.IsVisible)
-                    {
-                        Note currentNote = notesGrid.CurrentNote;
-                        _viewModel.SetNoteStartTimeCommand.Execute(currentNote);
-                        if (false == notesGrid.IsEditing)
-                        {
-                            notesGrid.CommitEdit();
-                        }
-                        e.Handled = true;
-                    }
-                    break;
-                case Key.Multiply:
-                    if (this.IsVisible)
-                    {
-                        Note currentNote = notesGrid.CurrentNote;
-                        _viewModel.SetNoteEndTimeCommand.Execute(currentNote);
-                        if (false == notesGrid.IsEditing)
-                        {
-                            notesGrid.CommitEdit();
-                        }
-                        e.Handled = true;
-                    }
-                    break;
+                }
             }
         }
 
@@ -116,6 +112,7 @@ namespace JayDev.Notemaker.View
 
         void FullscreenCourseView_KeyDown(object sender, KeyEventArgs e)
         {
+            Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen), MessageType.Navigate);
         }
 
         private void HandleMessage(string message)

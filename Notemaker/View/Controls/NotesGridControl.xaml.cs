@@ -18,6 +18,7 @@ using Microsoft.Windows.Controls.Primitives;
 using System.ComponentModel;
 using System.Diagnostics;
 using JayDev.Notemaker.Common;
+using GalaSoft.MvvmLight.Command;
 
 namespace JayDev.Notemaker.View.Controls
 {
@@ -99,6 +100,47 @@ namespace JayDev.Notemaker.View.Controls
             set { SetValue(NoteSavedCommandProperty, value); }
         }
 
+        private RelayCommand _doNothing;
+
+        /// <summary>
+        /// We need a blank command to bind the 'delete' key to, in the WPF datagrid... since it automatically hooks up the delete key, to
+        /// delete the selected items. we want to control all hotkeys ourselves...
+        /// </summary>
+        public RelayCommand DoNothing
+        {
+            get
+            {
+                return _doNothing
+                    ?? (_doNothing = new RelayCommand(
+                                          () =>
+                                          {
+                                              
+                                          }));
+            }
+        }
+
+        private RelayCommand _deleteSelectedNote;
+
+        /// <summary>
+        /// Gets the DeleteSelectedNote.
+        /// </summary>
+        public RelayCommand DeleteSelectedNote
+        {
+            get
+            {
+                return _deleteSelectedNote
+                    ?? (_deleteSelectedNote = new RelayCommand(
+                                          () =>
+                                          {
+                                              if (null != noteDataGrid.SelectedItem && noteDataGrid.SelectedItem is Note)
+                                              {
+                                                  Note note = noteDataGrid.SelectedItem as Note;
+                                                  Notes.Remove(note);
+                                              }
+                                          }));
+            }
+        }
+
         #endregion
 
         #region SetNoteStartTimeCommand
@@ -139,7 +181,6 @@ namespace JayDev.Notemaker.View.Controls
         {
             InitializeComponent();
             _uiDispatcher = Dispatcher.CurrentDispatcher;
-            Messenger.Default.Register<KeyEventArgs>(this, 999, (message) => HandleKeyPress(message));
             this.IsVisibleChanged += new DependencyPropertyChangedEventHandler(NotesGridControl_IsVisibleChanged);
            
         }
@@ -153,36 +194,6 @@ namespace JayDev.Notemaker.View.Controls
             {
                 _lastNotesGridControlVisible = this;
             }
-        }
-
-
-
-        private void HandleKeyPress(KeyEventArgs e)
-        {
-                //only fuck around with the UI if the window's visible
-                //TODO: this is kind of hacky. figure out a better way!
-                if (_lastNotesGridControlVisible == this)
-                {
-                    switch (e.Key)
-                    {
-                        case Key.NumPad7:
-                            //noteDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
-                            Debug.WriteLine("SHOW - from key");
-                            Messenger.Default.Send<string>("show", 12345);
-                            BeginEditNewNote();
-                            e.Handled = true;
-                            break;
-                        case Key.NumPad8:
-                            noteDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
-                            Messenger.Default.Send<string>("hide", 12345);
-                            e.Handled = true;
-                            break;
-                        case Key.NumPad9:
-                            noteDataGrid.CancelEdit(DataGridEditingUnit.Row);
-                            e.Handled = true;
-                            break;
-                    }
-                }
         }
 
         public void BeginEditNewNote()

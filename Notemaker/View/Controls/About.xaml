@@ -48,7 +48,7 @@
             <local:UndecoratedButton Margin="0,10,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="18" Height="18" Click="UndecoratedButton_Click">
                 <Grid>
                     <!-- need an almost-invisible rectangle here to capture clicks-->
-                        <Rectangle Width="18" Height="18" Fill="White" Opacity="0.01" />
+                        <Rectangle Width="18" Height="18" Fill="Transparent" Stroke="#EEEEEE" StrokeThickness="0.5"  />
                         <Path Data="M0,0 L1,1" Margin="3" Fill="White" Height="8" Stretch="Fill" Stroke="White" Width="8" RenderTransformOrigin="-8.917,7.5"/>
                     <Path Data="M0,1 L1,0" Margin="3" Fill="White" Height="8" Stretch="Fill" Stroke="White" Width="8"/>
                 </Grid>

@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using JayDev.Notemaker.View;
 using JayDev.Notemaker.Core;
+using Notemaker.Common;
 
 namespace JayDev.Notemaker.ViewModel
 {
@@ -47,8 +48,7 @@ namespace JayDev.Notemaker.ViewModel
                                                   _repo.PersistHotkeys(GetDefaultHotkeySet());
                                                   Hotkeys = new ObservableCollection<Hotkey>(_repo.GetHotkeys());
 
-                                                  //let the controller know that the application's hotkeys have changed.
-                                                  Messenger.Default.Send(new List<HotkeyBase>(Hotkeys), MessageType.HotkeyRegistration);
+                                                  HotkeyManager.HandleHotkeyRegistration(new List<HotkeyBase>(Hotkeys));
                                               }
                                           }));
             }
@@ -181,11 +181,12 @@ namespace JayDev.Notemaker.ViewModel
                     ?? (_saveHotkeysCommand = new RelayCommand(
                                           () =>
                                           {
+                                              IsEditingHotkeys = false;
                                               _repo.PersistHotkeys(Hotkeys.ToList());
                                               Hotkeys = new ObservableCollection<Hotkey>(_repo.GetHotkeys());
 
                                               //broadcast the new hotkeys
-                                              Messenger.Default.Send(new List<HotkeyBase>(Hotkeys), MessageType.HotkeyRegistration);
+                                              HotkeyManager.HandleHotkeyRegistration(new List<HotkeyBase>(Hotkeys));
                                           }));
             }
         }
@@ -347,6 +348,7 @@ namespace JayDev.Notemaker.ViewModel
             hotkeys.Add(new Hotkey(HotkeyFunction.NoteRating, ModifierKeys.Control, Key.D1) { Rating = 1 });
             hotkeys.Add(new Hotkey(HotkeyFunction.NoteRating, ModifierKeys.Control, Key.D2) { Rating = 2 });
             hotkeys.Add(new Hotkey(HotkeyFunction.NoteRating, ModifierKeys.Control, Key.D3) { Rating = 3 });
+            hotkeys.Add(new Hotkey(HotkeyFunction.NoteDelete, ModifierKeys.None, Key.Delete));
 
             return hotkeys;
         }

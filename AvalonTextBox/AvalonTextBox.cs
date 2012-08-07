@@ -499,16 +499,18 @@ namespace AvalonTextBox
                     {
                         case HotkeyFunction.NoteColour:
                             ApplyColour(match.Colour);
+                            e.Handled = true;
                             break;
                         case HotkeyFunction.NoteItalic:
                             ApplyItalics();
+                            e.Handled = true;
                             break;
                         case HotkeyFunction.NoteBold:
                             ApplyBold();
+                            e.Handled = true;
                             break;
                     }
 
-                    e.Handled = true;
                 }
             }
             //switch (e.Key)

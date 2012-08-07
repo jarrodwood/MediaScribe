@@ -14,6 +14,7 @@ using System.Timers;
 using System.Runtime.InteropServices;
 using JayDev.Notemaker.View.Controls;
 using JayDev.Notemaker.Core;
+using Notemaker.Common;
 
 namespace JayDev.Notemaker.ViewModel
 {
@@ -1068,29 +1069,34 @@ namespace JayDev.Notemaker.ViewModel
 
         void note_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            int a = 5;
         }
 
 
-        public void HandleKeypress(object sender, KeyEventArgs e)
+        public override void HandleWindowKeypress(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            switch(e.Key) {
-                case Key.NumPad0:
-                    _player.TogglePause();
-                    e.Handled = true;
-                    break;
-                case Key.NumPad1:
-                    _player.SeekRelative(-10);
-                    e.Handled = true;
-                    break;
-                case Key.NumPad2:
-                    _player.SeekRelative(-3);
-                    e.Handled = true;
-                    break;
-                case Key.NumPad3:
-                    _player.SeekRelative(3);
-                    e.Handled = true;
-                    break;
+            var matches = HotkeyManager.CheckHotkey(e);
+
+            if (null != matches && matches.Count > 0)
+            {
+                foreach (var match in matches)
+                {
+                    switch (match.Function)
+                    {
+                        case HotkeyFunction.ToggleFullscreen:
+                            Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen), MessageType.Navigate);
+                            e.Handled = true;
+                            break;
+                        case HotkeyFunction.TogglePause:
+                            _player.TogglePause();
+                            e.Handled = true;
+                            break;
+                        case HotkeyFunction.Seek:
+                            int seconds = match.SeekDirection == Direction.Forward ? match.SeekSeconds : match.SeekSeconds * -1;
+                            _player.SeekRelative(seconds);
+                            e.Handled = true;
+                            break;
+                    }
+                }
             }
         }
 

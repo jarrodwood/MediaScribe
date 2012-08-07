@@ -23,7 +23,9 @@ namespace JayDev.Notemaker.View
         private static CourseUseViewModel courseUseViewModel;
         private static CourseListViewModel courseListViewModel;
         private static SettingsViewModel settingsViewModel;
+
         private static UserControl currentView;
+        private static ViewModelBase currentViewModel;
 
         private static Controller _instance;
         public static Controller Singleton
@@ -41,7 +43,7 @@ namespace JayDev.Notemaker.View
         public void Initialize(MainWindow mainWindow)
         {
             _mainWindow = mainWindow;
-            _mainWindow.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
+            _mainWindow.PreviewKeyDown += new KeyEventHandler(MainWindow_KeyDown);
 
             //var logconfig = new System.IO.FileInfo("log4net.xml");
             //if (logconfig.Exists)
@@ -76,6 +78,7 @@ namespace JayDev.Notemaker.View
                     CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
                     _mainWindow.Content = courseUseView;
                     currentView = courseUseView;
+                    currentViewModel = courseUseViewModel;
                     loadedLastCourse = true;
                 }
             }
@@ -100,13 +103,17 @@ namespace JayDev.Notemaker.View
         static void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
             //TODO: handle lower-level (so can use keypad keys, regardless of numlock status). could try http://stackoverflow.com/a/5989521
+            currentViewModel.HandleWindowKeypress(sender, e);
 
-            if (currentView is FullscreenCourseView)
-            {
-                (currentView as FullscreenCourseView).HandleKeypress(sender, e);
+            CourseUseView courseUseView = currentView as CourseUseView;
+            if(null != courseUseView) {
+                courseUseView.HandleWindowKeypress(sender, e);
             }
-
-            courseUseViewModel.HandleKeypress(sender, e);
+            FullscreenCourseView fullscreenView = currentView as FullscreenCourseView;
+            if (null != fullscreenView)
+            {
+                fullscreenView.HandleWindowKeypress(sender, e);
+            }
         }
 
 
@@ -127,6 +134,7 @@ namespace JayDev.Notemaker.View
                         FullscreenCourseView fscView = new FullscreenCourseView(courseUseViewModel);
                         _mainWindow.Content = fscView;
                         currentView = fscView;
+                        currentViewModel = courseUseViewModel;
 
                         if (_mainWindow.WindowState == System.Windows.WindowState.Maximized)
                         {
@@ -134,7 +142,6 @@ namespace JayDev.Notemaker.View
                             _mainWindow.WindowState = System.Windows.WindowState.Normal;
                         }
                         _mainWindow.WindowStyle = System.Windows.WindowStyle.None;
-                        //this.Topmost = true;
                         _mainWindow.WindowState = System.Windows.WindowState.Maximized;
                     }
                     else
@@ -142,6 +149,7 @@ namespace JayDev.Notemaker.View
                         CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
                         _mainWindow.Content = courseUseView;
                         currentView = courseUseView;
+                        currentViewModel = courseUseViewModel;
 
                         _mainWindow.WindowStyle = preFullscreenWindowStyle;
                         _mainWindow.Topmost = false;
@@ -156,6 +164,7 @@ namespace JayDev.Notemaker.View
                     {
                         CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
                         currentView = courseUseView;
+                        currentViewModel = courseUseViewModel;
                         _mainWindow.Content = currentView;
                         courseUseViewModel.SetCurrentCourse(args.Course);
                     }
@@ -163,6 +172,7 @@ namespace JayDev.Notemaker.View
                 case NavigateMessage.ListCourses:
                     CourseListView courseListView = new CourseListView(courseListViewModel);
                     currentView = courseListView;
+                    currentViewModel = courseListViewModel;
                     _mainWindow.Content = currentView;
                     courseListViewModel.Init();
 
@@ -170,6 +180,7 @@ namespace JayDev.Notemaker.View
                 case NavigateMessage.Settings:
                     SettingsView settingsView = new SettingsView(settingsViewModel);
                     currentView = settingsView;
+                    currentViewModel = settingsViewModel;
                     _mainWindow.Content = settingsView;
                     break;
             }

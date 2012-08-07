@@ -30,11 +30,11 @@
             PreparingCellForEdit="noteDataGrid_PreparingCellForEdit"
             ItemsSource="{ Binding ElementName=NotesGridControlName, Path=Notes, Mode=TwoWay, IsAsync=True}"  CellEditEnding="noteDataGrid_CellEditEnding" Style="{StaticResource DataGridStyle1}">
             <DataGrid.InputBindings>
-                <KeyBinding Key="Delete" Command="" />
+                <KeyBinding Key="Delete" Command="{Binding ElementName=NotesGridControlName, Path=DoNothing}" />
             </DataGrid.InputBindings>
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Remove Note" Command="Delete" />
+                    <MenuItem Header="Remove Note" Command="{Binding ElementName=NotesGridControlName, Path=DeleteSelectedNote}" />
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
