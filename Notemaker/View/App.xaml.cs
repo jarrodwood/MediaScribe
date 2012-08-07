@@ -23,6 +23,7 @@ namespace JayDev.Notemaker
                     var application = new App();
 
                     application.InitializeComponent();
+                    
                     application.Run();
 
                     // Allow single instance code to perform cleanup operations

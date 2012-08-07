@@ -58,6 +58,8 @@ namespace JayDev.Notemaker
 
                     //on changing the function, clear all of the parameter fields
                     SetDefaultParameterValues();
+
+                    SetOrderWeight();
                 }
             }
         }
@@ -68,6 +70,19 @@ namespace JayDev.Notemaker
         public override Color Colour { get; set; }
 
         public override int Rating { get; set; }
+
+        private int _orderWeight = -1;
+        public virtual int OrderWeight
+        {
+            get
+            {
+                if (_orderWeight == -1)
+                {
+                    SetOrderWeight();
+                }
+                return _orderWeight;
+            }
+        }
 
         public Hotkey()
         {
@@ -81,6 +96,11 @@ namespace JayDev.Notemaker
             this.ModifierKey = modifier;
 
             SetDefaultParameterValues();
+        }
+
+        private void SetOrderWeight()
+        {
+            _orderWeight = Function.GetOrderWeight();
         }
 
         // Create the OnPropertyChanged method to raise the event

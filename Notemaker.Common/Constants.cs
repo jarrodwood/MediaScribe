@@ -27,32 +27,32 @@ namespace JayDev.Notemaker.Common
     public enum Direction { Back, Forward }
     public enum HotkeyFunction
     {
-        [Information("Toggle fullscreen", "Toggle between fullscreen mode and normal course mode. You can also toggle fullscreen by double-clicking on the video itself.", "only on the course notes screen.")]
-        ToggleFullscreen,
-        [Information("Toggle pause", "Toggle pausing the video", "only on the course notes screen, and a track has been selected.")]
-        TogglePause,
+        [Information(10, "Toggle fullscreen", "Toggle between fullscreen mode and normal course mode. You can also toggle fullscreen by double-clicking on the video itself.", "only on the course notes screen.")]
+        ToggleFullscreen = 1,
+        [Information(20, "Toggle pause", "Toggle pausing the video", "only on the course notes screen, and a track has been selected.")]
+        TogglePause = 2,
         //ToggleMute,
         //ChangeVolume,
-        [Information("Seek", "Jumps the current play position either forward or back a given of seconds.", "only on the course notes screen.")]
-        Seek,
-        [Information("Set note rating", "Sets the selected note's (or notes') rating.", "only on the course notes screen.")]
-        NoteRating,
-        [Information("Set note start time", "Sets the selected note's (or notes') start time, to the current track's current position.", "only on the course notes screen.")]
-        NoteSetStartTime,
-        [Information("Delete note", "Deletes the note.", "only on the course notes screen.")]
-        NoteDelete,
-        [Information("Note segment - bold", "You can either select a segment of text and hit this hotkey to style it bold, or you can hit the hotkey and any text you begin to type will be styled bold", "only when editing a note.")]
-        NoteBold,
-        [Information("Note segment - italic", "You can either select a segment of text and hit this hotkey to style it italic, or you can hit the hotkey and any text you begin to type will be styled italic", "only when editing a note.")]
-        NoteItalic,
-        [Information("Note segment - colour", "You can either select a segment of text and hit this hotkey to give it a specified colour, or you can hit the hotkey and any text you begin to type will be coloured", "only when editing a note.")]
-        NoteColour,
-        [Information("Create new note", "Begins a new note with the start time set to the current track's current position, and jumps the cursor straight to the note body so you can start typing instantly! NOTE: If you are currently editing a note, this will commit the changes first.", "only on the course notes screen.")]
-        NoteEditBegin,
-        [Information("Commit note edit", "Saves any changes you've made to the note that you're editing.", "only when editing a note.")]
-        NoteEditCommit,
-        [Information("Cancel note edit", "Cancels any changes you've made to the note that you're editing.", "only when editing a note.")]
-        NoteEditCancel,
+        [Information(30, "Seek", "Jumps the current play position either forward or back a given of seconds.", "only on the course notes screen.")]
+        Seek = 3,
+        [Information(40, "Set note rating", "Sets the selected note's (or notes') rating.", "only on the course notes screen.")]
+        NoteRating = 4,
+        [Information(50, "Set note start time", "Sets the selected note's (or notes') start time, to the current track's current position.", "only on the course notes screen.")]
+        NoteSetStartTime = 5,
+        [Information(60, "Delete note", "Deletes the note.", "only on the course notes screen.")]
+        NoteDelete = 6,
+        [Information(70, "Note segment - bold", "You can either select a segment of text and hit this hotkey to style it bold, or you can hit the hotkey and any text you begin to type will be styled bold", "only when editing a note.")]
+        NoteBold = 7,
+        [Information(80, "Note segment - italic", "You can either select a segment of text and hit this hotkey to style it italic, or you can hit the hotkey and any text you begin to type will be styled italic", "only when editing a note.")]
+        NoteItalic = 8,
+        [Information(90, "Note segment - colour", "You can either select a segment of text and hit this hotkey to give it a specified colour, or you can hit the hotkey and any text you begin to type will be coloured", "only when editing a note.")]
+        NoteColour = 9,
+        [Information(100, "Create new note", "Begins a new note with the start time set to the current track's current position, and jumps the cursor straight to the note body so you can start typing instantly! NOTE: If you are currently editing a note, this will commit the changes first.", "only on the course notes screen.")]
+        NoteEditBegin = 10,
+        [Information(110, "Commit note edit", "Saves any changes you've made to the note that you're editing.", "only when editing a note.")]
+        NoteEditCommit = 11,
+        [Information(120, "Cancel note edit", "Cancels any changes you've made to the note that you're editing.", "only when editing a note.")]
+        NoteEditCancel = 12,
         //NoteSetEndTime,
         //NoteToggleEndTime,
     }

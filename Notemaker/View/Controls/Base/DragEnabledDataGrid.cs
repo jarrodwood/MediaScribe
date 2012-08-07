@@ -146,19 +146,22 @@ namespace JayDev.Notemaker.View.Controls
         bool _isClickingDownOnSelectedItem = false;
         void DragSource_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            _startPoint = e.GetPosition(null);
-
-            if (e.LeftButton == MouseButtonState.Pressed)
+            if (CanDrag)
             {
-                DataGridRow row = UIHelpers.TryFindFromPoint<DataGridRow>((UIElement)this, e.GetPosition(this));
-                //ONLY allow dragging of rows, when we're NOT in edit mode. If we're in edit mode, obviously the user's trying to change a
-                //field value, not drag stuff...
-                if (false == row.IsEditing)
+                _startPoint = e.GetPosition(null);
+
+                if (e.LeftButton == MouseButtonState.Pressed)
                 {
-                    if (row != null && SelectedItems.Contains(row.Item))
+                    DataGridRow row = UIHelpers.TryFindFromPoint<DataGridRow>((UIElement)this, e.GetPosition(this));
+                    //ONLY allow dragging of rows, when we're NOT in edit mode. If we're in edit mode, obviously the user's trying to change a
+                    //field value, not drag stuff...
+                    if (false == row.IsEditing)
                     {
-                        e.Handled = true;
-                        _isClickingDownOnSelectedItem = true;
+                        if (row != null && SelectedItems.Contains(row.Item))
+                        {
+                            e.Handled = true;
+                            _isClickingDownOnSelectedItem = true;
+                        }
                     }
                 }
             }

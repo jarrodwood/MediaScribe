@@ -17,9 +17,12 @@ namespace JayDev.Notemaker.Model
             IList<Hotkey> result;
             using (ISession session = NHibernateHelper.OpenSession())
             {
-                result = session.CreateCriteria<Hotkey>().AddOrder(Order.Desc("Function")).List<Hotkey>();
+                //result = session.CreateCriteria<Hotkey>().AddOrder(Order.Desc("Function")).List<Hotkey>();
+                result = session.CreateCriteria<Hotkey>().List<Hotkey>();
             }
 
+            //order by orderWeight (it's metadata, so we can't do it at the DB level)
+            result = result.OrderBy(x => x.OrderWeight).ToList();
             return result as List<Hotkey>;
         }
 

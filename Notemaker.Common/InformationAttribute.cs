@@ -38,6 +38,17 @@ namespace JayDev.Notemaker.Common
             // no description - return the string value of the enum
             return null;
         }
+
+        public static int GetOrderWeight(this Enum value)
+        {
+            Type type = value.GetType();
+            var info = GetEnumInformation(value.ToString(), type);
+            if (null != info)
+            {
+                return info.OrderWeight;
+            }
+            return -1;
+        }
     }
 
     /// <summary>
@@ -51,16 +62,18 @@ namespace JayDev.Notemaker.Common
         private string _label;
         private string _description;
         private string _applicableWhen;
+        private int _orderWeight;
 
         public InformationAttribute()
         {
         }
 
-        public InformationAttribute(string label, string description, string applicableWhen)
+        public InformationAttribute(int orderWeight, string label, string description, string applicableWhen)
         {
             this._label = label;
             this._description = description;
             this._applicableWhen = applicableWhen;
+            this._orderWeight = orderWeight;
         }
 
         public override bool Equals(object obj)
@@ -141,6 +154,12 @@ namespace JayDev.Notemaker.Common
             {
                 this._applicableWhen = value;
             }
+        }
+
+        public int OrderWeight
+        {
+            get { return _orderWeight; }
+            set { _orderWeight = value; }
         }
     }
 }
