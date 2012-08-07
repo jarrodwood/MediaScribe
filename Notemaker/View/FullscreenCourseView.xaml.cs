@@ -45,61 +45,7 @@ namespace JayDev.MediaScribe.View
 
         public void HandleWindowKeypress(object sender, KeyEventArgs e)
         {
-            var matches = HotkeyManager.CheckHotkey(e);
-
-            if (null != matches && matches.Count > 0)
-            {
-                foreach (var match in matches)
-                {
-                    switch (match.Function)
-                    {
-                        case HotkeyFunction.NoteEditBegin:
-                            ThreadHelper.ExecuteAsyncUI(_currentDispatcher, delegate
-                            {
-                                if (notesGrid.IsEditing)
-                                {
-                                    notesGrid.CommitEdit();
-                                }
-
-                                HandleMessage("show");
-
-                                notesGrid.BeginEditNewNote();
-                            });
-                            e.Handled = true;
-                            break;
-                        case HotkeyFunction.NoteEditCommit:
-                            //commit the current edit, and hide the controls
-                            if (notesGrid.IsEditing)
-                            {
-                                notesGrid.CommitEdit();
-                            }
-                            HandleMessage("hide");
-                            e.Handled = true;
-                            break;
-                        case HotkeyFunction.NoteEditCancel:
-                            //cancel the current edit, and hide the controls
-                            if (notesGrid.IsEditing)
-                            {
-                                notesGrid.CancelEdit();
-                            }
-                            HandleMessage("hide");
-                            e.Handled = true;
-                            break;
-                        case HotkeyFunction.NoteSetStartTime:
-                            if (this.IsVisible)
-                            {
-                                Note currentNote = notesGrid.CurrentNote;
-                                _viewModel.SetNoteStartTimeCommand.Execute(currentNote);
-                                if (false == notesGrid.IsEditing)
-                                {
-                                    notesGrid.CommitEdit();
-                                }
-                                e.Handled = true;
-                            }
-                            break;
-                    }
-                }
-            }
+            CourseUseView.HandleWindowKeypressForBothViews(sender, e, _currentDispatcher, notesGrid, _viewModel, this.IsVisible, HandleMessage);
         }
 
         public void HideControls()

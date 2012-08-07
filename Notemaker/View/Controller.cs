@@ -75,7 +75,7 @@ namespace JayDev.MediaScribe.View
             if (startAtLastCourse)
             {
                 var courses = courseRepo.GetCourseList();
-                var currentCourse = courses.OrderBy(x => x.DateViewed).FirstOrDefault();
+                var currentCourse = courses.OrderBy(x => x.DateViewed).LastOrDefault();
                 if (null != currentCourse)
                 {
                     Navigate(new NavigateArgs(NavigateMessage.WriteCourseNotes, currentCourse));
@@ -177,7 +177,7 @@ namespace JayDev.MediaScribe.View
                         courseUseViewModel.SetCurrentCourse(courseToLoad);
 
                         //note the last course we had viewed
-                        _lastCourse = args.Course;
+                        _lastCourse = courseToLoad;
                     }
                     break;
                 case NavigateMessage.ListCourses:

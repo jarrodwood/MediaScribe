@@ -143,10 +143,18 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Rating" Width="50"  
-                                           Binding="{Binding Rating}" 
-                                           IsReadOnly="True"
-                                           SortMemberPath="Rating"/>
+                <DataGridTemplateColumn Header="Rating" SortMemberPath="Rating" CanUserSort="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Rating}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Path=Rating}" PreviewTextInput="TextBox_PreviewTextInput" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

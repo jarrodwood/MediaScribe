@@ -228,6 +228,25 @@ namespace JayDev.MediaScribe.View.Controls
         }
 
 
+        /// <summary>
+        /// Ensures that whatever the user types into the 'rating' textbox, is only numeric, and not of an excessively large length.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void TextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            TextBox textbox = sender as TextBox;
+            bool areAllNumbersNumericChars = Utility.AreAllValidNumericChars(e.Text);
+            bool isLengthOK = textbox.Text.Length + e.Text.Length <= 4;
+            bool stopInput = (false == areAllNumbersNumericChars || false == isLengthOK);
+            if (stopInput)
+            {
+                e.Handled = true;
+            }
+            base.OnPreviewTextInput(e);
+        }
+
+
         DataGridCell GetCell(DataGrid dg, int rowIndex, int columnIndex)
         {
             var dr = dg.ItemContainerGenerator.ContainerFromIndex(rowIndex) as DataGridRow;

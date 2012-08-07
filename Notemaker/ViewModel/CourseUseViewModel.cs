@@ -1067,6 +1067,10 @@ namespace JayDev.MediaScribe.ViewModel
             {
                 _repo.SaveNote(_currentCourse, note);
             }
+            else
+            {
+                Notes.Remove(note);
+            }
         }
 
         void note_PropertyChanged(object sender, PropertyChangedEventArgs e)

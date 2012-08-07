@@ -17,6 +17,7 @@ using System.Windows.Threading;
 using JayDev.MediaScribe.Common;
 using System.Timers;
 using MediaScribe.Common;
+using JayDev.MediaScribe.View.Controls;
 
 namespace JayDev.MediaScribe.View
 {
@@ -80,6 +81,11 @@ namespace JayDev.MediaScribe.View
 
         public void HandleWindowKeypress(object sender, KeyEventArgs e)
         {
+            HandleWindowKeypressForBothViews(sender, e, _currentDispatcher, notesGrid, _viewModel, IsVisible, (x) => { });
+        }
+
+        public static void HandleWindowKeypressForBothViews(object sender, KeyEventArgs e, Dispatcher _currentDispatcher, NotesGridControl notesGrid, CourseUseViewModel _viewModel, bool IsVisible, Action<string> HandleMessage)
+        {
             var matches = HotkeyManager.CheckHotkey(e);
 
             if (null != matches && matches.Count > 0)
@@ -96,6 +102,8 @@ namespace JayDev.MediaScribe.View
                                     notesGrid.CommitEdit();
                                 }
 
+                                HandleMessage("show");
+
                                 notesGrid.BeginEditNewNote();
                             });
                             e.Handled = true;
@@ -106,6 +114,7 @@ namespace JayDev.MediaScribe.View
                             {
                                 notesGrid.CommitEdit();
                             }
+                            HandleMessage("hide");
                             e.Handled = true;
                             break;
                         case HotkeyFunction.NoteEditCancel:
@@ -114,26 +123,51 @@ namespace JayDev.MediaScribe.View
                             {
                                 notesGrid.CancelEdit();
                             }
+                            HandleMessage("hide");
                             e.Handled = true;
                             break;
                         case HotkeyFunction.NoteSetStartTime:
-                            if (this.IsVisible)
+                            if (IsVisible)
                             {
                                 Note currentNote = notesGrid.CurrentNote;
-                                _viewModel.SetNoteStartTimeCommand.Execute(currentNote);
-                                if (false == notesGrid.IsEditing)
+                                bool isDirty = currentNote.IsDirty;
+                                if (false == isDirty)
                                 {
-                                    notesGrid.CommitEdit();
+                                    currentNote.BeginEdit();
                                 }
+                                _viewModel.SetNoteStartTimeCommand.Execute(currentNote);
+                                if (false == isDirty)
+                                {
+                                    currentNote.EndEdit();
+                                }
+
                                 e.Handled = true;
                             }
                             break;
-                        case HotkeyFunction.NoteDelete:
-                            ThreadHelper.ExecuteAsyncUI(_currentDispatcher, delegate
+                        case HotkeyFunction.NoteRating:
+                            if (IsVisible)
                             {
-                                notesGrid.DeleteSelectedNote.Execute(null);
-                            });
-                            e.Handled = true;
+                                Note currentNote = notesGrid.CurrentNote;
+                                bool isDirty = currentNote.IsDirty;
+                                if (false == isDirty)
+                                {
+                                    currentNote.BeginEdit();
+                                }
+                                if (currentNote.Rating == match.Rating)
+                                {
+                                    currentNote.Rating = null;
+                                }
+                                else
+                                {
+                                    currentNote.Rating = match.Rating;
+                                }
+                                if (false == isDirty)
+                                {
+                                    currentNote.EndEdit();
+                                }
+
+                                e.Handled = true;
+                            }
                             break;
                     }
                 }

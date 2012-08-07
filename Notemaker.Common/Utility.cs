@@ -13,6 +13,17 @@ namespace JayDev.MediaScribe.Common
 
     public static class Utility
     {
+
+        public static bool AreAllValidNumericChars(string str)
+        {
+            foreach (char c in str)
+            {
+                if (!Char.IsNumber(c)) return false;
+            }
+
+            return true;
+        }
+
         private static string applicationVersionNumber = null;
         public static string ApplicationVersionNumber
         {

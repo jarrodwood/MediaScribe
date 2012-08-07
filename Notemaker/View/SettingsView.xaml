@@ -212,7 +212,7 @@
                 <ScrollViewer DockPanel.Dock="Top" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Width="auto">
                     <DockPanel Grid.Column="1">
                         <StackPanel DockPanel.Dock="Top" MaxWidth="800">
-                            <GroupBox Header="Application Settings"  Foreground="#FF3F3F3F" Margin="10 10 10 0" Padding="10" BorderBrush="#FF75B2DE">
+                            <!--<GroupBox Header="Application Settings"  Foreground="#FF3F3F3F" Margin="10 10 10 0" Padding="10" BorderBrush="#FF75B2DE">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="250" />
@@ -221,7 +221,7 @@
                                     <TextBlock Grid.Row="0" Grid.Column="0" TextWrapping="Wrap">Load last course when the application starts:</TextBlock>
                                     <CheckBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"></CheckBox>
                                 </Grid>
-                            </GroupBox>
+                            </GroupBox>-->
                             <GroupBox Header="Hotkeys" Foreground="#FF3F3F3F" BorderBrush="#FF75B2DE" Margin="10 10 10 10" Padding="5">
                                 <DockPanel>
                                     <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->

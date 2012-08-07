@@ -332,7 +332,7 @@ namespace JayDev.MediaScribe.ViewModel
             hotkeys.Add(new Hotkey(HotkeyFunction.ToggleFullscreen, ModifierKeys.Control, Key.F));
             hotkeys.Add(new Hotkey(HotkeyFunction.TogglePause, ModifierKeys.None, Key.NumPad0));
             hotkeys.Add(new Hotkey(HotkeyFunction.Seek, ModifierKeys.None, Key.NumPad3) { SeekSeconds = 10, SeekDirection = Direction.Forward });
-            hotkeys.Add(new Hotkey(HotkeyFunction.Seek, ModifierKeys.None, Key.NumPad2) { SeekSeconds = 3, SeekDirection = Direction.Back });
+            hotkeys.Add(new Hotkey(HotkeyFunction.Seek, ModifierKeys.None, Key.NumPad1) { SeekSeconds = 3, SeekDirection = Direction.Back });
             hotkeys.Add(new Hotkey(HotkeyFunction.Seek, ModifierKeys.None, Key.NumPad2) { SeekSeconds = 10, SeekDirection = Direction.Back });
             hotkeys.Add(new Hotkey(HotkeyFunction.NoteBold, ModifierKeys.Control, Key.B));
             hotkeys.Add(new Hotkey(HotkeyFunction.NoteBold, ModifierKeys.None, Key.Subtract));

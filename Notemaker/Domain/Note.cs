@@ -115,9 +115,9 @@ namespace JayDev.MediaScribe
             }
         }
 
-        private int _rating;
+        private int? _rating;
         [DataMember]
-        public virtual int Rating
+        public virtual int? Rating
         {
             get { return _rating; }
             set

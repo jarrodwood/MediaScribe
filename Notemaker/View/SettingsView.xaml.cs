@@ -42,8 +42,9 @@ namespace JayDev.MediaScribe.View
         /// <param name="e"></param>
         protected void TextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            bool areAllNumbersNumericChars = AreAllValidNumericChars(e.Text);
-            bool isLengthOK = e.Text.Length <= 4;
+            TextBox textbox = sender as TextBox;
+            bool areAllNumbersNumericChars = Utility.AreAllValidNumericChars(e.Text);
+            bool isLengthOK = textbox.Text.Length + e.Text.Length <= 4;
             bool stopInput = (false == areAllNumbersNumericChars || false == isLengthOK);
             if (stopInput)
             {
@@ -89,16 +90,6 @@ namespace JayDev.MediaScribe.View
 
 
         #endregion
-
-        private bool AreAllValidNumericChars(string str)
-        {
-            foreach (char c in str)
-            {
-                if (!Char.IsNumber(c)) return false;
-            }
-
-            return true;
-        }
 
         private void addHotkeyButton_Click(object sender, RoutedEventArgs e)
         {
