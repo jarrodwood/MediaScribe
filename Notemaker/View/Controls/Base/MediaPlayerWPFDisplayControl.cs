@@ -106,7 +106,7 @@ namespace JayDev.MediaScribe.View.Controls
         {
             Messenger.Default.Send("hide", 12345);
             Debug.WriteLine("HIDING NOW");
-            countDown = 3;
+            countDown = 4;
         }
 
         int countDown = 0;
@@ -144,7 +144,7 @@ namespace JayDev.MediaScribe.View.Controls
             }
             if (msg == (int)WM_Messages.WM_MOUSELEAVE)
             {
-                countDown = 3;
+                countDown = 4;
                 hoverTimer.Stop();
             }
             else if (msg == (int)WM_Messages.WM_LBUTTONDBLCLK)
