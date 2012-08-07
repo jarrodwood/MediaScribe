@@ -106,7 +106,7 @@ namespace JayDev.Notemaker.View.Controls
         {
             Messenger.Default.Send("hide", 12345);
             Debug.WriteLine("HIDING NOW");
-            countDown = 2;
+            countDown = 1;
         }
 
         int countDown = 0;
@@ -123,8 +123,11 @@ namespace JayDev.Notemaker.View.Controls
             }
             if (msg == (int)WM_Messages.WM_MOUSEMOVE)
             {
-                if (lParam.ToInt32() != lastMoveLocation)
+                int currentMoveLocation = lParam.ToInt32();
+                if (currentMoveLocation != lastMoveLocation)
                 {
+                    //NOTE: when we hide the controls, the panel gets resized... and that seems to trigger the 'move' event just ONCE. so we
+                    //have a 'countdown' variable, which allows us to have ONE buffer move-event before we re-show the controls.
                     if (countDown <= 0)
                     {
                         Debug.WriteLine("SHOW - from timer");
@@ -136,12 +139,12 @@ namespace JayDev.Notemaker.View.Controls
                     {
                         countDown--;
                     }
-                    lastMoveLocation = lParam.ToInt32();
+                    lastMoveLocation = currentMoveLocation;
                 }
             }
             if (msg == (int)WM_Messages.WM_MOUSELEAVE)
             {
-                countDown = 10;
+                countDown = 1;
                 hoverTimer.Stop();
             }
             else if (msg == (int)WM_Messages.WM_LBUTTONDBLCLK)
