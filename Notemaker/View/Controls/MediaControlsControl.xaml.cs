@@ -16,6 +16,7 @@ using JayDev.MediaScribe.Common;
 using System.Timers;
 using System.Windows.Threading;
 using JayDev.MediaScribe.Converters;
+using System.ComponentModel;
 
 namespace JayDev.MediaScribe.View.Controls
 {
@@ -198,26 +199,28 @@ namespace JayDev.MediaScribe.View.Controls
         public static readonly DependencyProperty PrevTrackCommandProperty =
             DependencyProperty.Register("PrevTrackCommand", typeof(ICommand), typeof(MediaControlsControl), new UIPropertyMetadata(null));
 
-        
 
 
-        
-        
+
+
+        bool suspend;
 
         public MediaControlsControl()
         {
             InitializeComponent();
             _uiDispatcher = Dispatcher.CurrentDispatcher;
+
+            //Since sliders 'swallow' mouse down events... we need to hook into the mouse down here, instead of in XAML
+            timeSlider.AddHandler(Slider.PreviewMouseLeftButtonDownEvent, new MouseButtonEventHandler(timeSlider_MouseDown), true);
         }
 
-        TimeSpanToSecondsConverter converter = new TimeSpanToSecondsConverter();
-
-        private void timeSlider_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void timeSlider_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var seekTo = ((Slider)sender).Value;
-        
-            TimeSpan result = (TimeSpan)converter.ConvertBack(seekTo, typeof(TimeSpan), null, null);
+
+            TimeSpan result = (TimeSpan)(new TimeSpanToSecondsConverter()).ConvertBack(seekTo, typeof(TimeSpan), null, null);
             SeekToCommand.Execute(result);
+            suspend = false;
         }
     }
 }

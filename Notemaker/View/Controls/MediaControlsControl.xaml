@@ -127,9 +127,11 @@
             </Viewbox>
 
             <!-- NOTE: margin of -3 on top brings the controls BAM next to everything else... but it feels like something's missing then.-->
+            <!-- NOTE 2: There is also a 'MouseLeftButtonDown' event, which is hooked up in the class contructor (since the event is
+                         swallowed by the slider, we need to instruct it to capture handled events too, which can't be done via XAML)-->
             <Grid x:Name="TrackBar" Margin="0 0 0 0" Height="12" VerticalAlignment="Top">
-                <Slider Name="timeSlider" SmallChange="0.5" IsSnapToTickEnabled="True" TickFrequency="0.5" Height="15"
-                    Style="{DynamicResource JarrodSlider}" PreviewMouseLeftButtonUp="timeSlider_PreviewMouseLeftButtonUp"
+                <Slider Name="timeSlider" SmallChange="0.5" TickFrequency="0.5" Height="15" 
+                    Style="{DynamicResource JarrodSlider}" 
         		local:SliderPreviewHelper.PreviewEnabled="True"  
         		local:SliderPreviewHelper.ContentStyle="{StaticResource PreviewStyle}"      
                 Value="{Binding ElementName=MediaControlsControlName, Path=CurrentPlayTime, Converter={StaticResource timespanConverter}, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
