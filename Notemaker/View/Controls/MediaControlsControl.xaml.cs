@@ -201,10 +201,6 @@ namespace JayDev.MediaScribe.View.Controls
 
 
 
-
-
-        bool suspend;
-
         public MediaControlsControl()
         {
             InitializeComponent();
