@@ -406,6 +406,7 @@ namespace LibMPlayerCommon
         /// <param name="timePosition">Seconds.  The position to seek move to.</param>
         public void MovePosition(int timePosition)
         {
+            Debug.WriteLine(DateTime.Now.ToLongTimeString() + " MPLAYER move position, {0} seconds");
             MediaPlayer.StandardInput.WriteLine(string.Format("set_property time_pos {0}", timePosition));
             MediaPlayer.StandardInput.Flush();
         }
@@ -423,6 +424,7 @@ namespace LibMPlayerCommon
         /// <param name="type"></param>
         public void Seek(int value, Seek type)
         {
+            Debug.WriteLine(DateTime.Now.ToLongTimeString() + " MPLAYER Seek. {1} type, {0} seconds", value, type.ToString());
             MediaPlayer.StandardInput.WriteLine(string.Format("pausing_keep_force seek {0} {1}", value, (int)type));
             MediaPlayer.StandardInput.Flush();
         }

@@ -165,9 +165,11 @@ namespace JayDev.MediaScribe.ViewModel
             //TODO: the timer still makes it jump back for some reason - mplayer's returning the old time for a second or two ?
             this.CurrentPlayPosition = new TimeSpan(0, 0, time);
         }
+
         public void SeekRelative(int relativeTime)
         {
             _play.Seek(relativeTime, LibMPlayerCommon.Seek.Relative);
+            Debug.WriteLine(DateTime.Now.ToLongTimeString() + " Seek relative, {1} seconds. recorded position: {0}", CurrentPlayPosition.ToString(), relativeTime);
             if (relativeTime >= 0)
             {
                 this.CurrentPlayPosition = this.CurrentPlayPosition.Add(new TimeSpan(0, 0, relativeTime));
@@ -177,6 +179,7 @@ namespace JayDev.MediaScribe.ViewModel
                 this.CurrentPlayPosition = this.CurrentPlayPosition.Subtract(new TimeSpan(0, 0, Math.Abs(relativeTime)));
             }
         }
+
 
         public void Volume(double volumePercent)
         {
@@ -242,6 +245,7 @@ namespace JayDev.MediaScribe.ViewModel
         }
 
 
+        int _noTimesOutsideOfRange = 0;
         void _playPositionTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             if (_play.CurrentStatus == MediaStatus.Playing)
@@ -251,6 +255,18 @@ namespace JayDev.MediaScribe.ViewModel
                 if (Math.Abs(newTime.TotalSeconds - CurrentPlayPosition.TotalSeconds) <= MAX_TIME_DIFFERENCE_SECONDS)
                 {
                     CurrentPlayPosition = newTime;
+                    _noTimesOutsideOfRange = 0;
+                }
+                else
+                {
+                    _noTimesOutsideOfRange++;
+                }
+
+                //we've somehow fallen out of sync... force it to re-sync
+                if (_noTimesOutsideOfRange > 2)
+                {
+                    CurrentPlayPosition = newTime;
+                    _noTimesOutsideOfRange = 0;
                 }
             }
         }

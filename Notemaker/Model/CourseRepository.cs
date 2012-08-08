@@ -225,19 +225,19 @@ namespace JayDev.MediaScribe.Model
 
         public void DeleteNote(Note note)
         {
-            TrackTime start = note.Start;
-            TrackTime end = note.End;
-            note.Start = null;
-            note.End = null;
+            if (null == note.ID)
+                return;
+
+            using (ISession session = NHibernateHelper.OpenSession())
+            using (ITransaction transaction = session.BeginTransaction())
+            {
+                note = session.Get<Note>(note.ID.Value);
+            }
             lock (_destructiveOperationLockToken)
             {
                 using (ISession session = NHibernateHelper.OpenSession())
                 using (ITransaction transaction = session.BeginTransaction())
                 {
-                    if (null != start)
-                        session.Delete(start);
-                    if (null != end)
-                        session.Delete(end);
                     session.Delete(note);
 
                     transaction.Commit();

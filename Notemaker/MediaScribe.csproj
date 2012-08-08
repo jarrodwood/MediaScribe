@@ -107,6 +107,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\ConfigurationHelper.cs" />
     <Compile Include="Converters\ColourToBrushConverter.cs" />
     <Compile Include="Converters\ColourToNameStringConverter.cs" />
     <Compile Include="Converters\EnumConverters.cs" />

@@ -7,6 +7,7 @@ using System.Windows;
 using Microsoft.Shell;
 using System.Reflection;
 using System.IO;
+using JayDev.MediaScribe.Core;
 
 namespace JayDev.MediaScribe
 {
@@ -36,8 +37,8 @@ namespace JayDev.MediaScribe
             }
             catch (Exception e)
             {
-                string currentAssemblyDirectoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                System.IO.File.AppendAllText(currentAssemblyDirectoryName + @"\exception.txt", DateTime.Now.ToLongTimeString() + "\r\n" + e.ToString() + "\r\n\r\n");
+                StorageHelper storage = new StorageHelper();
+                storage.AppendFileToStorageFolder("error.txt", DateTime.Now.ToLongTimeString() + "\r\n" + e.ToString() + "\r\n\r\n");
                 MessageBox.Show("An error has occured -- please go to www.jarrod.co.nz/MediaScribe/ and get in touch.");
             }
         }

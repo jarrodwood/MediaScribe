@@ -1194,7 +1194,10 @@ namespace JayDev.MediaScribe.ViewModel
         }
         private void Stop()
         {
-            _player.Stop();
+            if (null != _player)
+            {
+                _player.Stop();
+            }
         }
 
 

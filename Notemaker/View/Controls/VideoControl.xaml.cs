@@ -96,7 +96,17 @@ namespace JayDev.MediaScribe.View.Controls
             InitializeComponent();
 
             var mPlayerWPFControl1 = MediaPlayerWPFDisplayControl.Instance;
+
+            //since we re-use the video control (since we don't want to keep on re-running mplayer), we need to ensure we disconnect the
+            //panel from its existing parent, before attaching it to us.
+            if (null != mPlayerWPFControl1.Parent)
+            {
+                (mPlayerWPFControl1.Parent as ContentControl).Content = null;
+            }
+
             this.videoPlaceholder.Content = mPlayerWPFControl1;
+
+            //hook up the event handler so the user can double-click in the panel to toggle fullscreen
             mPlayerWPFControl1.OnDoubleClick += new MediaPlayerWPFDisplayControl.DoubleClickHandler(mPlayerWPFControl1_OnDoubleClick);
 
             //Ensure that when the video panel pointer property of the native win32 control is updated, we update our reference to it.

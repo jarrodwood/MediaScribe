@@ -11,10 +11,7 @@ namespace JayDev.MediaScribe.Core
 {
     public class NHibernateHelper
     {
-        private static readonly string ApplicationFolderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + @"\MediaScribe";
-        private static readonly string GenericFilePath = ApplicationFolderPath + @"\{0}";
         private static readonly string DatabaseFileName = "MediaScribe.db";
-        private static readonly string DatabaseFilePath = string.Format(GenericFilePath, DatabaseFileName);
         private static readonly string EmbeddedEmptyDatabaseFileName = "JayDev.MediaScribe.Resources.MediaScribeEmpty.db";
 
         private static ISessionFactory _sessionFactory;
@@ -23,12 +20,10 @@ namespace JayDev.MediaScribe.Core
         {
             get
             {
-                if (false == System.IO.Directory.Exists(ApplicationFolderPath))
-                {
-                    System.IO.Directory.CreateDirectory(ApplicationFolderPath);
-                }
+                StorageHelper configHelper = new StorageHelper();
+                configHelper.VerifyAppFolderExists();
                 //if the database doesn't exist, create it using our embedded empty database (containing only hotkeys)
-                if (false == System.IO.File.Exists(DatabaseFilePath))
+                if (false == configHelper.FileExistsInStorageFolder(DatabaseFileName))
                 {
                     Assembly _assembly;
                     _assembly = Assembly.GetExecutingAssembly();
@@ -38,7 +33,7 @@ namespace JayDev.MediaScribe.Core
                         stream.Read(buffer, 0, buffer.Length);
                         // TODO: use the buffer that was read
 
-                        System.IO.File.WriteAllBytes(DatabaseFilePath, buffer);
+                        configHelper.WriteFileToStorageFolder(DatabaseFileName, buffer);
                     }
                 }
 
@@ -47,7 +42,8 @@ namespace JayDev.MediaScribe.Core
                     var configuration = new Configuration();
                     configuration.Configure();
                     configuration.AddAssembly("MediaScribe");
-                    string newConnectionString = string.Format(@"Data Source={0};Version=3", DatabaseFilePath);
+                    string databasePath = configHelper.GetFullPathOfFileInStorageFolder(DatabaseFileName);
+                    string newConnectionString = string.Format(@"Data Source={0};Version=3", databasePath);
                     configuration.SetProperty("connection.connection_string", newConnectionString);
                     _sessionFactory = configuration.BuildSessionFactory();
                 }
