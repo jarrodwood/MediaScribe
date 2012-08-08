@@ -39,6 +39,9 @@
   <PropertyGroup>
     <StartupObject>JayDev.MediaScribe.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Letter M blue.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EPPlus">
       <HintPath>..\..\..\libraries\EPPlus\EPPlus.dll</HintPath>
@@ -337,6 +340,7 @@
     <Folder Include="Styles\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\MediaScribeEmpty.db" />
     <None Include="Resources\Play.png" />
   </ItemGroup>
   <ItemGroup>
@@ -477,6 +481,7 @@
     <Resource Include="Images\help32.png" />
     <Resource Include="Images\info32.png" />
     <Resource Include="Images\Letter M blue 32.png" />
+    <Resource Include="Letter M blue.ico" />
     <Content Include="log4netoff.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

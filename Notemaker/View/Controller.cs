@@ -15,6 +15,10 @@ using JayDev.MediaScribe.Core;
 using MediaScribe.Common;
 using NHibernate;
 using NHibernate.Cfg;
+using System.Reflection;
+using System.IO;
+using System.Windows.Threading;
+using System.Threading;
 
 namespace JayDev.MediaScribe.View
 {
@@ -46,6 +50,20 @@ namespace JayDev.MediaScribe.View
 
         public void Initialize(MainWindow mainWindow)
         {
+            var assembly = Assembly.GetExecutingAssembly();
+            string currentAssemblyDirectoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            var oldChildMPlayerProcesses = (from procs in Process.GetProcesses()
+                                    where procs.ProcessName == "mplayer"
+                                    && Path.GetDirectoryName(procs.MainModule.FileName).Contains(currentAssemblyDirectoryName)
+                                    select procs).ToList();
+
+            try
+            {
+                oldChildMPlayerProcesses.ForEach(x => x.Kill());
+            }
+            catch { }
+
             _mainWindow = mainWindow;
             _mainWindow.PreviewKeyDown += new KeyEventHandler(MainWindow_KeyDown);
 
@@ -167,7 +185,14 @@ namespace JayDev.MediaScribe.View
                         currentViewModel.ViewModelBlur();
                         if (null == args.Course && null == _lastCourse)
                         {
-                            throw new ApplicationException("Error - can't write course notes, when we haven't been provided a course to write notes for!");
+                            CourseRepository courseRepo = new CourseRepository();
+                            var courses = courseRepo.GetCourseList();
+                            if (null == courses || courses.Count == 0)
+                            {  
+                                MessageBox.Show(_mainWindow,"Please create a course, before going to the Write Notes section");
+                                return;
+                            }
+                            _lastCourse = courses.First();
                         }
 
                         Course courseToLoad = args.Course ?? _lastCourse;

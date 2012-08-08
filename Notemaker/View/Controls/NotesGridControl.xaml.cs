@@ -114,7 +114,6 @@ namespace JayDev.MediaScribe.View.Controls
                     ?? (_doNothing = new RelayCommand(
                                           () =>
                                           {
-                                              int a = 5;
                                           }));
             }
         }
