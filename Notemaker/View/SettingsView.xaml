@@ -181,6 +181,36 @@
                         </Setter.Value>
                     </Setter>
                 </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Function}" Value="{x:Static nmCommon:HotkeyFunction.NoteRating}" />
+                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEditing}" Value="False" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Path=Rating}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Function}" Value="{x:Static nmCommon:HotkeyFunction.NoteRating}" />
+                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEditing}" Value="True" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox Text="{Binding Path=Rating}" Style="{StaticResource controlledTextBox}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiDataTrigger>
             </Style.Triggers>
             <Style.Setters>
                 <Setter Property="ContentTemplate">
