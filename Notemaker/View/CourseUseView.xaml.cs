@@ -84,7 +84,7 @@ namespace JayDev.MediaScribe.View
             HandleWindowKeypressForBothViews(sender, e, _currentDispatcher, notesGrid, _viewModel, IsVisible, (x) => { });
         }
 
-        public static void HandleWindowKeypressForBothViews(object sender, KeyEventArgs e, Dispatcher _currentDispatcher, NotesGridControl notesGrid, CourseUseViewModel _viewModel, bool IsVisible, Action<string> HandleMessage)
+        public static void HandleWindowKeypressForBothViews(object sender, KeyEventArgs e, Dispatcher _currentDispatcher, NotesGridControl notesGrid, CourseUseViewModel _viewModel, bool IsVisible, Action<ShowMessage> SendShowMessage)
         {
             var matches = HotkeyManager.CheckHotkey(e);
 
@@ -102,7 +102,7 @@ namespace JayDev.MediaScribe.View
                                     notesGrid.CommitEdit();
                                 }
 
-                                HandleMessage("show");
+                                SendShowMessage(new ShowMessage() { Show = true, Source = ShowSource.Hotkey });
 
                                 notesGrid.BeginEditNewNote();
                             });
@@ -114,7 +114,7 @@ namespace JayDev.MediaScribe.View
                             {
                                 notesGrid.CommitEdit();
                             }
-                            HandleMessage("hide");
+                            SendShowMessage(new ShowMessage() { Show = false, Source = ShowSource.Hotkey });
                             e.Handled = true;
                             break;
                         case HotkeyFunction.NoteEditCancel:
@@ -123,7 +123,7 @@ namespace JayDev.MediaScribe.View
                             {
                                 notesGrid.CancelEdit();
                             }
-                            HandleMessage("hide");
+                            SendShowMessage(new ShowMessage() { Show = false, Source = ShowSource.Hotkey });
                             e.Handled = true;
                             break;
                         case HotkeyFunction.NoteSetStartTime:

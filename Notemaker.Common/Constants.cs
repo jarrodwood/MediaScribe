@@ -13,6 +13,13 @@ namespace JayDev.MediaScribe.Common
     public enum MessageType { Navigate, RegisterReusableControl, HotkeyRegistration }
     public enum NavigateMessage { ToggleFullscreen, ListCourses, WriteCourseNotes, ReviewCourseNotes, Settings }
 
+    public enum ShowSource { MouseMove, Hotkey, MouseStoppedTimer }
+    public struct ShowMessage
+    {
+        public bool Show { get; set; }
+        public ShowSource Source { get; set; }
+    }
+
     public struct HotkeyMessage
     {
         public HotkeyFunction Function { get; set; }

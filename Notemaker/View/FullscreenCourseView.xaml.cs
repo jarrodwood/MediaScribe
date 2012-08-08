@@ -40,12 +40,12 @@ namespace JayDev.MediaScribe.View
             this.DataContext = _viewModel;
             _currentDispatcher = Dispatcher.CurrentDispatcher;
 
-            Messenger.Default.Register<string>(this, 12345, (message) => HandleMessage(message));
+            Messenger.Default.Register<ShowMessage>(this, 12345, (message) => HandleShowMessage(message));
         }
 
         public void HandleWindowKeypress(object sender, KeyEventArgs e)
         {
-            CourseUseView.HandleWindowKeypressForBothViews(sender, e, _currentDispatcher, notesGrid, _viewModel, this.IsVisible, HandleMessage);
+            CourseUseView.HandleWindowKeypressForBothViews(sender, e, _currentDispatcher, notesGrid, _viewModel, this.IsVisible, SendShowMessage);
         }
 
         public void HideControls()
@@ -61,10 +61,16 @@ namespace JayDev.MediaScribe.View
             Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen), MessageType.Navigate);
         }
 
-        private void HandleMessage(string message)
+        private void SendShowMessage(ShowMessage message)
         {
-            Debug.WriteLine("Handling message: " + message);
-            if (message == "show")
+            Messenger.Default.Send(message, 12345);
+        }
+
+        private void HandleShowMessage(ShowMessage message)
+        {
+            MediaPlayerWPFDisplayControl.Instance.ReceiveHotkeyHideNotification(message);
+            Debug.WriteLine("Handling message: " + message.Show.ToString() + ", source: " + message.Source.ToString());
+            if (message.Show)
             {
                 if (this.notesGrid.Visibility != Visibility.Visible)
                 {
