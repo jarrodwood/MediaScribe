@@ -23,6 +23,10 @@ namespace JayDev.MediaScribe.Core
         {
             get
             {
+                if (false == System.IO.Directory.Exists(ApplicationFolderPath))
+                {
+                    System.IO.Directory.CreateDirectory(ApplicationFolderPath);
+                }
                 //if the database doesn't exist, create it using our embedded empty database (containing only hotkeys)
                 if (false == System.IO.File.Exists(DatabaseFilePath))
                 {

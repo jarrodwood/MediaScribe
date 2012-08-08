@@ -28,7 +28,7 @@
             AutoGenerateColumns="False" Name="noteDataGrid" HeadersVisibility="Column" CanUserSortColumns="True" CanUserResizeRows="False" CanUserAddRows="True"
             CanUserDeleteRows="True" RowEditEnding="noteDataGrid_RowEditEnding" BeginningEdit="noteDataGrid_BeginningEdit"
             PreparingCellForEdit="noteDataGrid_PreparingCellForEdit"
-            ItemsSource="{ Binding ElementName=NotesGridControlName, Path=Notes, Mode=TwoWay, IsAsync=True}"  CellEditEnding="noteDataGrid_CellEditEnding" Style="{StaticResource DataGridStyle1}">
+            ItemsSource="{ Binding ElementName=NotesGridControlName, Path=Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, IsAsync=True}"  CellEditEnding="noteDataGrid_CellEditEnding" Style="{StaticResource DataGridStyle1}">
             <DataGrid.InputBindings>
                 <KeyBinding Key="Delete" Command="{Binding ElementName=NotesGridControlName, Path=DoNothing}" />
             </DataGrid.InputBindings>

@@ -26,10 +26,7 @@ namespace AvalonTextBox.Converters
 
             if (string.Empty == markedupText)
             {
-                return new List<Section>(new[] { 
-                    new Section() {
-                        Colour = ColorHelper.ApplicationDefaultTextColour,
-                        Text = string.Empty }});
+                return AvalonHelper.GetInitialSectionsForBlankString();
             }
 
             int preparedUntilIndex = 0;
@@ -126,6 +123,13 @@ namespace AvalonTextBox.Converters
             if (preparedUntilIndex < markedupText.Length)
             {
                 currentSection.Text = markedupText.Substring(preparedUntilIndex);
+                sections.Add(currentSection);
+            }
+
+            //this is more of an error-catching situation... but if there are no sections by the end of this, add the default-styled
+            //currentsectionto the list.
+            if (sections.Count == 0)
+            {
                 sections.Add(currentSection);
             }
 

@@ -703,7 +703,7 @@ namespace JayDev.MediaScribe.ViewModel
 
         #endregion
 
-        public override void ViewModelFocus()
+        public override void EnteringViewModel()
         {
             LoadCoursesBackground();
         }

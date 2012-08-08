@@ -128,7 +128,7 @@
                     <nmControls:NotesGridControl x:Name="notesGrid"
                                                        PrepareNoteForEditCommand="{Binding PrepareNoteForEditCommand}"
                                                        NoteSavedCommand="{Binding NoteSavedCommand}"
-                                                       Notes="{ Binding Notes, Mode=TwoWay}"
+                                                       Notes="{ Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                        PlayNoteCommand="{Binding PlayNoteCommand}"
                                                        SetNoteStartTimeCommand="{Binding SetNoteStartTimeCommand}"
                                                        NoteEditCompletedCommand="{Binding NoteEditCompletedCommand}">

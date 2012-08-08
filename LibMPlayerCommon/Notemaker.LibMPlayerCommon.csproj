@@ -103,168 +103,168 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="backend\COPYING-dsnative.txt">
+    <Content Include="backend\COPYING-dsnative.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\dsnative.dll">
+    </Content>
+    <Content Include="backend\dsnative.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\10-autohint.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\10-autohint.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\10-no-sub-pixel.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\10-no-sub-pixel.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\10-sub-pixel-bgr.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\10-sub-pixel-bgr.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\10-sub-pixel-rgb.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\10-sub-pixel-rgb.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\10-sub-pixel-vbgr.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\10-sub-pixel-vbgr.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\10-sub-pixel-vrgb.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\10-sub-pixel-vrgb.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\10-unhinted.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\10-unhinted.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\20-fix-globaladvance.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\20-fix-globaladvance.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\20-unhint-small-vera.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\20-unhint-small-vera.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\25-unhint-nonlatin.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\25-unhint-nonlatin.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\30-metric-aliases.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\30-metric-aliases.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\30-urw-aliases.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\30-urw-aliases.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\40-nonlatin.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\40-nonlatin.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\45-latin.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\45-latin.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\49-sansserif.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\49-sansserif.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\50-user.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\50-user.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\51-local.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\51-local.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\60-latin.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\60-latin.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\65-fonts-persian.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\65-fonts-persian.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\65-khmer.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\65-khmer.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\65-nonlatin.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\65-nonlatin.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\69-unifont.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\69-unifont.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\70-no-bitmaps.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\70-no-bitmaps.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\70-yes-bitmaps.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\70-yes-bitmaps.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\80-delicious.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\80-delicious.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.avail\90-synthetic.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.avail\90-synthetic.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.d\20-fix-globaladvance.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.d\20-fix-globaladvance.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.d\20-unhint-small-vera.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.d\20-unhint-small-vera.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.d\30-metric-aliases.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.d\30-metric-aliases.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.d\30-urw-aliases.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.d\30-urw-aliases.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.d\40-nonlatin.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.d\40-nonlatin.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.d\45-latin.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.d\45-latin.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.d\49-sansserif.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.d\49-sansserif.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.d\50-user.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.d\50-user.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.d\51-local.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.d\51-local.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.d\60-latin.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.d\60-latin.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.d\65-fonts-persian.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.d\65-fonts-persian.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.d\65-nonlatin.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.d\65-nonlatin.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.d\69-unifont.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.d\69-unifont.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.d\80-delicious.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.d\80-delicious.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.d\90-synthetic.conf">
+    </Content>
+    <Content Include="backend\fonts\conf.d\90-synthetic.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\conf.d\README">
+    </Content>
+    <Content Include="backend\fonts\conf.d\README">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\fonts.conf">
+    </Content>
+    <Content Include="backend\fonts\fonts.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\fonts\fonts.dtd">
+    </Content>
+    <Content Include="backend\fonts\fonts.dtd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\LICENSE.txt">
+    </Content>
+    <Content Include="backend\LICENSE.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\mencoder.exe">
+    </Content>
+    <Content Include="backend\mencoder.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\mplayer.exe">
+    </Content>
+    <Content Include="backend\mplayer.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\mplayer\codecs.conf">
+    </Content>
+    <Content Include="backend\mplayer\codecs.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\mplayer\config">
+    </Content>
+    <Content Include="backend\mplayer\config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\mplayer\input.conf">
+    </Content>
+    <Content Include="backend\mplayer\input.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\mplayer\subfont.ttf">
+    </Content>
+    <Content Include="backend\mplayer\subfont.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="backend\README.txt">
+    </Content>
+    <Content Include="backend\README.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="backend\codecs\" />

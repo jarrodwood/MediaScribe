@@ -66,6 +66,7 @@
     <Compile Include="Converters\NoteSectionsToInlineListConverter.cs" />
     <Compile Include="Converters\NoteSectionsToMarkedupTextConverter.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="MarkupColorizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Section.cs" />

@@ -36,6 +36,29 @@ namespace JayDev.MediaScribe.Model
             return result as List<Course>;
         }
 
+        //public Course GetCourse(int courseID)
+        //{
+        //    Course result = null;
+        //    using (ISession session = NHibernateHelper.OpenSession())
+        //    using (ITransaction transaction = session.BeginTransaction())
+        //    {
+        //        var results = session.CreateCriteria<Course>().Add(Restrictions.Eq("CourseID", courseID)).List<Course>();
+        //        if (null != results && results.Count == 1)
+        //            result = results[0];
+
+        //        transaction.Commit();
+        //    }
+
+        //    foreach (Note note in result.Notes)
+        //    {
+        //        if (null != note.Start)
+        //            note.Start.ParentCourse = result;
+        //        if (null != note.End)
+        //            note.End.ParentCourse = result;
+        //    }
+
+        //    return result;
+        //}
         public Course GetCourse(int courseID)
         {
             Course result;
@@ -202,15 +225,19 @@ namespace JayDev.MediaScribe.Model
 
         public void DeleteNote(Note note)
         {
+            TrackTime start = note.Start;
+            TrackTime end = note.End;
+            note.Start = null;
+            note.End = null;
             lock (_destructiveOperationLockToken)
             {
                 using (ISession session = NHibernateHelper.OpenSession())
                 using (ITransaction transaction = session.BeginTransaction())
                 {
-                    if (null != note.Start)
-                        session.Delete(note.Start);
-                    if (null != note.End)
-                        session.Delete(note.End);
+                    if (null != start)
+                        session.Delete(start);
+                    if (null != end)
+                        session.Delete(end);
                     session.Delete(note);
 
                     transaction.Commit();

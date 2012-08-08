@@ -15,6 +15,7 @@ using System.Runtime.InteropServices;
 using JayDev.MediaScribe.View.Controls;
 using JayDev.MediaScribe.Core;
 using MediaScribe.Common;
+using JayDev.MediaScribe.View;
 
 namespace JayDev.MediaScribe.ViewModel
 {
@@ -853,9 +854,6 @@ namespace JayDev.MediaScribe.ViewModel
                     ?? (_navigateCommand = new RelayCommand<NavigateMessage>(
                                           (NavigateMessage message) =>
                                           {
-                                              //save the current track and position for next time... do this BEFORE we stop playing.
-                                              SaveCourse();
-                                              LeavingViewModel();
                                               Messenger.Default.Send(new NavigateArgs(message, _currentCourse), MessageType.Navigate);
                                           }));
             }
@@ -1018,15 +1016,8 @@ namespace JayDev.MediaScribe.ViewModel
                 //the volume will have been given an initial value before this event is raised
                 _player.Volume(_volume);
 
-                //auto-load the appropriate file
-                if (null != _currentCourse.LastPlayedTrack)
-                {
-                    //JDW: track may have been removed
-                    if (_currentCourse.Tracks.Any(x => x.FilePath == _currentCourse.LastPlayedTrack.FilePath))
-                    {
-                        PlayFile(_currentCourse.LastPlayedTrack, _currentCourse.LastPlayedTrackPosition, true);
-                    }
-                }
+                //auto-load the last track
+                SetInitialTrack();
             }
         }
 
@@ -1052,10 +1043,13 @@ namespace JayDev.MediaScribe.ViewModel
             {
                 foreach (Note note in e.OldItems)
                 {
-                    note.PropertyChanged -= this.note_PropertyChanged;
-                    note.ChangeCommitted -= note_ChangeCommitted;
+                    ThreadHelper.ExecuteBackground(delegate
+                    {
+                        note.PropertyChanged -= this.note_PropertyChanged;
+                        note.ChangeCommitted -= note_ChangeCommitted;
 
-                    _repo.DeleteNote(note);
+                        _repo.DeleteNote(note);
+                    });
                 }
             }
         }
@@ -1128,6 +1122,8 @@ namespace JayDev.MediaScribe.ViewModel
             _tracks = new ObservableCollection<Track>(course.Tracks);
             _lastEmbeddedVideoHeight = course.EmbeddedVideoHeight;
             _lastEmbeddedVideoWidth = course.EmbeddedVideoWidth;
+
+            SetInitialTrack();
         }
 
 
@@ -1202,10 +1198,27 @@ namespace JayDev.MediaScribe.ViewModel
         }
 
 
-        public void LeavingViewModel()
+        public override void LeavingViewModel()
         {
             SaveCourse();
             Stop();
+        }
+
+        private void SetInitialTrack()
+        {
+            //NOTE: can only instruct mplayer to load a file, AFTER we've initialized the panel it will display to.
+            if (MediaPlayerWPFDisplayControl.Instance.IsVideoPanelInitialized)
+            {
+                //auto-load the appropriate file
+                if (null != _currentCourse.LastPlayedTrack)
+                {
+                    //JDW: track may have been removed
+                    if (_currentCourse.Tracks.Any(x => x.FilePath == _currentCourse.LastPlayedTrack.FilePath))
+                    {
+                        PlayFile(_currentCourse.LastPlayedTrack, _currentCourse.LastPlayedTrackPosition, true);
+                    }
+                }
+            }
         }
     }
 }

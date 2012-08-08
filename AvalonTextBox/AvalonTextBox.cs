@@ -485,6 +485,14 @@ namespace AvalonTextBox
                     sections[i - 1] = mergedSection;
                 }
             }
+
+            //the user might have removed all the text in the textbox, which has the effect of removing all of the (now empty) sections.
+            //however, we need at least ONE empty section for the user to type into.
+            //NOTE: we can't REPLACE the collection, since it's hooked up to the colorizer. we must add to it.
+            if (sections.Count == 0)
+            {
+                sections.AddRange(AvalonHelper.GetInitialSectionsForBlankString());
+            }
         }
 
         void AvalonTextBox_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)

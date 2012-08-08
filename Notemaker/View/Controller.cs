@@ -50,7 +50,6 @@ namespace JayDev.MediaScribe.View
 
         public void Initialize(MainWindow mainWindow)
         {
-            var assembly = Assembly.GetExecutingAssembly();
             string currentAssemblyDirectoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             var oldChildMPlayerProcesses = (from procs in Process.GetProcesses()
@@ -182,10 +181,10 @@ namespace JayDev.MediaScribe.View
                     break;
                 case NavigateMessage.WriteCourseNotes:
                     {
-                        currentViewModel.ViewModelBlur();
+                        currentViewModel.LeavingViewModel();
+                        CourseRepository courseRepo = new CourseRepository();
                         if (null == args.Course && null == _lastCourse)
                         {
-                            CourseRepository courseRepo = new CourseRepository();
                             var courses = courseRepo.GetCourseList();
                             if (null == courses || courses.Count == 0)
                             {  
@@ -195,7 +194,17 @@ namespace JayDev.MediaScribe.View
                             _lastCourse = courses.First();
                         }
 
-                        Course courseToLoad = args.Course ?? _lastCourse;
+
+                        Course courseToLoad = null;
+                        if (null != args.Course)
+                        {
+                            courseToLoad = args.Course;
+                        }
+                        else if (null != _lastCourse)
+                        {
+                            //the course is probably outdated... get a fresh copy.
+                            courseToLoad = courseRepo.GetCourse(_lastCourse.ID.Value);
+                        }
                         CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
                         currentView = courseUseView;
                         currentViewModel = courseUseViewModel;
@@ -205,29 +214,28 @@ namespace JayDev.MediaScribe.View
                         //note the last course we had viewed
                         _lastCourse = courseToLoad;
 
-                        currentViewModel.ViewModelFocus();
+                        currentViewModel.EnteringViewModel();
                     }
                     break;
                 case NavigateMessage.ListCourses:
-                    currentViewModel.ViewModelBlur();
+                    currentViewModel.LeavingViewModel();
                     CourseListView courseListView = new CourseListView(courseListViewModel);
                     currentView = courseListView;
                     currentViewModel = courseListViewModel;
                     _mainWindow.Content = currentView;
 
-                    currentViewModel.ViewModelFocus();
+                    currentViewModel.EnteringViewModel();
                     break;
                 case NavigateMessage.Settings:
-                    currentViewModel.ViewModelBlur();
+                    currentViewModel.LeavingViewModel();
                     SettingsView settingsView = new SettingsView(settingsViewModel);
                     currentView = settingsView;
                     currentViewModel = settingsViewModel;
                     _mainWindow.Content = settingsView;
 
-                    currentViewModel.ViewModelFocus();
+                    currentViewModel.EnteringViewModel();
                     break;
             }
         }
-
     }
 }

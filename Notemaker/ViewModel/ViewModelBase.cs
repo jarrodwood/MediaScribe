@@ -59,8 +59,8 @@ namespace JayDev.MediaScribe.ViewModel
         {
         }
 
-        public virtual void ViewModelFocus() { }
+        public virtual void EnteringViewModel() { }
 
-        public virtual void ViewModelBlur() { }
+        public virtual void LeavingViewModel() { }
     }
 }

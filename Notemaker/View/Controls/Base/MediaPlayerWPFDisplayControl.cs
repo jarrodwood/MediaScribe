@@ -16,6 +16,8 @@ namespace JayDev.MediaScribe.View.Controls
     /// </summary>
     public class MediaPlayerWPFDisplayControl : HwndHost
     {
+        public bool IsVideoPanelInitialized { get; private set; }
+
         private static MediaPlayerWPFDisplayControl instance;
 
         public static MediaPlayerWPFDisplayControl Instance
@@ -99,6 +101,8 @@ namespace JayDev.MediaScribe.View.Controls
             hoverTimer.Interval = 500;
 
             SetValue(VideoPanelHandlePropertyProperty, _source.Handle);
+
+            IsVideoPanelInitialized = true;
             return new HandleRef(null, _source.Handle);
         }
 
