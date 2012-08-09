@@ -802,7 +802,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:LibMplayerCommon, Version=1.0.4603.36697, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:LibMplayerCommon, Version=1.0.4603.43087, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_7DADC2FFC75F1DE950B66E86DC7F29C8"
@@ -1299,15 +1299,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:MediaScribe"
-        "ProductCode" = "8:{69D0D2B7-6122-4F85-85F1-347F444B35AF}"
-        "PackageCode" = "8:{EDBE1AD3-43A4-49ED-9A9E-E2778C2C312C}"
+        "ProductCode" = "8:{999C09D4-4885-40B8-AF2D-C7932E013952}"
+        "PackageCode" = "8:{E8A11569-F163-43B5-82FE-469B90CEE1CA}"
         "UpgradeCode" = "8:{0E3ECEF1-D28E-4E8E-AE91-31B0AD297AAA}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.9.0"
+        "ProductVersion" = "8:0.9.1"
         "Manufacturer" = "8:MediaScribe"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
