@@ -1,0 +1,515 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1EB1F07A-CCF1-49E0-B369-CE038CAB98FC}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JayDev.MediaScribe</RootNamespace>
+    <AssemblyName>MediaScribe</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>JayDev.MediaScribe.App</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Letter M blue.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EPPlus">
+      <HintPath>..\..\..\libraries\EPPlus\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1673db7d5906b0ad, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\Program Files (x86)\Laurent Bugnion (GalaSoft)\Mvvm Light Toolkit\Binaries\WPF4\GalaSoft.MvvmLight.Extras.WPF4.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=63eb5c012e0b3c1c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\Program Files (x86)\Laurent Bugnion (GalaSoft)\Mvvm Light Toolkit\Binaries\WPF4\GalaSoft.MvvmLight.WPF4.dll</HintPath>
+    </Reference>
+    <Reference Include="GrayscaleEffect">
+      <HintPath>..\..\..\examples\greyscale effect\WpfApplication1\GrayscaleEffect\bin\Debug\GrayscaleEffect.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.AvalonEdit">
+      <HintPath>..\..\..\Program Files (x86)\SharpDevelop\5.0\bin\ICSharpCode.AvalonEdit.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\nhibernate\Required_Bins\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\activerecord\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\..\..\sqlite-binary\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq">
+      <HintPath>..\..\..\sqlite-binary\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WPFToolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\WPF Toolkit\v3.5.50211.1\WPFToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="WPFToolkit.Extended">
+      <HintPath>..\..\WPFToolkitExtended\WPFToolkit.Extended.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\ConfigurationHelper.cs" />
+    <Compile Include="Converters\ColourToBrushConverter.cs" />
+    <Compile Include="Converters\ColourToNameStringConverter.cs" />
+    <Compile Include="Converters\EnumConverters.cs" />
+    <Compile Include="Converters\GridLengthConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
+    <Compile Include="Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="Converters\StringToXamlConverter.cs" />
+    <Compile Include="Core\CsvExporter.cs" />
+    <Compile Include="Core\NavigationHelper.cs" />
+    <Compile Include="Core\NHibernate\ColorUserType.cs" />
+    <Compile Include="Core\NHibernate\BaseUserType.cs" />
+    <Compile Include="Domain\Hotkey.cs" />
+    <Compile Include="Model\CourseRepositorySqlite.cs" />
+    <Compile Include="Model\RepositorySqliteBase.cs" />
+    <Compile Include="Model\SettingRepository.cs" />
+    <Compile Include="Model\SettingRepositorySqlite.cs" />
+    <Compile Include="Model\SqliteHelper.cs" />
+    <Compile Include="ViewModel\SettingsViewModel.cs" />
+    <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\Controls\About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\Base\UndecoratedButton.cs" />
+    <Compile Include="View\Controls\Base\ComboBoxItemWithTooltip.cs" />
+    <Compile Include="View\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Themes\JarrodBlueButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\JarrodButtonNoWhiteBorder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\JarrodPlusMinusButtons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\JarrodToggleButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\NavigationButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\NavigationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\ImageButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\NavigationControl2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CourseListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ExpressionDark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ExpressionDark_brushes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\JarrodDatagrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MyHuluStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\MediaControlsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\NotesGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\NavigationConverter.cs" />
+    <Compile Include="Core\DataGridExtensions.cs" />
+    <Compile Include="View\Controls\Base\DelayedDataGridTextColumn.cs" />
+    <Compile Include="View\Controls\Base\DoubleClickableDataGrid.cs" />
+    <Compile Include="View\Controls\Base\ExtendedObservableCollection.cs" />
+    <Compile Include="Converters\NumericRangeVisibilityConverter.cs" />
+    <Compile Include="Converters\PlayStatusVisibilityConverters.cs" />
+    <Compile Include="Converters\SecondsToTimespanConverter.cs" />
+    <Compile Include="View\Controls\Base\TextListAdorner.cs" />
+    <Compile Include="View\Controls\Base\UntoggleableToggleButton.cs" />
+    <Compile Include="Core\GlassEffect.cs" />
+    <Compile Include="Core\XslsExporter.cs" />
+    <Compile Include="Core\DebugTextWriter.cs" />
+    <Compile Include="Converters\EnumConverter.cs" />
+    <Compile Include="Core\ExtensionMethods.cs" />
+    <Compile Include="Core\LambdaComparer.cs" />
+    <Compile Include="Core\NHibernateHelper.cs" />
+    <Compile Include="Core\WatermarkAdorner.cs" />
+    <Compile Include="Core\WatermarkService.cs" />
+    <Compile Include="Converters\MaintenanceModeToVisibilityConverter.cs" />
+    <Compile Include="View\Controls\Base\CustomButtonChrome.cs" />
+    <Compile Include="Converters\TimeSpanToSecondsConverter.cs" />
+    <Compile Include="View\Controls\Base\ContentAdorner.cs" />
+    <Compile Include="Core\PreviewSliderHelper.cs" />
+    <Compile Include="View\Controls\Base\DragEnabledDataGrid.cs" />
+    <Compile Include="Core\SqliteConnectionProvider.cs" />
+    <Compile Include="ViewModel\CourseListViewModel.cs" />
+    <Compile Include="ViewModel\MediaPlayer.cs" />
+    <Compile Include="View\Controller.cs" />
+    <Compile Include="View\Controls\NavigationButton.xaml.cs">
+      <DependentUpon>NavigationButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\MediaControlsControl.xaml.cs">
+      <DependentUpon>MediaControlsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\NavigationControl.xaml.cs">
+      <DependentUpon>NavigationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\NavigationControl2.xaml.cs">
+      <DependentUpon>NavigationControl2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\NotesGridControl.xaml.cs">
+      <DependentUpon>NotesGridControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Domain\CourseList.cs" />
+    <Compile Include="Model\CourseRepository.cs" />
+    <Compile Include="Core\DataAccess.cs" />
+    <Compile Include="Domain\Course.cs" />
+    <Compile Include="Core\SingleInstance.cs" />
+    <Page Include="View\Controls\VideoControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CourseUseView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FullscreenCourseView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="Domain\SaveResult.cs" />
+    <Compile Include="ViewModel\CourseUseViewModel.cs" />
+    <Compile Include="View\App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\Controls\Base\MediaPlayerWPFDisplayControl.cs" />
+    <Compile Include="Domain\Note.cs" />
+    <Compile Include="Domain\Track.cs" />
+    <Compile Include="Domain\TrackTime.cs" />
+    <Compile Include="Domain\Tag.cs" />
+    <Compile Include="View\Controls\ImageButton.xaml.cs">
+      <DependentUpon>ImageButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\VideoControl.xaml.cs">
+      <DependentUpon>VideoControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CourseListView.xaml.cs">
+      <DependentUpon>CourseListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CourseUseView.xaml.cs">
+      <DependentUpon>CourseUseView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FullscreenCourseView.xaml.cs">
+      <DependentUpon>FullscreenCourseView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\examples\shell integration library\Microsoft.Windows.Shell\Microsoft.Windows.Shell.csproj">
+      <Project>{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}</Project>
+      <Name>Microsoft.Windows.Shell</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AvalonTextBox\MediaScribe.AvalonTextBox.csproj">
+      <Project>{CA7E4D71-3858-48F2-AF68-7E6DA88F79C9}</Project>
+      <Name>MediaScribe.AvalonTextBox</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LibMPlayerCommon\MediaScribe.LibMPlayerCommon.csproj">
+      <Project>{5D3616D0-160D-4601-AB67-E1ED9111C676}</Project>
+      <Name>MediaScribe.LibMPlayerCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MediaScribe.Common\MediaScribe.Common.csproj">
+      <Project>{7BE13DBC-C110-469E-92E7-49720938A62E}</Project>
+      <Name>MediaScribe.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Styles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\MediaScribeEmpty.db" />
+    <None Include="Resources\Play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PlayHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\application-vnd.oasis.opendocument.database.png" />
+    <Resource Include="Images\archive-insert-2.png" />
+    <Resource Include="Images\database.png" />
+    <Resource Include="Images\filenew.png" />
+    <Resource Include="Images\filter.png" />
+    <Resource Include="Images\fonts.png" />
+    <Resource Include="Images\format-list-ordered.png" />
+    <Resource Include="Images\format-list-unordered.png" />
+    <Resource Include="Images\galternatives.png" />
+    <Resource Include="Images\gnome-mime-application-x-archive.png" />
+    <Resource Include="Images\gnome-mime-application-zip.png" />
+    <Resource Include="Images\gthumb.png" />
+    <Resource Include="Images\gtk-add.png" />
+    <Resource Include="Images\gtk-italic.png" />
+    <Resource Include="Images\gtk-justify-fill.png" />
+    <Resource Include="Images\gtk-properties.png" />
+    <Resource Include="Images\gtk-stock-book.png" />
+    <Resource Include="Images\help-about.png" />
+    <Resource Include="Images\help-browser.png" />
+    <Resource Include="Images\list-add-4.png" />
+    <Resource Include="Images\list-add-7.png" />
+    <Resource Include="Images\list-remove-4.png" />
+    <Resource Include="Images\list-remove-6.png" />
+    <Resource Include="Images\newstyle-audio-volume-high.png" />
+    <Resource Include="Images\newstyle-audio-volume-low.png" />
+    <Resource Include="Images\newstyle-audio-volume-medium.png" />
+    <Resource Include="Images\newstyle-audio-volume-muted.png" />
+    <Resource Include="Images\object-rotate-left.png" />
+    <Resource Include="Images\object-rotate-right.png" />
+    <Resource Include="Images\oldstyle-edit-find.png" />
+    <Resource Include="Images\package-available-locked.png" />
+    <Resource Include="Images\package_office.png" />
+    <Resource Include="Images\preferences-desktop-font.png" />
+    <Resource Include="Images\preferences-desktop-keyboard-shortcuts.png" />
+    <Resource Include="Images\preferences-other.png" />
+    <Resource Include="Images\redhat-preferences.png" />
+    <Resource Include="Images\remove.png" />
+    <Resource Include="Images\rhythmbox01.png" />
+    <Resource Include="Images\server-database.png" />
+    <Resource Include="Images\sqlite_database_browser.png" />
+    <Resource Include="Images\stock_close.png" />
+    <Resource Include="Images\stock_dialog-error.png" />
+    <Resource Include="Images\stock_media-fwd.png" />
+    <Resource Include="Images\stock_media-next.png" />
+    <Resource Include="Images\stock_media-pause.png" />
+    <Resource Include="Images\stock_media-play.png" />
+    <Resource Include="Images\stock_media-prev.png" />
+    <Resource Include="Images\stock_media-rec.png" />
+    <Resource Include="Images\stock_media-rew.png" />
+    <Resource Include="Images\stock_media-stop.png" />
+    <Resource Include="Images\stock_refresh.png" />
+    <Resource Include="Images\stock_repeat.png" />
+    <Resource Include="Images\stock_save.png" />
+    <Resource Include="Images\stock_search-and-replace.png" />
+    <Resource Include="Images\stock_search.png" />
+    <Resource Include="Images\stock_shuffle.png" />
+    <Resource Include="Images\stock_text_bold.png" />
+    <Resource Include="Images\stock_text_italic.png" />
+    <Resource Include="Images\stock_volume-0.png" />
+    <Resource Include="Images\stock_volume-max.png" />
+    <Resource Include="Images\stock_volume-med.png" />
+    <Resource Include="Images\stock_volume-min.png" />
+    <Resource Include="Images\stock_volume-mute.png" />
+    <Resource Include="Images\stock_volume.png" />
+    <Resource Include="Images\system-config-rootpassword.png" />
+    <Resource Include="Images\system-restart.png" />
+    <Resource Include="Images\system-run.png" />
+    <Resource Include="Images\system-search.png" />
+    <Resource Include="Images\system-software-update.png" />
+    <Resource Include="Images\system-upgrade.png" />
+    <Resource Include="Images\trashcan_full01.png" />
+    <Resource Include="Images\type-list.png" />
+    <Resource Include="Images\update-manager.png" />
+    <Resource Include="Images\user-trash-default.png" />
+    <Resource Include="Images\view-file-columns.png" />
+    <Resource Include="Images\view-filter.png" />
+    <Resource Include="Images\view-list-details.png" />
+    <Resource Include="Images\view-list-icon.png" />
+    <Resource Include="Images\x-office-address-book.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\system-settings-2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\preferences-composer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\kfm.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\mp_viewer.png" />
+    <Resource Include="Images\seahorse.png" />
+    <Resource Include="Images\stock_lock-brocken.png" />
+    <Resource Include="Images\stock_lock-ok.png" />
+    <Resource Include="Images\text-x-generic.png" />
+    <Resource Include="Images\totem01.png" />
+    <Resource Include="Images\typing-monitor.png" />
+    <Resource Include="Images\video.png" />
+    <Resource Include="Images\xawtv.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\system-search-4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\icon_512.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="hibernate.cfg.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Mappings\Course.hbm.xml" />
+    <EmbeddedResource Include="Mappings\Note.hbm.xml" />
+    <EmbeddedResource Include="Mappings\Track.hbm.xml" />
+    <EmbeddedResource Include="Mappings\TrackTime.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Mappings\Hotkey.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Resource Include="Images\Letter N blue.ico" />
+    <Resource Include="Images\fullscreen.png" />
+    <Resource Include="Images\two_columns.png" />
+    <Resource Include="Images\view-sort-descending.png" />
+    <Resource Include="Images\miniplaybutton3-hover.png" />
+    <Resource Include="Images\miniplaybutton3.png" />
+    <Resource Include="Images\pencil-15.png" />
+    <Resource Include="Images\pencil-15-hover2.png" />
+    <Resource Include="Images\bar.png" />
+    <Resource Include="Images\help32.png" />
+    <Resource Include="Images\info32.png" />
+    <Resource Include="Images\Letter M blue 32.png" />
+    <Resource Include="Letter M blue.ico" />
+    <Content Include="log4netoff.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Page Include="Themes\JarrodGlassButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\JarrodSlider.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
