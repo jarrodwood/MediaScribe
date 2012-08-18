@@ -11,7 +11,7 @@ using System.Data.SQLite;
 
 namespace JayDev.MediaScribe
 {
-    public static class DataAccess
+    public static class XmlDataAccess
     {
         #region Constants
 
@@ -117,7 +117,7 @@ namespace JayDev.MediaScribe
                     File.Delete(string.Format(GenericFilePath, "bkup.xml"));
                 }
                 File.Copy(string.Format(GenericFilePath, CourseListFileName), string.Format(GenericFilePath, "bkup.xml"));
-                string xmlData = DataAccess.Serialize(list);
+                string xmlData = XmlDataAccess.Serialize(list);
                 string filePath = string.Format(GenericFilePath, CourseListFileName);
                 System.IO.File.WriteAllText(filePath, xmlData, Encoding.UTF8);
 
@@ -138,7 +138,7 @@ namespace JayDev.MediaScribe
             SaveResult result = new SaveResult();
 
             string sanitisedName = MakeValidFileName(course.Name);
-            string xmlData = DataAccess.Serialize(course);
+            string xmlData = XmlDataAccess.Serialize(course);
             string filePath = string.Format(GenericFilePath, sanitisedName);
             System.IO.File.WriteAllText(filePath, xmlData, Encoding.UTF8);
 

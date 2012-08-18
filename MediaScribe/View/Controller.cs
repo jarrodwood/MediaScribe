@@ -24,17 +24,16 @@ namespace JayDev.MediaScribe.View
 {
     public class Controller
     {
-        private static MainWindow _mainWindow;
-        private static Microsoft.Practices.Unity.UnityContainer _container = new Microsoft.Practices.Unity.UnityContainer();
-        private static CourseUseViewModel courseUseViewModel;
-        private static CourseListViewModel courseListViewModel;
-        private static SettingsViewModel settingsViewModel;
+        private MainWindow _mainWindow;
+        private CourseUseViewModel courseUseViewModel;
+        private CourseListViewModel courseListViewModel;
+        private SettingsViewModel settingsViewModel;
 
-        private static UserControl currentView;
-        private static ViewModelBase currentViewModel = new ViewModelBase();
+        private UserControl currentView;
+        private ViewModelBase currentViewModel = null;
 
-        private static Controller _instance;
-        public static Controller Singleton
+        private Controller _instance;
+        public Controller Singleton
         {
             get
             {
@@ -44,7 +43,22 @@ namespace JayDev.MediaScribe.View
             }
         }
 
-        private static Course _lastCourse;
+        private Course _lastCourse;
+
+
+        private List<Course> _allCourses;
+        public List<Course> AllCourses
+        {
+            get
+            {
+                if (null == _allCourses)
+                {
+                    _allCourses = (new CourseRepository()).GetCourseList();
+                }
+                return _allCourses;
+            }
+        }
+
 
         const bool startAtLastCourse = true;
 
@@ -91,8 +105,7 @@ namespace JayDev.MediaScribe.View
             bool loadedLastCourse = false;
             if (startAtLastCourse)
             {
-                var courses = courseRepo.GetCourseList();
-                var currentCourse = courses.OrderBy(x => x.DateViewed).LastOrDefault();
+                var currentCourse = AllCourses.OrderBy(x => x.DateViewed).LastOrDefault();
                 if (null != currentCourse)
                 {
                     Navigate(new NavigateArgs(NavigateMessage.WriteCourseNotes, currentCourse));
@@ -117,7 +130,7 @@ namespace JayDev.MediaScribe.View
         }
 
 
-        static void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
             //TODO: handle lower-level (so can use keypad keys, regardless of numlock status). could try http://stackoverflow.com/a/5989521
             currentViewModel.HandleWindowKeypress(sender, e);
@@ -134,11 +147,22 @@ namespace JayDev.MediaScribe.View
         }
 
 
-        static WindowStyle preFullscreenWindowStyle = WindowStyle.SingleBorderWindow;
-        static WindowState preFullscreenWindowState = WindowState.Maximized;
+        WindowStyle preFullscreenWindowStyle = WindowStyle.SingleBorderWindow;
+        WindowState preFullscreenWindowState = WindowState.Maximized;
 
+        public void RefreshCourse(Course course)
+        {
+            for (int i = 0; i < AllCourses.Count; i++)
+            {
+                if (_allCourses[i].ID == course.ID)
+                {
+                    _allCourses[i] = course;
+                    break;
+                }
+            }
+        }
 
-        private static void Navigate(NavigateArgs args)
+        private void Navigate(NavigateArgs args)
         {
             switch (args.Message)
             {
@@ -181,17 +205,19 @@ namespace JayDev.MediaScribe.View
                     break;
                 case NavigateMessage.WriteCourseNotes:
                     {
-                        currentViewModel.LeavingViewModel();
+                        if (null != currentViewModel)
+                        {
+                            currentViewModel.LeavingViewModel();
+                        }
                         CourseRepository courseRepo = new CourseRepository();
                         if (null == args.Course && null == _lastCourse)
                         {
-                            var courses = courseRepo.GetCourseList();
-                            if (null == courses || courses.Count == 0)
+                            if (null == AllCourses || AllCourses.Count == 0)
                             {  
                                 MessageBox.Show(_mainWindow,"Please create a course, before going to the Write Notes section");
                                 return;
                             }
-                            _lastCourse = courses.First();
+                            _lastCourse = AllCourses.First();
                         }
 
 
@@ -203,7 +229,7 @@ namespace JayDev.MediaScribe.View
                         else if (null != _lastCourse)
                         {
                             //the course is probably outdated... get a fresh copy.
-                            courseToLoad = courseRepo.GetCourse(_lastCourse.ID.Value);
+                            courseToLoad = _allCourses.First(x => x.ID == _lastCourse.ID);
                         }
                         CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
                         currentView = courseUseView;
@@ -218,7 +244,10 @@ namespace JayDev.MediaScribe.View
                     }
                     break;
                 case NavigateMessage.ListCourses:
-                    currentViewModel.LeavingViewModel();
+                    if (null != currentViewModel)
+                    {
+                        currentViewModel.LeavingViewModel();
+                    }
                     CourseListView courseListView = new CourseListView(courseListViewModel);
                     currentView = courseListView;
                     currentViewModel = courseListViewModel;
@@ -227,7 +256,10 @@ namespace JayDev.MediaScribe.View
                     currentViewModel.EnteringViewModel();
                     break;
                 case NavigateMessage.Settings:
-                    currentViewModel.LeavingViewModel();
+                    if (null != currentViewModel)
+                    {
+                        currentViewModel.LeavingViewModel();
+                    }
                     SettingsView settingsView = new SettingsView(settingsViewModel);
                     currentView = settingsView;
                     currentViewModel = settingsViewModel;

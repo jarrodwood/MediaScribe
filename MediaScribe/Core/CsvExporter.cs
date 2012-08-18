@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace JayDev.MediaScribe.Core
 {
@@ -10,13 +12,15 @@ namespace JayDev.MediaScribe.Core
 
         const string Separator = "\t";
         const string NewLine = "\r\n";
-        const string CurrentVersion = "1.0";
         public string CreateCsvText(List<Track> tracks, List<Note> notes)
         {
             StringBuilder builder = new StringBuilder();
             builder.Append("Version");
             builder.Append(Separator);
-            builder.Append(CurrentVersion);
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            string version = fvi.ProductVersion;
+            builder.Append(version);
             builder.Append(NewLine);
 
             builder.Append(NewLine);

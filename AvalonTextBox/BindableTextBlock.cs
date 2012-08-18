@@ -7,6 +7,7 @@ using System.Windows.Documents;
 using System.Windows;
 using AvalonTextBox.Converters;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace AvalonTextBox
 {
@@ -22,28 +23,31 @@ namespace AvalonTextBox
         // Using a DependencyProperty as the backing store for MarkedupText.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MarkedupTextProperty =
             DependencyProperty.Register("MarkedupText", typeof(string), typeof(BindableTextBlock), new UIPropertyMetadata(new PropertyChangedCallback((sender, args) => {
-                if (null == args.NewValue || string.IsNullOrEmpty((string)args.NewValue))
-                {
-                    BindableTextBlock textBlock = sender as BindableTextBlock;
-                    textBlock.Text = "Double-click here to write a note...";
-                    textBlock.FontStyle = FontStyles.Italic;
-                    textBlock.Opacity = 0.5;
-                }
-                else
-                {
-                    BindableTextBlock textBlock = sender as BindableTextBlock;
-                    textBlock.Text = null;
-                    textBlock.FontStyle = FontStyles.Normal;
-                    textBlock.Opacity = 1;
+                BindableTextBlock textBlock = sender as BindableTextBlock;
+                textBlock.Dispatcher.BeginInvoke(
+                    DispatcherPriority.Loaded,
+                    new Action(() => {
+                        if (null == args.NewValue || string.IsNullOrEmpty((string)args.NewValue))
+                        {
+                            textBlock.Text = "Double-click here to write a note...";
+                            textBlock.FontStyle = FontStyles.Italic;
+                            textBlock.Opacity = 0.5;
+                        }
+                        else
+                        {
+                            textBlock.Text = null;
+                            textBlock.FontStyle = FontStyles.Normal;
+                            textBlock.Opacity = 1;
 
-                    textBlock.Inlines.Clear();
-                    var inlines = new MarkedupTextToInlineListConverter().Convert(args.NewValue, typeof(List<Inline>), null, null) as List<Inline>;
-                    //trying to add 'null' throws exceptions
-                    if (null != inlines && inlines.Count > 0)
-                    {
-                        textBlock.Inlines.AddRange(inlines);
-                    }
-                }
+                            textBlock.Inlines.Clear();
+                            var inlines = new MarkedupTextToInlineListConverter().Convert(args.NewValue, typeof(List<Inline>), null, null) as List<Inline>;
+                            //trying to add 'null' throws exceptions
+                            if (null != inlines && inlines.Count > 0)
+                            {
+                                textBlock.Inlines.AddRange(inlines);
+                            }
+                        }
+                    }));
             })));
 
         

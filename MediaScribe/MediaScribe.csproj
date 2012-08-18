@@ -115,8 +115,6 @@
     <Compile Include="Converters\StringToXamlConverter.cs" />
     <Compile Include="Core\CsvExporter.cs" />
     <Compile Include="Core\NavigationHelper.cs" />
-    <Compile Include="Core\NHibernate\ColorUserType.cs" />
-    <Compile Include="Core\NHibernate\BaseUserType.cs" />
     <Compile Include="Domain\Hotkey.cs" />
     <Compile Include="Model\CourseRepositorySqlite.cs" />
     <Compile Include="Model\RepositorySqliteBase.cs" />
@@ -128,6 +126,7 @@
     <Compile Include="View\Controls\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Controls\Base\DelayedBindDataGrid.cs" />
     <Compile Include="View\Controls\Base\UndecoratedButton.cs" />
     <Compile Include="View\Controls\Base\ComboBoxItemWithTooltip.cs" />
     <Compile Include="View\SettingsView.xaml.cs">
@@ -218,7 +217,6 @@
     <Compile Include="Converters\EnumConverter.cs" />
     <Compile Include="Core\ExtensionMethods.cs" />
     <Compile Include="Core\LambdaComparer.cs" />
-    <Compile Include="Core\NHibernateHelper.cs" />
     <Compile Include="Core\WatermarkAdorner.cs" />
     <Compile Include="Core\WatermarkService.cs" />
     <Compile Include="Converters\MaintenanceModeToVisibilityConverter.cs" />
@@ -248,7 +246,7 @@
     </Compile>
     <Compile Include="Domain\CourseList.cs" />
     <Compile Include="Model\CourseRepository.cs" />
-    <Compile Include="Core\DataAccess.cs" />
+    <Compile Include="Core\XmlDataAccess.cs" />
     <Compile Include="Domain\Course.cs" />
     <Compile Include="Core\SingleInstance.cs" />
     <Page Include="View\Controls\VideoControl.xaml">
@@ -464,21 +462,6 @@
     <Resource Include="Images\icon_512.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="hibernate.cfg.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Mappings\Course.hbm.xml" />
-    <EmbeddedResource Include="Mappings\Note.hbm.xml" />
-    <EmbeddedResource Include="Mappings\Track.hbm.xml" />
-    <EmbeddedResource Include="Mappings\TrackTime.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Mappings\Hotkey.hbm.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <Resource Include="Images\Letter N blue.ico" />
     <Resource Include="Images\fullscreen.png" />
     <Resource Include="Images\two_columns.png" />

@@ -7,12 +7,7 @@
         Name="MainWindowName"
         Title="{Binding ElementName=MainWindowName, Path=DefaultTitle}" Height="300" Width="300"  Icon="/MediaScribe;component/Images/Letter%20M%20blue%2032.png">
         <!--Style="{DynamicResource GlassStyle}">-->
-    <Window.CommandBindings>
-        <CommandBinding Command="{x:Static shell:SystemCommands.CloseWindowCommand}"
-                    Executed="_OnSystemCommandCloseWindow"/>
-    </Window.CommandBindings>
     <Window.Resources>
-
         <Style x:Key="GlassStyle" TargetType="{x:Type local:MainWindow}">
             <Setter Property="shell:WindowChrome.WindowChrome">
                 <Setter.Value>

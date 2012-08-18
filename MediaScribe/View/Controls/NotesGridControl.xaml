@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="1000"
-             xmlns:atb="clr-namespace:AvalonTextBox;assembly=Notemaker.AvalonTextBox"
+             xmlns:atb="clr-namespace:AvalonTextBox;assembly=MediaScribe.AvalonTextBox"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
              xmlns:GalaSoft_MvvmLight_Command="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
              xmlns:local="clr-namespace:JayDev.MediaScribe.View.Controls"
@@ -19,13 +19,13 @@
                 NotNullValue="Visible" />-->
     </UserControl.Resources>
     <Grid>
-        <DataGrid
+        <local:DelayedBindDataGrid MinWidth="300"
             VirtualizingStackPanel.VirtualizationMode="Recycling"
             VirtualizingStackPanel.IsVirtualizing="True"
             EnableColumnVirtualization="True"
             EnableRowVirtualization="True"
             SelectionMode="Single"
-            AutoGenerateColumns="False" Name="noteDataGrid" HeadersVisibility="Column" CanUserSortColumns="True" CanUserResizeRows="False" CanUserAddRows="True"
+            AutoGenerateColumns="False" x:Name="noteDataGrid" HeadersVisibility="Column" CanUserSortColumns="True" CanUserResizeRows="False" CanUserAddRows="True"
             CanUserDeleteRows="True" RowEditEnding="noteDataGrid_RowEditEnding" BeginningEdit="noteDataGrid_BeginningEdit"
             PreparingCellForEdit="noteDataGrid_PreparingCellForEdit"
             ItemsSource="{ Binding ElementName=NotesGridControlName, Path=Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, IsAsync=True}"  CellEditEnding="noteDataGrid_CellEditEnding" Style="{StaticResource DataGridStyle1}">
@@ -38,27 +38,6 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <!--<DataGridTextColumn Header="From" Width="150"  
-                                           Binding="{Binding Path=Start.StringDisplayValue, Mode=OneWay}" 
-                                           IsReadOnly="True"/>-->
-                <!--<DataGridTemplateColumn Header="" Width="15">
-                    <DataGridTemplateColumn.CellEditingTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Button Name="playNoteButton" Click="playNoteButton_Click" Height="14">
-                                    <Path x:Name="arrow"
-                                      StrokeThickness = "1"
-                                      Fill            = "ForestGreen"
-                                      Data            = "M 1,6 L 6,3 L 1,0 L 1,6"/>
-                                </Button>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellEditingTemplate>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>-->
                 <DataGridTemplateColumn Header="From" Width="90" SortMemberPath="Start.StringDisplayValue" CanUserSort="True">
                     <!-- editing template -->
                     <DataGridTemplateColumn.CellEditingTemplate>
@@ -110,19 +89,6 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <!--<DataGridTextColumn Header="To" Width="100"  
-                                           Binding="{Binding End}" 
-                                           IsReadOnly="True"/>-->
-                <!--<DataGridTemplateColumn Header="Note" Width="*"  
-                                                <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <RichTextBox text bin="{Binding Path=PropertyToBindTo}"/>
-                            </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>-->
-                <!--<DataGridTextColumn Header="Note" Width="*"  
-                                           Binding="{Binding Path=TitleBody}" 
-                                           IsReadOnly="True"/>-->
                 <DataGridTemplateColumn Header="Note" Width="*" SortMemberPath="Body" CanUserSort="True">
                     <!-- editing template -->
                     <DataGridTemplateColumn.CellEditingTemplate>
@@ -143,7 +109,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Rating" SortMemberPath="Rating" CanUserSort="True">
+                <DataGridTemplateColumn Header="Rating" Width="50" SortMemberPath="Rating" CanUserSort="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Rating}" />
@@ -156,6 +122,6 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
-        </DataGrid>
+        </local:DelayedBindDataGrid>
     </Grid>
 </UserControl>

@@ -16,6 +16,7 @@ using JayDev.MediaScribe.View.Controls;
 using JayDev.MediaScribe.Core;
 using MediaScribe.Common;
 using JayDev.MediaScribe.View;
+using Microsoft.Practices.Unity;
 
 namespace JayDev.MediaScribe.ViewModel
 {
@@ -953,44 +954,33 @@ namespace JayDev.MediaScribe.ViewModel
                     ?? (_exportCsvCommand = new RelayCommand(
                                           () =>
                                           {
-                                          //    //TODO: refactor so we don't use dialogs in viewmodels
-                                          //    Microsoft.Win32.SaveFileDialog saveFileDialog1 = new Microsoft.Win32.SaveFileDialog();
-                                          //    saveFileDialog1.OverwritePrompt = true;
-                                          //    saveFileDialog1.RestoreDirectory = true;
-                                          //    saveFileDialog1.DefaultExt = "csv";
-                                          //    // Adds a extension if the user does not
-                                          //    saveFileDialog1.AddExtension = true;
-                                          //    saveFileDialog1.InitialDirectory = Convert.ToString(Environment.SpecialFolder.MyDocuments);
-                                          //    saveFileDialog1.Filter = "Csv File|*.csv";
-                                          //    saveFileDialog1.FileName = string.Format("Exported Notes for {0} - {1}.xlsx", _currentCourse.Name, DateTime.Now.ToString("dd-MM-yyyy HH.mm.ss"));
-                                          //    saveFileDialog1.Title = "Save Exported Notes";
+                                              //TODO: refactor so we don't use dialogs in viewmodels
+                                              Microsoft.Win32.SaveFileDialog saveFileDialog1 = new Microsoft.Win32.SaveFileDialog();
+                                              saveFileDialog1.OverwritePrompt = true;
+                                              saveFileDialog1.RestoreDirectory = true;
+                                              saveFileDialog1.DefaultExt = "csv";
+                                              // Adds a extension if the user does not
+                                              saveFileDialog1.AddExtension = true;
+                                              saveFileDialog1.InitialDirectory = Convert.ToString(Environment.SpecialFolder.MyDocuments);
+                                              saveFileDialog1.Filter = "Csv File|*.csv";
+                                              saveFileDialog1.FileName = string.Format("Exported Notes for {0} - {1}.xlsx", _currentCourse.Name, DateTime.Now.ToString("dd-MM-yyyy HH.mm.ss"));
+                                              saveFileDialog1.Title = "Save Exported Notes";
 
-                                          //    if (saveFileDialog1.ShowDialog() == true)
-                                          //    {
-                                          //        try
-                                          //        {
-                                          //            using (System.IO.FileStream fs = (System.IO.FileStream)saveFileDialog1.wr())
-                                          //            {
-                                          //                XslsExporter exporter = new XslsExporter();
-                                          //                exporter.CreateSpreadsheet(fs, Tracks.ToList(), Notes.ToList());
+                                              if (saveFileDialog1.ShowDialog() == true)
+                                              {
+                                                  try
+                                                  {
+                                                      CsvExporter exporter = new CsvExporter();
+                                                      string csvContents = exporter.CreateCsvText(Tracks.ToList(), Notes.ToList());
+                                                      System.IO.File.WriteAllText(saveFileDialog1.FileName, csvContents);
 
-                                          //                fs.Close();
-                                          //            }
-
-                                          //            var openResult = System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Export successful! Would you like to open the file?", "Open exported file confirmation", System.Windows.MessageBoxButton.YesNo);
-                                          //            if (openResult == System.Windows.MessageBoxResult.Yes)
-                                          //            {
-                                          //                System.Diagnostics.ProcessStartInfo info = new System.Diagnostics.ProcessStartInfo();
-                                          //                info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Maximized;
-                                          //                info.FileName = saveFileDialog1.FileName;
-                                          //                var process = System.Diagnostics.Process.Start(info);
-                                          //            }
-                                          //        }
-                                          //        catch (Exception e)
-                                          //        {
-                                          //            System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Error exporting :( - " + e.ToString());
-                                          //        }
-                                          //    }
+                                                      System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Export successful!", "Export successful", System.Windows.MessageBoxButton.OK);
+                                                  }
+                                                  catch (Exception e)
+                                                  {
+                                                      System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Error exporting :( - " + e.ToString());
+                                                  }
+                                              }
                                           }));
             }
         }
@@ -1111,7 +1101,10 @@ namespace JayDev.MediaScribe.ViewModel
                         note.PropertyChanged -= this.note_PropertyChanged;
                         note.ChangeCommitted -= note_ChangeCommitted;
 
-                        _repo.DeleteNote(note);
+                        if (null != note.ID)
+                        {
+                            _repo.DeleteNote(note);
+                        }
                     });
                 }
             }
@@ -1254,6 +1247,8 @@ namespace JayDev.MediaScribe.ViewModel
             _currentCourse.LastPlayedTrackPosition = _currentTrackPlayPosition;
             _currentCourse.DateViewed = DateTime.Now;
             _repo.SaveCourseOnly(_currentCourse);
+
+            _controller.RefreshCourse(_currentCourse);
         }
         private void Stop()
         {

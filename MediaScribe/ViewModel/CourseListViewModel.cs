@@ -11,6 +11,7 @@ using LibMPlayerCommon;
 using System.Windows.Threading;
 using JayDev.MediaScribe.Core;
 using System.IO;
+using JayDev.MediaScribe.View;
 
 namespace JayDev.MediaScribe.ViewModel
 {
@@ -710,7 +711,7 @@ namespace JayDev.MediaScribe.ViewModel
 
         private void LoadCoursesBackground()
         {
-            List<Course> courseList = _repo.GetCourseList();
+            List<Course> courseList = _controller.AllCourses;
             Courses = new ObservableCollection<Course>(courseList);
         }
     }

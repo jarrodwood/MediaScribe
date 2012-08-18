@@ -9,6 +9,8 @@ using JayDev.MediaScribe.View.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Forms;
 using System.Windows.Threading;
+using Microsoft.Practices.Unity;
+using JayDev.MediaScribe.View;
 
 namespace JayDev.MediaScribe.ViewModel
 {
@@ -16,6 +18,8 @@ namespace JayDev.MediaScribe.ViewModel
     {
         private RelayCommand _showAboutDialog;
         protected Dispatcher _uiDispatcher;
+        protected IUnityContainer _container;
+        protected Controller _controller;
 
         /// <summary>
         /// Gets the ShowAboutDialog.
@@ -53,6 +57,8 @@ namespace JayDev.MediaScribe.ViewModel
         public ViewModelBase() : base()
         {
             _uiDispatcher = Dispatcher.CurrentDispatcher;
+            _container = new UnityContainer();
+            _controller = _container.Resolve<Controller>();
         }
 
         public virtual void HandleWindowKeypress(object sender, System.Windows.Input.KeyEventArgs e)
