@@ -29,7 +29,6 @@ namespace JayDev.MediaScribe.View
         private CourseListViewModel courseListViewModel;
         private SettingsViewModel settingsViewModel;
 
-        private UserControl currentView;
         private ViewModelBase currentViewModel = null;
 
         private Controller _instance;
@@ -59,33 +58,20 @@ namespace JayDev.MediaScribe.View
             }
         }
 
-
         const bool startAtLastCourse = true;
 
-        public void Initialize(MainWindow mainWindow)
+        private TabControl _tabControl;
+
+        public void Initialize(MainWindow mainWindow, TabControl tabControl)
         {
-            string currentAssemblyDirectoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            this._tabControl = tabControl;
 
-            var oldChildMPlayerProcesses = (from procs in Process.GetProcesses()
-                                    where procs.ProcessName == "mplayer"
-                                    && Path.GetDirectoryName(procs.MainModule.FileName).Contains(currentAssemblyDirectoryName)
-                                    select procs).ToList();
-
-            try
-            {
-                oldChildMPlayerProcesses.ForEach(x => x.Kill());
-            }
-            catch { }
+            TryKillOldMPlayerProccesses();
 
             _mainWindow = mainWindow;
             _mainWindow.PreviewKeyDown += new KeyEventHandler(MainWindow_KeyDown);
 
-            //var logconfig = new System.IO.FileInfo("log4net.xml");
-            //if (logconfig.Exists)
-            //{
-            //    log4net.Config.XmlConfigurator.ConfigureAndWatch(logconfig);
-            //}  
-
+            //allow all Debug messages to be sent to console (useful for debugging within VS)
             Console.SetOut(new DebugTextWriter());
 
             CourseRepository courseRepo = new CourseRepository();
@@ -93,6 +79,12 @@ namespace JayDev.MediaScribe.View
             courseListViewModel = new CourseListViewModel(courseRepo);
             SettingRepository settingsRepo = new SettingRepository();
             settingsViewModel = new SettingsViewModel(settingsRepo);
+            
+            ((TabItem)_tabControl.Items[0]).Content = new CourseListView(courseListViewModel);
+            ((TabItem)_tabControl.Items[1]).Content = new SettingsView(settingsViewModel);
+            ((TabItem)_tabControl.Items[3]).Content = new CourseUseView(courseUseViewModel);
+
+
 
             Messenger.Default.Register<NavigateArgs>(Singleton, MessageType.Navigate, (message) => Navigate(message));
             Messenger.Default.Register<string>(Singleton, "errors", (error) => MessageBox.Show(error));
@@ -123,27 +115,34 @@ namespace JayDev.MediaScribe.View
         {
             //if we're closing the application, and we're on one of the course screens... we need to persist it's 'last' details to the db
             //(not valid if we're on list page, because we saved these details when we left the course screen)
-            if (currentView is CourseUseView || currentView is FullscreenCourseView)
+            if (currentViewModel is CourseUseViewModel)
             {
                 courseUseViewModel.LeavingViewModel();
             }
+
+            if (null != _fullscreenWindow)
+            {
+                _fullscreenWindow.Close();
+            }
         }
 
-
+        
         void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
             //TODO: handle lower-level (so can use keypad keys, regardless of numlock status). could try http://stackoverflow.com/a/5989521
             currentViewModel.HandleWindowKeypress(sender, e);
 
-            CourseUseView courseUseView = currentView as CourseUseView;
-            if(null != courseUseView) {
-                courseUseView.HandleWindowKeypress(sender, e);
-            }
-            FullscreenCourseView fullscreenView = currentView as FullscreenCourseView;
-            if (null != fullscreenView)
-            {
-                fullscreenView.HandleWindowKeypress(sender, e);
-            }
+            CourseUseView courseUseView = ((TabItem)_tabControl.Items[3]).Content as CourseUseView;
+            courseUseView.HandleWindowKeypress(sender, e);
+        }
+
+        void FullscreenWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            //TODO: handle lower-level (so can use keypad keys, regardless of numlock status). could try http://stackoverflow.com/a/5989521
+            currentViewModel.HandleWindowKeypress(sender, e);
+
+            FullscreenCourseView fullscreenView = _fullscreenWindow.Content as FullscreenCourseView;
+            fullscreenView.HandleWindowKeypress(sender, e);
         }
 
 
@@ -162,47 +161,115 @@ namespace JayDev.MediaScribe.View
             }
         }
 
+        Window _fullscreenWindow = null;
+
+        public bool IsFullscreen { get; private set; }
+
         private void Navigate(NavigateArgs args)
         {
             switch (args.Message)
             {
                 case NavigateMessage.ToggleFullscreen:
-                    if (currentView is CourseUseView)
+                    if (_mainWindow.Visibility == Visibility.Visible)
                     {
-                        preFullscreenWindowStyle = _mainWindow.WindowStyle;
-                        preFullscreenWindowState = _mainWindow.WindowState;
+                        //preFullscreenWindowStyle = _mainWindow.WindowStyle;
+                        //preFullscreenWindowState = _mainWindow.WindowState;
 
-                        FullscreenCourseView fscView = new FullscreenCourseView(courseUseViewModel);
-                        _mainWindow.Content = fscView;
-                        currentView = fscView;
+                        //FullscreenCourseView fscView = new FullscreenCourseView(courseUseViewModel);
+                        //_mainWindow.Content = fscView;
+                        //currentView = fscView;
                         currentViewModel = courseUseViewModel;
 
-                        if (_mainWindow.WindowState == System.Windows.WindowState.Maximized)
+                        if (null == _fullscreenWindow)
+                        {
+                            _fullscreenWindow = new BlankWindow();
+                            _fullscreenWindow.Content = new FullscreenCourseView(courseUseViewModel);
+                            _fullscreenWindow.PreviewKeyDown += new KeyEventHandler(FullscreenWindow_KeyDown);
+                            ((FullscreenCourseView)_fullscreenWindow.Content).videoControl.AssociateVideoWithControl();
+                        }
+                        else
+                        {
+                            ((FullscreenCourseView)_fullscreenWindow.Content).videoControl.AssociateVideoWithControl();
+                        }
+
+                        _fullscreenWindow.Visibility = Visibility.Visible;
+                        _mainWindow.Visibility = Visibility.Collapsed;
+
+                        if (_fullscreenWindow.WindowState == System.Windows.WindowState.Maximized)
                         {
                             //JDW: have to set winbdowState to normal first, otherwise WPF will still show the windows taskbar
-                            _mainWindow.WindowState = System.Windows.WindowState.Normal;
+                            _fullscreenWindow.WindowState = System.Windows.WindowState.Normal;
                         }
-                        _mainWindow.WindowStyle = System.Windows.WindowStyle.None;
-                        _mainWindow.WindowState = System.Windows.WindowState.Maximized;
-                        
+                        _fullscreenWindow.WindowStyle = System.Windows.WindowStyle.None;
+                        _fullscreenWindow.WindowState = System.Windows.WindowState.Maximized;
+                        _fullscreenWindow.BringIntoView();
+                        _fullscreenWindow.Focus();
+
+
+                        IsFullscreen = true;
                     }
                     else
                     {
-                        CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
-                        _mainWindow.Content = courseUseView;
-                        currentView = courseUseView;
-                        currentViewModel = courseUseViewModel;
+                        _mainWindow.Visibility = Visibility.Visible;
+                        _fullscreenWindow.Visibility = Visibility.Collapsed;
 
-                        _mainWindow.WindowStyle = preFullscreenWindowStyle;
-                        _mainWindow.Topmost = false;
-                        _mainWindow.WindowState = preFullscreenWindowState;
+                        CourseUseView courseUseView = ((TabItem)_tabControl.Items[3]).Content as CourseUseView;
+                        courseUseView.videoControl.AssociateVideoWithControl();
+
+                        //CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
+                        //_mainWindow.Content = courseUseView;
+                        //currentView = courseUseView;
+                        currentViewModel = courseUseViewModel;
 
                         //ensure that the mouse cursor is visible. this is a bit of a hack, since interacting with the win32 control is a
                         //PITA... and if the cursor was hidden when we left fullscreen, it'll stay hidden until it moves back over the win32
                         //control.
                         Mouse.OverrideCursor = null;
+
+                        IsFullscreen = false;
                     }
                     break;
+                //case NavigateMessage.ToggleFullscreen:
+                //    if (false == _mainWindow.Content is FullscreenCourseView)
+                //    {
+                //        preFullscreenWindowStyle = _mainWindow.WindowStyle;
+                //        preFullscreenWindowState = _mainWindow.WindowState;
+
+                //        FullscreenCourseView fscView = new FullscreenCourseView(courseUseViewModel);
+                //        _tabControl.Visibility = Visibility.Collapsed;
+                //        _mainWindow.Content = fscView;
+                //        //currentView = fscView;
+                //        currentViewModel = courseUseViewModel;
+
+                //        if (_mainWindow.WindowState == System.Windows.WindowState.Maximized)
+                //        {
+                //            //JDW: have to set winbdowState to normal first, otherwise WPF will still show the windows taskbar
+                //            _mainWindow.WindowState = System.Windows.WindowState.Normal;
+                //        }
+                //        _mainWindow.WindowStyle = System.Windows.WindowStyle.None;
+                //        _mainWindow.WindowState = System.Windows.WindowState.Maximized;
+
+                //    }
+                //    else
+                //    {
+                //        //CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
+                //        CourseUseView courseUseView = (CourseUseView)((TabItem)_tabControl.Items[3]).Content;
+                //        courseUseView.videoControl.AssociateVideoWithControl();
+                //        _mainWindow.Content = _tabControl;
+                //        _tabControl.Visibility = Visibility.Visible;
+                //        //currentView = courseUseView;
+                //        currentViewModel = courseUseViewModel;
+
+                //        _mainWindow.WindowStyle = preFullscreenWindowStyle;
+                //        _mainWindow.Topmost = false;
+                //        _mainWindow.WindowState = preFullscreenWindowState;
+
+                //        //ensure that the mouse cursor is visible. this is a bit of a hack, since interacting with the win32 control is a
+                //        //PITA... and if the cursor was hidden when we left fullscreen, it'll stay hidden until it moves back over the win32
+                //        //control.
+                //        Mouse.OverrideCursor = null;
+                //    }
+                //    break;
                 case NavigateMessage.WriteCourseNotes:
                     {
                         if (null != currentViewModel)
@@ -231,10 +298,10 @@ namespace JayDev.MediaScribe.View
                             //the course is probably outdated... get a fresh copy.
                             courseToLoad = _allCourses.First(x => x.ID == _lastCourse.ID);
                         }
-                        CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
-                        currentView = courseUseView;
+                        //CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
+                        //currentView = courseUseView;
                         currentViewModel = courseUseViewModel;
-                        _mainWindow.Content = currentView;
+                        //_mainWindow.Content = currentView;
                         courseUseViewModel.SetCurrentCourse(courseToLoad);
                         
                         //note the last course we had viewed
@@ -248,10 +315,10 @@ namespace JayDev.MediaScribe.View
                     {
                         currentViewModel.LeavingViewModel();
                     }
-                    CourseListView courseListView = new CourseListView(courseListViewModel);
-                    currentView = courseListView;
+                    //CourseListView courseListView = new CourseListView(courseListViewModel);
+                    //currentView = courseListView;
                     currentViewModel = courseListViewModel;
-                    _mainWindow.Content = currentView;
+                    //_mainWindow.Content = currentView;
 
                     currentViewModel.EnteringViewModel();
                     break;
@@ -260,14 +327,34 @@ namespace JayDev.MediaScribe.View
                     {
                         currentViewModel.LeavingViewModel();
                     }
-                    SettingsView settingsView = new SettingsView(settingsViewModel);
-                    currentView = settingsView;
+                    //SettingsView settingsView = new SettingsView(settingsViewModel);
+                    //currentView = settingsView;
                     currentViewModel = settingsViewModel;
-                    _mainWindow.Content = settingsView;
+                    //_mainWindow.Content = settingsView;
 
                     currentViewModel.EnteringViewModel();
                     break;
             }
+        }
+
+        /// <summary>
+        /// When MediaScribe is killed in Visual Studio, it often leaves the child mplayer processes running. This will find all old mplayer
+        /// instances started by MediaScribe, and kill them.
+        /// </summary>
+        private void TryKillOldMPlayerProccesses()
+        {
+            string currentAssemblyDirectoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            var oldChildMPlayerProcesses = (from procs in Process.GetProcesses()
+                                            where procs.ProcessName == "mplayer"
+                                            && Path.GetDirectoryName(procs.MainModule.FileName).Contains(currentAssemblyDirectoryName)
+                                            select procs).ToList();
+
+            try
+            {
+                oldChildMPlayerProcesses.ForEach(x => x.Kill());
+            }
+            catch { }
         }
     }
 }

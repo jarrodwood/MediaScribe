@@ -74,6 +74,17 @@ namespace JayDev.MediaScribe.View.Controls
 
 
 
+        public bool EnableAutohideControls
+        {
+            get { return (bool)GetValue(EnableAutohideControlsProperty); }
+            set { SetValue(EnableAutohideControlsProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for EnableAutohideControls.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty EnableAutohideControlsProperty =
+            DependencyProperty.Register("EnableAutohideControls", typeof(bool), typeof(VideoControl), new UIPropertyMetadata(null));
+
+
         #region PlayPauseCommand
 
         public static readonly DependencyProperty PlayPauseCommandqProperty =
@@ -95,6 +106,27 @@ namespace JayDev.MediaScribe.View.Controls
         {
             InitializeComponent();
 
+            //since we only have one instance of mplayer running, we have to share the control around the rest of the application. this 
+            //method yanks the video from whoever has it, and gives it to this control.
+            AssociateVideoWithControl();
+
+            //Ensure that when the video panel pointer property of the native win32 control is updated, we update our reference to it.
+            DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(MediaPlayerWPFDisplayControl.VideoPanelHandlePropertyProperty, typeof(MediaPlayerWPFDisplayControl));
+            if (dpd != null)
+            {
+                dpd.AddValueChanged(MediaPlayerWPFDisplayControl.Instance, delegate
+                {
+                    VideoPanelPointer = MediaPlayerWPFDisplayControl.Instance.VideoPanelHandleProperty;
+                });
+            }
+        }
+
+        /// <summary>
+        /// since we only have one instance of mplayer running, we have to share the control around the rest of the application. this 
+        /// method yanks the video from whoever has it, and gives it to this control.
+        /// </summary>
+        public void AssociateVideoWithControl()
+        {
             var mPlayerWPFControl1 = MediaPlayerWPFDisplayControl.Instance;
 
             //since we re-use the video control (since we don't want to keep on re-running mplayer), we need to ensure we disconnect the
@@ -107,16 +139,19 @@ namespace JayDev.MediaScribe.View.Controls
             this.videoPlaceholder.Content = mPlayerWPFControl1;
 
             //hook up the event handler so the user can double-click in the panel to toggle fullscreen
-            mPlayerWPFControl1.OnDoubleClick += new MediaPlayerWPFDisplayControl.DoubleClickHandler(mPlayerWPFControl1_OnDoubleClick);
+            MediaPlayerWPFDisplayControl.Instance.OnDoubleClick -= mPlayerWPFControl1_OnDoubleClick;
+            MediaPlayerWPFDisplayControl.Instance.OnDoubleClick += new MediaPlayerWPFDisplayControl.DoubleClickHandler(mPlayerWPFControl1_OnDoubleClick);
 
-            //Ensure that when the video panel pointer property of the native win32 control is updated, we update our reference to it.
-            DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(MediaPlayerWPFDisplayControl.VideoPanelHandlePropertyProperty, typeof(MediaPlayerWPFDisplayControl));
-            if (dpd != null)
+            //ensure that the panel is the right size.
+            SetPanelSizeForAspectRatio();
+
+            if (EnableAutohideControls)
             {
-                dpd.AddValueChanged(mPlayerWPFControl1, delegate
-                {
-                    VideoPanelPointer = mPlayerWPFControl1.VideoPanelHandleProperty;
-                });
+                MediaPlayerWPFDisplayControl.Instance.EnableAutoHide();
+            }
+            else
+            {
+                MediaPlayerWPFDisplayControl.Instance.DisableAutoHide();
             }
         }
 
@@ -147,7 +182,7 @@ namespace JayDev.MediaScribe.View.Controls
             SetPanelSizeForAspectRatio(e.NewSize.Width, e.NewSize.Height);
         }
 
-        private void SetPanelSizeForAspectRatio()
+        public void SetPanelSizeForAspectRatio()
         {
             SetPanelSizeForAspectRatio(this.ActualWidth, this.ActualHeight);
         }

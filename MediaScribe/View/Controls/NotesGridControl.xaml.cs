@@ -199,17 +199,9 @@ namespace JayDev.MediaScribe.View.Controls
 
         public void BeginEditNewNote()
         {
-            //for (int i = 100; i >= 0; i--)
-            //{
-            //    //JDW: commented out, since the reason the container wasn't ready was because the instance of the grid wasn't visible.
-            //    if (i == 0)
-            //        throw new Exception("why the hell?!");
-            //    if (noteDataGrid.ItemContainerGenerator.Status == System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated)
-            //    {
-            //        break;
-            //    }
-            //    System.Threading.Thread.Sleep(20);
-            //}
+            //NOTE: we need to scroll down to the bottom row, to make sure the placeholder row is in view. if it isn't in view, the cells
+            //      aren't rendered, and we can't get a reference to the cells to start editing.
+            noteDataGrid.ScrollIntoView(noteDataGrid.Items[noteDataGrid.Items.Count - 1]);
             DataGridCell cell = null;
             for (int i = 0; i < noteDataGrid.Columns.Count; i++)
             {
@@ -221,10 +213,18 @@ namespace JayDev.MediaScribe.View.Controls
             }
             if (cell != null)
             {
-                noteDataGrid.ScrollIntoView(noteDataGrid.Items[noteDataGrid.Items.Count - 1]);
                 cell.Focus();
                 noteDataGrid.CurrentCell = new DataGridCellInfo(cell);
                 noteDataGrid.BeginEdit();
+
+                //the code above successfully brings focus to the cell (even if there are scrollsbars), and begins editing... however,
+                //sometimes the scrollbars jump UP, so the row can't be seen. the reason /why/ is unclear, but it's related to the datagrid
+                //code. without digging through datagrid code (ergh) the simplest hack is to scroll /back/ into view, at 'input' priority
+                //(sending any higher than this will scroll into view BEFORE it jumps up)
+                ThreadHelper.ExecuteSyncUI(Dispatcher.CurrentDispatcher, delegate
+                {
+                    noteDataGrid.ScrollIntoView(noteDataGrid.Items[noteDataGrid.Items.Count - 1]);
+                }, DispatcherPriority.Input);
             }
         }
 

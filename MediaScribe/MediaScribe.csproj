@@ -117,18 +117,26 @@
     <Compile Include="Core\NavigationHelper.cs" />
     <Compile Include="Domain\Hotkey.cs" />
     <Compile Include="Model\CourseRepositorySqlite.cs" />
+    <Compile Include="Model\ExportImportRepository.cs" />
     <Compile Include="Model\RepositorySqliteBase.cs" />
     <Compile Include="Model\SettingRepository.cs" />
     <Compile Include="Model\SettingRepositorySqlite.cs" />
     <Compile Include="Model\SqliteHelper.cs" />
+    <Compile Include="ViewModel\ImportExportViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\BlankWindow.xaml.cs">
+      <DependentUpon>BlankWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Controls\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Controls\Base\DelayedBindDataGrid.cs" />
     <Compile Include="View\Controls\Base\UndecoratedButton.cs" />
     <Compile Include="View\Controls\Base\ComboBoxItemWithTooltip.cs" />
+    <Compile Include="View\DoubleControl.xaml.cs">
+      <DependentUpon>DoubleControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
@@ -145,6 +153,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\JarrodToggleButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\BlankWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -169,6 +181,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\CourseListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DoubleControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

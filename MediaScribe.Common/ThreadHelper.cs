@@ -27,7 +27,12 @@ namespace JayDev.MediaScribe.Common
 
         public static void ExecuteSyncUI(Dispatcher dispatcher, Action action)
         {
-            dispatcher.Invoke(action, DispatcherPriority.Normal);
+            ExecuteSyncUI(dispatcher, action, DispatcherPriority.Normal);
+        }
+
+        public static void ExecuteSyncUI(Dispatcher dispatcher, Action action, DispatcherPriority priority)
+        {
+            dispatcher.Invoke(action, priority);
         }
 
 

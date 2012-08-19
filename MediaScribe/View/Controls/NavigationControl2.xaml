@@ -44,7 +44,7 @@
     <Grid Height="50" VerticalAlignment="Top">
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#FFEEF6FF" Offset="0.2"/>
+                <GradientStop Color="#FFDEE6EF" Offset="0.2"/>
                 <!--<GradientStop Color="#FF75B2DE" Offset="1"/>-->
             </LinearGradientBrush>
         </Grid.Background>

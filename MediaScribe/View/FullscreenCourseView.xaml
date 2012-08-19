@@ -32,10 +32,12 @@
                                                        SetNoteStartTimeCommand="{Binding SetNoteStartTimeCommand}"
                                                        NoteEditCompletedCommand="{Binding NoteEditCompletedCommand}"/>
 
-        <MediaScribeControl:VideoControl VideoPanelPointer="{Binding VideoPanelPointer, Mode=OneWayToSource}"
+        <MediaScribeControl:VideoControl  x:Name="videoControl"
+                                                           VideoPanelPointer="{Binding VideoPanelPointer, Mode=OneWayToSource}"
                                                            AspectRatio="{Binding CurrentTrackVideoAspectRatio}"
                                                            IsShowingVideo="{Binding IsCurrentTrackVideo}"
-                                                           PlayPauseCommand="{Binding ToggleFullscreenCommand}"/>
+                                                           PlayPauseCommand="{Binding ToggleFullscreenCommand}"
+                                                           EnableAutohideControls="True"/>
         
     </DockPanel>
 </UserControl>

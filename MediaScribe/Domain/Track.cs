@@ -59,6 +59,7 @@ namespace JayDev.MediaScribe
 
         public virtual void CopyTo(Track track)
         {
+            track.ID = this.ID;
             track.Title = this.Title;
             track.Length = this.Length;
             track.FilePath = this.FilePath;

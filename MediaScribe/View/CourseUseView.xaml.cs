@@ -95,17 +95,14 @@ namespace JayDev.MediaScribe.View
                     switch (match.Function)
                     {
                         case HotkeyFunction.NoteEditBegin:
-                            ThreadHelper.ExecuteAsyncUI(_currentDispatcher, delegate
+                            if (notesGrid.IsEditing)
                             {
-                                if (notesGrid.IsEditing)
-                                {
-                                    notesGrid.CommitEdit();
-                                }
+                                notesGrid.CommitEdit();
+                            }
 
-                                SendShowMessage(new ShowMessage() { Show = true, Source = ShowSource.Hotkey });
+                            SendShowMessage(new ShowMessage() { Show = true, Source = ShowSource.Hotkey });
 
-                                notesGrid.BeginEditNewNote();
-                            });
+                            notesGrid.BeginEditNewNote();
                             e.Handled = true;
                             break;
                         case HotkeyFunction.NoteEditCommit:

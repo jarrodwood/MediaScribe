@@ -20,6 +20,7 @@ using System.Diagnostics;
 using System.Windows.Interop;
 using Microsoft.Windows.Shell;
 using Microsoft.Practices.Unity;
+using System.Runtime.InteropServices;
 
 namespace JayDev.MediaScribe.View
 {
@@ -45,7 +46,74 @@ namespace JayDev.MediaScribe.View
 
             Controller controller = new Controller();
             myContainer.RegisterInstance<Controller>(controller);
-            controller.Initialize(this);
+            controller.Initialize(this, tabControl1);
+
+            this.Loaded += new RoutedEventHandler(MainWindow_Loaded);
+
+            this.DataContext = new ViewModelBase();
+
+        }
+
+        void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Obtain the window handle for WPF application
+                IntPtr mainWindowPtr = new WindowInteropHelper(this).Handle;
+                HwndSource mainWindowSrc = HwndSource.FromHwnd(mainWindowPtr);
+                mainWindowSrc.CompositionTarget.BackgroundColor = Color.FromArgb(0, 0, 0, 0);
+
+                // Get System Dpi
+                System.Drawing.Graphics desktop = System.Drawing.Graphics.FromHwnd(mainWindowPtr);
+                float DesktopDpiX = desktop.DpiX;
+                float DesktopDpiY = desktop.DpiY;
+
+                // Set Margins
+                NonClientRegionAPI.MARGINS margins = new NonClientRegionAPI.MARGINS();
+
+                // Extend glass frame into client area 
+                // Note that the default desktop Dpi is 96dpi. The  margins are 
+                // adjusted for the system Dpi.
+                margins.cxLeftWidth = Convert.ToInt32(5 * (DesktopDpiX / 96));
+                margins.cxRightWidth = Convert.ToInt32(5 * (DesktopDpiX / 96));
+                margins.cyTopHeight = Convert.ToInt32(((int)tabControl1.ActualHeight + 5) * (DesktopDpiX / 96));
+                margins.cyBottomHeight = Convert.ToInt32(5 * (DesktopDpiX / 96));
+
+                int hr = NonClientRegionAPI.DwmExtendFrameIntoClientArea(mainWindowSrc.Handle, ref margins);
+                // 
+                if (hr < 0)
+                {
+                    //DwmExtendFrameIntoClientArea Failed
+                }
+            }
+            // If not Vista, paint background white. 
+            catch (DllNotFoundException)
+            {
+                Application.Current.MainWindow.Background = Brushes.White;
+            }
+        }
+
+        class NonClientRegionAPI
+        {
+            [StructLayout(LayoutKind.Sequential)]
+            public struct MARGINS
+            {
+                public int cxLeftWidth;      // width of left border that retains its size 
+                public int cxRightWidth;     // width of right border that retains its size 
+                public int cyTopHeight;      // height of top border that retains its size 
+                public int cyBottomHeight;   // height of bottom border that retains its size
+            };
+
+
+            [DllImport("DwmApi.dll")]
+            public static extern int DwmExtendFrameIntoClientArea(
+                IntPtr hwnd,
+                ref MARGINS pMarInset);
+        }
+
+        private void _OnSystemCommandCloseWindow(object sender, ExecutedRoutedEventArgs e)
+        {
+            SystemCommands.CloseWindow((Window)e.Parameter);
         }
     }
 }

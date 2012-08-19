@@ -74,19 +74,17 @@ namespace JayDev.MediaScribe.View
             {
                 if (this.notesGrid.Visibility != Visibility.Visible)
                 {
-                    ThreadHelper.ExecuteSyncUI(_currentDispatcher, delegate
-                    {
                         this.mediaControls.Visibility = System.Windows.Visibility.Visible;
                         this.notesGrid.Visibility = System.Windows.Visibility.Visible;
                         Mouse.OverrideCursor = null;
                         Debug.WriteLine(DateTime.Now.ToLongTimeString() + " override - show");
-                    });
                 }
             }
             else
             {
                 if (this.notesGrid.Visibility != System.Windows.Visibility.Collapsed)
                 {
+                    //needs to run under UI thread
                     ThreadHelper.ExecuteSyncUI(_currentDispatcher, delegate
                     {
                         this.mediaControls.Visibility = System.Windows.Visibility.Collapsed;
@@ -96,6 +94,11 @@ namespace JayDev.MediaScribe.View
                     });
                 }
             }
+        }
+
+        private void videoControl_AccessKeyPressed(object sender, AccessKeyPressedEventArgs e)
+        {
+
         }
 
     }

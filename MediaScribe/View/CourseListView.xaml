@@ -42,10 +42,10 @@
     <!--<Grid Background="#FFEFF5FF">-->
     <Grid Background="#FFEEF6FF">
         <DockPanel Name="windowContents">
-            <nmControls:NavigationControl2 DockPanel.Dock="Top"
+            <!--<nmControls:NavigationControl2 DockPanel.Dock="Top"
                                                 NavigateCommand="{Binding NavigateCommand}"
                                                 
-                                                />
+                                                />-->
             <Grid Name="mainGrid">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="5*"/>

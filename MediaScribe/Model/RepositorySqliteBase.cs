@@ -9,9 +9,9 @@ namespace JayDev.MediaScribe.Model
 {
     public class RepositorySqliteBase
     {
-        protected static SQLiteConnection connection = null;
+        protected SQLiteConnection connection = null;
 
-        protected static void PrepareConnection()
+        protected void PrepareConnection()
         {
             if (null == connection)
             {

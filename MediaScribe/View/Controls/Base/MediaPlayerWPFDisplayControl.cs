@@ -173,6 +173,22 @@ namespace JayDev.MediaScribe.View.Controls
             }
         }
 
+        public void EnableAutoHide()
+        {
+            _autohide = true;
+        }
+
+        public void DisableAutoHide()
+        {
+            _autohide = false;
+            if (null != hoverTimer)
+            {
+                hoverTimer.Stop();
+            }
+        }
+
+        private bool _autohide = true;
+
         /// <summary>
         /// WinAPI event handler, receiving messages for mouse-related events in the video panel
         /// </summary>
@@ -184,47 +200,51 @@ namespace JayDev.MediaScribe.View.Controls
         /// <returns></returns>
         protected override IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            if(msg != 132 && msg != 70)
+            if (msg != 132 && msg != 70)
             {
                 Debug.WriteLine(string.Format("Msg: {0}, wParam: {1}, lParam: {2}, handled? {3}", msg, wParam.ToInt32(), lParam.ToInt32(), handled));
             }
-            if (msg == (int)WM_Messages.WM_MOUSEMOVE)
-            {
-                //for a mouse-move event, the location of the cursor is stored as an int in the lParam parameter.
-                int currentMoveLocation = lParam.ToInt32();
-                if (currentMoveLocation != lastMoveLocation)
-                {
-                    //if the coundown falls to zero, we've used the buffer and the user is obviously using the mouse. So show the controls,
-                    //and stop & start the auto-hide timer
-                    if (_bufferCountdown <= 0)
-                    {
-                        Messenger.Default.Send(new ShowMessage() { Show = true, Source = ShowSource.MouseMove }, 12345);
-                        hoverTimer.Stop();
-                        hoverTimer.Start();
-                    }
-                    else
-                    {
-                        _bufferCountdown--;
-                    }
-
-                    lastMoveLocation = currentMoveLocation;
-                }
-            }
-
-            //if the cursor's left the video panel, stop the auto-hide timer.
-            if (msg == (int)WM_Messages.WM_MOUSELEAVE)
-            {
-                hoverTimer.Stop();
-            }
 
             //if the user double-clicks in the video panel, toggle fullscreen
-            else if (msg == (int)WM_Messages.WM_LBUTTONDBLCLK)
+            if (msg == (int)WM_Messages.WM_LBUTTONDBLCLK)
             {
                 Debug.WriteLine("double-click in video panel");
                 Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen), MessageType.Navigate);
 
                 //JDW: have to set it to handled, otherwise it fires the event twice.
                 handled = true;
+            }
+
+            if (_autohide)
+            {
+                if (msg == (int)WM_Messages.WM_MOUSEMOVE)
+                {
+                    //for a mouse-move event, the location of the cursor is stored as an int in the lParam parameter.
+                    int currentMoveLocation = lParam.ToInt32();
+                    if (currentMoveLocation != lastMoveLocation)
+                    {
+                        //if the coundown falls to zero, we've used the buffer and the user is obviously using the mouse. So show the controls,
+                        //and stop & start the auto-hide timer
+                        if (_bufferCountdown <= 0)
+                        {
+                            Messenger.Default.Send(new ShowMessage() { Show = true, Source = ShowSource.MouseMove }, 12345);
+                            hoverTimer.Stop();
+                            hoverTimer.Start();
+                        }
+                        else
+                        {
+                            _bufferCountdown--;
+                        }
+
+                        lastMoveLocation = currentMoveLocation;
+                    }
+                }
+
+                //if the cursor's left the video panel, stop the auto-hide timer.
+                if (msg == (int)WM_Messages.WM_MOUSELEAVE)
+                {
+                    hoverTimer.Stop();
+                }
             }
             return IntPtr.Zero;
         }
