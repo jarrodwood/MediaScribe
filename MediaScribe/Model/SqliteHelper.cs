@@ -125,8 +125,11 @@ namespace JayDev.MediaScribe.Model
                             case DataType.DateTime:
                                 {
                                     string colVal = (string)reader[ordinal];
-                                    DateTime convertedVal = DateTime.Parse(colVal);
-                                    mapping.PropertyInfo.SetValue(item, convertedVal, null);
+                                    if (colVal != string.Empty)
+                                    {
+                                        DateTime convertedVal = DateTime.Parse(colVal);
+                                        mapping.PropertyInfo.SetValue(item, convertedVal, null);
+                                    }
                                 }
                                 break;
                             case DataType.Double:
@@ -158,16 +161,19 @@ namespace JayDev.MediaScribe.Model
                             case DataType.TimeSpan:
                                 {
                                     string colVal = (string)reader[ordinal];
-                                    if (colVal.IndexOf(':') != -1)
+                                    if (colVal != string.Empty)
                                     {
-                                        TimeSpan convertedVal = TimeSpan.Parse(colVal);
-                                        mapping.PropertyInfo.SetValue(item, convertedVal, null);
-                                    }
-                                    else
-                                    {
-                                        string trimmed = colVal.Substring(0, colVal.Length - 7);
-                                        TimeSpan convertedVal = new TimeSpan(0, 0, Int32.Parse(trimmed));
-                                        mapping.PropertyInfo.SetValue(item, convertedVal, null);
+                                        if (colVal.IndexOf(':') != -1)
+                                        {
+                                            TimeSpan convertedVal = TimeSpan.Parse(colVal);
+                                            mapping.PropertyInfo.SetValue(item, convertedVal, null);
+                                        }
+                                        else
+                                        {
+                                            string trimmed = colVal.Substring(0, colVal.Length - 7);
+                                            TimeSpan convertedVal = new TimeSpan(0, 0, Int32.Parse(trimmed));
+                                            mapping.PropertyInfo.SetValue(item, convertedVal, null);
+                                        }
                                     }
                                 }
                                 break;
