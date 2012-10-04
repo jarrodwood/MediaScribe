@@ -119,7 +119,6 @@
     <Compile Include="Model\CourseRepositorySqlite.cs" />
     <Compile Include="Model\ExportImportRepository.cs" />
     <Compile Include="Model\RepositorySqliteBase.cs" />
-    <Compile Include="Model\SettingRepository.cs" />
     <Compile Include="Model\SettingRepositorySqlite.cs" />
     <Compile Include="Model\SqliteHelper.cs" />
     <Compile Include="ViewModel\ImportExportViewModel.cs" />
@@ -241,7 +240,6 @@
     <Compile Include="View\Controls\Base\ContentAdorner.cs" />
     <Compile Include="Core\PreviewSliderHelper.cs" />
     <Compile Include="View\Controls\Base\DragEnabledDataGrid.cs" />
-    <Compile Include="Core\SqliteConnectionProvider.cs" />
     <Compile Include="ViewModel\CourseListViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer.cs" />
     <Compile Include="View\Controller.cs" />
@@ -261,7 +259,6 @@
       <DependentUpon>NotesGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Domain\CourseList.cs" />
-    <Compile Include="Model\CourseRepository.cs" />
     <Compile Include="Core\XmlDataAccess.cs" />
     <Compile Include="Domain\Course.cs" />
     <Compile Include="Core\SingleInstance.cs" />
