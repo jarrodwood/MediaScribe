@@ -12,7 +12,13 @@ using JayDev.MediaScribe.View.Controls;
 
 namespace JayDev.MediaScribe.Core
 {
-   public static class SliderPreviewHelper
+    /// <summary>
+    /// Helper class: contains code related to a 'preview' box when hovering the cursor over a WPF Slider. This is initially used in
+    /// MediaScribe to view the current track's time at the cursor's position (e.g. hover at the start of the Slider, and the time will be
+    /// at or near 0:00, at the end of the file the time will be the full track's duration, hover at the center and the time will show half
+    /// of the track's duration)
+    /// </summary>
+    public static class SliderPreviewHelper
     {
         #region PreviewEnabled
 
@@ -33,7 +39,7 @@ namespace JayDev.MediaScribe.Core
             typeof(bool),
             typeof(SliderPreviewHelper),
             new UIPropertyMetadata(false, OnPreviewEnabledChanged));
-       
+
         #endregion // PreviewEnabled
 
         #region ContentStyle
@@ -54,7 +60,7 @@ namespace JayDev.MediaScribe.Core
             typeof(Style),
             typeof(SliderPreviewHelper),
             new UIPropertyMetadata(null));
-        #endregion 
+        #endregion
 
         //Internal Dependancy property
         #region PopupAdorner
@@ -68,9 +74,9 @@ namespace JayDev.MediaScribe.Core
             typeof(ContentAdorner),
             typeof(SliderPreviewHelper),
             new UIPropertyMetadata(null));
-        #endregion 
+        #endregion
 
-        static void OnPreviewEnabledChanged( DependencyObject depObj, DependencyPropertyChangedEventArgs e)
+        static void OnPreviewEnabledChanged(DependencyObject depObj, DependencyPropertyChangedEventArgs e)
         {
             Slider item = depObj as Slider;
             if (item == null)

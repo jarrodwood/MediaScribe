@@ -333,6 +333,8 @@ namespace JayDev.MediaScribe.ViewModel
 
         #endregion
 
+        #region CancelCommand
+
         private RelayCommand _cancelCommand;
 
         /// <summary>
@@ -361,6 +363,8 @@ namespace JayDev.MediaScribe.ViewModel
 
         #endregion
 
+        #region UpdateCourseListCommand
+
         private RelayCommand _updateCourseListCommand;
 
         /// <summary>
@@ -378,6 +382,10 @@ namespace JayDev.MediaScribe.ViewModel
                                           }));
             }
         }
+
+        #endregion
+
+        #endregion
 
         #region Notified Properties
 

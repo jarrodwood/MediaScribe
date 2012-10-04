@@ -40,6 +40,8 @@ namespace JayDev.MediaScribe.ViewModel
 
         #region Public Properties & Backing Fields
 
+        #region CurrentPage
+
         public NavigateMessage CurrentPage
         {
             get
@@ -47,6 +49,8 @@ namespace JayDev.MediaScribe.ViewModel
                 return NavigateMessage.WriteCourseNotes;
             }
         }
+
+        #endregion
 
         #region Notes
 
@@ -255,6 +259,8 @@ namespace JayDev.MediaScribe.ViewModel
 
         #endregion PlayStatus
 
+        #region VirtualEmbeddedVideoHeight
+
         /// <summary>
         /// The <see cref="VirtualEmbeddedVideoHeight" /> property's name.
         /// </summary>
@@ -289,6 +295,8 @@ namespace JayDev.MediaScribe.ViewModel
                 }
             }
         }
+
+        #endregion
 
         #region LastEmbeddedVideoWidth
 
@@ -537,6 +545,7 @@ namespace JayDev.MediaScribe.ViewModel
 
         #region Commands
 
+        #region NextTrackCommand
         private RelayCommand _nextTrackCommand;
 
         /// <summary>
@@ -556,6 +565,10 @@ namespace JayDev.MediaScribe.ViewModel
                                           }));
             }
         }
+
+        #endregion
+
+        #region PrevTrackCommand
 
         private RelayCommand _prevTrackCommand;
 
@@ -577,6 +590,9 @@ namespace JayDev.MediaScribe.ViewModel
             }
         }
 
+        #endregion
+
+        #region SaveCourseCommand
 
         private RelayCommand _saveCourseCommand;
 
@@ -596,6 +612,10 @@ namespace JayDev.MediaScribe.ViewModel
                                           () => false == _isBusy));
             }
         }
+
+        #endregion
+
+        #region PlayPauseCommand
 
         private RelayCommand _playPauseCommand;
 
@@ -620,6 +640,9 @@ namespace JayDev.MediaScribe.ViewModel
             }
         }
 
+        #endregion
+
+        #region PrepareNoteForEditCommand
 
         private RelayCommand<Note> _prepareNoteForEditCommand;
         public RelayCommand<Note> PrepareNoteForEditCommand
@@ -643,6 +666,9 @@ namespace JayDev.MediaScribe.ViewModel
             }
         }
 
+        #endregion
+
+        #region NoteSavedCommand
 
         private RelayCommand<Note> _noteSavedCommand;
         public RelayCommand<Note> NoteSavedCommand
@@ -661,6 +687,9 @@ namespace JayDev.MediaScribe.ViewModel
             }
         }
 
+        #endregion
+
+        #region NoteEditCompletedCommand
 
         private RelayCommand<Note> _noteEditCompletedCommand;
         public RelayCommand<Note> NoteEditCompletedCommand
@@ -680,6 +709,10 @@ namespace JayDev.MediaScribe.ViewModel
                                           (Note context) => true));
             }
         }
+
+        #endregion
+
+        #region SetNoteStartTimeCommand
 
         private RelayCommand<Note> _setNoteStartTimeCommand;
         public RelayCommand<Note> SetNoteStartTimeCommand
@@ -719,6 +752,10 @@ namespace JayDev.MediaScribe.ViewModel
             }
         }
 
+        #endregion
+
+        #region SetNoteEndTimeCommand
+
         private RelayCommand<Note> _setNoteEndTimeCommand;
         public RelayCommand<Note> SetNoteEndTimeCommand
         {
@@ -739,6 +776,10 @@ namespace JayDev.MediaScribe.ViewModel
             }
         }
 
+        #endregion
+
+        #region PlayNoteCommand
+
         private RelayCommand<Note> _playNoteCommand;
         public RelayCommand<Note> PlayNoteCommand
         {
@@ -757,7 +798,9 @@ namespace JayDev.MediaScribe.ViewModel
             }
         }
 
-        
+        #endregion
+
+        #region StopCommand
 
         private RelayCommand _stopCommand;
 
@@ -779,6 +822,9 @@ namespace JayDev.MediaScribe.ViewModel
             }
         }
 
+        #endregion
+
+        #region SeekToCommand
 
         private RelayCommand<TimeSpan> _seekToCommand;
 
@@ -803,6 +849,9 @@ namespace JayDev.MediaScribe.ViewModel
             }
         }
 
+        #endregion
+
+        #region SelectTrackCommand
 
         private RelayCommand<Track> _selectTrackCommand;
 
@@ -822,6 +871,9 @@ namespace JayDev.MediaScribe.ViewModel
             }
         }
 
+        #endregion
+
+        #region ToggleFullscreenCommand
 
         private RelayCommand _toggleFullscreenCommand;
 
@@ -846,6 +898,10 @@ namespace JayDev.MediaScribe.ViewModel
             }
         }
 
+        #endregion
+
+        #region NavigateCommand
+
         private RelayCommand<NavigateMessage> _navigateCommand;
         public RelayCommand<NavigateMessage> NavigateCommand
         {
@@ -859,6 +915,10 @@ namespace JayDev.MediaScribe.ViewModel
                                           }));
             }
         }
+        
+        #endregion
+
+        #region NotesLoadedCommand
 
         private RelayCommand _notesLoadedCommand;
 
@@ -880,6 +940,8 @@ namespace JayDev.MediaScribe.ViewModel
                             }));
             }
         }
+
+        #endregion
 
         #region ExportExcelCommand
 
@@ -987,6 +1049,8 @@ namespace JayDev.MediaScribe.ViewModel
 
         #endregion
 
+        #region ToggleMuteCommand
+
         private RelayCommand _toggleMuteCommand;
 
         /// <summary>
@@ -1005,6 +1069,8 @@ namespace JayDev.MediaScribe.ViewModel
                                           }));
             }
         }
+
+        #endregion
 
         #endregion
 
