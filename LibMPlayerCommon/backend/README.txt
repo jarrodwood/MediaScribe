@@ -1,22 +1,31 @@
-MPlayer/MEncoder Win32 binary Builds by Gianluigi Tiesi <sherpya@netfarm.it>
+MPlayer/MEncoder Win32 binary Builds by Redxii <redxii@users.sourceforge.net> for SMPlayer
+Report bugs to http://smplayer.sf.net/
 
-The included subfont.ttf is DejaVu Serif,
-Copyright (c) 2003 by Bitstream, Inc. All Rights Reserved. Bitstream Vera is
-a trademark of Bitstream, Inc.
-DejaVu changes are in public domain.
 
-Additionally were added some patches from me, and other picked around internet.
-For information about included patches please look at:
+The included subfont.ttf is Roboto Cn Bold Condensed:
+Copyright (C) 2008 The Android Open Source Project
+
+Licensed under the Apache License, Version 2.0 (the “License”);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an “AS IS” BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Some libraries are from Gianluigi Tiesi [sherpya@netfarm.it] Mplayer for Windows:
+pthreadsGC2-static-2.9.x
+libmng-mingw32-1.0.10-gcc42.tar.bz2
+libSDL-mingw32-1.2.15-gcc46.tar.bz2
+
+For information about included libraries please look at:
 http://oss.netfarm.it/mplayer-win32.php
 
-Modified windows icons are made by using Lila SVG Icon and Theme Artwork:
-http://www.lila-center.info/doku.php
-Copyright 2004-2006 Lila Community
-available under the GNU General Public License
 
--- Report bugs to sherpya@netfarm.it
-
---
 The bottom of this file has a list of keyboard shortcuts to control MPlayer.
 A complete list of command line parameters is in mplayer.html. More
 documentation is in the docs/ directory. Start reading at index.html or

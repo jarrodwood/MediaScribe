@@ -65,21 +65,22 @@ namespace LibMPlayerCommon
             }
         }
 
-        public static string MEncoder
-        {
-            get
-            {
-                if (OSPlatform() == "windows")
-                {
-                    string t = System.IO.Path.Combine(CurrentAssemblyDirectory(), "backend");
-                    return System.IO.Path.Combine(t, "mencoder.exe");
-                }
-                else
-                {
-                    return "mencoder";
-                }
-            }
-        }
+        //TODO: remove, not required
+        //public static string MEncoder
+        //{
+        //    get
+        //    {
+        //        if (OSPlatform() == "windows")
+        //        {
+        //            string t = System.IO.Path.Combine(CurrentAssemblyDirectory(), "backend");
+        //            return System.IO.Path.Combine(t, "mencoder.exe");
+        //        }
+        //        else
+        //        {
+        //            return "mencoder";
+        //        }
+        //    }
+        //}
 
     }
 }
