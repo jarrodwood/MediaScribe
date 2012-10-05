@@ -111,6 +111,7 @@ namespace JayDev.MediaScribe.View
                             {
                                 notesGrid.CommitEdit();
                             }
+                            notesGrid.UpdateLayout();
                             SendShowMessage(new ShowMessage() { Show = false, Source = ShowSource.Hotkey });
                             e.Handled = true;
                             break;
@@ -120,6 +121,7 @@ namespace JayDev.MediaScribe.View
                             {
                                 notesGrid.CancelEdit();
                             }
+                            notesGrid.UpdateLayout();
                             SendShowMessage(new ShowMessage() { Show = false, Source = ShowSource.Hotkey });
                             e.Handled = true;
                             break;
