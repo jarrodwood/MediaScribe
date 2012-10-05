@@ -40,6 +40,8 @@ namespace JayDev.MediaScribe.View.Controls
         #region Dependency Properties
 
 
+        
+
         public ObservableCollection<Note> Notes
         {
             get { return (ObservableCollection<Note>)GetValue(NotesProperty); }
@@ -201,12 +203,17 @@ namespace JayDev.MediaScribe.View.Controls
         {
             //NOTE: we need to scroll down to the bottom row, to make sure the placeholder row is in view. if it isn't in view, the cells
             //      aren't rendered, and we can't get a reference to the cells to start editing.
+            //NOTE: always update layout before scrolling
+            noteDataGrid.UpdateLayout();
             noteDataGrid.ScrollIntoView(noteDataGrid.Items[noteDataGrid.Items.Count - 1]);
+            
             DataGridCell cell = null;
+            DataGridColumn noteColumn = null;
             for (int i = 0; i < noteDataGrid.Columns.Count; i++)
             {
                 if (String.Equals(noteDataGrid.Columns[i].Header, "Note"))
                 {
+                    noteColumn = noteDataGrid.Columns[i];
                     cell = GetCell(noteDataGrid, Notes.Count, i);
                     break;
                 }
@@ -215,6 +222,8 @@ namespace JayDev.MediaScribe.View.Controls
             {
                 cell.Focus();
                 noteDataGrid.CurrentCell = new DataGridCellInfo(cell);
+                //NOTE: if we don't update layout here, we sometimes get argumentoutofrangeexceptions being thrown when beginning edit
+                noteDataGrid.UpdateLayout();
                 noteDataGrid.BeginEdit();
 
                 //the code above successfully brings focus to the cell (even if there are scrollsbars), and begins editing... however,
@@ -223,7 +232,7 @@ namespace JayDev.MediaScribe.View.Controls
                 //(sending any higher than this will scroll into view BEFORE it jumps up)
                 ThreadHelper.ExecuteSyncUI(Dispatcher.CurrentDispatcher, delegate
                 {
-                    noteDataGrid.ScrollIntoView(noteDataGrid.Items[noteDataGrid.Items.Count - 1]);
+                    noteDataGrid.ScrollIntoView(noteDataGrid.Items[noteDataGrid.Items.Count - 1], noteColumn);
                 }, DispatcherPriority.Input);
             }
         }
@@ -251,6 +260,10 @@ namespace JayDev.MediaScribe.View.Controls
         DataGridCell GetCell(DataGrid dg, int rowIndex, int columnIndex)
         {
             var dr = dg.ItemContainerGenerator.ContainerFromIndex(rowIndex) as DataGridRow;
+            //NOTE: must always update layout before scrolling.
+            dg.UpdateLayout();
+            //NOTE: if we don't scroll the specific cell into view here, we /sometimes/ have the problem that the cell cannot be found. WPF...
+            dg.ScrollIntoView(dr, dg.Columns[columnIndex]);
             var dc = dg.Columns[columnIndex].GetCellContent(dr);
             return dc.Parent as DataGridCell;
         }
