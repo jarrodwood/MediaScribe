@@ -331,14 +331,38 @@ namespace JayDev.MediaScribe.View.Controls
             noteDataGrid.CancelEdit(DataGridEditingUnit.Row);
         }
 
+        /// <summary>
+        /// Code to execute when we begin editing a cell. NOTE: this is called for /any/ cell, so may contain different logic depending on
+        /// which column the cell belongs to.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void noteDataGrid_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
         {
-            //set focus on the textbox, so the user can just start typing.
+            //Logic for Notes column cells
             var textbox = UIHelpers.GetVisualChild<AvalonTextBox.AvalonTextBox>(e.Row);
             if (textbox != null)
             {
+                //set focus on the textbox, so the user can just start typing.
                 Keyboard.Focus(textbox);
+
+                //add a resize event handler, so that if the size of the textbox increases, we can scroll the grid to see the new line/s.
+                textbox.TextArea.TextView.SizeChanged -= TextView_SizeChanged;
+                textbox.TextArea.TextView.SizeChanged += new SizeChangedEventHandler(TextView_SizeChanged);
             }
+        }
+
+        /// <summary>
+        /// When the size of the textbox for a currently-edited note changes, ensure that the datagrid scrolls to show the entire textbox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void TextView_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            //TODO: change logic to execute on textbox content change (i.e. when they hit a key), rather than size change. This will be
+            //      a lot more sensible, but more expensive to implement and i'll have to figure out just /how much/ more later.
+            noteDataGrid.UpdateLayout();
+            noteDataGrid.ScrollIntoView(noteDataGrid.Items[noteDataGrid.Items.Count - 1]);
         }
     }
 }
