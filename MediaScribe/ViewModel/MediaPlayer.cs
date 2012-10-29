@@ -19,12 +19,50 @@ namespace JayDev.MediaScribe.ViewModel
         /// </summary>
         private const int MAX_TIME_DIFFERENCE_SECONDS = 10;
         private const int PLAY_POSITION_UPDATE_INTERVAL_MILLISECONDS = 500;
+
         private static MPlayer _play;
-        private string _filePath;
         private Timer _playPositionTimer = new Timer();
         private IntPtr _handle;
 
-        private double _currentVolume = Constants.DefaultVolume;
+        public delegate void TrackFinishedEventHandler(object sender, EventArgs e);
+
+        public event TrackFinishedEventHandler TrackFinished;
+
+        private double _currentVolume = Constants.DEFAULT_VOLUME;
+
+        #region CurrentTrack
+
+        /// <summary>
+        /// The <see cref="CurrentTrack" /> property's name.
+        /// </summary>
+        public const string CurrentTrackPropertyName = "CurrentTrack";
+
+        private Track _currentTrack = null;
+
+        /// <summary>
+        /// Sets and gets the CurrentTrack property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public Track CurrentTrack
+        {
+            get
+            {
+                return _currentTrack;
+            }
+
+            set
+            {
+                if (_currentTrack == value)
+                {
+                    return;
+                }
+
+                _currentTrack = value;
+                RaisePropertyChanged(CurrentTrackPropertyName);
+            }
+        }
+
+        #endregion
 
         #region CurrentPlayPosition
 
@@ -150,7 +188,7 @@ namespace JayDev.MediaScribe.ViewModel
             {
                 if (PlayStatus == Common.PlayStatus.Stopped)
                 {
-                    PlayFile2(currentFilePath, CurrentPlayPosition, PlayAction.Play);
+                    PlayFile(_allTracks, _currentTrackIndex, CurrentPlayPosition, PlayAction.Play);
                 }
                 else
                 {
@@ -203,35 +241,41 @@ namespace JayDev.MediaScribe.ViewModel
             }
         }
 
-        string loadedFilePath = null;
-        string currentFilePath = null;
+        Track _loadedTrack = null;
+        int _currentTrackIndex;
+        List<Track> _allTracks = null;
         public enum PlayAction { DontPlay, Play, MaintainStatus }
-        public void PlayFile2(string filePath, TimeSpan time, PlayAction action)
+        public void PlayFile(List<Track> tracks, int trackIndex, TimeSpan time, PlayAction action)
         {
-            this.currentFilePath = filePath;
+            _allTracks = tracks;
+            Track track = tracks[trackIndex];
+            this.CurrentTrack = track;
+            this._currentTrackIndex = trackIndex;
             this.CurrentPlayPosition = time;
 
-            bool isChangingFile = loadedFilePath != currentFilePath;
+            bool isChangingFile = _loadedTrack != CurrentTrack;
             PlayStatus playStatusAtMethodCall = PlayStatus;
-            if (filePath != loadedFilePath)
+            if (track != _loadedTrack)
             {
                 Stop();
             }
 
             if (action == PlayAction.Play || (action == PlayAction.MaintainStatus && playStatusAtMethodCall == Common.PlayStatus.Playing))
             {
-                //'loadfile' is a bad method name -- it actually PLAYS the file, too.
-                if (filePath != loadedFilePath
+                //'LoadFile' is a bad method name -- it actually PLAYS the file, too.
+                if (track != _loadedTrack
                     || playStatusAtMethodCall == Common.PlayStatus.Stopped)
                 {
-                    _play.LoadFile(filePath);
-                    loadedFilePath = filePath;
+                    _play.LoadFile(track.FilePath);
+                    _loadedTrack = track;
+                    _play.VideoExited -= VideoExited;
+                    _play.VideoExited += new MplayerEventHandler(VideoExited);
                 }
 
                 //When we load a file, mplayer resets the volume. If we have the non-default volume, ensure it's set. This isn't perfect
                 //since it'll start the file at default volume for a splitsecond.
                 //TODO: switch volume control from mplayer's native controls to Windows's volume settings for the application.
-                if (_currentVolume != Constants.DefaultVolume)
+                if (_currentVolume != Constants.DEFAULT_VOLUME)
                 {
                     Volume(_currentVolume);
                 }
@@ -252,6 +296,24 @@ namespace JayDev.MediaScribe.ViewModel
             //set the play position, to instantly update the trackbar... instead of waiting for the timer to tick.
             //TODO: the timer still makes it jump back for some reason - mplayer's returning the old time for a second or two ?
             this.CurrentPlayPosition = time;
+        }
+
+        void VideoExited(object sender, MplayerEvent e)
+        {
+            //If we're at the end of the file, raise the event that the track's finished.
+            //we need to do this check because the 'VideoExited' event is raised whenever the video is stopped, not just when it's reached
+            //the end.
+            if (CurrentTrack.Length.TotalSeconds - CurrentPlayPosition.TotalSeconds <= 2)
+            {
+                if (this.TrackFinished != null)
+                {
+                    this.TrackFinished(this, new EventArgs());
+                }
+            }
+            else
+            {
+                Stop();
+            }
         }
 
 

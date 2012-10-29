@@ -96,7 +96,7 @@ namespace JayDev.MediaScribe.View.Controls
                 List<object> selectedItemsList = new List<object>();
                 foreach (var item in SelectedItems)
                 {
-                    if (item.ToString() != Constants.NewItemPlaceholderName)
+                    if (item.ToString() != Constants.NEW_ITEM_PLACEHOLDER_NAME)
                     {
                         selectedItemsList.Add(item);
                     }

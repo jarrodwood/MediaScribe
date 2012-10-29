@@ -561,7 +561,7 @@ namespace JayDev.MediaScribe.ViewModel
                                           {
                                               int currentTrackIndex = Tracks.IndexOf(_currentTrack);
                                               int nextTrackIndex = currentTrackIndex == Tracks.Count - 1 ? 0 : currentTrackIndex + 1;
-                                              PlayFile(Tracks[nextTrackIndex], TimeSpan.Zero, true);
+                                              PlayFile(Tracks.ToList(), nextTrackIndex, TimeSpan.Zero, true);
                                           }));
             }
         }
@@ -585,7 +585,7 @@ namespace JayDev.MediaScribe.ViewModel
                                           {
                                               int currentTrackIndex = Tracks.IndexOf(_currentTrack);
                                               int prevTrackIndex = currentTrackIndex == 0 ? Tracks.Count - 1 : currentTrackIndex - 1;
-                                              PlayFile(Tracks[prevTrackIndex], TimeSpan.Zero, true);
+                                              PlayFile(Tracks.ToList(), prevTrackIndex, TimeSpan.Zero, true);
                                           }));
             }
         }
@@ -791,7 +791,8 @@ namespace JayDev.MediaScribe.ViewModel
                                           {
                                               if (null != context && null != context.Start)
                                               {
-                                                  PlayFile(context.Start.Track, context.Start.Time, false);
+                                                  int trackIndex = Tracks.IndexOf(context.Start.Track);
+                                                  PlayFile(Tracks.ToList(), trackIndex, context.Start.Time, false);
                                               }
                                           },
                                           (Note context) => true));
@@ -841,7 +842,8 @@ namespace JayDev.MediaScribe.ViewModel
                                           {
                                               if (null != _currentTrack)
                                               {
-                                                  PlayFile(_currentTrack, time, false);
+                                                  int currentTrackIndex = Tracks.IndexOf(_currentTrack);
+                                                  PlayFile(Tracks.ToList(), currentTrackIndex, time, false);
                                               }
                                           },
                                           (TimeSpan time) => true
@@ -866,7 +868,8 @@ namespace JayDev.MediaScribe.ViewModel
                     ?? (_selectTrackCommand = new RelayCommand<Track>(
                                           (Track track) =>
                                           {
-                                              PlayFile(track, TimeSpan.Zero, false);
+                                              int trackIndex = Tracks.IndexOf(track);
+                                              PlayFile(Tracks.ToList(), trackIndex, TimeSpan.Zero, false);
                                           }));
             }
         }
@@ -1094,7 +1097,7 @@ namespace JayDev.MediaScribe.ViewModel
                 _player.Volume(_volume);
             };
 
-            Volume = Constants.DefaultVolume;
+            Volume = Constants.DEFAULT_VOLUME;
         }
 
         #endregion
@@ -1135,9 +1138,19 @@ namespace JayDev.MediaScribe.ViewModel
                 _player.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(_player_PropertyChanged);
                 //the volume will have been given an initial value before this event is raised
                 _player.Volume(_volume);
+                _player.TrackFinished += new MediaPlayer.TrackFinishedEventHandler(_player_TrackFinished);
 
                 //auto-load the last track
                 SetInitialTrack();
+            }
+        }
+
+        void _player_TrackFinished(object sender, EventArgs e)
+        {
+            int trackIndex = Tracks.IndexOf(_currentTrack);
+            if (trackIndex < Tracks.Count - 1)
+            {
+                PlayFile(Tracks.ToList(), trackIndex + 1, TimeSpan.Zero, true);
             }
         }
 
@@ -1234,6 +1247,11 @@ namespace JayDev.MediaScribe.ViewModel
             {
                 PlayStatus = _player.PlayStatus;
             }
+            if (e.PropertyName == MediaPlayer.CurrentTrackPropertyName)
+            {
+                _currentTrack = _player.CurrentTrack;
+
+            }
         }
 
         public void SetCurrentCourse(Course course)
@@ -1261,8 +1279,9 @@ namespace JayDev.MediaScribe.ViewModel
         private bool _isLoading = false;
         private bool _isBusy = false;
 
-        private void PlayFile(Track track, TimeSpan position, bool maintainPlayStatus)
+        private void PlayFile(List<Track> tracks, int trackIndex, TimeSpan position, bool maintainPlayStatus)
         {
+            Track track = tracks[trackIndex];
             if (null == track)
                 return;
 
@@ -1272,6 +1291,7 @@ namespace JayDev.MediaScribe.ViewModel
             }
 
             _currentTrack = track;
+            IsCurrentTrackVideo = track.IsVideo;
             CurrentTrackPlayPosition = position;
             CurrentTrackName = _currentTrack.StringDisplayValue;
             //Propert
@@ -1279,15 +1299,8 @@ namespace JayDev.MediaScribe.ViewModel
 
             track.IsPlaying = true;
 
-            IsCurrentTrackVideo = track.IsVideo;
-
-            //if we don't care about maintaining the existing play status (e.g. if we are playing a note), or we're already playing another
-            //track... we'll begin playing this track.
-            //if (false == maintainPlayStatus || PlayStatus == Common.PlayStatus.Playing)
-            //{
             JayDev.MediaScribe.ViewModel.MediaPlayer.PlayAction action = maintainPlayStatus ? JayDev.MediaScribe.ViewModel.MediaPlayer.PlayAction.MaintainStatus : JayDev.MediaScribe.ViewModel.MediaPlayer.PlayAction.Play;
-            _player.PlayFile2(track.FilePath, position, action);
-            //}
+            _player.PlayFile(tracks, trackIndex, position, action);
         }
 
         private void PlayPause()
@@ -1301,7 +1314,7 @@ namespace JayDev.MediaScribe.ViewModel
                 }
                 else
                 {
-                    PlayFile(Tracks.First(), TimeSpan.Zero, false);
+                    PlayFile(Tracks.ToList(), 0, TimeSpan.Zero, false);
                 }
             }
             else
@@ -1351,7 +1364,8 @@ namespace JayDev.MediaScribe.ViewModel
                     //JDW: track may have been removed
                     if (_currentCourse.Tracks.Any(x => x.FilePath == _currentCourse.LastPlayedTrack.FilePath))
                     {
-                        PlayFile(_currentCourse.LastPlayedTrack, _currentCourse.LastPlayedTrackPosition, true);
+                        int trackIndex = _currentCourse.Tracks.IndexOf(_currentCourse.LastPlayedTrack);
+                        PlayFile(_currentCourse.Tracks, trackIndex, _currentCourse.LastPlayedTrackPosition, true);
                     }
                 }
             }

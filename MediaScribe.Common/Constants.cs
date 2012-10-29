@@ -300,8 +300,8 @@ namespace JayDev.MediaScribe.Common
         /// MS.Internal.NamedObject... and the only way, it seems, to detect if a given row is of one of these types, is by calling
         /// .ToString() on it - which will return this string here.
         /// </summary>
-        public const string NewItemPlaceholderName = "{NewItemPlaceholder}";
+        public const string NEW_ITEM_PLACEHOLDER_NAME = "{NewItemPlaceholder}";
 
-        public const int DefaultVolume = 100;
+        public const int DEFAULT_VOLUME = 100;
     }
 }

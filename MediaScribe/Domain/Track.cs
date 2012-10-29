@@ -76,16 +76,16 @@ namespace JayDev.MediaScribe
         }
 
         
-        private bool blah;
+        private bool _isPlaying;
         public virtual bool IsPlaying
         {
             get
             {
-                return blah;
+                return _isPlaying;
             }
             set
             {
-                blah = value;
+                _isPlaying = value;
 
                 OnPropertyChanged("IsPlaying");
             }
