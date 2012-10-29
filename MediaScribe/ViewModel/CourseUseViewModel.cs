@@ -1340,7 +1340,7 @@ namespace JayDev.MediaScribe.ViewModel
             _currentCourse.DateViewed = DateTime.Now;
             _repo.SaveCourseOnly(_currentCourse);
 
-            _controller.RefreshCourse(_currentCourse);
+            _controller.UpdateCourseInMemory(_currentCourse);
         }
         private void Stop()
         {

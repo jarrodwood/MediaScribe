@@ -26,6 +26,7 @@ namespace JayDev.MediaScribe.View
     public class Controller
     {
         private MainWindow _mainWindow;
+        private Window _fullscreenWindow = null;
         private CourseUseViewModel courseUseViewModel;
         private CourseListViewModel courseListViewModel;
         private SettingsViewModel settingsViewModel;
@@ -51,6 +52,9 @@ namespace JayDev.MediaScribe.View
 
         const bool startAtLastCourse = true;
 
+        /// <summary>
+        /// The tab control in the main window. We need this reference to change the current tab, when we need to navigate.
+        /// </summary>
         private TabControl _tabControl;
 
         /// <summary>
@@ -62,38 +66,44 @@ namespace JayDev.MediaScribe.View
         public void Initialize(MainWindow mainWindow, TabControl tabControl)
         {
             this._tabControl = tabControl;
+            this._mainWindow = mainWindow;
 
             //Note the UI dispatcher
             _currentDispatcher = Dispatcher.CurrentDispatcher;
 
+            //Due to mplayer being an external process and has no way of telling when /this/ application closes, if MediaScribe is killed
+            //old mplayer.exe processes can remain hanging around. So we should try to see if this has happened, and kill the old instances.
             TryKillOldMPlayerProccesses();
-
-            _mainWindow = mainWindow;
+            
+            //we need to hook into the key pressing events in the main window, for use with hotkeys.
             _mainWindow.PreviewKeyDown += new KeyEventHandler(MainWindow_KeyDown);
 
             //allow all Debug messages to be sent to console (useful for debugging within VS)
             Console.SetOut(new DebugTextWriter());
 
+            //Create all view models
             CourseRepository courseRepo = new CourseRepository();
             courseUseViewModel = new CourseUseViewModel(courseRepo);
             courseListViewModel = new CourseListViewModel(courseRepo);
             SettingRepository settingsRepo = new SettingRepository();
             settingsViewModel = new SettingsViewModel(settingsRepo);
 
+            //Set the contents of the tabs in the main window's tab control
             ((TabItem)_tabControl.Items[0]).Content = new CourseListView(courseListViewModel);
             ((TabItem)_tabControl.Items[1]).Content = new SettingsView(settingsViewModel);
             ((TabItem)_tabControl.Items[3]).Content = new CourseUseView(courseUseViewModel);
 
-
-
+            //register the controller to receive application messages
             Messenger.Default.Register<NavigateArgs>(this, MessageType.Navigate, (message) => Navigate(message));
             Messenger.Default.Register<string>(this, "errors", (error) => MessageBox.Show(error));
 
+            //ensure that we hook into the application closing event, so that we can tidy up anything that needs to be tidied up.
             _mainWindow.Closing += new System.ComponentModel.CancelEventHandler(_mainWindow_Closing);
 
-
+            //load the user's hotkeys, and register them for use in the application
             HotkeyManager.HandleHotkeyRegistration(new List<HotkeyBase>(settingsRepo.GetHotkeys()));
 
+            //if the application has been run before, automatically load the most recently opened course. Otherwise, load the course list.
             bool loadedLastCourse = false;
             if (startAtLastCourse)
             {
@@ -144,7 +154,12 @@ namespace JayDev.MediaScribe.View
             fullscreenView.HandleWindowKeypress(sender, e);
         }
 
-        public void RefreshCourse(Course course)
+        /// <summary>
+        /// When we load the application, we retrieve a list of courses. To increase efficiency, this is never re-loaded. Instead, when a
+        /// course is updated, this method must be called to update the list of courses in memory, with the updated details.
+        /// </summary>
+        /// <param name="course"></param>
+        public void UpdateCourseInMemory(Course course)
         {
             for (int i = 0; i < AllCourses.Count; i++)
             {
@@ -156,7 +171,6 @@ namespace JayDev.MediaScribe.View
             }
         }
 
-        Window _fullscreenWindow = null;
 
         public bool IsFullscreen { get; private set; }
 
