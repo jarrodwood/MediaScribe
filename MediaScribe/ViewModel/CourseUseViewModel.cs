@@ -1241,7 +1241,15 @@ namespace JayDev.MediaScribe.ViewModel
             _currentCourse = course;
             CourseName = course.Name;
             Notes = new ExtendedObservableCollection<Note>();
-            _tracks = new ObservableCollection<Track>(course.Tracks);
+            if (null == Tracks)
+            {
+                _tracks = new ObservableCollection<Track>();
+            }
+            else
+            {
+                Tracks.Clear();
+            }
+            Tracks.AddRange(new ObservableCollection<Track>(course.Tracks));
             _lastEmbeddedVideoHeight = course.EmbeddedVideoHeight;
             _lastEmbeddedVideoWidth = course.EmbeddedVideoWidth;
 
