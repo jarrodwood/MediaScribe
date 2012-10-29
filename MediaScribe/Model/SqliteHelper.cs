@@ -55,6 +55,10 @@ namespace JayDev.MediaScribe.Model
         /// </summary>
         static SqliteHelper()
         {
+            /***********************
+             * Prepare database mappings
+             ***********************/
+
             TableNamesByType.Add(typeof(Course), "Courses");
             PropertyInfo[] courseProperties = typeof(Course).GetProperties();
             List<SqliteDataMapping> courseMappings = new List<SqliteDataMapping>();
@@ -113,6 +117,11 @@ namespace JayDev.MediaScribe.Model
             hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "SeekSeconds", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "SeekSeconds") });
             hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "Rating", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "Rating") });
             MappingsByType.Add(typeof(Hotkey), hotkeyMappings);
+
+            /***********************
+             * Prepare database upgrade scripts
+             ***********************/
+
         }
 
         #endregion

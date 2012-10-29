@@ -114,6 +114,7 @@
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\StringToXamlConverter.cs" />
     <Compile Include="Core\CsvExporter.cs" />
+    <Compile Include="Core\DatabaseUpdateEntry.cs" />
     <Compile Include="Core\NavigationHelper.cs" />
     <Compile Include="Domain\Hotkey.cs" />
     <Compile Include="Model\CourseRepositorySqlite.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="Model\RepositorySqliteBase.cs" />
     <Compile Include="Model\SettingRepositorySqlite.cs" />
     <Compile Include="Model\SqliteHelper.cs" />
+    <Compile Include="Model\UpdateRepository.cs" />
     <Compile Include="ViewModel\ImportExportViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />

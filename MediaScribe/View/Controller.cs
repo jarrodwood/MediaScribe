@@ -68,6 +68,8 @@ namespace JayDev.MediaScribe.View
             this._tabControl = tabControl;
             this._mainWindow = mainWindow;
 
+            //Check database version, and see if it needs updating.
+
             //Note the UI dispatcher
             _currentDispatcher = Dispatcher.CurrentDispatcher;
 

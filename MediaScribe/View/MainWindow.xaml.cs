@@ -55,6 +55,11 @@ namespace JayDev.MediaScribe.View
 
         }
 
+        /// <summary>
+        /// Give the main window the aero 'glass' effect, if possible.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             try

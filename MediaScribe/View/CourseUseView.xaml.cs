@@ -173,8 +173,16 @@ namespace JayDev.MediaScribe.View
                         case HotkeyFunction.NoteDelete:
                             if (IsVisible)
                             {
-                                Note currentNote = notesGrid.CurrentNote;
-                                notesGrid.DeleteSelectedNote.Execute(currentNote);
+                                //if it's not the placeholder row, get delete confirmation, and delete the note.
+                                if (notesGrid.noteDataGrid.SelectedItem.ToString() != Constants.NEW_ITEM_PLACEHOLDER_NAME)
+                                {
+                                    MessageBoxResult result = MessageBox.Show("Are you sure you wish to delete the note?");
+                                    if (result == MessageBoxResult.OK)
+                                    {
+                                        Note currentNote = notesGrid.CurrentNote;
+                                        notesGrid.DeleteSelectedNote.Execute(currentNote);
+                                    }
+                                }
                                 e.Handled = true;
                             }
                             break;
