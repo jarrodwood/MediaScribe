@@ -42,9 +42,10 @@ namespace JayDev.MediaScribe.View
         {
             InitializeComponent();
 
-            IUnityContainer myContainer = new UnityContainer();
-
             Controller controller = new Controller();
+            //We need to register the controller with Unity, before calling the initialize method. this is why the the logic isn't housed
+            //in the controller constructor.
+            IUnityContainer myContainer = new UnityContainer();
             myContainer.RegisterInstance<Controller>(controller);
             controller.Initialize(this, tabControl1);
 

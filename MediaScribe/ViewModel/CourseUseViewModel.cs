@@ -1152,6 +1152,10 @@ namespace JayDev.MediaScribe.ViewModel
             {
                 PlayFile(Tracks.ToList(), trackIndex + 1, TimeSpan.Zero, true);
             }
+            else
+            {
+                Stop();
+            }
         }
 
         void _notes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

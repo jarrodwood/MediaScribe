@@ -19,6 +19,7 @@ using System.Reflection;
 using System.IO;
 using System.Windows.Threading;
 using System.Threading;
+using Microsoft.Practices.Unity;
 
 namespace JayDev.MediaScribe.View
 {
@@ -33,19 +34,7 @@ namespace JayDev.MediaScribe.View
 
         private Dispatcher _currentDispatcher;
 
-        private Controller _instance;
-        public Controller Singleton
-        {
-            get
-            {
-                if (null == _instance)
-                    _instance = new Controller();
-                return _instance;
-            }
-        }
-
         private Course _lastCourse;
-
 
         private List<Course> _allCourses;
         public List<Course> AllCourses
@@ -64,6 +53,12 @@ namespace JayDev.MediaScribe.View
 
         private TabControl _tabControl;
 
+        /// <summary>
+        /// Initialize the constructor. This logic is not in the constructor, because the controller MUST be registered with Unity before
+        /// calling this.
+        /// </summary>
+        /// <param name="mainWindow"></param>
+        /// <param name="tabControl"></param>
         public void Initialize(MainWindow mainWindow, TabControl tabControl)
         {
             this._tabControl = tabControl;
@@ -84,15 +79,15 @@ namespace JayDev.MediaScribe.View
             courseListViewModel = new CourseListViewModel(courseRepo);
             SettingRepository settingsRepo = new SettingRepository();
             settingsViewModel = new SettingsViewModel(settingsRepo);
-            
+
             ((TabItem)_tabControl.Items[0]).Content = new CourseListView(courseListViewModel);
             ((TabItem)_tabControl.Items[1]).Content = new SettingsView(settingsViewModel);
             ((TabItem)_tabControl.Items[3]).Content = new CourseUseView(courseUseViewModel);
 
 
 
-            Messenger.Default.Register<NavigateArgs>(Singleton, MessageType.Navigate, (message) => Navigate(message));
-            Messenger.Default.Register<string>(Singleton, "errors", (error) => MessageBox.Show(error));
+            Messenger.Default.Register<NavigateArgs>(this, MessageType.Navigate, (message) => Navigate(message));
+            Messenger.Default.Register<string>(this, "errors", (error) => MessageBox.Show(error));
 
             _mainWindow.Closing += new System.ComponentModel.CancelEventHandler(_mainWindow_Closing);
 
@@ -149,10 +144,6 @@ namespace JayDev.MediaScribe.View
             fullscreenView.HandleWindowKeypress(sender, e);
         }
 
-
-        WindowStyle preFullscreenWindowStyle = WindowStyle.SingleBorderWindow;
-        WindowState preFullscreenWindowState = WindowState.Maximized;
-
         public void RefreshCourse(Course course)
         {
             for (int i = 0; i < AllCourses.Count; i++)
@@ -176,12 +167,6 @@ namespace JayDev.MediaScribe.View
                 case NavigateMessage.ToggleFullscreen:
                     if (_mainWindow.Visibility == Visibility.Visible)
                     {
-                        //preFullscreenWindowStyle = _mainWindow.WindowStyle;
-                        //preFullscreenWindowState = _mainWindow.WindowState;
-
-                        //FullscreenCourseView fscView = new FullscreenCourseView(courseUseViewModel);
-                        //_mainWindow.Content = fscView;
-                        //currentView = fscView;
                         currentViewModel = courseUseViewModel;
 
                         if (null == _fullscreenWindow)
@@ -220,9 +205,6 @@ namespace JayDev.MediaScribe.View
                         CourseUseView courseUseView = ((TabItem)_tabControl.Items[3]).Content as CourseUseView;
                         courseUseView.videoControl.AssociateVideoWithControl();
 
-                        //CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
-                        //_mainWindow.Content = courseUseView;
-                        //currentView = courseUseView;
                         currentViewModel = courseUseViewModel;
 
                         //ensure that the mouse cursor is visible. this is a bit of a hack, since interacting with the win32 control is a
@@ -233,47 +215,6 @@ namespace JayDev.MediaScribe.View
                         IsFullscreen = false;
                     }
                     break;
-                //case NavigateMessage.ToggleFullscreen:
-                //    if (false == _mainWindow.Content is FullscreenCourseView)
-                //    {
-                //        preFullscreenWindowStyle = _mainWindow.WindowStyle;
-                //        preFullscreenWindowState = _mainWindow.WindowState;
-
-                //        FullscreenCourseView fscView = new FullscreenCourseView(courseUseViewModel);
-                //        _tabControl.Visibility = Visibility.Collapsed;
-                //        _mainWindow.Content = fscView;
-                //        //currentView = fscView;
-                //        currentViewModel = courseUseViewModel;
-
-                //        if (_mainWindow.WindowState == System.Windows.WindowState.Maximized)
-                //        {
-                //            //JDW: have to set winbdowState to normal first, otherwise WPF will still show the windows taskbar
-                //            _mainWindow.WindowState = System.Windows.WindowState.Normal;
-                //        }
-                //        _mainWindow.WindowStyle = System.Windows.WindowStyle.None;
-                //        _mainWindow.WindowState = System.Windows.WindowState.Maximized;
-
-                //    }
-                //    else
-                //    {
-                //        //CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
-                //        CourseUseView courseUseView = (CourseUseView)((TabItem)_tabControl.Items[3]).Content;
-                //        courseUseView.videoControl.AssociateVideoWithControl();
-                //        _mainWindow.Content = _tabControl;
-                //        _tabControl.Visibility = Visibility.Visible;
-                //        //currentView = courseUseView;
-                //        currentViewModel = courseUseViewModel;
-
-                //        _mainWindow.WindowStyle = preFullscreenWindowStyle;
-                //        _mainWindow.Topmost = false;
-                //        _mainWindow.WindowState = preFullscreenWindowState;
-
-                //        //ensure that the mouse cursor is visible. this is a bit of a hack, since interacting with the win32 control is a
-                //        //PITA... and if the cursor was hidden when we left fullscreen, it'll stay hidden until it moves back over the win32
-                //        //control.
-                //        Mouse.OverrideCursor = null;
-                //    }
-                //    break;
                 case NavigateMessage.WriteCourseNotes:
                     {
                         if (null != currentViewModel)
@@ -322,10 +263,7 @@ namespace JayDev.MediaScribe.View
                     {
                         currentViewModel.LeavingViewModel();
                     }
-                    //CourseListView courseListView = new CourseListView(courseListViewModel);
-                    //currentView = courseListView;
                     currentViewModel = courseListViewModel;
-                    //_mainWindow.Content = currentView;
 
                     currentViewModel.EnteringViewModel();
                     break;
@@ -334,10 +272,7 @@ namespace JayDev.MediaScribe.View
                     {
                         currentViewModel.LeavingViewModel();
                     }
-                    //SettingsView settingsView = new SettingsView(settingsViewModel);
-                    //currentView = settingsView;
                     currentViewModel = settingsViewModel;
-                    //_mainWindow.Content = settingsView;
 
                     currentViewModel.EnteringViewModel();
                     break;
