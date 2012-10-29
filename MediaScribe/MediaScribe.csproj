@@ -118,6 +118,7 @@
     <Compile Include="Domain\Hotkey.cs" />
     <Compile Include="Model\CourseRepositorySqlite.cs" />
     <Compile Include="Model\ExportImportRepository.cs" />
+    <Compile Include="Model\ImportExportRepository.cs" />
     <Compile Include="Model\RepositorySqliteBase.cs" />
     <Compile Include="Model\SettingRepositorySqlite.cs" />
     <Compile Include="Model\SqliteHelper.cs" />
@@ -139,19 +140,19 @@
     <Compile Include="View\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
-    <Page Include="Themes\JarrodBlueButton.xaml">
+    <Page Include="Styles\JarrodBlueButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Themes\JarrodButtonNoWhiteBorder.xaml">
+    <Page Include="Styles\JarrodButtonNoWhiteBorder.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Themes\JarrodPlusMinusButtons.xaml">
+    <Page Include="Styles\JarrodPlusMinusButtons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Themes\JarrodToggleButton.xaml">
+    <Page Include="Styles\JarrodToggleButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -167,15 +168,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Controls\NavigationControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\Controls\ImageButton.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Controls\NavigationControl2.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -187,19 +180,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ExpressionDark.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\ExpressionDark_brushes.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\JarrodDatagrid.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\MyHuluStyle.xaml">
+    <Page Include="Styles\JarrodDatagrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -248,12 +229,6 @@
     </Compile>
     <Compile Include="View\Controls\MediaControlsControl.xaml.cs">
       <DependentUpon>MediaControlsControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Controls\NavigationControl.xaml.cs">
-      <DependentUpon>NavigationControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Controls\NavigationControl2.xaml.cs">
-      <DependentUpon>NavigationControl2.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Controls\NotesGridControl.xaml.cs">
       <DependentUpon>NotesGridControl.xaml</DependentUpon>
@@ -357,9 +332,7 @@
       <Name>MediaScribe.Common</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Styles\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Resources\MediaScribeEmpty.db" />
     <None Include="Resources\Play.png" />
@@ -491,11 +464,11 @@
     <Content Include="log4netoff.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Page Include="Themes\JarrodGlassButton.xaml">
+    <Page Include="Styles\JarrodGlassButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Themes\JarrodSlider.xaml">
+    <Page Include="Styles\JarrodSlider.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

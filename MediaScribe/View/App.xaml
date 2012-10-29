@@ -6,14 +6,12 @@
         <!-- Resources scoped at the Application level should be defined here. -->
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="MyHuluStyle.xaml"/>
-                <!--<ResourceDictionary Source="ExpressionDark.xaml"/>-->
-                <ResourceDictionary Source="/Themes/JarrodDatagrid.xaml"/>
-                <ResourceDictionary Source="/Themes/JarrodSlider.xaml"/>
-                <ResourceDictionary Source="/Themes/JarrodGlassButton.xaml"/>
-                <ResourceDictionary Source="/Themes/JarrodToggleButton.xaml"/>
-                <ResourceDictionary Source="/Themes/JarrodBlueButton.xaml"/>
-                <ResourceDictionary Source="/Themes/JarrodPlusMinusButtons.xaml"/>
+                <ResourceDictionary Source="/Styles/JarrodDatagrid.xaml"/>
+                <ResourceDictionary Source="/Styles/JarrodSlider.xaml"/>
+                <ResourceDictionary Source="/Styles/JarrodGlassButton.xaml"/>
+                <ResourceDictionary Source="/Styles/JarrodToggleButton.xaml"/>
+                <ResourceDictionary Source="/Styles/JarrodBlueButton.xaml"/>
+                <ResourceDictionary Source="/Styles/JarrodPlusMinusButtons.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

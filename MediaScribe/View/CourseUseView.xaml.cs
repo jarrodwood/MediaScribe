@@ -97,6 +97,7 @@ namespace JayDev.MediaScribe.View
                         case HotkeyFunction.NoteEditBegin:
                             if (notesGrid.IsEditing)
                             {
+                                notesGrid.UpdateLayout();
                                 notesGrid.CommitEdit();
                             }
 
@@ -109,6 +110,7 @@ namespace JayDev.MediaScribe.View
                             //commit the current edit, and hide the controls
                             if (notesGrid.IsEditing)
                             {
+                                notesGrid.UpdateLayout();
                                 notesGrid.CommitEdit();
                             }
                             notesGrid.UpdateLayout();

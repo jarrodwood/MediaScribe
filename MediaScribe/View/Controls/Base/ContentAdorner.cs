@@ -9,8 +9,13 @@ using System.Windows.Media;
 
 namespace JayDev.MediaScribe.View.Controls
 {
+    /// <summary>
+    /// Provides WPF content control functionality to an Adorner.
+    /// </summary>
     public class ContentAdorner : Adorner
     {
+        private ContentControl _contentControl;
+
         public ContentAdorner(UIElement adornedElem, Style contentStyle)
             : base(adornedElem)
         {
@@ -49,10 +54,10 @@ namespace JayDev.MediaScribe.View.Controls
         }
 
         protected override int VisualChildrenCount { get { return 1; } }
+
         protected override Visual GetVisualChild(int index) { return _contentControl; }
 
 
-        private ContentControl _contentControl;
     }
 
 }

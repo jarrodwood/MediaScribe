@@ -24,6 +24,8 @@ namespace JayDev.MediaScribe.ViewModel
         private Timer _playPositionTimer = new Timer();
         private IntPtr _handle;
 
+        private double _currentVolume = Constants.DefaultVolume;
+
         #region CurrentPlayPosition
 
         /// <summary>
@@ -183,6 +185,7 @@ namespace JayDev.MediaScribe.ViewModel
 
         public void Volume(double volumePercent)
         {
+            _currentVolume = volumePercent;
             if (null != _play)
             {
                 _play.Volume((int)volumePercent, true);
@@ -225,6 +228,13 @@ namespace JayDev.MediaScribe.ViewModel
                     loadedFilePath = filePath;
                 }
 
+                //When we load a file, mplayer resets the volume. If we have the non-default volume, ensure it's set. This isn't perfect
+                //since it'll start the file at default volume for a splitsecond.
+                //TODO: switch volume control from mplayer's native controls to Windows's volume settings for the application.
+                if (_currentVolume != Constants.DefaultVolume)
+                {
+                    Volume(_currentVolume);
+                }
 
                 //NOTE: if we're on the SAME FILE, and we want to seek to the start... we should be able to. if we're changing file... it
                 //will start off at the beginning, so seeking will just make it stutter.

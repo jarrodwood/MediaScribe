@@ -21,8 +21,10 @@ namespace JayDev.MediaScribe
         [STAThread]
         public static void Main()
         {
-            //try
-            //{
+            #if (DEBUG==false)
+            try
+            {
+            #endif
                 if (SingleInstance<App>.InitializeAsFirstInstance(Unique))
                 {
                     var application = new App();
@@ -34,13 +36,15 @@ namespace JayDev.MediaScribe
                     // Allow single instance code to perform cleanup operations
                     SingleInstance<App>.Cleanup();
                 }
-            //}
-            //catch (Exception e)
-            //{
-            //    StorageHelper storage = new StorageHelper();
-            //    storage.AppendFileToStorageFolder("error.txt", DateTime.Now.ToLongTimeString() + "\r\n" + e.ToString() + "\r\n\r\n");
-            //    MessageBox.Show("An error has occured -- please go to www.jarrod.co.nz/MediaScribe/ and get in touch.");
-            //}
+            #if (DEBUG==false)
+            }
+            catch (Exception e)
+            {
+                StorageHelper storage = new StorageHelper();
+                storage.AppendFileToStorageFolder("error.txt", DateTime.Now.ToLongTimeString() + "\r\n" + e.ToString() + "\r\n\r\n");
+                MessageBox.Show("An error has occured -- please go to www.jarrod.co.nz/MediaScribe/ and get in touch.");
+            }
+            #endif
         }
 
         #region ISingleInstanceApp Members

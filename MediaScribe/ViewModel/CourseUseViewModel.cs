@@ -1093,7 +1093,8 @@ namespace JayDev.MediaScribe.ViewModel
                 _updateVolumeTimer.Stop();
                 _player.Volume(_volume);
             };
-            Volume = 100;
+
+            Volume = Constants.DefaultVolume;
         }
 
         #endregion

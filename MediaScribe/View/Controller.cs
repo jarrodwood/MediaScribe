@@ -31,6 +31,8 @@ namespace JayDev.MediaScribe.View
 
         private ViewModelBase currentViewModel = null;
 
+        private Dispatcher _currentDispatcher;
+
         private Controller _instance;
         public Controller Singleton
         {
@@ -65,6 +67,9 @@ namespace JayDev.MediaScribe.View
         public void Initialize(MainWindow mainWindow, TabControl tabControl)
         {
             this._tabControl = tabControl;
+
+            //Note the UI dispatcher
+            _currentDispatcher = Dispatcher.CurrentDispatcher;
 
             TryKillOldMPlayerProccesses();
 
@@ -108,7 +113,6 @@ namespace JayDev.MediaScribe.View
             {
                 Navigate(new NavigateArgs(NavigateMessage.ListCourses));
             }
-
         }
 
         void _mainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -298,16 +302,19 @@ namespace JayDev.MediaScribe.View
                             //the course is probably outdated... get a fresh copy.
                             courseToLoad = _allCourses.First(x => x.ID == _lastCourse.ID);
                         }
-                        //CourseUseView courseUseView = new CourseUseView(courseUseViewModel);
-                        //currentView = courseUseView;
+
                         currentViewModel = courseUseViewModel;
-                        //_mainWindow.Content = currentView;
                         courseUseViewModel.SetCurrentCourse(courseToLoad);
                         
                         //note the last course we had viewed
                         _lastCourse = courseToLoad;
 
                         currentViewModel.EnteringViewModel();
+
+                        ThreadHelper.ExecuteAsyncUI(_currentDispatcher, delegate
+                        {
+                            _tabControl.SelectedIndex = 3;
+                        });
                     }
                     break;
                 case NavigateMessage.ListCourses:

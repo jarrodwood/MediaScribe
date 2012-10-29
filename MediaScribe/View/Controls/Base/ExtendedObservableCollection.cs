@@ -7,7 +7,7 @@ using System.Windows.Threading;
 namespace JayDev.MediaScribe.View.Controls
 {
     /// <summary>
-    /// supports bulks adding. ref: http://stackoverflow.com/questions/7687000/fast-performing-and-thread-safe-observable-collection
+    /// Supports bulks adding. ref: http://stackoverflow.com/questions/7687000/fast-performing-and-thread-safe-observable-collection
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class ExtendedObservableCollection<T> : ObservableCollection<T>

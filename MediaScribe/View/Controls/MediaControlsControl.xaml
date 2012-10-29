@@ -167,9 +167,6 @@
 
 
                         </StackPanel>
-                        <!--<Button DockPanel.Dock="Right" Height="20px" HorizontalAlignment="Right" Command="{Binding ElementName=MediaControlsControlName, Path=StopCommand}">Stop</Button>
-                        <Button DockPanel.Dock="Right" Height="20px" HorizontalAlignment="Right">Toggle notes in trackbar</Button>
-                        <Button DockPanel.Dock="Right" Height="20px" HorizontalAlignment="Right">preview on/off</Button>-->
                     </DockPanel>
                 </Grid>
 
@@ -280,7 +277,6 @@
                 
                 
                 
-            <!--<StackPanel Grid.Column="4" Orientation="Horizontal"></StackPanel>-->
             <Grid Grid.Column="5" VerticalAlignment="Center" Margin="0 0 20 0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -297,7 +293,7 @@
                     <Image Source="/MediaScribe;component/Images/stock_volume-med.png" Margin="0,1,0,0" Width="32" Height="32" Visibility="{Binding ElementName=MediaControlsControlName, Path=Volume, Converter={StaticResource medVolumeConverter}}" />
                     <Image Source="/MediaScribe;component/Images/stock_volume-max.png" Margin="0,1,0,0" Width="32" Height="32" Visibility="{Binding ElementName=MediaControlsControlName, Path=Volume, Converter={StaticResource maxVolumeConverter}}" />
                 </Grid>
-                <Slider VerticalAlignment="Center" Grid.Column="2" Maximum="100" Minimum="0"  Value="{Binding ElementName=MediaControlsControlName, Path=Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Slider VerticalAlignment="Center" Grid.Column="2" Maximum="100" Minimum="0"  Value="{Binding ElementName=MediaControlsControlName, Path=Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsSnapToTickEnabled="False" IsMoveToPointEnabled="True" />
             </Grid>
         </Grid>
     </Grid>

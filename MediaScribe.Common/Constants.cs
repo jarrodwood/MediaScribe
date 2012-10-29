@@ -302,5 +302,6 @@ namespace JayDev.MediaScribe.Common
         /// </summary>
         public const string NewItemPlaceholderName = "{NewItemPlaceholder}";
 
+        public const int DefaultVolume = 100;
     }
 }

@@ -94,6 +94,11 @@ namespace JayDev.MediaScribe.Core
             }
         }
 
+        /// <summary>
+        /// When the cursor leaves the control, hide the popup
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         static void item_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             Slider slider = sender as Slider;
@@ -101,6 +106,12 @@ namespace JayDev.MediaScribe.Core
             popup.Visibility = Visibility.Collapsed;
         }
 
+        /// <summary>
+        /// When the cursor moves around the control, show it if it's not yet visible, set the appropriate time value in the popup, and move
+        /// it to the cursor's x-axis location on the slider.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         static void item_PreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
             Slider slider = sender as Slider;
@@ -133,7 +144,5 @@ namespace JayDev.MediaScribe.Core
             position.Y = slider.ActualHeight / 2.0;
             popup.PlacementOffset = position;
         }
-
-
     }
 }
