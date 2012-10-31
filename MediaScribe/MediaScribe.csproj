@@ -114,15 +114,14 @@
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\StringToXamlConverter.cs" />
     <Compile Include="Core\CsvExporter.cs" />
-    <Compile Include="Core\DatabaseUpdateEntry.cs" />
     <Compile Include="Core\NavigationHelper.cs" />
+    <Compile Include="View\Controls\MediaScribeMainTabControl.cs" />
     <Compile Include="Domain\Hotkey.cs" />
     <Compile Include="Model\CourseRepositorySqlite.cs" />
     <Compile Include="Model\ExportImportRepository.cs" />
     <Compile Include="Model\ImportExportRepository.cs" />
-    <Compile Include="Model\RepositorySqliteBase.cs" />
+    <Compile Include="Model\RepositoryBase.cs" />
     <Compile Include="Model\SettingRepositorySqlite.cs" />
-    <Compile Include="Model\SqliteHelper.cs" />
     <Compile Include="Model\UpdateRepository.cs" />
     <Compile Include="ViewModel\ImportExportViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
@@ -139,6 +138,7 @@
     <Compile Include="View\DoubleControl.xaml.cs">
       <DependentUpon>DoubleControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\IController.cs" />
     <Compile Include="View\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>

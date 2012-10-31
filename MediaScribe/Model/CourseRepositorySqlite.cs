@@ -7,7 +7,7 @@ using System.Configuration;
 
 namespace JayDev.MediaScribe.Model
 {
-    public class CourseRepository : RepositorySqliteBase
+    public class CourseRepository : RepositoryBase
     {
 
         public List<Course> GetCourseList()
@@ -17,18 +17,18 @@ namespace JayDev.MediaScribe.Model
             PrepareConnection();
             using (SQLiteTransaction mytransaction = connection.BeginTransaction())
             {
-                courses = SqliteHelper.ReadAll<Course>(connection);
+                courses = ReadAll<Course>(connection);
 
                     if (null != courses && courses.Count > 0)
                     {
                         Dictionary<int, Course> coursesByID = courses.ToDictionary(x => x.ID.Value);
 
-                        List<Note> notes = SqliteHelper.ReadAll<Note>(connection);
+                        List<Note> notes = ReadAll<Note>(connection);
 
-                        List<TrackTime> trackTimes = SqliteHelper.ReadAll<TrackTime>(connection);
+                        List<TrackTime> trackTimes = ReadAll<TrackTime>(connection);
                         Dictionary<int, TrackTime> trackTimesByID = trackTimes.ToDictionary(x => x.ID.Value);
 
-                        List<Track> tracks = SqliteHelper.ReadAll<Track>(connection);
+                        List<Track> tracks = ReadAll<Track>(connection);
                         Dictionary<int, Track> tracksByID = tracks.ToDictionary(x => x.ID.Value);
 
 
@@ -78,7 +78,7 @@ namespace JayDev.MediaScribe.Model
             PrepareConnection();
             using (SQLiteTransaction mytransaction = connection.BeginTransaction())
             {
-                SqliteHelper.Save<Course>(course, connection);
+                Save<Course>(course, connection);
 
                 mytransaction.Commit();
             }
@@ -89,10 +89,10 @@ namespace JayDev.MediaScribe.Model
             PrepareConnection();
             using (SQLiteTransaction mytransaction = connection.BeginTransaction())
             {
-                SqliteHelper.Save<Course>(course, connection);
+                Save<Course>(course, connection);
 
                 course.Tracks.ForEach(x => x.ParentCourseID = course.ID.Value);
-                SqliteHelper.Save<Track>(course.Tracks, connection);
+                Save<Track>(course.Tracks, connection);
 
                 mytransaction.Commit();
             }
@@ -105,18 +105,18 @@ namespace JayDev.MediaScribe.Model
             {
                 if (null != note.Start)
                 {
-                    SqliteHelper.Save<TrackTime>(note.Start, connection);
+                    Save<TrackTime>(note.Start, connection);
                     note.StartTrackTimeID = note.Start.ID;
                 }
 
                 if (null != note.End)
                 {
-                    SqliteHelper.Save<TrackTime>(note.End, connection);
+                    Save<TrackTime>(note.End, connection);
                     note.EndTrackTimeID = note.End.ID;
                 }
 
                 note.ParentCourseID = parentCourse.ID.Value;
-                SqliteHelper.Save<Note>(note, connection);
+                Save<Note>(note, connection);
 
                 mytransaction.Commit();
             }
@@ -128,16 +128,16 @@ namespace JayDev.MediaScribe.Model
             PrepareConnection();
             using (SQLiteTransaction mytransaction = connection.BeginTransaction())
             {
-                SqliteHelper.Delete<Note>(note, connection);
+                Delete<Note>(note, connection);
 
                 if (null != note.Start)
                 {
-                    SqliteHelper.Delete<TrackTime>(note.Start, connection);
+                    Delete<TrackTime>(note.Start, connection);
                 }
 
                 if (null != note.End)
                 {
-                    SqliteHelper.Delete<TrackTime>(note.End, connection);
+                    Delete<TrackTime>(note.End, connection);
                 }
 
                 mytransaction.Commit();
@@ -152,24 +152,26 @@ namespace JayDev.MediaScribe.Model
             {
                 foreach (Note note in course.Notes)
                 {
-                    SqliteHelper.Delete<Note>(note, connection);
+                    Delete<Note>(note, connection);
 
                     if (null != note.StartTrackTimeID)
                     {
-                        SqliteHelper.Delete<TrackTime>(new TrackTime() { ID = note.StartTrackTimeID }, connection);
+                        Delete<TrackTime>(new TrackTime() { ID = note.StartTrackTimeID }, connection);
                     }
                     if (null != note.EndTrackTimeID)
                     {
-                        SqliteHelper.Delete<TrackTime>(new TrackTime() { ID = note.EndTrackTimeID }, connection);
+                        Delete<TrackTime>(new TrackTime() { ID = note.EndTrackTimeID }, connection);
                     }
                 }
 
                 foreach (Track track in course.Tracks)
                 {
-                    SqliteHelper.Delete<Track>(track, connection);
+                    Delete<Track>(track, connection);
                 }
 
-                SqliteHelper.Delete<Course>(course, connection);
+                Delete<Course>(course, connection);
+
+                mytransaction.Commit();
             }
         }
     }

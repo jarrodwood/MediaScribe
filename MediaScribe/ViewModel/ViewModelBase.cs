@@ -19,7 +19,7 @@ namespace JayDev.MediaScribe.ViewModel
         private RelayCommand _showAboutDialog;
         protected Dispatcher _uiDispatcher;
         protected IUnityContainer _container;
-        protected Controller _controller;
+        protected IController _controller;
 
         /// <summary>
         /// Gets the ShowAboutDialog.
@@ -54,11 +54,14 @@ namespace JayDev.MediaScribe.ViewModel
             }
         }
 
-        public ViewModelBase() : base()
+        public ViewModelBase(UnityContainer unityContainer) : base()
         {
             _uiDispatcher = Dispatcher.CurrentDispatcher;
-            _container = new UnityContainer();
-            _controller = _container.Resolve<Controller>();
+            if (null != unityContainer)
+            {
+                _container = unityContainer;
+                _controller = _container.Resolve<IController>();
+            }
         }
 
         public virtual void HandleWindowKeypress(object sender, System.Windows.Input.KeyEventArgs e)

@@ -7,10 +7,23 @@ using System.Windows.Media;
 
 namespace JayDev.MediaScribe.Common
 {
+    /// <summary>
+    /// The media player can be in several various states. This is a type-safe enum of them.
+    /// </summary>
     public enum PlayStatus { Stopped, Playing, Paused }
 
+    /// <summary>
+    /// When on the 'Course List' screen, on the right-hand side of the screen we show the selected course's details. This detail section
+    /// can be in one of several states. This is a type-safe enum of them.
+    /// NOTE: "None" is when no course is selected (i.e. we can't show a course in the details, it'll be blank or show a message)
+    /// </summary>
     public enum MaintenanceMode { View, Create, Edit, None }
-    public enum MessageType { Navigate, RegisterReusableControl, HotkeyRegistration }
+
+    /// <summary>
+    /// Typesafe enum of the allowed asynchronous application messages
+    /// </summary>
+    public enum MessageType { Navigate, SetFullscreenMode }
+
     public enum NavigateMessage { ToggleFullscreen, ListCourses, WriteCourseNotes, ReviewCourseNotes, Settings }
 
     public enum ShowSource { MouseMove, Hotkey, MouseStoppedTimer }
@@ -65,6 +78,20 @@ namespace JayDev.MediaScribe.Common
     }
 
     #endregion
+
+    public class ApplicationTab
+    {
+        public const int CourseList = 0;
+        public const int Settings = 1;
+        //public const int ImportExport = 2;
+        public const int WriteNotes = 2;
+    }
+
+    public enum TabChangeSource
+    {
+        Application, //Requires manually setting the main window's tab index
+        User //The user has selected a tab, and we're now handling the request. We don't need to set the main window's tab.
+    }
 
     public enum WM_Messages
     {

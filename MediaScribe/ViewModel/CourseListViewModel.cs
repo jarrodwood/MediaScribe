@@ -12,6 +12,7 @@ using System.Windows.Threading;
 using JayDev.MediaScribe.Core;
 using System.IO;
 using JayDev.MediaScribe.View;
+using Microsoft.Practices.Unity;
 
 namespace JayDev.MediaScribe.ViewModel
 {
@@ -38,7 +39,7 @@ namespace JayDev.MediaScribe.ViewModel
                                           (NavigateMessage message) =>
                                           {
                                               //JDW: if we're navigating from the list view, we have no context course.
-                                              Messenger.Default.Send(new NavigateArgs(message), MessageType.Navigate);
+                                              Messenger.Default.Send(new NavigateArgs(message, TabChangeSource.Application), MessageType.Navigate);
                                           }));
             }
         }
@@ -100,7 +101,11 @@ namespace JayDev.MediaScribe.ViewModel
                                               }
                                               else
                                               {
-                                                  courseToSave = new Course();
+                                                  courseToSave = new Course()
+                                                  {
+                                                      DateCreated = DateTime.Now,
+                                                      DateViewed = DateTime.Now
+                                                  };
                                               }
                                               courseToSave.Name = SelectedCourseName;
                                               courseToSave.Tracks.Clear();
@@ -123,6 +128,9 @@ namespace JayDev.MediaScribe.ViewModel
                                               Courses = new ObservableCollection<Course>(_repo.GetCourseList());
                                               SelectedCourse = Courses.First(x => x.ID == courseToSave.ID);
                                               SelectedCourseTracks = new ObservableCollection<Track>(SelectedCourse.Tracks);
+
+
+                                              _controller.UpdateCourseInMemory(SelectedCourse);
                                           },
                                           () => //can save if there is a name, and tracks.
                                               false == string.IsNullOrWhiteSpace(SelectedCourseName)
@@ -182,6 +190,7 @@ namespace JayDev.MediaScribe.ViewModel
                                               var openResult = System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Are you sure you want to delete the selected course?", "Delete course confirmation", System.Windows.MessageBoxButton.YesNo);
                                               if (openResult == System.Windows.MessageBoxResult.Yes)
                                               {
+                                                  _controller.RemoveCourseFromMemory(SelectedCourse);
                                                   _repo.DeleteCourse(SelectedCourse);
                                                   Courses = new ObservableCollection<Course>(_repo.GetCourseList());
                                               }
@@ -325,7 +334,7 @@ namespace JayDev.MediaScribe.ViewModel
                                               //ensure that an item is selected first.
                                               if (null != SelectedCourse)
                                               {
-                                                  Messenger.Default.Send(new NavigateArgs(NavigateMessage.WriteCourseNotes, SelectedCourse), MessageType.Navigate);
+                                                  Messenger.Default.Send(new NavigateArgs(NavigateMessage.WriteCourseNotes, SelectedCourse, TabChangeSource.Application), MessageType.Navigate);
                                               }
                                           }));
             }
@@ -379,6 +388,114 @@ namespace JayDev.MediaScribe.ViewModel
                                           () =>
                                           {
                                               Courses = new ObservableCollection<Course>(_repo.GetCourseList());
+                                          }));
+            }
+        }
+
+        #endregion
+
+        #region ExportExcelCommand
+
+        private RelayCommand _exportExcelCommand;
+
+        /// <summary>
+        /// Gets the ExportExcelCommand.
+        /// </summary>
+        public RelayCommand ExportExcelCommand
+        {
+            get
+            {
+                return _exportExcelCommand
+                    ?? (_exportExcelCommand = new RelayCommand(
+                                          () =>
+                                          {
+                                              
+                                              //TODO: refactor so we don't use dialogs in viewmodels
+                                              Microsoft.Win32.SaveFileDialog saveFileDialog1 = new Microsoft.Win32.SaveFileDialog();
+                                              saveFileDialog1.OverwritePrompt = true;
+                                              saveFileDialog1.RestoreDirectory = true;
+                                              saveFileDialog1.DefaultExt = "xslx";
+                                              // Adds a extension if the user does not
+                                              saveFileDialog1.AddExtension = true;
+                                              saveFileDialog1.InitialDirectory = Convert.ToString(Environment.SpecialFolder.MyDocuments);
+                                              saveFileDialog1.Filter = "Excel Spreadsheet|*.xlsx";
+                                              saveFileDialog1.FileName = string.Format("Exported Notes for {0} - {1}.xlsx", SelectedCourse.Name, DateTime.Now.ToString("dd-MM-yyyy HH.mm.ss"));
+                                              saveFileDialog1.Title = "Save Exported Notes";
+
+                                              if (saveFileDialog1.ShowDialog() == true)
+                                              {
+                                                  try
+                                                  {
+                                                      using (System.IO.FileStream fs = (System.IO.FileStream)saveFileDialog1.OpenFile())
+                                                      {
+                                                          XslsExporter exporter = new XslsExporter();
+                                                          exporter.CreateSpreadsheet(fs, SelectedCourse.Tracks.ToList(), SelectedCourse.Notes.ToList());
+
+                                                          fs.Close();
+                                                      }
+
+                                                      var openResult = System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Export successful! Would you like to open the file?", "Open exported file confirmation", System.Windows.MessageBoxButton.YesNo);
+                                                      if (openResult == System.Windows.MessageBoxResult.Yes)
+                                                      {
+                                                          System.Diagnostics.ProcessStartInfo info = new System.Diagnostics.ProcessStartInfo();
+                                                          info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Maximized;
+                                                          info.FileName = saveFileDialog1.FileName;
+                                                          var process = System.Diagnostics.Process.Start(info);
+                                                      }
+                                                  }
+                                                  catch (Exception e)
+                                                  {
+                                                      System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Error exporting :( - " + e.ToString());
+                                                  }
+                                              }
+                                          }));
+            }
+        }
+
+        #endregion
+
+        #region ExportCsvCommand
+
+        private RelayCommand _exportCsvCommand;
+
+        /// <summary>
+        /// Gets the ExportCsvCommand.
+        /// </summary>
+        public RelayCommand ExportCsvCommand
+        {
+            get
+            {
+                return _exportCsvCommand
+                    ?? (_exportCsvCommand = new RelayCommand(
+                                          () =>
+                                          {
+                                              //TODO: refactor so we don't use dialogs in viewmodels
+                                              Microsoft.Win32.SaveFileDialog saveFileDialog1 = new Microsoft.Win32.SaveFileDialog();
+                                              saveFileDialog1.OverwritePrompt = true;
+                                              saveFileDialog1.RestoreDirectory = true;
+                                              saveFileDialog1.DefaultExt = "csv";
+                                              // Adds a extension if the user does not
+                                              saveFileDialog1.AddExtension = true;
+                                              saveFileDialog1.InitialDirectory = Convert.ToString(Environment.SpecialFolder.MyDocuments);
+                                              saveFileDialog1.Filter = "Csv File|*.csv";
+                                              saveFileDialog1.FileName = string.Format("Exported Notes for {0} - {1}.xlsx", SelectedCourse.Name, DateTime.Now.ToString("dd-MM-yyyy HH.mm.ss"));
+                                              saveFileDialog1.Title = "Save Exported Notes";
+
+                                              if (saveFileDialog1.ShowDialog() == true)
+                                              {
+                                                  try
+                                                  {
+                                                      CsvExporter exporter = new CsvExporter();
+                                                      string csvContents = exporter.CreateCsvText(SelectedCourse.Tracks.ToList(), SelectedCourse.Notes.ToList());
+                                                      System.IO.File.WriteAllText(saveFileDialog1.FileName, csvContents);
+
+                                                      System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Export successful!", "Export successful", System.Windows.MessageBoxButton.OK);
+                                                  }
+                                                  catch (Exception e)
+                                                  {
+                                                      System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Error exporting :( - " + e.ToString());
+                                                  }
+                                              }
                                           }));
             }
         }
@@ -686,7 +803,8 @@ namespace JayDev.MediaScribe.ViewModel
 
         #region Constructor
 
-        public CourseListViewModel(CourseRepository repo) : base()
+        public CourseListViewModel(CourseRepository repo, UnityContainer unityContainer)
+            : base(unityContainer)
         {
             _repo = repo;
             _uiDispatcher = Dispatcher.CurrentDispatcher;

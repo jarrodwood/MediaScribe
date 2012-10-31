@@ -6,7 +6,7 @@ using System.Data.SQLite;
 
 namespace JayDev.MediaScribe.Model
 {
-    public class ExportImportRepository : RepositorySqliteBase
+    public class ExportImportRepository : RepositoryBase
     {
         protected SQLiteConnection exportConnection = null;
 

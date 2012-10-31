@@ -155,7 +155,7 @@ namespace JayDev.MediaScribe.View.Controls
         /// <param name="e"></param>
         void hoverTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Messenger.Default.Send(new ShowMessage() { Show = false, Source = ShowSource.MouseStoppedTimer }, 12345);
+            Messenger.Default.Send(new ShowMessage() { Show = false, Source = ShowSource.MouseStoppedTimer }, MessageType.SetFullscreenMode);
             Debug.WriteLine("HIDING NOW");
             _bufferCountdown = COUNTDOWN_DEFAULT;
         }
@@ -209,7 +209,7 @@ namespace JayDev.MediaScribe.View.Controls
             if (msg == (int)WM_Messages.WM_LBUTTONDBLCLK)
             {
                 Debug.WriteLine("double-click in video panel");
-                Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen), MessageType.Navigate);
+                Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen, TabChangeSource.Application), MessageType.Navigate);
 
                 //JDW: have to set it to handled, otherwise it fires the event twice.
                 handled = true;
@@ -227,7 +227,7 @@ namespace JayDev.MediaScribe.View.Controls
                         //and stop & start the auto-hide timer
                         if (_bufferCountdown <= 0)
                         {
-                            Messenger.Default.Send(new ShowMessage() { Show = true, Source = ShowSource.MouseMove }, 12345);
+                            Messenger.Default.Send(new ShowMessage() { Show = true, Source = ShowSource.MouseMove }, MessageType.SetFullscreenMode);
                             hoverTimer.Stop();
                             hoverTimer.Start();
                         }

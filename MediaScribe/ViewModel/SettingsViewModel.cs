@@ -14,6 +14,7 @@ using System.Windows.Media;
 using JayDev.MediaScribe.View;
 using JayDev.MediaScribe.Core;
 using MediaScribe.Common;
+using Microsoft.Practices.Unity;
 
 namespace JayDev.MediaScribe.ViewModel
 {
@@ -87,7 +88,7 @@ namespace JayDev.MediaScribe.ViewModel
                                           (NavigateMessage message) =>
                                           {
                                               //JDW: if we're navigating from the list view, we have no context course.
-                                              Messenger.Default.Send(new NavigateArgs(message), MessageType.Navigate);
+                                              Messenger.Default.Send(new NavigateArgs(message, TabChangeSource.Application), MessageType.Navigate);
                                           }));
             }
         }
@@ -184,7 +185,6 @@ namespace JayDev.MediaScribe.ViewModel
                                               _repo.PersistHotkeys(Hotkeys.ToList());
                                               Hotkeys = new ObservableCollection<Hotkey>(_repo.GetHotkeys());
 
-                                              //broadcast the new hotkeys
                                               HotkeyManager.HandleHotkeyRegistration(new List<HotkeyBase>(Hotkeys));
                                           }));
             }
@@ -315,7 +315,8 @@ namespace JayDev.MediaScribe.ViewModel
 
         #region Constructor
 
-        public SettingsViewModel(SettingRepository repo) : base()
+        public SettingsViewModel(SettingRepository repo, UnityContainer unityContainer)
+            : base(unityContainer)
         {
             _repo = repo;
 

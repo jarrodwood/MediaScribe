@@ -159,7 +159,7 @@ namespace JayDev.MediaScribe.View.Controls
         void mPlayerWPFControl1_OnDoubleClick(MediaPlayerWPFDisplayControl.DoubleClickEventArgs args)
         {
 
-            Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen), MessageType.Navigate);
+            Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen, TabChangeSource.Application), MessageType.Navigate);
         }
 
 

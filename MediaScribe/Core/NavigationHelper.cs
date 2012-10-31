@@ -15,14 +15,21 @@ namespace JayDev.MediaScribe.Core
     {
         public Course Course { get; set; }
         public NavigateMessage Message { get; set; }
+        public TabChangeSource Source { get; set; }
         public NavigateArgs(NavigateMessage message)
         {
             this.Message = message;
         }
-        public NavigateArgs(NavigateMessage message, Course course)
+        public NavigateArgs(NavigateMessage message, TabChangeSource source)
+        {
+            this.Message = message;
+            this.Source = source;
+        }
+        public NavigateArgs(NavigateMessage message, Course course, TabChangeSource source)
         {
             this.Message = message;
             this.Course = course;
+            this.Source = source;
         }
     }
 

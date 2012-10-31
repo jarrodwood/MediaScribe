@@ -40,7 +40,7 @@ namespace JayDev.MediaScribe.View
             this.DataContext = _viewModel;
             _currentDispatcher = Dispatcher.CurrentDispatcher;
 
-            Messenger.Default.Register<ShowMessage>(this, 12345, (message) => HandleShowMessage(message));
+            Messenger.Default.Register<ShowMessage>(this, MessageType.SetFullscreenMode, (message) => HandleShowMessage(message));
         }
 
         public void HandleWindowKeypress(object sender, KeyEventArgs e)
@@ -58,12 +58,12 @@ namespace JayDev.MediaScribe.View
 
         void FullscreenCourseView_KeyDown(object sender, KeyEventArgs e)
         {
-            Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen), MessageType.Navigate);
+            Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen, TabChangeSource.Application), MessageType.Navigate);
         }
 
         private void SendShowMessage(ShowMessage message)
         {
-            Messenger.Default.Send(message, 12345);
+            Messenger.Default.Send(message, MessageType.SetFullscreenMode);
         }
 
         private void HandleShowMessage(ShowMessage message)

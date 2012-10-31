@@ -102,7 +102,7 @@ namespace JayDev.MediaScribe.ViewModel
         /// Creates the wrapper for the mplayer library.
         /// </summary>
         /// <param name="handle">pointer to the panel where the video needs to be displayed</param>
-        public MediaPlayer(IntPtr handle)
+        public MediaPlayer(IntPtr handle) : base (null)
         {
             //we only initialize mplayer once.
             if (null == _play)

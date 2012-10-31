@@ -6,7 +6,7 @@ using System.Data.SQLite;
 
 namespace JayDev.MediaScribe.Model
 {
-    public class SettingRepository : RepositorySqliteBase
+    public class SettingRepository : RepositoryBase
     {
         private object _destructiveOperationLockToken = new object();
 
@@ -16,7 +16,7 @@ namespace JayDev.MediaScribe.Model
             List<Hotkey> hotkeys;
             using (SQLiteTransaction mytransaction = connection.BeginTransaction())
             {
-                hotkeys = SqliteHelper.ReadAll<Hotkey>(connection);
+                hotkeys = ReadAll<Hotkey>(connection);
 
                 mytransaction.Commit();
             }
@@ -57,11 +57,11 @@ namespace JayDev.MediaScribe.Model
 
                 foreach (Hotkey hotkey in toDelete)
                 {
-                    SqliteHelper.Delete<Hotkey>(hotkey, connection);
+                    Delete<Hotkey>(hotkey, connection);
                 }
                 foreach (Hotkey hotkey in toCreate)
                 {
-                    SqliteHelper.Save<Hotkey>(hotkey, connection);
+                    Save<Hotkey>(hotkey, connection);
                 }
 
                 mytransaction.Commit();

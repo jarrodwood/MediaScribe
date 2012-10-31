@@ -891,7 +891,7 @@ namespace JayDev.MediaScribe.ViewModel
                     ?? (_toggleFullscreenCommand = new RelayCommand(
                                           () =>
                                           {
-                                              Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen), MessageType.Navigate);
+                                              Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen, TabChangeSource.Application), MessageType.Navigate);
                                           },
                                           () => true
                     //{
@@ -914,7 +914,7 @@ namespace JayDev.MediaScribe.ViewModel
                     ?? (_navigateCommand = new RelayCommand<NavigateMessage>(
                                           (NavigateMessage message) =>
                                           {
-                                              Messenger.Default.Send(new NavigateArgs(message, _currentCourse), MessageType.Navigate);
+                                              Messenger.Default.Send(new NavigateArgs(message, _currentCourse, TabChangeSource.Application), MessageType.Navigate);
                                           }));
             }
         }
@@ -941,112 +941,6 @@ namespace JayDev.MediaScribe.ViewModel
                                 _isBusy = false;
                                 _isLoading = false;
                             }));
-            }
-        }
-
-        #endregion
-
-        #region ExportExcelCommand
-
-        private RelayCommand _exportExcelCommand;
-
-        /// <summary>
-        /// Gets the ExportExcelCommand.
-        /// </summary>
-        public RelayCommand ExportExcelCommand
-        {
-            get
-            {
-                return _exportExcelCommand
-                    ?? (_exportExcelCommand = new RelayCommand(
-                                          () =>
-                                          {
-                                              //TODO: refactor so we don't use dialogs in viewmodels
-                                              Microsoft.Win32.SaveFileDialog saveFileDialog1 = new Microsoft.Win32.SaveFileDialog();
-                                              saveFileDialog1.OverwritePrompt = true;
-                                              saveFileDialog1.RestoreDirectory = true;
-                                              saveFileDialog1.DefaultExt = "xslx";
-                                              // Adds a extension if the user does not
-                                              saveFileDialog1.AddExtension = true;
-                                              saveFileDialog1.InitialDirectory = Convert.ToString(Environment.SpecialFolder.MyDocuments);
-                                              saveFileDialog1.Filter = "Excel Spreadsheet|*.xlsx";
-                                              saveFileDialog1.FileName = string.Format("Exported Notes for {0} - {1}.xlsx", _currentCourse.Name, DateTime.Now.ToString("dd-MM-yyyy HH.mm.ss"));
-                                              saveFileDialog1.Title = "Save Exported Notes";
-
-                                              if (saveFileDialog1.ShowDialog() == true)
-                                              {
-                                                  try
-                                                  {
-                                                      using (System.IO.FileStream fs = (System.IO.FileStream)saveFileDialog1.OpenFile())
-                                                      {
-                                                          XslsExporter exporter = new XslsExporter();
-                                                          exporter.CreateSpreadsheet(fs, Tracks.ToList(), Notes.ToList());
-
-                                                          fs.Close();
-                                                      }
-
-                                                      var openResult = System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Export successful! Would you like to open the file?", "Open exported file confirmation", System.Windows.MessageBoxButton.YesNo);
-                                                      if(openResult == System.Windows.MessageBoxResult.Yes) {
-                                                          System.Diagnostics.ProcessStartInfo info = new System.Diagnostics.ProcessStartInfo();
-                                                          info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Maximized;
-                                                          info.FileName = saveFileDialog1.FileName;
-                                                          var process = System.Diagnostics.Process.Start(info);
-                                                      }
-                                                  }
-                                                  catch (Exception e)
-                                                  {
-                                                      System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Error exporting :( - " + e.ToString());
-                                                  }
-                                              }
-                                          }));
-            }
-        }
-
-        #endregion
-
-        #region ExportCsvCommand
-
-        private RelayCommand _exportCsvCommand;
-
-        /// <summary>
-        /// Gets the ExportCsvCommand.
-        /// </summary>
-        public RelayCommand ExportCsvCommand
-        {
-            get
-            {
-                return _exportCsvCommand
-                    ?? (_exportCsvCommand = new RelayCommand(
-                                          () =>
-                                          {
-                                              //TODO: refactor so we don't use dialogs in viewmodels
-                                              Microsoft.Win32.SaveFileDialog saveFileDialog1 = new Microsoft.Win32.SaveFileDialog();
-                                              saveFileDialog1.OverwritePrompt = true;
-                                              saveFileDialog1.RestoreDirectory = true;
-                                              saveFileDialog1.DefaultExt = "csv";
-                                              // Adds a extension if the user does not
-                                              saveFileDialog1.AddExtension = true;
-                                              saveFileDialog1.InitialDirectory = Convert.ToString(Environment.SpecialFolder.MyDocuments);
-                                              saveFileDialog1.Filter = "Csv File|*.csv";
-                                              saveFileDialog1.FileName = string.Format("Exported Notes for {0} - {1}.xlsx", _currentCourse.Name, DateTime.Now.ToString("dd-MM-yyyy HH.mm.ss"));
-                                              saveFileDialog1.Title = "Save Exported Notes";
-
-                                              if (saveFileDialog1.ShowDialog() == true)
-                                              {
-                                                  try
-                                                  {
-                                                      CsvExporter exporter = new CsvExporter();
-                                                      string csvContents = exporter.CreateCsvText(Tracks.ToList(), Notes.ToList());
-                                                      System.IO.File.WriteAllText(saveFileDialog1.FileName, csvContents);
-
-                                                      System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Export successful!", "Export successful", System.Windows.MessageBoxButton.OK);
-                                                  }
-                                                  catch (Exception e)
-                                                  {
-                                                      System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Error exporting :( - " + e.ToString());
-                                                  }
-                                              }
-                                          }));
             }
         }
 
@@ -1079,7 +973,8 @@ namespace JayDev.MediaScribe.ViewModel
 
         #region Constructor
 
-        public CourseUseViewModel(CourseRepository repo) : base()
+        public CourseUseViewModel(CourseRepository repo, UnityContainer unityContainer)
+            : base(unityContainer)
         {
             _repo = repo;
 
@@ -1223,7 +1118,7 @@ namespace JayDev.MediaScribe.ViewModel
                     switch (match.Function)
                     {
                         case HotkeyFunction.ToggleFullscreen:
-                            Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen), MessageType.Navigate);
+                            Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen, TabChangeSource.Application), MessageType.Navigate);
                             e.Handled = true;
                             break;
                         case HotkeyFunction.TogglePause:
@@ -1338,6 +1233,7 @@ namespace JayDev.MediaScribe.ViewModel
             _currentCourse.LastPlayedTrack = _currentTrack;
             _currentCourse.LastPlayedTrackPosition = _currentTrackPlayPosition;
             _currentCourse.DateViewed = DateTime.Now;
+            _currentCourse.Notes = Notes.ToList();
             _repo.SaveCourseOnly(_currentCourse);
 
             _controller.UpdateCourseInMemory(_currentCourse);

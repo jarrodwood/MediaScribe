@@ -8,22 +8,10 @@ using JayDev.MediaScribe.Core;
 
 namespace JayDev.MediaScribe.Model
 {
-    public class UpdateRepository : RepositorySqliteBase
+    public class UpdateRepository : RepositoryBase
     {
-        private static List<DatabaseUpdateEntry> _UpdateEntries = new List<DatabaseUpdateEntry>();
         static UpdateRepository()
         {
-            _UpdateEntries.Add(new DatabaseUpdateEntry()
-            {
-                VersionNumber = "0.9",
-                UpdateScript = null
-            });
-
-            _UpdateEntries.Add(new DatabaseUpdateEntry()
-            {
-                VersionNumber = "0.95",
-                UpdateScript = null
-            });
         }
 
         public void EnsureDatabaseIsUpdated()
@@ -33,17 +21,35 @@ namespace JayDev.MediaScribe.Model
             PrepareConnection();
             using (SQLiteTransaction mytransaction = connection.BeginTransaction())
             {
+                using (SQLiteCommand mycommand = new SQLiteCommand(connection))
+                {
+                }
             }
         }
 
-        private string GetDatabaseVersionNumber()
-        {
+        private string GetDatabaseVersionNumber() {
             PrepareConnection();
             using (SQLiteTransaction mytransaction = connection.BeginTransaction())
             {
-                
+                using (SQLiteCommand mycommand = new SQLiteCommand(connection))
+                {
+                    string versionNumber = null;
+                    try {
+                    mycommand.CommandText = "SELECT DatabaseVersion FROM Version";
+                    string stringResult = Convert.ToString(mycommand.ExecuteScalar());
+                        versionNumber = stringResult;
+                    }
+                    catch(SQLiteException exception) {
+                        if(exception.Message.Contains("no such table")) {
+                            versionNumber = "0.9.0.0";
+                        }
+                        else {
+                            throw;
+                        }
+                    }
+                    return versionNumber;
+                }
             }
-            return null;
         }
     }
 }

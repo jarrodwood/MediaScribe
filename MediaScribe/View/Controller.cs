@@ -23,7 +23,7 @@ using Microsoft.Practices.Unity;
 
 namespace JayDev.MediaScribe.View
 {
-    public class Controller
+    public class Controller : IController
     {
         private MainWindow _mainWindow;
         private Window _fullscreenWindow = null;
@@ -55,20 +55,22 @@ namespace JayDev.MediaScribe.View
         /// <summary>
         /// The tab control in the main window. We need this reference to change the current tab, when we need to navigate.
         /// </summary>
-        private TabControl _tabControl;
+        private JayDev.MediaScribe.View.Controls.MediaScribeMainTabControl _tabControl;
 
         /// <summary>
-        /// Initialize the constructor. This logic is not in the constructor, because the controller MUST be registered with Unity before
+        /// Initialize the constructor. This logic is not in the constructor, because we require input parameters. TODO: see if we can pass
+        /// input parameters via unity
         /// calling this.
         /// </summary>
         /// <param name="mainWindow"></param>
         /// <param name="tabControl"></param>
-        public void Initialize(MainWindow mainWindow, TabControl tabControl)
+        public void Initialize(MainWindow mainWindow, JayDev.MediaScribe.View.Controls.MediaScribeMainTabControl tabControl, UnityContainer unityContainer)
         {
             this._tabControl = tabControl;
             this._mainWindow = mainWindow;
 
             //Check database version, and see if it needs updating.
+            //TODO
 
             //Note the UI dispatcher
             _currentDispatcher = Dispatcher.CurrentDispatcher;
@@ -85,15 +87,15 @@ namespace JayDev.MediaScribe.View
 
             //Create all view models
             CourseRepository courseRepo = new CourseRepository();
-            courseUseViewModel = new CourseUseViewModel(courseRepo);
-            courseListViewModel = new CourseListViewModel(courseRepo);
+            courseUseViewModel = new CourseUseViewModel(courseRepo, unityContainer);
+            courseListViewModel = new CourseListViewModel(courseRepo, unityContainer);
             SettingRepository settingsRepo = new SettingRepository();
-            settingsViewModel = new SettingsViewModel(settingsRepo);
+            settingsViewModel = new SettingsViewModel(settingsRepo, unityContainer);
 
             //Set the contents of the tabs in the main window's tab control
-            ((TabItem)_tabControl.Items[0]).Content = new CourseListView(courseListViewModel);
-            ((TabItem)_tabControl.Items[1]).Content = new SettingsView(settingsViewModel);
-            ((TabItem)_tabControl.Items[3]).Content = new CourseUseView(courseUseViewModel);
+            ((TabItem)_tabControl.Items[ApplicationTab.CourseList]).Content = new CourseListView(courseListViewModel);
+            ((TabItem)_tabControl.Items[ApplicationTab.Settings]).Content = new SettingsView(settingsViewModel);
+            ((TabItem)_tabControl.Items[ApplicationTab.WriteNotes]).Content = new CourseUseView(courseUseViewModel);
 
             //register the controller to receive application messages
             Messenger.Default.Register<NavigateArgs>(this, MessageType.Navigate, (message) => Navigate(message));
@@ -112,13 +114,47 @@ namespace JayDev.MediaScribe.View
                 var currentCourse = AllCourses.OrderBy(x => x.DateViewed).LastOrDefault();
                 if (null != currentCourse)
                 {
-                    Navigate(new NavigateArgs(NavigateMessage.WriteCourseNotes, currentCourse));
+                    Navigate(new NavigateArgs(NavigateMessage.WriteCourseNotes, currentCourse, TabChangeSource.Application));
                     loadedLastCourse = true;
                 }
             }
             if (false == loadedLastCourse)
             {
-                Navigate(new NavigateArgs(NavigateMessage.ListCourses));
+                Navigate(new NavigateArgs(NavigateMessage.ListCourses, TabChangeSource.Application));
+            }
+
+            _tabControl.SelectionChanged += new SelectionChangedEventHandler(_tabControl_SelectionChanged);
+        }
+
+        void _tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //SelectionChanged is a routed event; we want to ignore any controls other than the tab control itself, which may be firing it.
+            if (e.OriginalSource == this._tabControl)
+            {
+                if (true == _tabControl.SuppressNextSelectedIndexChangeEvent)
+                {
+                    _tabControl.SuppressNextSelectedIndexChangeEvent = false;
+                }
+                else
+                {
+                    e.Handled = true;
+                    if (e.AddedItems.Count > 0)
+                    {
+                        TabItem tabItem = e.AddedItems[0] as TabItem;
+                        if (tabItem.Content is CourseListView)
+                        {
+                            Navigate(new NavigateArgs(NavigateMessage.ListCourses, TabChangeSource.User));
+                        }
+                        else if (tabItem.Content is SettingsView)
+                        {
+                            Navigate(new NavigateArgs(NavigateMessage.Settings, TabChangeSource.User));
+                        }
+                        else if (tabItem.Content is CourseUseView)
+                        {
+                            Navigate(new NavigateArgs(NavigateMessage.WriteCourseNotes, TabChangeSource.User));
+                        }
+                    }
+                }
             }
         }
 
@@ -143,7 +179,7 @@ namespace JayDev.MediaScribe.View
             //TODO: handle lower-level (so can use keypad keys, regardless of numlock status). could try http://stackoverflow.com/a/5989521
             currentViewModel.HandleWindowKeypress(sender, e);
 
-            CourseUseView courseUseView = ((TabItem)_tabControl.Items[3]).Content as CourseUseView;
+            CourseUseView courseUseView = ((TabItem)_tabControl.Items[ApplicationTab.WriteNotes]).Content as CourseUseView;
             courseUseView.HandleWindowKeypress(sender, e);
         }
 
@@ -163,16 +199,40 @@ namespace JayDev.MediaScribe.View
         /// <param name="course"></param>
         public void UpdateCourseInMemory(Course course)
         {
+            bool courseFound = false;
             for (int i = 0; i < AllCourses.Count; i++)
             {
                 if (_allCourses[i].ID == course.ID)
                 {
+                    courseFound = true;
                     _allCourses[i] = course;
                     break;
                 }
             }
+
+            //If the course wasn't found in the list in memory, it's presumably a newly created course
+            if (false == courseFound)
+            {
+                _allCourses.Add(course);
+            }
         }
 
+        /// <summary>
+        /// When we delete a course from the list, we must ensure that it doesn't hang around in-memory after it's been removed from the
+        /// database.
+        /// </summary>
+        /// <param name="course"></param>
+        public void RemoveCourseFromMemory(Course course)
+        {
+            for (int i = AllCourses.Count - 1; i >= 0; i--)
+            {
+                if (_allCourses[i].ID == course.ID)
+                {
+                    _allCourses.RemoveAt(i);
+                    break;
+                }
+            }
+        }
 
         public bool IsFullscreen { get; private set; }
 
@@ -218,7 +278,7 @@ namespace JayDev.MediaScribe.View
                         _mainWindow.Visibility = Visibility.Visible;
                         _fullscreenWindow.Visibility = Visibility.Collapsed;
 
-                        CourseUseView courseUseView = ((TabItem)_tabControl.Items[3]).Content as CourseUseView;
+                        CourseUseView courseUseView = ((TabItem)_tabControl.Items[ApplicationTab.WriteNotes]).Content as CourseUseView;
                         courseUseView.videoControl.AssociateVideoWithControl();
 
                         currentViewModel = courseUseViewModel;
@@ -270,7 +330,10 @@ namespace JayDev.MediaScribe.View
 
                         ThreadHelper.ExecuteAsyncUI(_currentDispatcher, delegate
                         {
-                            _tabControl.SelectedIndex = 3;
+                            //we want to ensure that the Navigate logic doesn't get executed twice when we programmatically change the tab's
+                            //index.
+                            _tabControl.SuppressNextSelectedIndexChangeEvent = true;
+                            _tabControl.SelectedIndex = ApplicationTab.WriteNotes;
                         });
                     }
                     break;

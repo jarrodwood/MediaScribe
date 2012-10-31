@@ -42,16 +42,16 @@ namespace JayDev.MediaScribe.View
         {
             InitializeComponent();
 
-            Controller controller = new Controller();
+            UnityContainer unityContainer = new UnityContainer();
+            unityContainer.RegisterType<IController, Controller>(new ContainerControlledLifetimeManager());
+            IController controller = unityContainer.Resolve<IController>();
             //We need to register the controller with Unity, before calling the initialize method. this is why the the logic isn't housed
             //in the controller constructor.
-            IUnityContainer myContainer = new UnityContainer();
-            myContainer.RegisterInstance<Controller>(controller);
-            controller.Initialize(this, tabControl1);
+            controller.Initialize(this, tabControl1, unityContainer);
 
             this.Loaded += new RoutedEventHandler(MainWindow_Loaded);
 
-            this.DataContext = new ViewModelBase();
+            this.DataContext = new ViewModelBase(null);
 
         }
 

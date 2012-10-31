@@ -7,5 +7,9 @@ namespace JayDev.MediaScribe.ViewModel
 {
     public class ImportExportViewModel : ViewModelBase
     {
+        public ImportExportViewModel()
+            : base(null)
+        {
+        }
     }
 }

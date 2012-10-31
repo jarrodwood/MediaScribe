@@ -153,19 +153,19 @@
     </Window.Resources>
     <Grid>
 
-        <TabControl  Name="tabControl1" Padding="0">
+        <nmControls:MediaScribeMainTabControl x:Name="tabControl1" Padding="0">
             <TabItem Header="Course List" Name="tabCourseList">
             </TabItem>
             <TabItem Header="Settings" Name="tabSettings">
                 <Grid />
             </TabItem>
-            <TabItem Header="Import/Export" Name="tabImportExport">
+            <!--<TabItem Header="Import/Export" Name="tabImportExport">
                 <Grid />
-            </TabItem>
+            </TabItem>-->
             <TabItem Header="Write Notes" Name="tabNotes">
                 <Grid />
             </TabItem>
-        </TabControl>
+        </nmControls:MediaScribeMainTabControl>
 
         <nmControls:NavigationButton Margin="00 0 3 0" MySource="/MediaScribe;component/Images/info32.png" Height="22" Width="22" HorizontalAlignment="Right" VerticalAlignment="Top"
                                                                 Command="{Binding ShowAboutDialog}"
