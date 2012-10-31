@@ -84,7 +84,7 @@ namespace JayDev.MediaScribe.ViewModel
 
         #region Tracks
 
-        private ObservableCollection<Track> _tracks;
+        private ObservableCollection<Track> _tracks = new ObservableCollection<Track>();
         public ObservableCollection<Track> Tracks { get { return _tracks; } }
 
         #endregion
@@ -936,10 +936,13 @@ namespace JayDev.MediaScribe.ViewModel
                     ?? (_notesLoadedCommand = new RelayCommand(
                             () =>
                             {
-                                _isBusy = true;
-                                Notes = new ObservableCollection<Note>(_currentCourse.Notes);
-                                _isBusy = false;
-                                _isLoading = false;
+                                if (null != _currentCourse)
+                                {
+                                    _isBusy = true;
+                                    Notes = new ObservableCollection<Note>(_currentCourse.Notes);
+                                    _isBusy = false;
+                                    _isLoading = false;
+                                }
                             }));
             }
         }
@@ -1159,14 +1162,7 @@ namespace JayDev.MediaScribe.ViewModel
             _currentCourse = course;
             CourseName = course.Name;
             Notes = new ExtendedObservableCollection<Note>();
-            if (null == Tracks)
-            {
-                _tracks = new ObservableCollection<Track>();
-            }
-            else
-            {
-                Tracks.Clear();
-            }
+            Tracks.Clear();
             Tracks.AddRange(new ObservableCollection<Track>(course.Tracks));
             _lastEmbeddedVideoHeight = course.EmbeddedVideoHeight;
             _lastEmbeddedVideoWidth = course.EmbeddedVideoWidth;

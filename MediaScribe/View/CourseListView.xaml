@@ -132,13 +132,13 @@
                                             CanUserSort="True"
                                             IsReadOnly="True"/>
                                         <DataGridTextColumn Header="Date Created"
-                                            Width="135"
+                                            Width="140"
                                             Binding="{Binding Path=DateCreated}" 
                                             SortMemberPath="DateCreated"
                                             CanUserSort="True"
                                             IsReadOnly="True"/>
                                         <DataGridTextColumn Header="Last Viewed"
-                                            Width="135"
+                                            Width="140"
                                             Binding="{Binding Path=DateViewed}" 
                                             SortMemberPath="DateViewed"
                                             CanUserSort="True"

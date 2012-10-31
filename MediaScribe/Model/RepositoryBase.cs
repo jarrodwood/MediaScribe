@@ -7,6 +7,8 @@ using System.Windows.Media;
 using System.Reflection;
 using JayDev.MediaScribe.Common;
 using System.Configuration;
+using System.IO;
+using JayDev.MediaScribe.Core;
 
 namespace JayDev.MediaScribe.Model
 {
@@ -14,7 +16,7 @@ namespace JayDev.MediaScribe.Model
     /// The base class for all SQLite repositories.
     /// </summary>
     public class RepositoryBase
-    {        
+    {
         #region Private Static Fields
 
         /// <summary>
@@ -599,14 +601,15 @@ namespace JayDev.MediaScribe.Model
         {
             if (null == connection)
             {
+                new StorageHelper().CreateDBIfNotExist();
+
                 SQLiteFactory factory = new SQLiteFactory();
                 connection = factory.CreateConnection() as SQLiteConnection;
-                var connString = ConfigurationManager.ConnectionStrings["MediaScribeDB"].ConnectionString;
+                var connString = ConfigurationManager.ConnectionStrings["MediaScribeDB"].ConnectionString.Replace("%AppData%", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
                 connection.ConnectionString = connString;
                 connection.Open();
             }
         }
-
 
     }
 }

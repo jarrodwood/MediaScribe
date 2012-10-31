@@ -301,8 +301,9 @@ namespace JayDev.MediaScribe.View
                         if (null == args.Course && null == _lastCourse)
                         {
                             if (null == AllCourses || AllCourses.Count == 0)
-                            {  
-                                MessageBox.Show(_mainWindow,"Please create a course, before going to the Write Notes section");
+                            {
+                                MessageBox.Show(_mainWindow, "Please create a course, before going to the Write Notes section");
+                                _tabControl.SelectedIndex = ApplicationTab.CourseList;
                                 return;
                             }
                             _lastCourse = AllCourses.First();

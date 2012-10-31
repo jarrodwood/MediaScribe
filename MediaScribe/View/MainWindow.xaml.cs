@@ -67,7 +67,7 @@ namespace JayDev.MediaScribe.View
                 // Obtain the window handle for WPF application
                 IntPtr mainWindowPtr = new WindowInteropHelper(this).Handle;
                 HwndSource mainWindowSrc = HwndSource.FromHwnd(mainWindowPtr);
-                mainWindowSrc.CompositionTarget.BackgroundColor = Color.FromArgb(0, 0, 0, 0);
+                mainWindowSrc.CompositionTarget.BackgroundColor = ColorHelper.FromString("#FFDEE6EF");
 
                 // Get System Dpi
                 System.Drawing.Graphics desktop = System.Drawing.Graphics.FromHwnd(mainWindowPtr);
@@ -95,7 +95,7 @@ namespace JayDev.MediaScribe.View
             // If not Vista, paint background white. 
             catch (DllNotFoundException)
             {
-                Application.Current.MainWindow.Background = Brushes.White;
+                Application.Current.MainWindow.Background = new SolidColorBrush(ColorHelper.FromString("#FFDEE6EF"));
             }
         }
 
