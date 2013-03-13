@@ -37,30 +37,17 @@ namespace LibMPlayerCommon
             return "windows";
         }
 
-        /// <summary>
-        /// Return the directory of the current executing assembly
-        /// </summary>
-        /// <returns></returns>
-        private static string CurrentAssemblyDirectory()
-        {
-            string location = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            location = System.IO.Path.GetDirectoryName(location);
-            return location;
-
-        }
-
         public static string MPlayer
         {
             get
             {
                 if (OSPlatform() == "windows")
                 {
-                    string t = System.IO.Path.Combine(CurrentAssemblyDirectory(), "backend");
-                    return System.IO.Path.Combine(t, "mplayer.exe");
+                    return JayDev.MediaScribe.Common.Constants.MPlayerExecutablePath;
                 }
                 else
                 {
-                    return "mplayer";
+                    throw new ApplicationException("Error - we're not using windows??");
                 }
             }
         }

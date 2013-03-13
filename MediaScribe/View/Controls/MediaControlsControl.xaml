@@ -23,18 +23,18 @@
                 VisibleFrom="33" VisibleTo="66" />
             <nmConverters:NumericRangeVisibilityConverter x:Key="maxVolumeConverter" 
                 VisibleFrom="67" VisibleTo="100" />
-            <DataTemplate x:Key="PreviewDataTemplate">
+            <!--<DataTemplate x:Key="PreviewDataTemplate">
                 <TextBlock Text="{Binding StringFormat=\{0:00.00\}, Converter={StaticResource secondsConverter}}"/>
-            </DataTemplate>
+            </DataTemplate>-->
 
             <Style x:Key="PreviewStyle" TargetType="{x:Type ContentControl}">
-                <Setter Property="ContentTemplate" Value="{StaticResource PreviewDataTemplate}"/>
+                <!--<Setter Property="ContentTemplate" Value="{StaticResource PreviewDataTemplate}"/>-->
                 <Setter Property="IsHitTestVisible" Value="False"/>
-                <Setter Property="Margin" Value="-30,-70,0,0" />
+                <!--<Setter Property="Margin" Value="-30,-140,0,0" />-->
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ContentControl}">
-                            <Grid Margin="-5" Width="70" Height="70">
+                            <!--<Grid Margin="-5">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="0.5*"/>
                                     <RowDefinition Height="0.5*"/>
@@ -50,12 +50,18 @@
                                         </LinearGradientBrush>
                                     </Rectangle.Fill>
                                 </Rectangle>
-                                <Path Stretch="Fill" Stroke="#FF3F3F3F" HorizontalAlignment="Center" Margin="20,-1,19.5,-1" VerticalAlignment="Stretch" Width="0.5" Data="M18.875,30.200352 L19.125,40" Grid.Row="1" />
+                                <Path Stretch="Fill" Stroke="#FF3F3F3F" HorizontalAlignment="Center" Margin="20,-1,19.5,-1" VerticalAlignment="Stretch" Width="0.5" Data="M18.875,30.200352 L19.125,40" Grid.Row="1" />-->
 
-                                <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5">
-                                    <ContentPresenter  />
-                                </Viewbox>
+                            <!--<nmControls:TrackbarPreview
+                                CurrentPlayTime="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CurrentPlayTime}"
+                                ThumbnailGenerator="{Binding ElementName=MediaControlsControlName, Path=ThumbnailGenerator}"
+
+                            />-->
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5">
+                                <ContentPresenter  />
                             </Grid>
+
+                            <!--</Grid>-->
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -133,7 +139,8 @@
                 <Slider Name="timeSlider" SmallChange="0.5" TickFrequency="0.5" Height="15" 
                     Style="{DynamicResource JarrodSlider}" 
         		local:SliderPreviewHelper.PreviewEnabled="True"  
-        		local:SliderPreviewHelper.ContentStyle="{StaticResource PreviewStyle}"      
+        		local:SliderPreviewHelper.ContentStyle="{StaticResource PreviewStyle}" 
+        		local:SliderPreviewHelper.ThumbnailGenerator="{Binding ElementName=MediaControlsControlName, Path=ThumbnailGenerator}"      
                 Value="{Binding ElementName=MediaControlsControlName, Path=CurrentPlayTime, Converter={StaticResource timespanConverter}, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                 Maximum="{Binding ElementName=MediaControlsControlName, Path=MaxPlayTime, Converter={StaticResource timespanConverter}}"
                 Minimum="0"

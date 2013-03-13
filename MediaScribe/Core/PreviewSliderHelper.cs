@@ -9,6 +9,8 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Shapes;
 using JayDev.MediaScribe.View.Controls;
+using System.Windows.Media.Imaging;
+using System.Diagnostics;
 
 namespace JayDev.MediaScribe.Core
 {
@@ -61,6 +63,29 @@ namespace JayDev.MediaScribe.Core
             typeof(SliderPreviewHelper),
             new UIPropertyMetadata(null));
         #endregion
+
+        #region ThumbnailGenerator
+        public static ThumbnailGenerator GetThumbnailGenerator(Slider slider)
+        {
+            return (ThumbnailGenerator)slider.GetValue(ThumbnailGeneratorProperty);
+        }
+
+        public static void SetThumbnailGenerator(
+          Slider slider, ThumbnailGenerator value)
+        {
+            slider.SetValue(ThumbnailGeneratorProperty, value);
+        }
+
+        public static readonly DependencyProperty ThumbnailGeneratorProperty =
+            DependencyProperty.RegisterAttached(
+            "ThumbnailGenerator",
+            typeof(ThumbnailGenerator),
+            typeof(SliderPreviewHelper),
+            new UIPropertyMetadata(null));
+        #endregion
+
+
+        static TrackbarPreview subControl = null;
 
         //Internal Dependancy property
         #region PopupAdorner
@@ -139,10 +164,49 @@ namespace JayDev.MediaScribe.Core
                 double diff = value % slider.SmallChange;
                 value -= diff;
             }
-            popup.Content = Math.Max(slider.Minimum, Math.Min(slider.Maximum, value));
+
+            double displayValue = Math.Max(slider.Minimum, Math.Min(slider.Maximum, value));
+            if (null == subControl)
+                subControl = new TrackbarPreview();
+
+            var generator = GetThumbnailGenerator(slider);
+            TimeSpan hoverTime = new TimeSpan(0, 0, (int)displayValue + 1);
+            subControl.CurrentPlayTime = hoverTime;
+
+            if (generator.IsTrackVideo)
+            {
+                Thumbnail thumbnail = generator.GetThumbnailForTime(hoverTime);
+                if (null != thumbnail)
+                {
+                    string fullPath = string.Format(@"{0}\{1}", generator.ImageDirectory, thumbnail.Filename);
+                    subControl.Thumbnail.Source = new BitmapImage(new Uri(fullPath));
+                    subControl.Thumbnail.Width = thumbnail.Width;
+                    subControl.Thumbnail.Height = thumbnail.Height;
+                    subControl.Throbber.Visibility = Visibility.Collapsed;
+                    subControl.Thumbnail.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    subControl.Throbber.Visibility = Visibility.Visible;
+                    subControl.Thumbnail.Visibility = Visibility.Collapsed;
+                }
+            }
+            else
+            {
+                subControl.Throbber.Visibility = Visibility.Collapsed;
+                subControl.Thumbnail.Visibility = Visibility.Collapsed;
+            }
+            subControl.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
+            var height = subControl.ActualHeight + subControl.DesiredSize.Height;
+            Debug.WriteLine(string.Format("actual height: {0}, desired: {1}, blah: {2}", subControl.ActualHeight, subControl.DesiredSize.Height, height));
+            subControl.Margin = new Thickness(-1 * (subControl.ActualWidth / 2) - 5, -1 * (height), 0, 0);
+
+            popup.Content = subControl;
+
             position = e.GetPosition(slider);
-            position.Y = slider.ActualHeight / 2.0;
+            position.Y = 0;// slider.ActualHeight / 2.0;
             popup.PlacementOffset = position;
+
         }
     }
 }

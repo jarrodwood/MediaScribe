@@ -23,7 +23,7 @@ using Microsoft.Practices.Unity;
 
 namespace JayDev.MediaScribe.View
 {
-    public class Controller : IController
+    public class Controller : IController, IDisposable
     {
         private MainWindow _mainWindow;
         private Window _fullscreenWindow = null;
@@ -368,7 +368,7 @@ namespace JayDev.MediaScribe.View
             string currentAssemblyDirectoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             var oldChildMPlayerProcesses = (from procs in Process.GetProcesses()
-                                            where procs.ProcessName == "mplayer"
+                                            where (procs.ProcessName == "mplayer" || procs.ProcessName == "mplayer2")
                                             && Path.GetDirectoryName(procs.MainModule.FileName).Contains(currentAssemblyDirectoryName)
                                             select procs).ToList();
 
@@ -377,6 +377,11 @@ namespace JayDev.MediaScribe.View
                 oldChildMPlayerProcesses.ForEach(x => x.Kill());
             }
             catch { }
+        }
+
+        public void Dispose()
+        {
+            TryKillOldMPlayerProccesses();
         }
     }
 }

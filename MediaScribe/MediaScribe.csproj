@@ -44,39 +44,40 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EPPlus">
-      <HintPath>..\..\..\libraries\EPPlus\EPPlus.dll</HintPath>
+      <HintPath>C:\Program Files\MediaScribe\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1673db7d5906b0ad, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Program Files (x86)\Laurent Bugnion (GalaSoft)\Mvvm Light Toolkit\Binaries\WPF4\GalaSoft.MvvmLight.Extras.WPF4.dll</HintPath>
+      <HintPath>C:\Program Files\MediaScribe\GalaSoft.MvvmLight.Extras.WPF4.dll</HintPath>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=63eb5c012e0b3c1c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Program Files (x86)\Laurent Bugnion (GalaSoft)\Mvvm Light Toolkit\Binaries\WPF4\GalaSoft.MvvmLight.WPF4.dll</HintPath>
+      <HintPath>C:\Program Files\MediaScribe\GalaSoft.MvvmLight.WPF4.dll</HintPath>
     </Reference>
     <Reference Include="GrayscaleEffect">
-      <HintPath>..\..\..\examples\greyscale effect\WpfApplication1\GrayscaleEffect\bin\Debug\GrayscaleEffect.dll</HintPath>
+      <HintPath>C:\Program Files\MediaScribe\GrayscaleEffect.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.AvalonEdit">
-      <HintPath>..\..\..\Program Files (x86)\SharpDevelop\5.0\bin\ICSharpCode.AvalonEdit.dll</HintPath>
-    </Reference>
-    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\nhibernate\Required_Bins\Iesi.Collections.dll</HintPath>
+      <HintPath>C:\Program Files\MediaScribe\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\activerecord\log4net.dll</HintPath>
+      <HintPath>C:\Program Files\MediaScribe\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>C:\Program Files\MediaScribe\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Windows.Shell">
+      <HintPath>C:\Program Files\MediaScribe\Microsoft.Windows.Shell.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite">
-      <HintPath>..\..\..\sqlite-binary\System.Data.SQLite.dll</HintPath>
+      <HintPath>C:\Program Files\MediaScribe\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.SQLite.Linq">
-      <HintPath>..\..\..\sqlite-binary\System.Data.SQLite.Linq.dll</HintPath>
+      <HintPath>C:\Program Files\MediaScribe\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Remoting" />
@@ -96,10 +97,10 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="WPFToolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\WPF Toolkit\v3.5.50211.1\WPFToolkit.dll</HintPath>
+      <HintPath>C:\Program Files\MediaScribe\WPFToolkit.dll</HintPath>
     </Reference>
     <Reference Include="WPFToolkit.Extended">
-      <HintPath>..\..\WPFToolkitExtended\WPFToolkit.Extended.dll</HintPath>
+      <HintPath>C:\Program Files\MediaScribe\WPFToolkit.Extended.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +116,7 @@
     <Compile Include="Converters\StringToXamlConverter.cs" />
     <Compile Include="Core\CsvExporter.cs" />
     <Compile Include="Core\NavigationHelper.cs" />
+    <Compile Include="Core\ThumbnailGenerator.cs" />
     <Compile Include="View\Controls\MediaScribeMainTabControl.cs" />
     <Compile Include="Domain\Hotkey.cs" />
     <Compile Include="Model\CourseRepositorySqlite.cs" />
@@ -135,6 +137,17 @@
     <Compile Include="View\Controls\Base\DelayedBindDataGrid.cs" />
     <Compile Include="View\Controls\Base\UndecoratedButton.cs" />
     <Compile Include="View\Controls\Base\ComboBoxItemWithTooltip.cs" />
+    <Compile Include="View\Controls\Throbber.xaml.cs">
+      <DependentUpon>Throbber.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\Controls\ThrobberBlock.xaml.cs">
+      <DependentUpon>ThrobberBlock.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\Controls\TrackbarPreview.xaml.cs">
+      <DependentUpon>TrackbarPreview.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\DoubleControl.xaml.cs">
       <DependentUpon>DoubleControl.xaml</DependentUpon>
     </Compile>
@@ -171,6 +184,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Controls\ImageButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\Throbber.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\ThrobberBlock.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\TrackbarPreview.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -317,10 +342,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\examples\shell integration library\Microsoft.Windows.Shell\Microsoft.Windows.Shell.csproj">
-      <Project>{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}</Project>
-      <Name>Microsoft.Windows.Shell</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AvalonTextBox\MediaScribe.AvalonTextBox.csproj">
       <Project>{CA7E4D71-3858-48F2-AF68-7E6DA88F79C9}</Project>
       <Name>MediaScribe.AvalonTextBox</Name>
@@ -463,6 +484,7 @@
     <Resource Include="Images\info32.png" />
     <Resource Include="Images\Letter M blue 32.png" />
     <Resource Include="Letter M blue.ico" />
+    <Resource Include="Images\throbber.gif" />
     <Content Include="log4netoff.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

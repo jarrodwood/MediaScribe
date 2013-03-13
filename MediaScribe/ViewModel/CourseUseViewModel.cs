@@ -541,6 +541,40 @@ namespace JayDev.MediaScribe.ViewModel
 
         #endregion
 
+        #region ThumbnailGenerator
+
+        /// <summary>
+        /// The <see cref="ThumbnailGenerator" /> property's name.
+        /// </summary>
+        public const string ThumbnailGeneratorPropertyName = "ThumbnailGenerator";
+
+        private ThumbnailGenerator _thumbnailGenerator = null;
+
+        /// <summary>
+        /// Sets and gets the ThumbnailGenerator property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public ThumbnailGenerator ThumbnailGenerator
+        {
+            get
+            {
+                return _thumbnailGenerator;
+            }
+
+            set
+            {
+                if (_thumbnailGenerator == value)
+                {
+                    return;
+                }
+
+                _thumbnailGenerator = value;
+                RaisePropertyChanged(ThumbnailGeneratorPropertyName);
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Commands
@@ -996,6 +1030,10 @@ namespace JayDev.MediaScribe.ViewModel
             };
 
             Volume = Constants.DEFAULT_VOLUME;
+
+            if (null == ThumbnailGenerator)
+                ThumbnailGenerator = new Core.ThumbnailGenerator();
+
         }
 
         #endregion
@@ -1183,6 +1221,11 @@ namespace JayDev.MediaScribe.ViewModel
             if (null != _currentTrack)
             {
                 _currentTrack.IsPlaying = false;
+            }
+
+            if (_currentTrack != track)
+            {
+                ThumbnailGenerator.Generate(track);
             }
 
             _currentTrack = track;

@@ -16,6 +16,7 @@ using JayDev.MediaScribe.Common;
 using System.Timers;
 using System.Windows.Threading;
 using JayDev.MediaScribe.Converters;
+using JayDev.MediaScribe.Core;
 using System.ComponentModel;
 
 namespace JayDev.MediaScribe.View.Controls
@@ -101,8 +102,6 @@ namespace JayDev.MediaScribe.View.Controls
 
         #endregion
 
-
-
         #region SeekToCommand
 
         public static readonly DependencyProperty SeekToCommandProperty =
@@ -119,7 +118,6 @@ namespace JayDev.MediaScribe.View.Controls
 
         #endregion
 
-        
         #region TrackTitle
 
         public string TrackTitle
@@ -133,7 +131,6 @@ namespace JayDev.MediaScribe.View.Controls
             DependencyProperty.Register("TrackTitle", typeof(string), typeof(MediaControlsControl), new UIPropertyMetadata(null));
 
         #endregion
-
 
         #region Volume
 
@@ -149,8 +146,6 @@ namespace JayDev.MediaScribe.View.Controls
 
         #endregion
 
-
-
         public bool IsMuted
         {
             get { return (bool)GetValue(IsMutedProperty); }
@@ -162,6 +157,18 @@ namespace JayDev.MediaScribe.View.Controls
             DependencyProperty.Register("IsMuted", typeof(bool), typeof(MediaControlsControl), new UIPropertyMetadata(null));
 
 
+
+        public ThumbnailGenerator ThumbnailGenerator
+        {
+            get { return (ThumbnailGenerator)GetValue(ThumbnailGeneratorProperty); }
+            set { SetValue(ThumbnailGeneratorProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ThumbnailGenerator.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ThumbnailGeneratorProperty =
+            DependencyProperty.Register("ThumbnailGenerator", typeof(ThumbnailGenerator), typeof(MediaControlsControl), new UIPropertyMetadata(null));
+
+        
 
 
 
