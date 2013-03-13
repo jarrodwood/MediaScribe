@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="JayDev.MediaScribe.View.Controls.TrackbarPreview"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             x:Name="VideoSeekPopupName"
+             xmlns:nmControls="clr-namespace:JayDev.MediaScribe.View.Controls"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style x:Key="TimeFont" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Foreground" Value="#FF3F3F3F" />
+        </Style>
+    </UserControl.Resources>
+    <StackPanel VerticalAlignment="Bottom">
+    <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="10"/>
+                                </Grid.RowDefinitions>
+                                <Grid.Effect>
+                                    <DropShadowEffect BlurRadius="5"  ShadowDepth="2"/>
+                                </Grid.Effect>
+            <Rectangle Stroke="#FF3F3F3F" StrokeThickness="1"  VerticalAlignment="Stretch">
+                                    <Rectangle.Fill>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FFDAC9FF" Offset="0"/>
+                                            <GradientStop Color="#FFAC7EFF" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <Path Stretch="Fill" Stroke="#FF3F3F3F" HorizontalAlignment="Center" Margin="20,-1,19.5,-1" VerticalAlignment="Stretch" Width="0.5" Data="M18.875,30.200352 L19.125,40" Grid.Row="1" />
+
+
+            <StackPanel VerticalAlignment="Stretch">
+                <nmControls:Throbber x:Name="Throbber" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15 15 15 10" />
+                <Image Name="Thumbnail" Stretch="None" Width="200" Source="/MediaScribe;component/Images/throbber.gif" Margin="5 5 5 0" />
+                <TextBlock VerticalAlignment="Bottom"  Style="{StaticResource TimeFont}" Name="PositionText" Text="{Binding ElementName=VideoSeekPopupName, Path=CurrentPlayTime, StringFormat=h\\:mm\\:ss, FallbackValue=(time)}" HorizontalAlignment="Center" Margin="15 5 15 5" />
+            </StackPanel>
+        </Grid>
+    </StackPanel>
+</UserControl>

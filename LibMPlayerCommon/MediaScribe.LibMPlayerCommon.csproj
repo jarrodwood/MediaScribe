@@ -271,4 +271,10 @@
     <Content Include="backend\mplayer.html" />
     <Content Include="backend\README.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MediaScribe.Common\MediaScribe.Common.csproj">
+      <Project>{7BE13DBC-C110-469E-92E7-49720938A62E}</Project>
+      <Name>MediaScribe.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 namespace JayDev.MediaScribe.View.Controls
 {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Interaction logic for TrackbarPreview.xaml
     /// </summary>
     public partial class ImageButton : UserControl
     {
