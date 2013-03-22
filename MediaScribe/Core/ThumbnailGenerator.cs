@@ -150,6 +150,11 @@ namespace JayDev.MediaScribe.Core
             });
         }
 
+
+        public void ExecuteWhenThumbnailGenerated(TimeSpan time, Action action)
+        {
+        }
+
         public Thumbnail GetThumbnailForTime(TimeSpan forTime)
         {
             //if there are no thumbnails, there is no match.

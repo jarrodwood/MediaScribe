@@ -34,17 +34,17 @@
   <ItemGroup>
     <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1673db7d5906b0ad, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\MediaScribe\GalaSoft.MvvmLight.Extras.WPF4.dll</HintPath>
+      <HintPath>..\Dependencies\GalaSoft.MvvmLight.Extras.WPF4.dll</HintPath>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=63eb5c012e0b3c1c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\MediaScribe\GalaSoft.MvvmLight.WPF4.dll</HintPath>
+      <HintPath>..\Dependencies\GalaSoft.MvvmLight.WPF4.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.AvalonEdit">
-      <HintPath>C:\Program Files\MediaScribe\ICSharpCode.AvalonEdit.dll</HintPath>
+      <HintPath>..\Dependencies\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.NRefactory">
-      <HintPath>C:\Program Files\MediaScribe\ICSharpCode.NRefactory.dll</HintPath>
+      <HintPath>..\Dependencies\ICSharpCode.NRefactory.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />

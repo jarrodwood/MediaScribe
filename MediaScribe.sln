@@ -3,11 +3,31 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaScribe", "MediaScribe\MediaScribe.csproj", "{1EB1F07A-CCF1-49E0-B369-CE038CAB98FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaScribe.LibMPlayerCommon", "LibMPlayerCommon\MediaScribe.LibMPlayerCommon.csproj", "{5D3616D0-160D-4601-AB67-E1ED9111C676}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaScribe.LibMPlayerCommon", "MediaScribe.LibMPlayerCommon\MediaScribe.LibMPlayerCommon.csproj", "{5D3616D0-160D-4601-AB67-E1ED9111C676}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaScribe.AvalonTextBox", "AvalonTextBox\MediaScribe.AvalonTextBox.csproj", "{CA7E4D71-3858-48F2-AF68-7E6DA88F79C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaScribe.AvalonTextBox", "MediaScribe.AvalonTextBox\MediaScribe.AvalonTextBox.csproj", "{CA7E4D71-3858-48F2-AF68-7E6DA88F79C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaScribe.Common", "MediaScribe.Common\MediaScribe.Common.csproj", "{7BE13DBC-C110-469E-92E7-49720938A62E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{31FBF897-FCBC-463C-B2A6-CFF5ED353901}"
+	ProjectSection(SolutionItems) = preProject
+		Dependencies\EPPlus.dll = Dependencies\EPPlus.dll
+		Dependencies\GalaSoft.MvvmLight.Extras.WPF4.dll = Dependencies\GalaSoft.MvvmLight.Extras.WPF4.dll
+		Dependencies\GalaSoft.MvvmLight.WPF4.dll = Dependencies\GalaSoft.MvvmLight.WPF4.dll
+		Dependencies\GrayscaleEffect.dll = Dependencies\GrayscaleEffect.dll
+		Dependencies\ICSharpCode.AvalonEdit.dll = Dependencies\ICSharpCode.AvalonEdit.dll
+		Dependencies\ICSharpCode.NRefactory.dll = Dependencies\ICSharpCode.NRefactory.dll
+		Dependencies\Iesi.Collections.dll = Dependencies\Iesi.Collections.dll
+		Dependencies\Microsoft.Practices.ServiceLocation.dll = Dependencies\Microsoft.Practices.ServiceLocation.dll
+		Dependencies\Microsoft.Practices.Unity.dll = Dependencies\Microsoft.Practices.Unity.dll
+		Dependencies\Microsoft.Windows.Shell.dll = Dependencies\Microsoft.Windows.Shell.dll
+		Dependencies\Mono.Cecil.dll = Dependencies\Mono.Cecil.dll
+		Dependencies\System.Data.SQLite.dll = Dependencies\System.Data.SQLite.dll
+		Dependencies\System.Data.SQLite.Linq.dll = Dependencies\System.Data.SQLite.Linq.dll
+		Dependencies\System.Windows.Interactivity.dll = Dependencies\System.Windows.Interactivity.dll
+		Dependencies\WPFToolkit.dll = Dependencies\WPFToolkit.dll
+		Dependencies\WPFToolkit.Extended.dll = Dependencies\WPFToolkit.Extended.dll
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
