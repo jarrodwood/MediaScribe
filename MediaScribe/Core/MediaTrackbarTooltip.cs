@@ -11,6 +11,8 @@ using System.Windows.Shapes;
 using JayDev.MediaScribe.View.Controls;
 using System.Windows.Media.Imaging;
 using System.Diagnostics;
+using JayDev.MediaScribe.Common;
+using System.Windows.Threading;
 
 namespace JayDev.MediaScribe.Core
 {
@@ -20,7 +22,7 @@ namespace JayDev.MediaScribe.Core
     /// at or near 0:00, at the end of the file the time will be the full track's duration, hover at the center and the time will show half
     /// of the track's duration)
     /// </summary>
-    public static class SliderPreviewHelper
+    public static class MediaTrackbarTooltip
     {
         #region PreviewEnabled
 
@@ -39,7 +41,7 @@ namespace JayDev.MediaScribe.Core
             DependencyProperty.RegisterAttached(
             "PreviewEnabled",
             typeof(bool),
-            typeof(SliderPreviewHelper),
+            typeof(MediaTrackbarTooltip),
             new UIPropertyMetadata(false, OnPreviewEnabledChanged));
 
         #endregion // PreviewEnabled
@@ -60,7 +62,7 @@ namespace JayDev.MediaScribe.Core
             DependencyProperty.RegisterAttached(
             "ContentStyle",
             typeof(Style),
-            typeof(SliderPreviewHelper),
+            typeof(MediaTrackbarTooltip),
             new UIPropertyMetadata(null));
         #endregion
 
@@ -80,26 +82,26 @@ namespace JayDev.MediaScribe.Core
             DependencyProperty.RegisterAttached(
             "ThumbnailGenerator",
             typeof(ThumbnailGenerator),
-            typeof(SliderPreviewHelper),
+            typeof(MediaTrackbarTooltip),
             new UIPropertyMetadata(null));
         #endregion
 
 
         static TrackbarPreview subControl = null;
 
-        //Internal Dependancy property
-        #region PopupAdorner
-        private static ContentAdorner GetPopupAdorner(Slider slider)
-        {
-            return (ContentAdorner)slider.GetValue(PopupAdornerProperty);
-        }
+        ////Internal Dependancy property
+        //#region PopupAdorner
+        //private static ContentAdorner GetPopupAdorner(Slider slider)
+        //{
+        //    return (ContentAdorner)slider.GetValue(PopupAdornerProperty);
+        //}
 
-        private static readonly DependencyProperty PopupAdornerProperty = DependencyProperty.RegisterAttached(
-            "PopupAdorner",
-            typeof(ContentAdorner),
-            typeof(SliderPreviewHelper),
-            new UIPropertyMetadata(null));
-        #endregion
+        //private static readonly DependencyProperty PopupAdornerProperty = DependencyProperty.RegisterAttached(
+        //    "PopupAdorner",
+        //    typeof(ContentAdorner),
+        //    typeof(MediaTrackbarTooltip),
+        //    new UIPropertyMetadata(null));
+        //#endregion
 
         static void OnPreviewEnabledChanged(DependencyObject depObj, DependencyPropertyChangedEventArgs e)
         {
@@ -129,12 +131,29 @@ namespace JayDev.MediaScribe.Core
         static void item_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             Slider slider = sender as Slider;
-            ContentAdorner popup = GetPopupAdorner(slider);
-            popup.Visibility = Visibility.Collapsed;
+            //ContentAdorner popup = GetPopupAdorner(slider);
+            //popup.Visibility = Visibility.Collapsed;
             if (null != tooltip)
             {
                 tooltip.IsOpen = false;
+                //ensure that we clear the thumbnail source, to release the file lock so it can be deleted.
+                subControl.Thumbnail.Source = null;
             }
+        }
+
+        static TimeSpan GetHoverTime(Slider slider, Point position, System.Windows.Controls.Primitives.Track _track)
+        {
+            double value = _track.ValueFromPoint(position);
+
+            if (slider.SmallChange != 0.0)
+            {
+                double diff = value % slider.SmallChange;
+                value -= diff;
+            }
+
+            double displayValue = Math.Max(slider.Minimum, Math.Min(slider.Maximum, value));
+            TimeSpan hoverTime = new TimeSpan(0, 0, (int)displayValue + 1);
+            return hoverTime;
         }
 
         /// <summary>
@@ -146,38 +165,21 @@ namespace JayDev.MediaScribe.Core
         static void item_PreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
             Slider slider = sender as Slider;
+            var generator = GetThumbnailGenerator(slider);
+            //before we do anything, clear any existing request to be notified when a certain thumbnail is generated.
+            generator.NotifyWhenThumbnailReady = null;
 
-            ContentAdorner popup = GetPopupAdorner(slider);
-            if (popup == null)
-            {
-                Style style = GetContentStyle(slider);
-                popup = new ContentAdorner(slider, style);
-                slider.SetValue(PopupAdornerProperty, popup);
-                AdornerLayer layer = AdornerLayer.GetAdornerLayer(slider);
-                layer.Add(popup);
-            }
-
-            popup.Visibility = Visibility.Visible;
 
             System.Windows.Controls.Primitives.Track _track = slider.Template.FindName("PART_Track", slider) as System.Windows.Controls.Primitives.Track;
-
             Point position = e.MouseDevice.GetPosition(_track);
 
-            double value = _track.ValueFromPoint(position);
+            TimeSpan hoverTime = GetHoverTime(slider, position, _track);
 
-            if (slider.SmallChange != 0.0)
-            {
-                double diff = value % slider.SmallChange;
-                value -= diff;
-            }
 
-            double displayValue = Math.Max(slider.Minimum, Math.Min(slider.Maximum, value));
             if (null == subControl)
                 subControl = new TrackbarPreview();
 
 
-            var generator = GetThumbnailGenerator(slider);
-            TimeSpan hoverTime = new TimeSpan(0, 0, (int)displayValue + 1);
             subControl.CurrentPlayTime = hoverTime;
 
             if (generator.IsTrackVideo)
@@ -196,6 +198,23 @@ namespace JayDev.MediaScribe.Core
                 {
                     subControl.Throbber.Visibility = Visibility.Visible;
                     subControl.Thumbnail.Visibility = Visibility.Collapsed;
+
+                    var uiDispatcher = Dispatcher.CurrentDispatcher;
+                    generator.NotifyWhenThumbnailReady = new Tuple<TimeSpan, Action<Thumbnail>>
+                        (hoverTime, (notifyThumb) =>
+                    {
+                        ThreadHelper.ExecuteSyncUI(uiDispatcher, delegate
+                        {
+                            subControl.Throbber.Visibility = Visibility.Collapsed;
+                            subControl.Thumbnail.Visibility = Visibility.Visible;
+                            string fullPath = string.Format(@"{0}\{1}", notifyThumb.FileDirectory, notifyThumb.Filename);
+                            subControl.Thumbnail.Source = new BitmapImage(new Uri(fullPath));
+                            subControl.Thumbnail.Width = notifyThumb.Width;
+                            subControl.Thumbnail.Height = notifyThumb.Height;
+
+                            SetControlSize(slider, position, true);
+                        });
+                    });
                 }
             }
             else
@@ -203,36 +222,55 @@ namespace JayDev.MediaScribe.Core
                 subControl.Throbber.Visibility = Visibility.Collapsed;
                 subControl.Thumbnail.Visibility = Visibility.Collapsed;
             }
+
+            SetControlSize(slider, position, false);
+        }
+
+        private static void SetControlSize(Slider slider, Point position, bool isFromNotification)
+        {
+            //TODO: fix this hack. The dropshadow is set in the TrackbarPreview, we should just grab the value from there.
+            int marginForTooltipDropshadow = 10;
+
             subControl.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
-            var height = subControl.ActualHeight + subControl.DesiredSize.Height;
+            var height = subControl.DesiredSize.Height + marginForTooltipDropshadow;
             Logging.Log(LoggingSource.ThumbnailGeneration, string.Format("actual height: {0}, desired: {1}, blah: {2}", subControl.ActualHeight, subControl.DesiredSize.Height, height));
-            subControl.Margin = new Thickness(-1 * (subControl.ActualWidth / 2) - 5, -1 * (height), 0, 0);
+            //subControl.Margin = new Thickness(-1 * (subControl.ActualWidth / 2) - 5, -1 * (height), 0, 0);
+
+            Logging.Log(LoggingSource.ThumbnailGeneration, string.Format("actual width: {0}, desired: {1}, thumb: {2}", subControl.ActualWidth, subControl.DesiredSize.Width, subControl.Thumbnail.Width));
 
 
-            StackPanel t1 = new StackPanel();
-            TextBlock r1 = new TextBlock();
-            r1.Height = 200;
-            r1.Width = 200;
-            r1.Background = Brushes.Red;
-            r1.Text = "moocow";
-            //t1.Children.Add(r1);
-            //r1.Margin = new Thickness(0, 200, 0, 0);
             if (null == tooltip)
             {
-                tooltip = new ToolTip { Content = r1, OverridesDefaultStyle = true };
+                tooltip = new ToolTip
+                {
+                    Content = subControl,
+                    OverridesDefaultStyle = true,
+                    Height = height + marginForTooltipDropshadow,
+                    Width = subControl.DesiredSize.Width,
+                    Background = Brushes.Transparent,
+                    BorderBrush = Brushes.Transparent,
+                    BorderThickness = new Thickness(0)
+                };
             }
-            subControl.ToolTip = tooltip;
 
 
-            popup.Content = subControl;
+            slider.ToolTip = tooltip;
 
-            position = e.GetPosition(slider);
-            position.Y = 0;// slider.ActualHeight / 2.0;
-            popup.PlacementOffset = position;
+            position.Y = 0;
 
+            var width = subControl.DesiredSize.Width + marginForTooltipDropshadow;
+            //TODO: remove this hack, figure out why when we use the notification, the control's desiredwidth
+            //      is often smaller than the thumbnail it contains.
+            if (subControl.Thumbnail.Visibility == Visibility.Visible)
+                width = subControl.Thumbnail.Width + marginForTooltipDropshadow;
+
+            tooltip.Width = width;
+            tooltip.Height = height;
+            tooltip.PlacementTarget = slider;
+
+            tooltip.Placement = PlacementMode.Top;
+            tooltip.HorizontalOffset = position.X - (tooltip.Width / 2) + (marginForTooltipDropshadow / 2);
             tooltip.IsOpen = true;
-            tooltip.Placement = PlacementMode.Center;
-            tooltip.HorizontalOffset = position.X;
         }
     }
 }

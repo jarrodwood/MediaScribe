@@ -235,7 +235,7 @@ namespace LibMPlayerCommon
 
             string backend = MplayerBackend();
             //noautosub disables subtiles... which were causing mplayer to go into an infinite loop. not cool.
-            MediaPlayer.StartInfo.Arguments = string.Format("-slave -noautosub -quiet -idle -aspect 4/3 -v -vo {0} -wid {1}", backend, this._wid);
+            MediaPlayer.StartInfo.Arguments = string.Format("-slave -noautosub -nofontconfig -quiet -idle -v -vo {0} -wid {1}", backend, this._wid);
             MediaPlayer.StartInfo.FileName = BackendPrograms.MPlayer;
 
             MediaPlayer.Start();
@@ -315,7 +315,7 @@ namespace LibMPlayerCommon
 
 
             //noautosub disables subtiles... which were causing mplayer to go into an infinite loop. not cool.
-            MediaPlayer.StartInfo.Arguments = string.Format("-slave -noautosub -quiet -idle -aspect 4/3 -v -vo {0} -wid {1} \"{2}\"", backend, this._wid, filePath);
+            MediaPlayer.StartInfo.Arguments = string.Format("-slave -noautosub -nofontconfig -quiet -idle -v -vo {0} -wid {1} \"{2}\"", backend, this._wid, filePath);
             MediaPlayer.StartInfo.FileName = BackendPrograms.MPlayer;
 
             MediaPlayer.Start();

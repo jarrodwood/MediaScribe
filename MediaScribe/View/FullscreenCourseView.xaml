@@ -14,6 +14,7 @@
                                                    PlayPauseCommand="{Binding PlayPauseCommand}"
                                                    SeekToCommand="{Binding SeekToCommand}"
                                                    TrackTitle="{Binding CurrentTrackName}"
+                                                   ThumbnailGenerator="{Binding ThumbnailGenerator}"
                                                    PlayStatus="{Binding PlayStatus}"
                                                    Volume="{Binding Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                    ToggleMuteCommand="{Binding ToggleMuteCommand}"

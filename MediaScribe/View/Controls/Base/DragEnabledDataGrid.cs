@@ -171,7 +171,7 @@ namespace JayDev.MediaScribe.View.Controls
 
         void DragSource_GiveFeedback(object sender, GiveFeedbackEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("DragSource_GiveFeedback " + e.Effects.ToString());
+            Logging.Log(LoggingSource.DragEnabledDataGrid, "DragSource_GiveFeedback " + e.Effects.ToString());
 
             if (this.DragScope == null)
             {
@@ -314,7 +314,7 @@ namespace JayDev.MediaScribe.View.Controls
         {
             //JDW: make sure the row under the grid is being selected, to give user feedback about where the rows will be inserted
             Point position = e.GetPosition(this);
-            System.Diagnostics.Debug.WriteLine("DragSource_GiveFeedbackPos " + position.ToString());
+            Logging.Log(LoggingSource.DragEnabledDataGrid, "DragSource_GiveFeedbackPos " + position.ToString());
             var row = UIHelpers.TryFindFromPoint<DataGridRow>(this, position);
             if (row != null) this.SelectedItem = row.Item;
         }

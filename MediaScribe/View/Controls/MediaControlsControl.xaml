@@ -30,6 +30,7 @@
             <Style x:Key="PreviewStyle" TargetType="{x:Type ContentControl}">
                 <!--<Setter Property="ContentTemplate" Value="{StaticResource PreviewDataTemplate}"/>-->
                 <Setter Property="IsHitTestVisible" Value="False"/>
+                
                 <!--<Setter Property="Margin" Value="-30,-140,0,0" />-->
                 <Setter Property="Template">
                     <Setter.Value>
@@ -138,9 +139,9 @@
             <Grid x:Name="TrackBar" Margin="0 0 0 0" Height="12" VerticalAlignment="Top">
                 <Slider Name="timeSlider" SmallChange="0.5" TickFrequency="0.5" Height="15" 
                     Style="{DynamicResource JarrodSlider}" 
-        		local:SliderPreviewHelper.PreviewEnabled="True"  
-        		local:SliderPreviewHelper.ContentStyle="{StaticResource PreviewStyle}" 
-        		local:SliderPreviewHelper.ThumbnailGenerator="{Binding ElementName=MediaControlsControlName, Path=ThumbnailGenerator}"      
+        		local:MediaTrackbarTooltip.PreviewEnabled="True"  
+        		local:MediaTrackbarTooltip.ContentStyle="{StaticResource PreviewStyle}" 
+        		local:MediaTrackbarTooltip.ThumbnailGenerator="{Binding ElementName=MediaControlsControlName, Path=ThumbnailGenerator}"      
                 Value="{Binding ElementName=MediaControlsControlName, Path=CurrentPlayTime, Converter={StaticResource timespanConverter}, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                 Maximum="{Binding ElementName=MediaControlsControlName, Path=MaxPlayTime, Converter={StaticResource timespanConverter}}"
                 Minimum="0"
