@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{5D3616D0-160D-4601-AB67-E1ED9111C676}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>LibMPlayerCommon</RootNamespace>
+    <AssemblyName>LibMplayerCommon</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AspectRatio.cs" />
+    <Compile Include="BackendPrograms.cs" />
+    <Compile Include="Discover.cs" />
+    <Compile Include="Globals.cs" />
+    <Compile Include="Logging.cs" />
+    <Compile Include="MPlayer.cs" />
+    <Compile Include="MplayerEvent.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TimeConversion.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="backend2\mplayer2.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MediaScribe.Common\MediaScribe.Common.csproj">
+      <Project>{7BE13DBC-C110-469E-92E7-49720938A62E}</Project>
+      <Name>MediaScribe.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="backend2\libquvi-scripts\lua\README" />
+    <None Include="backend2\libquvi-scripts\lua\util\charset.lua" />
+    <None Include="backend2\libquvi-scripts\lua\util\content_type.lua" />
+    <None Include="backend2\libquvi-scripts\lua\util\trim.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\101greatgoals.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\academicearth.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\arte.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\audioboo.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\bikeradar.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\blip.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\bloomberg.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\break.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\canalplus.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\cbsnews.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\charlierose.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\clipfish.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\collegehumor.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\dailymotion.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\empflix.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\foxnews.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\francetelevisions.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\funnyordie.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\gaskrank.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\globo.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\golem.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\guardian.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\imdb.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\keezmovies.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\liveleak.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\metacafe.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\mgnetwork.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\pluzz.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\pornhub.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\publicsenat.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\quvi\bit.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\quvi\const.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\quvi\url.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\quvi\util.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\README" />
+    <None Include="backend2\libquvi-scripts\lua\website\redtube.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\sapo.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\sevenload.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\soundcloud.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\spankwire.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\spiegel.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\tagtele.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\tcmag.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\ted.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\theonion.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\tmunderground.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\tnaflix.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\totallynsfw.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\tube8.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\tvlux.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\videa.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\videobash.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\vimeo.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\xhamster.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\xvideos.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\yfrog.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\youjizz.lua" />
+    <None Include="backend2\libquvi-scripts\lua\website\youtube.lua" />
+    <None Include="backend2\libquvi-scripts\version" />
+    <None Include="backend2\mplayer\subfont.ttf" />
+  </ItemGroup>
+</Project>
