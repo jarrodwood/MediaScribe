@@ -47,6 +47,9 @@ namespace JayDev.MediaScribe.Model
         /// method.
         /// </summary>
         private static readonly Dictionary<Type, string> InsertQueriesByType = new Dictionary<Type, string>();
+        
+        private static readonly string DatabaseFileName = "MediaScribe.db";
+        private static readonly string InitialDatabaseScriptFileName = "JayDev.MediaScribe.Resources.create_db.sql";
 
         #endregion
 
@@ -594,6 +597,9 @@ namespace JayDev.MediaScribe.Model
 
         protected SQLiteConnection connection = null;
 
+        protected static bool isDatabaseReady = false;
+        protected static object isDatabaseReadyLock = new object();
+
         /// <summary>
         /// Prepares a connection to the MediaScribe database.
         /// </summary>
@@ -601,15 +607,79 @@ namespace JayDev.MediaScribe.Model
         {
             if (null == connection)
             {
-                new StorageHelper().CreateDBIfNotExist();
+                CreateDatabaseIfNotExists();
+               
 
-                SQLiteFactory factory = new SQLiteFactory();
-                connection = factory.CreateConnection() as SQLiteConnection;
-                var connString = ConfigurationManager.ConnectionStrings["MediaScribeDB"].ConnectionString.Replace("%AppData%", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
-                connection.ConnectionString = connString;
-                connection.Open();
+                connection = CreateOpenConnection();
             }
         }
 
+        protected SQLiteConnection CreateOpenConnection()
+        {
+            SQLiteFactory factory = new SQLiteFactory();
+            var result = factory.CreateConnection() as SQLiteConnection;
+            var connString = ConfigurationManager.ConnectionStrings["MediaScribeDB"].ConnectionString.Replace("%AppData%", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+            result.ConnectionString = connString;
+            result.Open();
+            return result;
+        }
+
+        protected void CreateDatabaseIfNotExists()
+        {
+            if (false == isDatabaseReady)
+            {
+                lock (isDatabaseReadyLock)
+                {
+                    //because of the lock, if we got into here /after/ a previous thread's finished, return.
+                    if (isDatabaseReady)
+                        return;
+
+                    string databaseFilePath = string.Format(Constants.ApplicationGenericFilePath, DatabaseFileName);
+
+                    if (false == File.Exists(databaseFilePath))
+                    {
+                        if (false == Directory.Exists(Constants.ApplicationFolderPath))
+                            Directory.CreateDirectory(Constants.ApplicationFolderPath);
+
+                        try
+                        {
+                            string initialDBScript = null;
+                            Assembly _assembly = Assembly.GetExecutingAssembly();
+                            using (var reader = new StreamReader(_assembly.GetManifestResourceStream(InitialDatabaseScriptFileName)))
+                            {
+                                initialDBScript = reader.ReadToEnd();
+                            }
+
+                            SQLiteConnection.CreateFile(databaseFilePath);
+
+                            using (var tempConnection = CreateOpenConnection())
+                            {
+                                using (SQLiteCommand mycommand = new SQLiteCommand(tempConnection))
+                                {
+
+                                    mycommand.CommandText = initialDBScript;
+                                    var affectedCount = mycommand.ExecuteNonQuery();
+                                    if (affectedCount <= 0)
+                                    {
+                                        throw new Exception("database creation failed?");
+                                    }
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            //if there was an exception, ensure that the (empty) database is removed
+                            if (File.Exists(databaseFilePath))
+                                File.Delete(databaseFilePath);
+
+                            throw;
+                        }
+                    }
+
+                    //flag that the database is ready for use.
+                    isDatabaseReady = true;
+                }
+            }
+        }
     }
 }
