@@ -30,10 +30,10 @@ namespace JayDev.MediaScribe.Core
             ws.Cells[1, 1].Value = "Tracks:";
             ws.Cells[2, 1].Value = "Track Number";
             ws.Cells[2, 2].Value = "Track Path";
-            List<Track> orderedTracks = tracks.OrderBy(x => x.OrderNumber).ToList();
+            List<Track> orderedTracks = tracks.OrderBy(x => x.TrackNumber).ToList();
             for (int i = 0; i < tracks.Count; i++)
             {
-                ws.Cells[i + 3, 1].Value = orderedTracks[i].OrderNumber;
+                ws.Cells[i + 3, 1].Value = orderedTracks[i].TrackNumber;
                 ws.Cells[i + 3, 2].Value = orderedTracks[i].FilePath;
             }
 

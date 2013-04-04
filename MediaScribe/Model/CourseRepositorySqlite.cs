@@ -29,12 +29,12 @@ namespace JayDev.MediaScribe.Model
                         Dictionary<int, TrackTime> trackTimesByID = trackTimes.ToDictionary(x => x.ID.Value);
 
                         List<Track> tracks = ReadAll<Track>(connection);
-                        Dictionary<int, Track> tracksByID = tracks.ToDictionary(x => x.ID.Value);
+                        Dictionary<int, Track> tracksByNumber = tracks.ToDictionary(x => x.TrackNumber.Value);
 
 
                         foreach (TrackTime trackTime in trackTimes)
                         {
-                            trackTime.Track = tracksByID[trackTime.TrackID.Value];
+                            trackTime.Track = tracksByNumber[trackTime.TrackNumber.Value];
                         }
 
                         foreach (var note in notes)

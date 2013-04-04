@@ -29,7 +29,7 @@ namespace JayDev.MediaScribe
 
         public virtual Course ParentCourse { get; set; }
 
-        public virtual int? OrderNumber { get; set; }
+        public virtual int? TrackNumber { get; set; }
 
         public virtual long? FileSize { get; set; }
 
@@ -65,7 +65,7 @@ namespace JayDev.MediaScribe
             track.FilePath = this.FilePath;
             track.IsVideo = this.IsVideo;
             track.AspectRatio = this.AspectRatio;
-            track.OrderNumber = this.OrderNumber;
+            track.TrackNumber = this.TrackNumber;
         }
 
         public virtual object Clone()

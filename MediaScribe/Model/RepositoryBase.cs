@@ -93,7 +93,7 @@ namespace JayDev.MediaScribe.Model
             PropertyInfo[] trackTimeProperties = typeof(TrackTime).GetProperties();
             List<SqliteDataMapping> trackTimeMappings = new List<SqliteDataMapping>();
             trackTimeMappings.Add(new SqliteDataMapping() { ColumnName = "TrackTimeID", PropertyDataType = DataType.Int, PropertyInfo = trackTimeProperties.First(x => x.Name == "ID"), PrimaryKey = true });
-            trackTimeMappings.Add(new SqliteDataMapping() { ColumnName = "TrackID", PropertyDataType = DataType.Int, PropertyInfo = trackTimeProperties.First(x => x.Name == "TrackID") });
+            trackTimeMappings.Add(new SqliteDataMapping() { ColumnName = "TrackNumber", PropertyDataType = DataType.Int, PropertyInfo = trackTimeProperties.First(x => x.Name == "TrackNumber") });
             trackTimeMappings.Add(new SqliteDataMapping() { ColumnName = "Time", PropertyDataType = DataType.TimeSpan, PropertyInfo = trackTimeProperties.First(x => x.Name == "Time") });
             MappingsByType.Add(typeof(TrackTime), trackTimeMappings);
 
@@ -107,7 +107,7 @@ namespace JayDev.MediaScribe.Model
             trackMappings.Add(new SqliteDataMapping() { ColumnName = "Length", PropertyDataType = DataType.TimeSpan, PropertyInfo = trackProperties.First(x => x.Name == "Length") });
             trackMappings.Add(new SqliteDataMapping() { ColumnName = "IsVideo", PropertyDataType = DataType.Boolean, PropertyInfo = trackProperties.First(x => x.Name == "IsVideo") });
             trackMappings.Add(new SqliteDataMapping() { ColumnName = "AspectRatio", PropertyDataType = DataType.Float, PropertyInfo = trackProperties.First(x => x.Name == "AspectRatio") });
-            trackMappings.Add(new SqliteDataMapping() { ColumnName = "OrderNumber", PropertyDataType = DataType.Int, PropertyInfo = trackProperties.First(x => x.Name == "OrderNumber") });
+            trackMappings.Add(new SqliteDataMapping() { ColumnName = "TrackNumber", PropertyDataType = DataType.Int, PropertyInfo = trackProperties.First(x => x.Name == "TrackNumber") });
             trackMappings.Add(new SqliteDataMapping() { ColumnName = "FileSize", PropertyDataType = DataType.Long, PropertyInfo = trackProperties.First(x => x.Name == "FileSize") });
             MappingsByType.Add(typeof(Track), trackMappings);
 

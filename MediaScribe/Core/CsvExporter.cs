@@ -33,7 +33,7 @@ namespace JayDev.MediaScribe.Core
             foreach (Track track in tracks)
             {
                 builder.Append(NewLine);
-                builder.Append(track.OrderNumber);
+                builder.Append(track.TrackNumber);
                 builder.Append(Separator);
                 builder.Append(track.FileSize);
                 builder.Append(Separator);

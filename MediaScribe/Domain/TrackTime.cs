@@ -14,7 +14,7 @@ namespace JayDev.MediaScribe
     {
         public virtual int? ID { get; set; }
 
-        public virtual int? TrackID { get; set; }
+        public virtual int? TrackNumber { get; set; }
 
         public virtual event PropertyChangedEventHandler PropertyChanged;
 
@@ -33,11 +33,11 @@ namespace JayDev.MediaScribe
                 track = value;
                 if (null == track)
                 {
-                    TrackID = null;
+                    TrackNumber = null;
                 }
                 else
                 {
-                    TrackID = track.ID.Value;
+                    TrackNumber = track.TrackNumber.Value;
                 }
                 OnPropertyChanged("Track");
             }
@@ -60,7 +60,7 @@ namespace JayDev.MediaScribe
             {
                 if (null != track)
                 {
-                    return track.OrderNumber + 1;
+                    return track.TrackNumber + 1;
                 }
 
                 return null;
