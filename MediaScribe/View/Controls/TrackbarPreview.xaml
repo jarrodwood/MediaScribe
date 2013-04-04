@@ -35,7 +35,7 @@
 
             <StackPanel VerticalAlignment="Stretch">
                 <nmControls:Throbber x:Name="Throbber" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15 15 15 10" />
-                <Image Name="Thumbnail" Stretch="None" Width="200" Source="/MediaScribe;component/Images/throbber.gif" Margin="5 5 5 0" />
+                <Image Name="Thumbnail" Stretch="UniformToFill" Width="200" Source="/MediaScribe;component/Images/throbber.gif" Margin="5 5 5 0" />
                 <TextBlock VerticalAlignment="Bottom"  Style="{StaticResource TimeFont}" Name="PositionText" Text="{Binding ElementName=VideoSeekPopupName, Path=CurrentPlayTime, StringFormat=h\\:mm\\:ss, FallbackValue=(time)}" HorizontalAlignment="Center" Margin="15 5 15 5" />
             </StackPanel>
         </Grid>
