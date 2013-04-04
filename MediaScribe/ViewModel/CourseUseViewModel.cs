@@ -1232,6 +1232,7 @@ namespace JayDev.MediaScribe.ViewModel
             IsCurrentTrackVideo = track.IsVideo;
             CurrentTrackPlayPosition = position;
             CurrentTrackName = _currentTrack.StringDisplayValue;
+            CurrentTrackVideoAspectRatio = _currentTrack.AspectRatio;
             //Propert
             CurrentTrackTotalLength = track.Length;
 
