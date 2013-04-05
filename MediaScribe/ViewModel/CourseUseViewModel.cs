@@ -1188,6 +1188,10 @@ namespace JayDev.MediaScribe.ViewModel
             _currentCourse = course;
             CourseName = course.Name;
             Notes = new ExtendedObservableCollection<Note>();
+
+            //flag missing track files
+            course.Tracks.ForEach(x => x.CheckTrackMissing());
+
             Tracks.Clear();
             Tracks.AddRange(new ObservableCollection<Track>(course.Tracks));
             _lastEmbeddedVideoHeight = course.EmbeddedVideoHeight;
@@ -1221,8 +1225,18 @@ namespace JayDev.MediaScribe.ViewModel
             CurrentTrackPlayPosition = position;
             CurrentTrackName = _currentTrack.StringDisplayValue;
             CurrentTrackVideoAspectRatio = _currentTrack.AspectRatio;
-            //Propert
             CurrentTrackTotalLength = track.Length;
+
+
+            //check if the track is missing. if so, skip to the next one.
+            //JDW NOTE: this has to be done /after/ setting the track as the current track, so we know which track the 'next' track is.
+            tracks[trackIndex].CheckTrackMissing();
+            if (tracks[trackIndex].IsMissing)
+            {
+                NextTrackCommand.Execute(null);
+                return;
+            }
+
 
             track.IsPlaying = true;
 

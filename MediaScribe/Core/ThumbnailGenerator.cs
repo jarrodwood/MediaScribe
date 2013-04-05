@@ -104,7 +104,7 @@ namespace JayDev.MediaScribe.Core
                         Directory.Delete(dir);
                     }
                     catch (UnauthorizedAccessException) { }
-                    catch (DirectoryNotFoundException) { }
+                    catch (IOException) { }
                 }
             }
             catch (UnauthorizedAccessException) { }

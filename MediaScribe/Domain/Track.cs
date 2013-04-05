@@ -5,6 +5,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Windows;
 using System.ComponentModel;
+using System.IO;
 
 namespace JayDev.MediaScribe
 {
@@ -34,6 +35,11 @@ namespace JayDev.MediaScribe
         public virtual long? FileSize { get; set; }
 
         public virtual event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// flag indicating that the file does not exist
+        /// </summary>
+        public virtual bool IsMissing { get; set; }
 
         public virtual string FileName
         {
@@ -100,6 +106,15 @@ namespace JayDev.MediaScribe
             if (handler != null)
             {
                 handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        public void CheckTrackMissing()
+        {
+            FileInfo fi = new FileInfo(FilePath);
+            if(false == fi.Exists || fi.Length == 0)
+            {
+                IsMissing = true;
             }
         }
     }

@@ -189,6 +189,27 @@
                                                Binding="{Binding Length}" 
                                                IsReadOnly="True"/>
                                             </DataGrid.Columns>
+                                            <DataGrid.CellStyle>
+                                                <Style TargetType="DataGridCell">
+                                                    <Style.Triggers>
+                                                        <!--TODO: this code block is used several times; move into staticresource-->
+                                                        <DataTrigger Binding="{Binding Path=IsMissing, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                                            <Setter Property="Foreground">
+                                                                <Setter.Value>
+                                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                                        <GradientStop Color="#FFFF2E05" Offset="0"/>
+                                                                        <GradientStop Color="#FFFF0515" Offset="1"/>
+                                                                    </LinearGradientBrush>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Setter Property="ToolTip" Value="Track cannot be found" />
+                                                            <Setter Property="ToolTipService.BetweenShowDelay" Value="0" />
+                                                            <Setter Property="ToolTipService.InitialShowDelay" Value="0" />
+                                                            <Setter Property="ToolTipService.HasDropShadow" Value="True" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </DataGrid.CellStyle>
                                         </nmControls:DragEnabledDataGrid>
                                     </DockPanel>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 0">
@@ -375,6 +396,27 @@
                                                Binding="{Binding Length}" 
                                                IsReadOnly="True"/>
                                                 </DataGrid.Columns>
+                                                <DataGrid.CellStyle>
+                                                    <Style TargetType="DataGridCell">
+                                                        <Style.Triggers>
+                                                            <!--TODO: this code block is used several times; move into staticresource-->
+                                                            <DataTrigger Binding="{Binding Path=IsMissing, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                                                <Setter Property="Foreground">
+                                                                    <Setter.Value>
+                                                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                                            <GradientStop Color="#FFFF2E05" Offset="0"/>
+                                                                            <GradientStop Color="#FFFF0515" Offset="1"/>
+                                                                        </LinearGradientBrush>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                                <Setter Property="ToolTip" Value="Track cannot be found" />
+                                                                <Setter Property="ToolTipService.BetweenShowDelay" Value="0" />
+                                                                <Setter Property="ToolTipService.InitialShowDelay" Value="0" />
+                                                                <Setter Property="ToolTipService.HasDropShadow" Value="True" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </DataGrid.CellStyle>
                                             </nmControls:DragEnabledDataGrid>
                                         </DockPanel>
                                         <!--Empty content control, which 'fills' the dockpanel. As the grid grows, this will shrink away to nothing... and as the grid continues to grow, it'll get scrollbars.-->

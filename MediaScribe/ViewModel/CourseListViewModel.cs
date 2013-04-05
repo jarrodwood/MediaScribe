@@ -159,7 +159,7 @@ namespace JayDev.MediaScribe.ViewModel
                                           {
                                               if (SelectedCourse.Notes.Count > 0)
                                               {
-                                                  var openResult = System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Are you sure you want to edit the tracks? Unless you're adding them on the end, this may up your note locations.", "Edit course track list confirmation", System.Windows.MessageBoxButton.YesNo);
+                                                  var openResult = System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Are you sure you want to edit the tracks? Unless you're adding them on the end, this may mess up your note locations.", "Edit course track list confirmation", System.Windows.MessageBoxButton.YesNo);
                                                   if (openResult == System.Windows.MessageBoxResult.No)
                                                   {
                                                       return;
@@ -626,6 +626,9 @@ namespace JayDev.MediaScribe.ViewModel
                 }
                 else
                 {
+                    //check whether the tracks exist
+                    _selectedCourse.Tracks.ForEach(x => x.CheckTrackMissing());
+
                     SelectedCourseName = _selectedCourse.Name;
                     SelectedCourseTracks = new ObservableCollection<Track>(_selectedCourse.Tracks);
                     //when we've selected a course, we may be able to view it
