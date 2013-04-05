@@ -20,79 +20,53 @@ namespace JayDev.MediaScribe
 
         public virtual event PropertyChangedEventHandler PropertyChanged;
 
-        private TrackTime _start;
-
         public delegate void ObjectChangeCommittedEventHandler(object sender, EventArgs e);
 
         public virtual event ObjectChangeCommittedEventHandler ChangeCommitted;
 
-        public virtual int? StartTrackTimeID { get; set; }
-        [DataMember]
-        public virtual TrackTime Start
-        {
-            get { return _start; }
+        private int? _startTrackNumber;
+        private int? _endTrackNumber;
+        private TimeSpan? _startTime;
+        private TimeSpan? _endTime;
+        public virtual int? StartTrackNumber { get { return _startTrackNumber; }
             set
             {
-                //has the value changed?
-                bool isChanged = _start != value;
-
-                //if it has changed... remove the event from the old object, replace the object, hook up the event handler to the new value (if new value is not null), then notify everyone of the change.
-                if (null != _start && isChanged)
-                {
-                    (_start as INotifyPropertyChanged).PropertyChanged -= startPropertyChanged;
-                }
-                _start = value;
-                if (null != _start)
-                {
-                    (_start as INotifyPropertyChanged).PropertyChanged += new PropertyChangedEventHandler(startPropertyChanged);
-                }
-                if (isChanged)
-                {
-                    OnPropertyChanged("Start");
-                }
+                _startTrackNumber = value;
+                OnPropertyChanged("StartStringDisplayValue");
             }
         }
 
-        void startPropertyChanged(object sender, PropertyChangedEventArgs e)
+        public virtual TimeSpan? StartTime
         {
-            OnPropertyChanged("Start");
+            get { return _startTime; }
+            set
+            {
+                _startTime = value;
+                OnPropertyChanged("StartStringDisplayValue");
+            }
+        }
+
+        public virtual int? EndTrackNumber
+        {
+            get { return _endTrackNumber; }
+            set
+            {
+                _endTrackNumber = value;
+                OnPropertyChanged("EndStringDisplayValue");
+            }
+        }
+        public virtual TimeSpan? EndTime
+        {
+            get { return _endTime; }
+            set
+            {
+                _endTime = value;
+                OnPropertyChanged("EndStringDisplayValue");
+            }
         }
 
         public virtual bool IsDirty { get; set; }
 
-        public virtual int? EndTrackTimeID { get; set; }
-        private TrackTime _end;
-
-        [DataMember]
-        public virtual TrackTime End
-        {
-            get { return _end; }
-            set
-            {
-                //has the value changed?
-                bool isChanged = _end != value;
-
-                //if it has changed... remove the event from the old object, replace the object, hook up the event handler to the new value (if new value is not null), then notify everyone of the change.
-                if (null != _end && isChanged)
-                {
-                    (_end as INotifyPropertyChanged).PropertyChanged -= endPropertyChanged;
-                }
-                _end = value;
-                if (null != _end)
-                {
-                    (_end as INotifyPropertyChanged).PropertyChanged += new PropertyChangedEventHandler(endPropertyChanged);
-                }
-                if (isChanged)
-                {
-                    OnPropertyChanged("End");
-                }
-            }
-        }
-
-        void endPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            OnPropertyChanged("End");
-        }
         private string _title;
         [DataMember]
         public virtual string Title
@@ -153,6 +127,52 @@ namespace JayDev.MediaScribe
                 OnPropertyChanged("Tags");
             }
         }
+
+
+        public virtual string StartStringDisplayValue
+        {
+            get
+            {
+                if(null == StartTrackNumber && null == StartTime)
+                    return string.Empty;
+
+                StringBuilder resultBuilder = new StringBuilder();
+                if (null != StartTrackNumber)
+                {
+                    resultBuilder.Append(StartTrackNumber);
+                }
+                resultBuilder.Append(" - ");
+                if (null != this.StartTime)
+                {
+                    resultBuilder.Append(Utility.GetTimeSpanAsLongString(this.StartTime.Value));
+                }
+
+                return resultBuilder.ToString();
+            }
+        }
+
+        public virtual string EndStringDisplayValue
+        {
+            get
+            {
+                if (null == EndTrackNumber && null == EndTime)
+                    return string.Empty;
+
+                StringBuilder resultBuilder = new StringBuilder();
+                if (null != EndTrackNumber)
+                {
+                    resultBuilder.Append(EndTrackNumber);
+                }
+                resultBuilder.Append(" - ");
+                if (null != this.EndTime)
+                {
+                    resultBuilder.Append(Utility.GetTimeSpanAsLongString(this.EndTime.Value));
+                }
+
+                return resultBuilder.ToString();
+            }
+        }
+    
 
         void tags_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -230,8 +250,10 @@ namespace JayDev.MediaScribe
         private void DeepCopy(Note source, Note destination)
         {
             //use properties where possible, to raise PropertyChanged events.
-            destination.Start = null == source.Start ? null : (TrackTime)source.Start.Clone();
-            destination.End = null == source.End ? null : (TrackTime)source.End.Clone();
+            destination.StartTime = source.StartTime;
+            destination.StartTrackNumber = source.StartTrackNumber;
+            destination.EndTime = source.EndTime;
+            destination.EndTrackNumber = source.EndTrackNumber;
             destination.Title = source.Title;
             destination.Body = source.Body;
             destination.Rating = source.Rating;

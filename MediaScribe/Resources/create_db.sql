@@ -65,10 +65,14 @@ CREATE TABLE Notes (
   CourseID          integer NOT NULL,
 
   Body              text NOT NULL,
+  
+  StartTrackNumber  integer,
 
-  StartTrackTimeID  integer,
+  StartTime         text,
+  
+  EndTrackNumber  integer,
 
-  EndTrackTimeID    integer,
+  EndTime         text,
 
   Rating            integer,
 
@@ -95,14 +99,7 @@ CREATE TABLE Settings (
   SerializedData  blob NOT NULL
 
 );
-CREATE TABLE TrackTimes (
 
-  TrackTimeID  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-
-  TrackNumber  integer NOT NULL,
-
-  "Time"       text
-);
 CREATE TABLE Tracks (
 
   TrackID      integer PRIMARY KEY AUTOINCREMENT NOT NULL,

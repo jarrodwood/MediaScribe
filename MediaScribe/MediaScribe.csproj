@@ -263,7 +263,6 @@
       <DependentUpon>NotesGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Domain\CourseList.cs" />
-    <Compile Include="Core\XmlDataAccess.cs" />
     <Compile Include="Domain\Course.cs" />
     <Compile Include="Core\SingleInstance.cs" />
     <Page Include="View\Controls\VideoControl.xaml">

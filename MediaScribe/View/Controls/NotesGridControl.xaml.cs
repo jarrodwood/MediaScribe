@@ -293,7 +293,8 @@ namespace JayDev.MediaScribe.View.Controls
             Note context = e.Row.DataContext as Note;
             if (null != context)
             {
-                if (null == context.Start)
+                //TODO: check 2013-04-04
+                if (null == context.StartTime)
                 {
                     PrepareNoteForEditCommand.Execute(context);
                 }

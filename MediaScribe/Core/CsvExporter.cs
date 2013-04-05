@@ -51,9 +51,9 @@ namespace JayDev.MediaScribe.Core
 
             foreach (Note note in notes)
             {
-                builder.Append(note.Start.StringDisplayValue);
+                builder.Append(note.StartStringDisplayValue);
                 builder.Append(Separator);
-                builder.Append(note.End.StringDisplayValue);
+                builder.Append(note.EndStringDisplayValue);
                 builder.Append(Separator);
                 builder.Append(EscapeTextForCsv(note.Body));
                 builder.Append(Separator);

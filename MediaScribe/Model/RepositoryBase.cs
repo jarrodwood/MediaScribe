@@ -84,19 +84,13 @@ namespace JayDev.MediaScribe.Model
             noteMappings.Add(new SqliteDataMapping() { ColumnName = "NoteID", PropertyDataType = DataType.Int, PropertyInfo = noteProperties.First(x => x.Name == "ID"), PrimaryKey = true });
             noteMappings.Add(new SqliteDataMapping() { ColumnName = "CourseID", PropertyDataType = DataType.Int, PropertyInfo = noteProperties.First(x => x.Name == "ParentCourseID") });
             noteMappings.Add(new SqliteDataMapping() { ColumnName = "Body", PropertyDataType = DataType.String, PropertyInfo = noteProperties.First(x => x.Name == "Body") });
-            noteMappings.Add(new SqliteDataMapping() { ColumnName = "StartTrackTimeID", PropertyDataType = DataType.Int, PropertyInfo = noteProperties.First(x => x.Name == "StartTrackTimeID") });
-            noteMappings.Add(new SqliteDataMapping() { ColumnName = "EndTrackTimeID", PropertyDataType = DataType.Int, PropertyInfo = noteProperties.First(x => x.Name == "EndTrackTimeID") });
+            noteMappings.Add(new SqliteDataMapping() { ColumnName = "StartTrackNumber", PropertyDataType = DataType.Int, PropertyInfo = noteProperties.First(x => x.Name == "StartTrackNumber") });
+            noteMappings.Add(new SqliteDataMapping() { ColumnName = "StartTime", PropertyDataType = DataType.TimeSpan, PropertyInfo = noteProperties.First(x => x.Name == "StartTime") });
+            noteMappings.Add(new SqliteDataMapping() { ColumnName = "EndTrackNumber", PropertyDataType = DataType.Int, PropertyInfo = noteProperties.First(x => x.Name == "EndTrackNumber") });
+            noteMappings.Add(new SqliteDataMapping() { ColumnName = "EndTime", PropertyDataType = DataType.TimeSpan, PropertyInfo = noteProperties.First(x => x.Name == "EndTime") });
             noteMappings.Add(new SqliteDataMapping() { ColumnName = "Rating", PropertyDataType = DataType.Int, PropertyInfo = noteProperties.First(x => x.Name == "Rating") });
             MappingsByType.Add(typeof(Note), noteMappings);
             
-            TableNamesByType.Add(typeof(TrackTime), "TrackTimes");
-            PropertyInfo[] trackTimeProperties = typeof(TrackTime).GetProperties();
-            List<SqliteDataMapping> trackTimeMappings = new List<SqliteDataMapping>();
-            trackTimeMappings.Add(new SqliteDataMapping() { ColumnName = "TrackTimeID", PropertyDataType = DataType.Int, PropertyInfo = trackTimeProperties.First(x => x.Name == "ID"), PrimaryKey = true });
-            trackTimeMappings.Add(new SqliteDataMapping() { ColumnName = "TrackNumber", PropertyDataType = DataType.Int, PropertyInfo = trackTimeProperties.First(x => x.Name == "TrackNumber") });
-            trackTimeMappings.Add(new SqliteDataMapping() { ColumnName = "Time", PropertyDataType = DataType.TimeSpan, PropertyInfo = trackTimeProperties.First(x => x.Name == "Time") });
-            MappingsByType.Add(typeof(TrackTime), trackTimeMappings);
-
             TableNamesByType.Add(typeof(Track), "Tracks");
             PropertyInfo[] trackProperties = typeof(Track).GetProperties();
             List<SqliteDataMapping> trackMappings = new List<SqliteDataMapping>();

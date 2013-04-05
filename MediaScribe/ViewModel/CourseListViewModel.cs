@@ -91,7 +91,8 @@ namespace JayDev.MediaScribe.ViewModel
                                               //update the OrderNumbers on the tracks before we save them
                                               for (int i = 0; i < SelectedCourseTracks.Count; i++)
                                               {
-                                                  SelectedCourseTracks[i].TrackNumber = i;
+                                                  //JDW NOTE: set i+1 since it's user-visible, and people like lists starting at 1.
+                                                  SelectedCourseTracks[i].TrackNumber = i + 1;
                                               }
 
                                               Course courseToSave;

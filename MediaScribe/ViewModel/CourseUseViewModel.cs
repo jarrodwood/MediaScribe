@@ -688,12 +688,8 @@ namespace JayDev.MediaScribe.ViewModel
                                           (Note context) =>
                                           {
                                               if(_currentTrack != null && string.IsNullOrEmpty(context.Body)) {
-                                                  context.Start = new TrackTime()
-                                                  {
-                                                      Time = CurrentTrackPlayPosition,
-                                                      Track = _currentTrack,
-                                                      ParentCourse = _currentCourse
-                                                  };
+                                                  context.StartTime = CurrentTrackPlayPosition;
+                                                  context.StartTrackNumber = _currentTrack.TrackNumber;
                                               }
                                           },
                                           (Note context) => true));
@@ -757,12 +753,8 @@ namespace JayDev.MediaScribe.ViewModel
                     ?? (_setNoteStartTimeCommand = new RelayCommand<Note>(
                                           (Note context) =>
                                           {
-                                              context.Start = new TrackTime()
-                                              {
-                                                  Track = _currentTrack,
-                                                  Time = CurrentTrackPlayPosition,
-                                                  ParentCourse = _currentCourse
-                                              };
+                                              context.StartTrackNumber = _currentTrack.TrackNumber;
+                                              context.StartTime = CurrentTrackPlayPosition;
 
                                               ////NOTE: if we already have a 'start' tracktime, don't replace it - update it. this is to save
                                               ////us NHibernate pain
@@ -799,12 +791,8 @@ namespace JayDev.MediaScribe.ViewModel
                     ?? (_setNoteEndTimeCommand = new RelayCommand<Note>(
                                           (Note context) =>
                                           {
-                                              context.End = new TrackTime()
-                                              {
-                                                  Track = _currentTrack,
-                                                  Time = CurrentTrackPlayPosition,
-                                                  ParentCourse = _currentCourse
-                                              };
+                                              context.EndTrackNumber = _currentTrack.TrackNumber;
+                                              context.EndTime = CurrentTrackPlayPosition;
                                           },
                                           (Note context) => true));
             }
@@ -823,10 +811,10 @@ namespace JayDev.MediaScribe.ViewModel
                     ?? (_playNoteCommand = new RelayCommand<Note>(
                                           (Note context) =>
                                           {
-                                              if (null != context && null != context.Start)
+                                              if (null != context && null != context.StartTime)
                                               {
-                                                  int trackIndex = Tracks.IndexOf(context.Start.Track);
-                                                  PlayFile(Tracks.ToList(), trackIndex, context.Start.Time, false);
+                                                  int trackIndex = Tracks.IndexOf(Tracks.First(x => x.TrackNumber == context.StartTrackNumber));
+                                                  PlayFile(Tracks.ToList(), trackIndex, context.StartTime.Value, false);
                                               }
                                           },
                                           (Note context) => true));

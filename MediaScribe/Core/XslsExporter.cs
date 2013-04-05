@@ -53,11 +53,10 @@ namespace JayDev.MediaScribe.Core
             
             for (int i = 0; i < notes.Count; i++)
             {
-                if (null != notes[i].Start)
+                if (null != notes[i].StartTrackNumber)
                 {
-                    int? trackIndex = notes[i].Start.IndexOfTrackInCourse;
-                    ws.Cells[currentRow, 1].Value = null == trackIndex ? "" : trackIndex.Value.ToString();
-                    ws.Cells[currentRow, 2].Value = notes[i].Start.Time.ToString();
+                    ws.Cells[currentRow, 1].Value = notes[i].StartTrackNumber.Value.ToString();
+                    ws.Cells[currentRow, 2].Value = notes[i].StartTime.Value.ToString();
                 }
 
 

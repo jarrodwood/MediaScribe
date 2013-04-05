@@ -25,29 +25,11 @@ namespace JayDev.MediaScribe.Model
 
                         List<Note> notes = ReadAll<Note>(connection);
 
-                        List<TrackTime> trackTimes = ReadAll<TrackTime>(connection);
-                        Dictionary<int, TrackTime> trackTimesByID = trackTimes.ToDictionary(x => x.ID.Value);
-
                         List<Track> tracks = ReadAll<Track>(connection);
                         Dictionary<int, Track> tracksByNumber = tracks.ToDictionary(x => x.TrackNumber.Value);
 
-
-                        foreach (TrackTime trackTime in trackTimes)
-                        {
-                            trackTime.Track = tracksByNumber[trackTime.TrackNumber.Value];
-                        }
-
                         foreach (var note in notes)
                         {
-                            if (null != note.StartTrackTimeID)
-                            {
-                                note.Start = trackTimesByID[note.StartTrackTimeID.Value];
-                            }
-                            if (null != note.EndTrackTimeID)
-                            {
-                                note.End = trackTimesByID[note.EndTrackTimeID.Value];
-                            }
-
                             Course parentCourse = coursesByID[note.ParentCourseID];
                             note.ParentCourse = parentCourse;
                             parentCourse.Notes.Add(note);
@@ -103,18 +85,6 @@ namespace JayDev.MediaScribe.Model
             PrepareConnection();
             using (SQLiteTransaction mytransaction = connection.BeginTransaction())
             {
-                if (null != note.Start)
-                {
-                    Save<TrackTime>(note.Start, connection);
-                    note.StartTrackTimeID = note.Start.ID;
-                }
-
-                if (null != note.End)
-                {
-                    Save<TrackTime>(note.End, connection);
-                    note.EndTrackTimeID = note.End.ID;
-                }
-
                 note.ParentCourseID = parentCourse.ID.Value;
                 Save<Note>(note, connection);
 
@@ -130,16 +100,6 @@ namespace JayDev.MediaScribe.Model
             {
                 Delete<Note>(note, connection);
 
-                if (null != note.Start)
-                {
-                    Delete<TrackTime>(note.Start, connection);
-                }
-
-                if (null != note.End)
-                {
-                    Delete<TrackTime>(note.End, connection);
-                }
-
                 mytransaction.Commit();
             }
         }
@@ -153,15 +113,6 @@ namespace JayDev.MediaScribe.Model
                 foreach (Note note in course.Notes)
                 {
                     Delete<Note>(note, connection);
-
-                    if (null != note.StartTrackTimeID)
-                    {
-                        Delete<TrackTime>(new TrackTime() { ID = note.StartTrackTimeID }, connection);
-                    }
-                    if (null != note.EndTrackTimeID)
-                    {
-                        Delete<TrackTime>(new TrackTime() { ID = note.EndTrackTimeID }, connection);
-                    }
                 }
 
                 foreach (Track track in course.Tracks)

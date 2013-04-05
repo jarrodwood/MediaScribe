@@ -38,12 +38,12 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="From" Width="90" SortMemberPath="Start.StringDisplayValue" CanUserSort="True">
+                <DataGridTemplateColumn Header="From" Width="90" SortMemberPath="StartStringDisplayValue" CanUserSort="True">
                     <!-- editing template -->
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding Path=Start.StringDisplayValue}" />
+                                <TextBlock Text="{Binding Path=StartStringDisplayValue}" />
                                 <TextBlock xml:space="preserve"></TextBlock>
 
                                 <local:UndecoratedButton Margin="2 0 0 0" VerticalAlignment="Center" Click="setNoteStartTime_Click">
@@ -84,7 +84,7 @@
                                         </Image.Style>
                                     </Image>
                                 </local:UndecoratedButton>
-                                <TextBlock Margin="2 0 0 0" Text="{Binding Path=Start.StringDisplayValue}" />
+                                <TextBlock Margin="2 0 0 0" Text="{Binding Path=StartStringDisplayValue}" />
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
