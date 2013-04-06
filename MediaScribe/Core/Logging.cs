@@ -3,37 +3,58 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
+using JayDev.MediaScribe.Common;
+using System.IO;
 
 namespace JayDev.MediaScribe.Core
 {
     enum LoggingSource { ThumbnailGeneration, MPlayerWindow, AsyncWorker, Errors, DragEnabledDataGrid, FullscreenToggle }
     internal class Logging
     {
-        static List<LoggingSource> showSources = new List<LoggingSource>();
+        static List<LoggingSource> sourcesToWriteToDebug = new List<LoggingSource>();
+        static List<LoggingSource> sourcesToWriteToFile = new List<LoggingSource>();
         static Logging()
         {
-            showSources = new List<LoggingSource>()
+            sourcesToWriteToDebug = new List<LoggingSource>()
             {
                 LoggingSource.ThumbnailGeneration,
                 LoggingSource.Errors,
             };
+            sourcesToWriteToFile = new List<LoggingSource>()
+            {
+                LoggingSource.Errors,
+            };
+        }
+
+        public static void VerifyAppFolderExists()
+        {
+            if (false == System.IO.Directory.Exists(Constants.ApplicationFolderPath))
+            {
+                System.IO.Directory.CreateDirectory(Constants.ApplicationFolderPath);
+            }
         }
 
         public static void Log(LoggingSource source, string text)
         {
-            if (showSources.Contains(source))
+            string prefixedText = string.Format("{0} [{1}] - {2}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), source, text);
+
+            if (sourcesToWriteToDebug.Contains(source))
             {
-                Debug.WriteLine(string.Format("{0} [{1}] - {2}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), source, text));
+                Debug.WriteLine(prefixedText);
+                
+            }
+
+            if (sourcesToWriteToFile.Contains(source))
+            {
+                VerifyAppFolderExists();
+                File.AppendAllText(string.Format(Constants.ApplicationGenericFilePath, "errorlog.txt"), prefixedText);
             }
         }
 
         public static void Log(LoggingSource source, string text, params string[] replacement)
         {
-            if (showSources.Contains(source))
-            {
-                string replacementExpanded = string.Format(text, replacement);
-                Debug.WriteLine(string.Format("{0} [{1}] - {2}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), source, replacementExpanded));
-            }
+            string replacementExpanded = string.Format(text, replacement);
+            Log(source, replacementExpanded);
         }
     }
 }

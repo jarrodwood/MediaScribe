@@ -252,7 +252,8 @@ namespace JayDev.MediaScribe.Core
                     BorderThickness = new Thickness(0)
                 };
             }
-
+            ToolTipService.SetToolTip(slider, tooltip);
+            ToolTipService.SetInitialShowDelay(slider, 0);
 
             slider.ToolTip = tooltip;
 

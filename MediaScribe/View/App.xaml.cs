@@ -40,11 +40,11 @@ namespace JayDev.MediaScribe
             }
             catch (Exception e)
             {
-                StorageHelper storage = new StorageHelper();
-                storage.AppendFileToStorageFolder("error.txt", DateTime.Now.ToLongTimeString() + "\r\n" + e.ToString() + "\r\n\r\n");
+            Logging.
+                Logging.Log(LoggingSource.Errors, e.ToString() + "\r\n\r\n");
                 MessageBox.Show("An error has occured -- please go to www.jarrod.co.nz/MediaScribe/ and get in touch.");
             }
-            #endif
+#endif
         }
 
         #region ISingleInstanceApp Members

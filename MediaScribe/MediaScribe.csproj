@@ -119,6 +119,7 @@
     <Compile Include="Core\CsvExporter.cs" />
     <Compile Include="Core\NavigationHelper.cs" />
     <Compile Include="Core\ThumbnailGenerator.cs" />
+    <Compile Include="ViewModel\AboutViewModel.cs" />
     <Compile Include="View\Controls\MediaScribeMainTabControl.cs" />
     <Compile Include="Domain\Hotkey.cs" />
     <Compile Include="Model\CourseRepositorySqlite.cs" />
@@ -343,6 +344,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\netsparkle\source\trunk\NetSparkle\NetSparkle2010.csproj">
+      <Project>{74635A21-2BAD-4522-AB95-E3E5703CD301}</Project>
+      <Name>NetSparkle2010</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MediaScribe.AvalonTextBox\MediaScribe.AvalonTextBox.csproj">
       <Project>{CA7E4D71-3858-48F2-AF68-7E6DA88F79C9}</Project>
       <Name>MediaScribe.AvalonTextBox</Name>

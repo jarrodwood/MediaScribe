@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using JayDev.MediaScribe.ViewModel;
 
 namespace JayDev.MediaScribe.View.Controls
 {
@@ -23,6 +24,7 @@ namespace JayDev.MediaScribe.View.Controls
         {
             InitializeComponent();
             this.MouseLeftButtonDown+=new MouseButtonEventHandler(About_MouseLeftButtonDown);
+            this.DataContext = new AboutViewModel();
         }
 
 

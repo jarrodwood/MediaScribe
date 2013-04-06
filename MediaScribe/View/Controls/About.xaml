@@ -5,10 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500"
+        Width="430" Height="330"
              xmlns:local="clr-namespace:JayDev.MediaScribe.View.Controls"
         >
 
-    <Grid x:Name="LayoutRoot">
+    <Grid x:Name="LayoutRoot" >
         <Border Width="400" Height="300" CornerRadius="15" Background="Black">
             <Border.Effect>
                 <BlurEffect Radius="15" RenderingBias="Quality" />
@@ -28,30 +29,34 @@
                 MediaScribe
                 </TextBlock>
                 <Separator Margin="0 10 0 0" Width="200"></Separator>
-                <TextBlock FontSize="12" Margin="0 25 0 0" HorizontalAlignment="Center" Foreground="#FF3F3F3F">
-                Version 0.9.3, 31/10/2012
-                </TextBlock>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 25 0 0">
+                        <TextBlock Text="Version " FontSize="12" HorizontalAlignment="Center" Foreground="#FF3F3F3F" />
+                        <TextBlock Text="{Binding Version, FallbackValue='[1.0.0]'}" FontSize="12" HorizontalAlignment="Center" Foreground="#FF3F3F3F" />
+                    </StackPanel>
+                    <TextBlock Text="please find out more at" FontSize="12" Margin="0 0 0 0" HorizontalAlignment="Center" Foreground="#FF3F3F3F" />
                 <TextBlock FontSize="12" Margin="0 0 0 0" HorizontalAlignment="Center" Foreground="#FF3F3F3F">
-                Please find updates at
+				<Hyperlink>http://mediascribe.jarrod.co.nz/</Hyperlink>
                 </TextBlock>
-                <TextBlock FontSize="12" Margin="0 0 0 0" HorizontalAlignment="Center" Foreground="#FF3F3F3F">
-				<Hyperlink>www.jarrod.co.nz/MediaScribe/</Hyperlink>
-                </TextBlock>
-                <TextBlock FontSize="12" Margin="0 25 0 0" HorizontalAlignment="Center" Foreground="#FF3F3F3F">
-                Copyright © 2012 by Jarrod Wood
-                </TextBlock>
-                <TextBlock FontSize="12" Margin="0 0 0 0" HorizontalAlignment="Center" Foreground="#FF3F3F3F">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 25 0 0">
+                        <TextBlock Text="{Binding CopyrightHolder, FallbackValue='[Copyright © 2013]'}" FontSize="12" HorizontalAlignment="Center" Foreground="#FF3F3F3F" />
+                        <TextBlock Text=" by Jarrod Wood" FontSize="12" HorizontalAlignment="Center" Foreground="#FF3F3F3F" />
+                    </StackPanel>
+                    <TextBlock FontSize="12" Margin="0 0 0 0" HorizontalAlignment="Center" Foreground="#FF3F3F3F">
 				<Hyperlink>www.jarrod.co.nz</Hyperlink>
                 </TextBlock>
             </StackPanel>
 
             <local:UndecoratedButton Margin="0,10,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="18" Height="18" Click="UndecoratedButton_Click">
                 <Grid>
-                    <!-- need an almost-invisible rectangle here to capture clicks-->
-                        <Rectangle Width="18" Height="18" Fill="Transparent" Stroke="#EEEEEE" StrokeThickness="0.5"  />
-                        <Path Data="M0,0 L1,1" Margin="3" Fill="White" Height="8" Stretch="Fill" Stroke="White" Width="8" RenderTransformOrigin="-8.917,7.5"/>
-                    <Path Data="M0,1 L1,0" Margin="3" Fill="White" Height="8" Stretch="Fill" Stroke="White" Width="8"/>
-                </Grid>
+                        <!-- need an almost-invisible rectangle here to capture clicks-->
+                        <Rectangle Width="18" Height="18" Fill="Transparent" Stroke="Transparent" StrokeThickness="0.5"  />
+                        <Border CornerRadius="5" BorderBrush="#99FF0000" BorderThickness="1" Background="#33FF0000" Width="18" Height="18" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Grid Width="18" Height="18" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Path Data="M0,0 L1,1" Margin="3" Fill="Red" Height="12" Stretch="Fill" Stroke="Red" StrokeThickness="2.0"  Width="12" RenderTransformOrigin="-8.917,7.5"/>
+                        <Path Data="M0,1 L1,0" Margin="3" Fill="Red" Height="12" Stretch="Fill" Stroke="Red" StrokeThickness="2.0" Width="12"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
             </local:UndecoratedButton>
             </Grid>
         </Border>
