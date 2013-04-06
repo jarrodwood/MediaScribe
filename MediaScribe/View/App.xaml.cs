@@ -40,9 +40,8 @@ namespace JayDev.MediaScribe
             }
             catch (Exception e)
             {
-            Logging.
                 Logging.Log(LoggingSource.Errors, e.ToString() + "\r\n\r\n");
-                MessageBox.Show("An error has occured -- please go to www.jarrod.co.nz/MediaScribe/ and get in touch.");
+                MessageBox.Show("An error has occured -- please go to http://mediascribe.jarrod.co.nz/contact/ and get in touch.");
             }
 #endif
         }

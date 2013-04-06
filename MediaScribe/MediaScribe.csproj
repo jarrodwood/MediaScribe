@@ -119,6 +119,7 @@
     <Compile Include="Core\CsvExporter.cs" />
     <Compile Include="Core\NavigationHelper.cs" />
     <Compile Include="Core\ThumbnailGenerator.cs" />
+    <Compile Include="Domain\ApplicationSettings.cs" />
     <Compile Include="ViewModel\AboutViewModel.cs" />
     <Compile Include="View\Controls\MediaScribeMainTabControl.cs" />
     <Compile Include="Domain\Hotkey.cs" />
@@ -491,6 +492,7 @@
     <Resource Include="Images\Letter M blue 32.png" />
     <Resource Include="Letter M blue.ico" />
     <Resource Include="Images\throbber.gif" />
+    <Resource Include="appcast.xml" />
     <Content Include="log4netoff.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

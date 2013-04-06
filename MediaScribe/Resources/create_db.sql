@@ -1,42 +1,42 @@
 ﻿PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
-CREATE TABLE Courses (
-
-  CourseID                 integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-
-  Name                     text NOT NULL,
-
-  LastPlayedTrackID        integer,
-
-  LastPlayedTrackPosition  text,
-
-  EmbeddedVideoWidth       text,
-
-  EmbeddedVideoHeight      text,
-
-  DateCreated              text,
-
-  DateViewed               text
-
+CREATE TABLE Courses (
+
+  CourseID                 integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+
+  Name                     text NOT NULL,
+
+  LastPlayedTrackID        integer,
+
+  LastPlayedTrackPosition  text,
+
+  EmbeddedVideoWidth       text,
+
+  EmbeddedVideoHeight      text,
+
+  DateCreated              text,
+
+  DateViewed               text
+
 );
-CREATE TABLE Hotkeys (
-
-  HotkeyID       integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-
-  Function       integer NOT NULL,
-
-  ModifierKey    integer NOT NULL,
-
-  "Key"          integer NOT NULL,
-
-  Colour         text,
-
-  SeekDirection  integer,
-
-  SeekSeconds    integer,
-
-  Rating         integer
-
+CREATE TABLE Hotkeys (
+
+  HotkeyID       integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+
+  Function       integer NOT NULL,
+
+  ModifierKey    integer NOT NULL,
+
+  "Key"          integer NOT NULL,
+
+  Colour         text,
+
+  SeekDirection  integer,
+
+  SeekSeconds    integer,
+
+  Rating         integer
+
 );
 INSERT INTO "Hotkeys" VALUES(1,1,2,49,'#FF3F3F3F',0,3,0);
 INSERT INTO "Hotkeys" VALUES(2,2,0,74,'#FF3F3F3F',0,3,0);
@@ -58,79 +58,82 @@ INSERT INTO "Hotkeys" VALUES(18,4,2,36,'#FF3F3F3F',0,3,2);
 INSERT INTO "Hotkeys" VALUES(19,4,2,37,'#FF3F3F3F',0,3,3);
 INSERT INTO "Hotkeys" VALUES(21,3,0,75,'#FF3F3F3F',0,3,0);
 INSERT INTO "Hotkeys" VALUES(23,6,0,32,'#FF3F3F3F',0,3,0);
-CREATE TABLE Notes (
-
-  NoteID            integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-
-  CourseID          integer NOT NULL,
-
-  Body              text NOT NULL,
-  
-  StartTrackNumber  integer,
-
-  StartTime         text,
-  
-  EndTrackNumber  integer,
-
-  EndTime         text,
-
-  Rating            integer,
-
-  BodyInlines       blob,
-
-  BodyStripped      text,
-
-  BodyXaml          text,
-
-  /* Foreign keys */
-
-  FOREIGN KEY (CourseID)
-
-    REFERENCES Courses(CourseID)
-
-    ON DELETE NO ACTION
-
-    ON UPDATE NO ACTION
+CREATE TABLE Notes (
+
+  NoteID            integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+
+  CourseID          integer NOT NULL,
+
+  Body              text NOT NULL,
+  
+  StartTrackNumber  integer,
+
+  StartTime         text,
+  
+  EndTrackNumber  integer,
+
+  EndTime         text,
+
+  Rating            integer,
+
+  BodyInlines       blob,
+
+  BodyStripped      text,
+
+  BodyXaml          text,
+
+  /* Foreign keys */
+
+  FOREIGN KEY (CourseID)
+
+    REFERENCES Courses(CourseID)
+
+    ON DELETE NO ACTION
+
+    ON UPDATE NO ACTION
 );
-CREATE TABLE Settings (
+CREATE TABLE Tracks (
+
+  TrackID      integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+
+  CourseID     integer NOT NULL,
+
+  FilePath     text NOT NULL,
+
+  Title        text,
+
+  Length       text NOT NULL,
+
+  IsVideo      integer NOT NULL,
+
+  AspectRatio  text,
+
+  TrackNumber  integer,
+
+  FileSize     integer,
+
+  /* Foreign keys */
+
+  FOREIGN KEY (CourseID)
+
 
-  SettingID       integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-
-  SerializedData  blob NOT NULL
-
+  REFERENCES Courses(CourseID)
+
+    ON DELETE NO ACTION
+
+    ON UPDATE NO ACTION
+
 );
-
-CREATE TABLE Tracks (
-
-  TrackID      integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-
-  CourseID     integer NOT NULL,
-
-  FilePath     text NOT NULL,
-
-  Title        text,
-
-  Length       text NOT NULL,
-
-  IsVideo      integer NOT NULL,
-
-  AspectRatio  text,
-
-  TrackNumber  integer,
-
-  FileSize     integer,
-
-  /* Foreign keys */
-
-  FOREIGN KEY (CourseID)
-
-    REFERENCES Courses(CourseID)
-
-    ON DELETE NO ACTION
-
-    ON UPDATE NO ACTION
-
+CREATE TABLE settings (
+    "SettingID" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+    "SerializedData" TEXT NOT NULL
 );
+CREATE TABLE version (
+    "VersionID" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+    "SchemaVersion" TEXT NOT NULL
+);
+INSERT INTO "version" VALUES(1,'1.0.0.0');
 DELETE FROM sqlite_sequence;
 INSERT INTO "sqlite_sequence" VALUES('Hotkeys',23);
+INSERT INTO "sqlite_sequence" VALUES('version',1);
 COMMIT;
