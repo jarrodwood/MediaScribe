@@ -21,6 +21,7 @@ using System.Windows.Interop;
 using Microsoft.Windows.Shell;
 using Microsoft.Practices.Unity;
 using System.Runtime.InteropServices;
+using AppLimit.NetSparkle;
 
 namespace JayDev.MediaScribe.View
 {
@@ -38,9 +39,15 @@ namespace JayDev.MediaScribe.View
             }
         }
 
+        private Sparkle _sparkle;
+
+
         public MainWindow()
         {
             InitializeComponent();
+
+            _sparkle = new Sparkle("http://mediascribe.jarrod.co.nz/appcast.xml");
+            _sparkle.StartLoop(true);
 
             UnityContainer unityContainer = new UnityContainer();
             unityContainer.RegisterType<IController, Controller>(new ContainerControlledLifetimeManager());
