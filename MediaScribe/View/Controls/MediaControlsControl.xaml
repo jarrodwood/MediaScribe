@@ -168,7 +168,7 @@
                     <DockPanel>
                         <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="20 0 0 0">
                         <TextBlock Foreground="#FF3F3F3F" Name="currentPlayTime" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=CurrentPlayTime, StringFormat=h\\:mm\\:ss}"/>
-                        <TextBlock Foreground="#FF3F3F3F" HorizontalAlignment="Left" xml:space="preserve"> /</TextBlock>
+                        <TextBlock Foreground="#FF3F3F3F" HorizontalAlignment="Left" xml:space="preserve"> / </TextBlock>
                         <TextBlock Foreground="#FF3F3F3F" Name="totalTrackTime" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=MaxPlayTime, StringFormat=h\\:mm\\:ss}"/>
                         <TextBlock Foreground="#FF3F3F3F" HorizontalAlignment="Left" xml:space="preserve"> - </TextBlock>
                         <TextBlock Foreground="#FF3F3F3F" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=TrackTitle, StringFormat=h\\:mm\\:ss, TargetNullValue='No track selected'}"/>
