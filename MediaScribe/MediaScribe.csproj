@@ -43,6 +43,10 @@
     <ApplicationIcon>Letter M blue.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AppLimit.NetSparkle.Net40, Version=1.0.22.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dependencies\AppLimit.NetSparkle.Net40.dll</HintPath>
+    </Reference>
     <Reference Include="EPPlus">
       <HintPath>..\Dependencies\EPPlus.dll</HintPath>
     </Reference>
@@ -59,9 +63,6 @@
     </Reference>
     <Reference Include="ICSharpCode.AvalonEdit">
       <HintPath>..\Dependencies\ICSharpCode.AvalonEdit.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\Dependencies\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\Dependencies\Microsoft.Practices.Unity.dll</HintPath>
@@ -344,10 +345,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\netsparkle\source\trunk\NetSparkle\NetSparkle2010.csproj">
-      <Project>{74635A21-2BAD-4522-AB95-E3E5703CD301}</Project>
-      <Name>NetSparkle2010</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MediaScribe.AvalonTextBox\MediaScribe.AvalonTextBox.csproj">
       <Project>{CA7E4D71-3858-48F2-AF68-7E6DA88F79C9}</Project>
       <Name>MediaScribe.AvalonTextBox</Name>
@@ -492,6 +489,9 @@
     <Resource Include="Letter M blue.ico" />
     <Resource Include="Images\throbber.gif" />
     <Resource Include="appcast.xml" />
+    <Content Include="LICENSE.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="log4netoff.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
