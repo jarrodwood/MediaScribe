@@ -5,23 +5,26 @@ using System.Text;
 using JayDev.MediaScribe.Common;
 using GalaSoft.MvvmLight.Messaging;
 using System.Windows.Input;
+using JayDev.MediaScribe;
 
 namespace MediaScribe.Common
 {
-    public class HotkeyManager
+    public class SettingManager
     {
-        private static HotkeyManager _instance;
-        public static HotkeyManager Singleton
+        private static SettingManager _instance;
+        public static SettingManager Singleton
         {
             get
             {
                 if (null == _instance)
                 {
-                    _instance = new HotkeyManager();
+                    _instance = new SettingManager();
                 }
                 return _instance;
             }
         }
+
+        public static ApplicationSettings ApplicationSettings { get; set; }
 
         struct keyMatch
         {

@@ -16,6 +16,7 @@
                 xmlns:System="clr-namespace:System;assembly=mscorlib"
                 xmlns:wpfx="clr-namespace:Xceed.Wpf.Toolkit;assembly=WPFToolkit.Extended"
              
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              x:Name="SettingsViewName"
              d:DesignHeight="368" d:DesignWidth="1380">
     <UserControl.Resources>
@@ -252,6 +253,18 @@
                                     <CheckBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"></CheckBox>
                                 </Grid>
                             </GroupBox>-->
+                            <GroupBox Header="Options" Foreground="#FF3F3F3F" BorderBrush="#FF75B2DE" Margin="10 10 10 10" Padding="5">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <TextBlock Width="200" Text="Enable trackbar video preview" ToolTip="When you hover the cursor over the trackbar, this will show up a thumbnail preview of the video at that location." ToolTipService.InitialShowDelay="0" />
+                                        <CheckBox IsChecked="{Binding Path=ApplicationSettings.GenerateThumbnails, Mode=TwoWay}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 5 0 0">
+                                        <TextBlock VerticalAlignment="Center" Width="200" Text="Fullscreen video note-editing width" ToolTip="When you are in full-screen mode, this configures the width of the notes list, in pixels. The default value is 600." ToolTipService.InitialShowDelay="0" />
+                                        <wpfx:IntegerUpDown Value="{Binding Path=ApplicationSettings.FullscreenNotePanelWidth, Mode=TwoWay}" Increment="50" Maximum="1500" Minimum="400" Width="60" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </GroupBox>
                             <GroupBox Header="Hotkeys" Foreground="#FF3F3F3F" BorderBrush="#FF75B2DE" Margin="10 10 10 10" Padding="5">
                                 <DockPanel>
                                     <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->

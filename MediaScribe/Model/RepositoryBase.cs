@@ -118,6 +118,13 @@ namespace JayDev.MediaScribe.Model
             hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "Rating", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "Rating") });
             MappingsByType.Add(typeof(Hotkey), hotkeyMappings);
 
+            TableNamesByType.Add(typeof(ApplicationSettings), "Settings");
+            PropertyInfo[] settingsProperties = typeof(ApplicationSettings).GetProperties();
+            List<SqliteDataMapping> settingsMappings = new List<SqliteDataMapping>();
+            settingsMappings.Add(new SqliteDataMapping() { ColumnName = "SettingID", PropertyDataType = DataType.Int, PropertyInfo = settingsProperties.First(x => x.Name == "ID"), PrimaryKey = true });
+            settingsMappings.Add(new SqliteDataMapping() { ColumnName = "SerializedData", PropertyDataType = DataType.String, PropertyInfo = settingsProperties.First(x => x.Name == "SerializedData") });
+            MappingsByType.Add(typeof(ApplicationSettings), settingsMappings);
+
             /***********************
              * Prepare database upgrade scripts
              ***********************/

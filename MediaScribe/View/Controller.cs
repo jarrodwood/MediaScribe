@@ -105,7 +105,10 @@ namespace JayDev.MediaScribe.View
             _mainWindow.Closing += new System.ComponentModel.CancelEventHandler(_mainWindow_Closing);
 
             //load the user's hotkeys, and register them for use in the application
-            HotkeyManager.HandleHotkeyRegistration(new List<HotkeyBase>(settingsRepo.GetHotkeys()));
+            SettingManager.HandleHotkeyRegistration(new List<HotkeyBase>(settingsRepo.GetHotkeys()));
+
+            //load the application settings
+            SettingManager.ApplicationSettings = settingsRepo.GetApplicationSettings();
 
             //if the application has been run before, automatically load the most recently opened course. Otherwise, load the course list.
             bool loadedLastCourse = false;
@@ -248,6 +251,10 @@ namespace JayDev.MediaScribe.View
                         if (null == _fullscreenWindow)
                         {
                             _fullscreenWindow = new BlankWindow();
+                            _fullscreenWindow.SizeChanged += (sizeChangedSender, sizeChangedArgs) =>
+                            {
+                                courseUseViewModel.FullscreenWindowSize = sizeChangedArgs.NewSize;
+                            };
                             _fullscreenWindow.Content = new FullscreenCourseView(courseUseViewModel);
                             _fullscreenWindow.PreviewKeyDown += new KeyEventHandler(FullscreenWindow_KeyDown);
                             ((FullscreenCourseView)_fullscreenWindow.Content).videoControl.AssociateVideoWithControl();

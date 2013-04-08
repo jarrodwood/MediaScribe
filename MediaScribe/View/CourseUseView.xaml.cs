@@ -86,7 +86,7 @@ namespace JayDev.MediaScribe.View
 
         public static void HandleWindowKeypressForBothViews(object sender, KeyEventArgs e, Dispatcher _currentDispatcher, NotesGridControl notesGrid, CourseUseViewModel _viewModel, bool IsVisible, Action<ShowMessage> SendShowMessage)
         {
-            var matches = HotkeyManager.CheckHotkey(e);
+            var matches = SettingManager.CheckHotkey(e);
 
             if (null != matches && matches.Count > 0)
             {

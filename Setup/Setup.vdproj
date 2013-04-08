@@ -1258,7 +1258,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:MediaScribe"
         "ProductCode" = "8:{B9C680D9-6104-48E0-88A8-8B74AA33E8B7}"
-        "PackageCode" = "8:{E4F59D50-3506-4C3C-86BE-D9E837EF24C0}"
+        "PackageCode" = "8:{CA8AF9DB-FE2F-4A15-A1C4-8DF297C6A36F}"
         "UpgradeCode" = "8:{0E3ECEF1-D28E-4E8E-AE91-31B0AD297AAA}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -1863,7 +1863,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_000ECC0723D24F2FAF6002A5B34FC411"
             {
-            "SourcePath" = "8:..\\MediaScribe\\obj\\x86\\Release\\MediaScribe.exe"
+            "SourcePath" = "8:..\\MediaScribe\\obj\\x86\\Debug\\MediaScribe.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_299A926B10DC4933BA4CB8C1DB058E4D"
@@ -2059,7 +2059,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_65C8375C1F7E471CA73A13E2B1C553B6"
             {
-            "SourcePath" = "8:..\\MediaScribe.Common\\obj\\Release\\MediaScribe.Common.dll"
+            "SourcePath" = "8:..\\MediaScribe.Common\\obj\\Debug\\MediaScribe.Common.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_299A926B10DC4933BA4CB8C1DB058E4D"
@@ -2227,7 +2227,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_8E3C50CEE8234B72986EF80D7BE24830"
             {
-            "SourcePath" = "8:..\\MediaScribe.AvalonTextBox\\obj\\Release\\MediaScribe.AvalonTextBox.dll"
+            "SourcePath" = "8:..\\MediaScribe.AvalonTextBox\\obj\\Debug\\MediaScribe.AvalonTextBox.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_299A926B10DC4933BA4CB8C1DB058E4D"
@@ -2283,7 +2283,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_915C97647D8444BF9F676FDAE6737AD3"
             {
-            "SourcePath" = "8:..\\MediaScribe.LibMPlayerCommon\\obj\\Release\\LibMplayerCommon.dll"
+            "SourcePath" = "8:..\\MediaScribe.LibMPlayerCommon\\obj\\Debug\\LibMplayerCommon.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_299A926B10DC4933BA4CB8C1DB058E4D"

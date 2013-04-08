@@ -119,7 +119,6 @@
     <Compile Include="Core\CsvExporter.cs" />
     <Compile Include="Core\NavigationHelper.cs" />
     <Compile Include="Core\ThumbnailGenerator.cs" />
-    <Compile Include="Domain\ApplicationSettings.cs" />
     <Compile Include="ViewModel\AboutViewModel.cs" />
     <Compile Include="View\Controls\MediaScribeMainTabControl.cs" />
     <Compile Include="Domain\Hotkey.cs" />

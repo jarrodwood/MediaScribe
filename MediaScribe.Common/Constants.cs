@@ -22,7 +22,7 @@ namespace JayDev.MediaScribe.Common
     /// <summary>
     /// Typesafe enum of the allowed asynchronous application messages
     /// </summary>
-    public enum MessageType { Navigate, SetFullscreenMode }
+    public enum MessageType { Navigate, SetFullscreenMode, ApplicationSettingsChanged }
 
     public enum NavigateMessage { ToggleFullscreen, ListCourses, WriteCourseNotes, ReviewCourseNotes, Settings }
 
@@ -329,6 +329,11 @@ namespace JayDev.MediaScribe.Common
         /// NOTE: we can also do an
         /// </summary>
         public const string NEW_ITEM_PLACEHOLDER_NAME = "{NewItemPlaceholder}";
+
+        /// <summary>
+        /// the mininum width in pixels for the fullscreen video (the rest of the screen will be filled by the notes control)
+        /// </summary>
+        public const double MINIMUM_FULLSCREN_VIDEO_WIDTH = 200;
 
         public const int DEFAULT_VOLUME = 100;
 

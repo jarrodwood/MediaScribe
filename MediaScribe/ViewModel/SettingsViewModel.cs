@@ -48,7 +48,7 @@ namespace JayDev.MediaScribe.ViewModel
                                                   _repo.PersistHotkeys(GetDefaultHotkeySet());
                                                   Hotkeys = new ObservableCollection<Hotkey>(_repo.GetHotkeys());
 
-                                                  HotkeyManager.HandleHotkeyRegistration(new List<HotkeyBase>(Hotkeys));
+                                                  SettingManager.HandleHotkeyRegistration(new List<HotkeyBase>(Hotkeys));
                                               }
                                           }));
             }
@@ -95,27 +95,6 @@ namespace JayDev.MediaScribe.ViewModel
 
         #endregion
 
-        //#region AddHotkeyCommand
-
-        //private RelayCommand _addHotkeyCommand;
-
-        ///// <summary>
-        ///// Gets the AddHotkeyCommand.
-        ///// </summary>
-        //public RelayCommand AddHotkeyCommand
-        //{
-        //    get
-        //    {
-        //        return _addHotkeyCommand
-        //            ?? (_addHotkeyCommand = new RelayCommand(
-        //                                  () =>
-        //                                  {
-
-        //                                  }));
-        //    }
-        //}
-
-        //#endregion
 
         #region DeleteHotkeysCommand
 
@@ -185,7 +164,32 @@ namespace JayDev.MediaScribe.ViewModel
                                               _repo.PersistHotkeys(Hotkeys.ToList());
                                               Hotkeys = new ObservableCollection<Hotkey>(_repo.GetHotkeys());
 
-                                              HotkeyManager.HandleHotkeyRegistration(new List<HotkeyBase>(Hotkeys));
+                                              SettingManager.HandleHotkeyRegistration(new List<HotkeyBase>(Hotkeys));
+                                          }));
+            }
+        }
+
+        #endregion
+
+        #region SaveApplicationSettingsCommand
+
+        private RelayCommand _saveApplicationSettingsCommand;
+
+        /// <summary>
+        /// Gets the SaveApplicationSettingsCommand.
+        /// </summary>
+        public RelayCommand SaveApplicationSettingsCommand
+        {
+            get
+            {
+                return _saveApplicationSettingsCommand
+                    ?? (_saveApplicationSettingsCommand = new RelayCommand(
+                                          () =>
+                                          {
+                                              _repo.SaveApplicationSettings(ApplicationSettings);
+                                              SettingManager.ApplicationSettings = ApplicationSettings;
+                                              //notify anyone interested that the application settings have changed.
+                                              Messenger.Default.Send(ApplicationSettings, MessageType.ApplicationSettingsChanged);
                                           }));
             }
         }
@@ -241,11 +245,6 @@ namespace JayDev.MediaScribe.ViewModel
         /// </summary>
         public List<object> SelectedHotkeys
         {
-            //get
-            //{
-            //    return _SelectedHotkeys.Cast<object>().ToList();
-            //}
-
             set
             {
                 if (null == value || value is string)
@@ -303,6 +302,37 @@ namespace JayDev.MediaScribe.ViewModel
 
         #endregion
 
+        /// <summary>
+        /// The <see cref="ApplicationSettings" /> property's name.
+        /// </summary>
+        public const string ApplicationSettingsPropertyName = "ApplicationSettings";
+
+        private ApplicationSettings _applicationSettings = null;
+
+        
+        /// <summary>
+        /// Sets and gets the ApplicationSettings property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public ApplicationSettings ApplicationSettings
+        {
+            get
+            {
+                return _applicationSettings;
+            }
+
+            set
+            {
+                if (_applicationSettings == value)
+                {
+                    return;
+                }
+
+                _applicationSettings = value;
+                RaisePropertyChanged(ApplicationSettingsPropertyName);
+            }
+        }
+
         public NavigateMessage CurrentPage
         {
             get
@@ -322,9 +352,15 @@ namespace JayDev.MediaScribe.ViewModel
 
             var hotkeys = _repo.GetHotkeys();
             Hotkeys = new ObservableCollection<Hotkey>(hotkeys);
+
+            ApplicationSettings = _repo.GetApplicationSettings();
+            //when the application settings object is changed, persist changes to database automagically.
+            ApplicationSettings.PropertyChanged += delegate {
+                SaveApplicationSettingsCommand.Execute(null);
+            };
         }
 
-
+        
         List<Hotkey> GetDefaultHotkeySet()
         {
             List<Hotkey> hotkeys = new List<Hotkey>();

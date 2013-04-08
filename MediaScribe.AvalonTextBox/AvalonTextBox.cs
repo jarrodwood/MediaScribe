@@ -497,7 +497,7 @@ namespace AvalonTextBox
 
         void AvalonTextBox_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            var matches = HotkeyManager.CheckHotkey(e);
+            var matches = SettingManager.CheckHotkey(e);
 
             if (null != matches && matches.Count > 0)
             {

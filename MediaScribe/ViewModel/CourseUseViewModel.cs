@@ -575,6 +575,65 @@ namespace JayDev.MediaScribe.ViewModel
 
         #endregion
 
+
+        #region FullscreenWindowSize
+
+        /// <summary>
+        /// The <see cref="FullscreenWindowSize" /> property's name.
+        /// </summary>
+        public const string FullscreenWindowSizePropertyName = "FullscreenWindowSize";
+
+        private System.Windows.Size _fullscreenWindowSize = System.Windows.Size.Empty;
+
+        /// <summary>
+        /// Sets and gets the FullscreenWindowSize property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public System.Windows.Size FullscreenWindowSize
+        {
+            get
+            {
+                return _fullscreenWindowSize;
+            }
+
+            set
+            {
+                if (_fullscreenWindowSize == value)
+                {
+                    return;
+                }
+
+                _fullscreenWindowSize = value;
+                RaisePropertyChanged(FullscreenWindowSizePropertyName);
+                //when the fullscreen window size property changes, we need to notify that the controlled fullscreen notes width property has changed too.
+                //this is because it's derived from the fullscreen window size property.
+                RaisePropertyChanged(ControlledFullscreenNotePanelWidthPropertyName);
+            }
+        }
+
+        #endregion
+
+        #region ControlledFullscreenNotesWidth
+
+        /// <summary>
+        /// The <see cref="ControlledFullscreenNotePanelWidth" /> property's name.
+        /// </summary>
+        public const string ControlledFullscreenNotePanelWidthPropertyName = "ControlledFullscreenNotePanelWidth";
+
+        /// <summary>
+        /// Sets and gets the ControlledFullscreenNotePanelWidth property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public double ControlledFullscreenNotePanelWidth
+        {
+            get
+            {
+                return Math.Min(FullscreenWindowSize.Width - Constants.MINIMUM_FULLSCREN_VIDEO_WIDTH, (double)SettingManager.ApplicationSettings.FullscreenNotePanelWidth);
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Commands
@@ -1022,6 +1081,13 @@ namespace JayDev.MediaScribe.ViewModel
             if (null == ThumbnailGenerator)
                 ThumbnailGenerator = new Core.ThumbnailGenerator();
 
+            //when the application settings change, ensure we're notified about it so that any derived
+            //properties can be updated too.
+            Messenger.Default.Register<ApplicationSettings>(this, MessageType.ApplicationSettingsChanged, (message) =>
+            {
+                RaisePropertyChanged(ControlledFullscreenNotePanelWidthPropertyName);
+            });
+
         }
 
         #endregion
@@ -1138,7 +1204,7 @@ namespace JayDev.MediaScribe.ViewModel
 
         public override void HandleWindowKeypress(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            var matches = HotkeyManager.CheckHotkey(e);
+            var matches = SettingManager.CheckHotkey(e);
 
             if (null != matches && matches.Count > 0)
             {
@@ -1215,7 +1281,8 @@ namespace JayDev.MediaScribe.ViewModel
                 _currentTrack.IsPlaying = false;
             }
 
-            if (_currentTrack != track)
+            if (_currentTrack != track
+                && true == SettingManager.ApplicationSettings.GenerateThumbnails)
             {
                 ThumbnailGenerator.Generate(track);
             }

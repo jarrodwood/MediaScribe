@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.SQLite;
+using System.Runtime.Serialization.Json;
+using System.IO;
 
 namespace JayDev.MediaScribe.Model
 {
@@ -67,5 +69,59 @@ namespace JayDev.MediaScribe.Model
                 mytransaction.Commit();
             }
         }
+
+        public ApplicationSettings GetApplicationSettings()
+        {
+            PrepareConnection();
+            ApplicationSettings settings;
+            using (SQLiteTransaction mytransaction = connection.BeginTransaction())
+            {
+                var allSettings = ReadAll<ApplicationSettings>(connection);
+                if (allSettings.Count > 1)
+                    throw new Exception("error - expecting only one 'Settings' database row.");
+
+                if (allSettings.Count == 0)
+                    return ApplicationSettings.GetDefaultSettings();
+
+                using (MemoryStream stream = new MemoryStream())
+                using (StreamWriter writer = new StreamWriter(stream))
+                {
+                    writer.Write(allSettings[0].SerializedData);
+                    writer.Flush();
+                    stream.Position = 0;
+                    DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(ApplicationSettings));
+                    settings = (ApplicationSettings)serializer.ReadObject(stream);
+                    //ensure we record the SettingID of the object read from the database... we're going to need it to make sure we don't add more than one row to the database.
+                    settings.ID = allSettings[0].ID;
+                }
+
+                mytransaction.Commit();
+            }
+
+            return settings;
+        }
+
+        public void SaveApplicationSettings(ApplicationSettings settings)
+        {
+            PrepareConnection();
+            using (SQLiteTransaction mytransaction = connection.BeginTransaction())
+            {
+                using (MemoryStream stream1 = new MemoryStream())
+                {
+                    DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(ApplicationSettings));
+
+                    serializer.WriteObject(stream1, settings);
+
+                    stream1.Position = 0;
+                    StreamReader sr = new StreamReader(stream1);
+                    settings.SerializedData = sr.ReadToEnd();
+                }
+
+                Save<ApplicationSettings>(settings, connection);
+
+                mytransaction.Commit();
+            }
+        }
+
     }
 }
