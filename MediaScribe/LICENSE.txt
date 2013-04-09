@@ -1,10 +1,12 @@
 -------------------
 MediaScribe
 -------------------
-MediaScribe is distributed under the GPL v3, contained later in this file.
+All MediaScribe sourcecode by Jarrod Wood is distributed under the GPL v3 license, contained later in this file.
+MediaScribe contains components covered by other licenses, each explained below.
+If you distribute or make changes to MediaScribe, you must ensure you respect the licenses of MediaScribe and all of its components.
+
 MediaScribe is Copyright (c) 2012-2013 Jarrod Wood
 MediaScribe is downloadable as both a pre-compiled binary and original source, from http://mediascribe.jarrod.co.nz/
-MediaScribe contains components distributed under other licenses, outlined below.
 
 
 -------------------
