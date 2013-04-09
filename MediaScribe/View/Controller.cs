@@ -136,28 +136,21 @@ namespace JayDev.MediaScribe.View
             //SelectionChanged is a routed event; we want to ignore any controls other than the tab control itself, which may be firing it.
             if (e.OriginalSource == this._tabControl)
             {
-                if (true == _tabControl.SuppressNextSelectedIndexChangeEvent)
+                e.Handled = true;
+                if (e.AddedItems.Count > 0)
                 {
-                    _tabControl.SuppressNextSelectedIndexChangeEvent = false;
-                }
-                else
-                {
-                    e.Handled = true;
-                    if (e.AddedItems.Count > 0)
+                    TabItem tabItem = e.AddedItems[0] as TabItem;
+                    if (tabItem.Content is CourseListView)
                     {
-                        TabItem tabItem = e.AddedItems[0] as TabItem;
-                        if (tabItem.Content is CourseListView)
-                        {
-                            Navigate(new NavigateArgs(NavigateMessage.ListCourses, TabChangeSource.User));
-                        }
-                        else if (tabItem.Content is SettingsView)
-                        {
-                            Navigate(new NavigateArgs(NavigateMessage.Settings, TabChangeSource.User));
-                        }
-                        else if (tabItem.Content is CourseUseView)
-                        {
-                            Navigate(new NavigateArgs(NavigateMessage.WriteCourseNotes, TabChangeSource.User));
-                        }
+                        Navigate(new NavigateArgs(NavigateMessage.ListCourses, TabChangeSource.User));
+                    }
+                    else if (tabItem.Content is SettingsView)
+                    {
+                        Navigate(new NavigateArgs(NavigateMessage.Settings, TabChangeSource.User));
+                    }
+                    else if (tabItem.Content is CourseUseView)
+                    {
+                        Navigate(new NavigateArgs(NavigateMessage.WriteCourseNotes, TabChangeSource.User));
                     }
                 }
             }
