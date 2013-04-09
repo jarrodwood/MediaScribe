@@ -41,7 +41,6 @@ namespace JayDev.MediaScribe.View
 
         private Sparkle _sparkle;
 
-
         public MainWindow()
         {
             InitializeComponent();
@@ -51,16 +50,20 @@ namespace JayDev.MediaScribe.View
 
             UnityContainer unityContainer = new UnityContainer();
             unityContainer.RegisterType<IController, Controller>(new ContainerControlledLifetimeManager());
+
+            //JDW NOTE: we need to set the data context BEFORE initializing the controller, since initialization
+            //will perform a navigation that we need to catch in mainwindow's viewmodel... but AFTER creating the
+            //the controller, since we need its reference inside the viewmodel.
+            this.DataContext = new WindowHeaderViewModel(unityContainer);
+
             IController controller = unityContainer.Resolve<IController>();
             //We need to register the controller with Unity, before calling the initialize method. this is why the the logic isn't housed
             //in the controller constructor.
             controller.Initialize(this, tabControl1, unityContainer);
 
             this.Loaded += new RoutedEventHandler(MainWindow_Loaded);
-
-            this.DataContext = new ViewModelBase(null);
-
         }
+
 
         /// <summary>
         /// Give the main window the aero 'glass' effect, if possible.

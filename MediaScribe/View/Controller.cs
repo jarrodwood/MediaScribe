@@ -30,12 +30,13 @@ namespace JayDev.MediaScribe.View
         private CourseUseViewModel courseUseViewModel;
         private CourseListViewModel courseListViewModel;
         private SettingsViewModel settingsViewModel;
+        private WindowHeaderViewModel windowHeaderViewModel;
 
         private ViewModelBase currentViewModel = null;
 
         private Dispatcher _currentDispatcher;
 
-        private Course _lastCourse;
+        public Course LastCourse { get; set; }
 
         private List<Course> _allCourses;
         public List<Course> AllCourses
@@ -91,6 +92,7 @@ namespace JayDev.MediaScribe.View
             courseListViewModel = new CourseListViewModel(courseRepo, unityContainer);
             SettingRepository settingsRepo = new SettingRepository();
             settingsViewModel = new SettingsViewModel(settingsRepo, unityContainer);
+            //windowHeaderViewModel = new WindowHeaderViewModel(unityContainer);
 
             //Set the contents of the tabs in the main window's tab control
             ((TabItem)_tabControl.Items[ApplicationTab.CourseList]).Content = new CourseListView(courseListViewModel);
@@ -98,7 +100,7 @@ namespace JayDev.MediaScribe.View
             ((TabItem)_tabControl.Items[ApplicationTab.WriteNotes]).Content = new CourseUseView(courseUseViewModel);
 
             //register the controller to receive application messages
-            Messenger.Default.Register<NavigateArgs>(this, MessageType.Navigate, (message) => Navigate(message));
+            Messenger.Default.Register<NavigateArgs>(this, MessageType.PerformNavigation, (message) => Navigate(message));
             Messenger.Default.Register<string>(this, "errors", (error) => MessageBox.Show(error));
 
             //ensure that we hook into the application closing event, so that we can tidy up anything that needs to be tidied up.
@@ -241,128 +243,129 @@ namespace JayDev.MediaScribe.View
 
         private void Navigate(NavigateArgs args)
         {
-            switch (args.Message)
+            try
             {
-                case NavigateMessage.ToggleFullscreen:
-                    if (_mainWindow.Visibility == Visibility.Visible)
-                    {
-                        currentViewModel = courseUseViewModel;
-
-                        if (null == _fullscreenWindow)
+                switch (args.Message)
+                {
+                    case NavigateMessage.ToggleFullscreen:
+                        if (_mainWindow.Visibility == Visibility.Visible)
                         {
-                            _fullscreenWindow = new BlankWindow();
-                            _fullscreenWindow.SizeChanged += (sizeChangedSender, sizeChangedArgs) =>
+                            currentViewModel = courseUseViewModel;
+
+                            if (null == _fullscreenWindow)
                             {
-                                courseUseViewModel.FullscreenWindowSize = sizeChangedArgs.NewSize;
-                            };
-                            _fullscreenWindow.Content = new FullscreenCourseView(courseUseViewModel);
-                            _fullscreenWindow.PreviewKeyDown += new KeyEventHandler(FullscreenWindow_KeyDown);
-                            ((FullscreenCourseView)_fullscreenWindow.Content).videoControl.AssociateVideoWithControl();
+                                _fullscreenWindow = new BlankWindow();
+                                _fullscreenWindow.SizeChanged += (sizeChangedSender, sizeChangedArgs) =>
+                                {
+                                    courseUseViewModel.FullscreenWindowSize = sizeChangedArgs.NewSize;
+                                };
+                                _fullscreenWindow.Content = new FullscreenCourseView(courseUseViewModel);
+                                _fullscreenWindow.PreviewKeyDown += new KeyEventHandler(FullscreenWindow_KeyDown);
+                                ((FullscreenCourseView)_fullscreenWindow.Content).videoControl.AssociateVideoWithControl();
+                            }
+                            else
+                            {
+                                ((FullscreenCourseView)_fullscreenWindow.Content).videoControl.AssociateVideoWithControl();
+                            }
+
+                            _fullscreenWindow.Visibility = Visibility.Visible;
+                            _mainWindow.Visibility = Visibility.Collapsed;
+
+                            if (_fullscreenWindow.WindowState == System.Windows.WindowState.Maximized)
+                            {
+                                //JDW: have to set winbdowState to normal first, otherwise WPF will still show the windows taskbar
+                                _fullscreenWindow.WindowState = System.Windows.WindowState.Normal;
+                            }
+                            _fullscreenWindow.WindowStyle = System.Windows.WindowStyle.None;
+                            _fullscreenWindow.WindowState = System.Windows.WindowState.Maximized;
+                            _fullscreenWindow.BringIntoView();
+                            _fullscreenWindow.Focus();
+
+
+                            IsFullscreen = true;
                         }
                         else
                         {
-                            ((FullscreenCourseView)_fullscreenWindow.Content).videoControl.AssociateVideoWithControl();
+                            _mainWindow.Visibility = Visibility.Visible;
+                            _fullscreenWindow.Visibility = Visibility.Collapsed;
+
+                            CourseUseView courseUseView = ((TabItem)_tabControl.Items[ApplicationTab.WriteNotes]).Content as CourseUseView;
+                            courseUseView.videoControl.AssociateVideoWithControl();
+
+                            currentViewModel = courseUseViewModel;
+
+                            //ensure that the mouse cursor is visible. this is a bit of a hack, since interacting with the win32 control is a
+                            //PITA... and if the cursor was hidden when we left fullscreen, it'll stay hidden until it moves back over the win32
+                            //control.
+                            Mouse.OverrideCursor = null;
+
+                            IsFullscreen = false;
                         }
-
-                        _fullscreenWindow.Visibility = Visibility.Visible;
-                        _mainWindow.Visibility = Visibility.Collapsed;
-
-                        if (_fullscreenWindow.WindowState == System.Windows.WindowState.Maximized)
+                        break;
+                    case NavigateMessage.WriteCourseNotes:
                         {
-                            //JDW: have to set winbdowState to normal first, otherwise WPF will still show the windows taskbar
-                            _fullscreenWindow.WindowState = System.Windows.WindowState.Normal;
+                            if (null != currentViewModel)
+                            {
+                                currentViewModel.LeavingViewModel();
+                            }
+                            CourseRepository courseRepo = new CourseRepository();
+                            if (null == args.Course && null == LastCourse)
+                            {
+                                if (null == AllCourses || AllCourses.Count == 0)
+                                {
+                                    MessageBox.Show(_mainWindow, "Please create a course, before going to the Write Notes section");
+                                    _tabControl.SelectedIndex = ApplicationTab.CourseList;
+                                    return;
+                                }
+                                LastCourse = AllCourses.First();
+                            }
+
+
+                            Course courseToLoad = null;
+                            if (null != args.Course)
+                            {
+                                courseToLoad = args.Course;
+                            }
+                            else if (null != LastCourse)
+                            {
+                                //the course is probably outdated... get a fresh copy.
+                                courseToLoad = _allCourses.First(x => x.ID == LastCourse.ID);
+                            }
+
+                            currentViewModel = courseUseViewModel;
+                            courseUseViewModel.SetCurrentCourse(courseToLoad);
+
+                            //note the last course we had viewed
+                            LastCourse = courseToLoad;
+
+                            currentViewModel.EnteringViewModel();
+                            _tabControl.SelectedIndex = ApplicationTab.WriteNotes;
                         }
-                        _fullscreenWindow.WindowStyle = System.Windows.WindowStyle.None;
-                        _fullscreenWindow.WindowState = System.Windows.WindowState.Maximized;
-                        _fullscreenWindow.BringIntoView();
-                        _fullscreenWindow.Focus();
-
-
-                        IsFullscreen = true;
-                    }
-                    else
-                    {
-                        _mainWindow.Visibility = Visibility.Visible;
-                        _fullscreenWindow.Visibility = Visibility.Collapsed;
-
-                        CourseUseView courseUseView = ((TabItem)_tabControl.Items[ApplicationTab.WriteNotes]).Content as CourseUseView;
-                        courseUseView.videoControl.AssociateVideoWithControl();
-
-                        currentViewModel = courseUseViewModel;
-
-                        //ensure that the mouse cursor is visible. this is a bit of a hack, since interacting with the win32 control is a
-                        //PITA... and if the cursor was hidden when we left fullscreen, it'll stay hidden until it moves back over the win32
-                        //control.
-                        Mouse.OverrideCursor = null;
-
-                        IsFullscreen = false;
-                    }
-                    break;
-                case NavigateMessage.WriteCourseNotes:
-                    {
+                        break;
+                    case NavigateMessage.ListCourses:
                         if (null != currentViewModel)
                         {
                             currentViewModel.LeavingViewModel();
                         }
-                        CourseRepository courseRepo = new CourseRepository();
-                        if (null == args.Course && null == _lastCourse)
-                        {
-                            if (null == AllCourses || AllCourses.Count == 0)
-                            {
-                                MessageBox.Show(_mainWindow, "Please create a course, before going to the Write Notes section");
-                                _tabControl.SelectedIndex = ApplicationTab.CourseList;
-                                return;
-                            }
-                            _lastCourse = AllCourses.First();
-                        }
-
-
-                        Course courseToLoad = null;
-                        if (null != args.Course)
-                        {
-                            courseToLoad = args.Course;
-                        }
-                        else if (null != _lastCourse)
-                        {
-                            //the course is probably outdated... get a fresh copy.
-                            courseToLoad = _allCourses.First(x => x.ID == _lastCourse.ID);
-                        }
-
-                        currentViewModel = courseUseViewModel;
-                        courseUseViewModel.SetCurrentCourse(courseToLoad);
-                        
-                        //note the last course we had viewed
-                        _lastCourse = courseToLoad;
+                        currentViewModel = courseListViewModel;
 
                         currentViewModel.EnteringViewModel();
-
-                        ThreadHelper.ExecuteAsyncUI(_currentDispatcher, delegate
+                        break;
+                    case NavigateMessage.Settings:
+                        if (null != currentViewModel)
                         {
-                            //we want to ensure that the Navigate logic doesn't get executed twice when we programmatically change the tab's
-                            //index.
-                            _tabControl.SuppressNextSelectedIndexChangeEvent = true;
-                            _tabControl.SelectedIndex = ApplicationTab.WriteNotes;
-                        });
-                    }
-                    break;
-                case NavigateMessage.ListCourses:
-                    if (null != currentViewModel)
-                    {
-                        currentViewModel.LeavingViewModel();
-                    }
-                    currentViewModel = courseListViewModel;
+                            currentViewModel.LeavingViewModel();
+                        }
+                        currentViewModel = settingsViewModel;
 
-                    currentViewModel.EnteringViewModel();
-                    break;
-                case NavigateMessage.Settings:
-                    if (null != currentViewModel)
-                    {
-                        currentViewModel.LeavingViewModel();
-                    }
-                    currentViewModel = settingsViewModel;
-
-                    currentViewModel.EnteringViewModel();
-                    break;
+                        currentViewModel.EnteringViewModel();
+                        break;
+                }
+            }
+            finally
+            {
+                //notify whoever's interested that navigation has been performed
+                Messenger.Default.Send<NavigateMessage>(args.Message, MessageType.NavigationPerformed);
             }
         }
 

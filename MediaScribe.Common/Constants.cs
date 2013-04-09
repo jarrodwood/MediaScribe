@@ -22,7 +22,7 @@ namespace JayDev.MediaScribe.Common
     /// <summary>
     /// Typesafe enum of the allowed asynchronous application messages
     /// </summary>
-    public enum MessageType { Navigate, SetFullscreenMode, ApplicationSettingsChanged }
+    public enum MessageType { PerformNavigation, NavigationPerformed, SetFullscreenMode, ApplicationSettingsChanged, SaveCourseAndExportToExcel }
 
     public enum NavigateMessage { ToggleFullscreen, ListCourses, WriteCourseNotes, ReviewCourseNotes, Settings }
 

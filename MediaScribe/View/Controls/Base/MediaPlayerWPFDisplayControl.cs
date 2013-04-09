@@ -209,7 +209,7 @@ namespace JayDev.MediaScribe.View.Controls
             if (msg == (int)WM_Messages.WM_LBUTTONDBLCLK)
             {
                 Logging.Log(LoggingSource.MPlayerWindow, "double-click in video panel");
-                Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen, TabChangeSource.Application), MessageType.Navigate);
+                Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen, TabChangeSource.Application), MessageType.PerformNavigation);
 
                 //JDW: have to set it to handled, otherwise it fires the event twice.
                 handled = true;

@@ -58,7 +58,7 @@ namespace JayDev.MediaScribe.View
 
         void FullscreenCourseView_KeyDown(object sender, KeyEventArgs e)
         {
-            Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen, TabChangeSource.Application), MessageType.Navigate);
+            Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen, TabChangeSource.Application), MessageType.PerformNavigation);
         }
 
         private void SendShowMessage(ShowMessage message)

@@ -4,6 +4,7 @@
     xmlns:shell="http://schemas.microsoft.com/winfx/2006/xaml/presentation/shell"
     xmlns:local="clr-namespace:JayDev.MediaScribe.View"
     xmlns:nmControls="clr-namespace:JayDev.MediaScribe.View.Controls"
+    xmlns:nmConverters="clr-namespace:JayDev.MediaScribe.Converters"
     WindowState="Maximized" 
         Name="MainWindowName" Background="Transparent"
         Title="{Binding ElementName=MainWindowName, Path=DefaultTitle}" Height="300" Width="679"  Icon="/MediaScribe;component/Images/Letter%20M%20blue%2032.png">
@@ -148,8 +149,12 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
-        
+
+        <nmConverters:BooleanToVisibilityConverter 
+                x:Key="BooleanToVisibilityConverterTrueIsVisible" 
+                True="Visible" 
+                False="Hidden" />
+
     </Window.Resources>
     <Grid>
 
@@ -166,9 +171,18 @@
                 <Grid />
             </TabItem>
         </nmControls:MediaScribeMainTabControl>
-
-        <nmControls:NavigationButton Margin="00 0 3 0" MySource="/MediaScribe;component/Images/info32.png" Height="22" Width="22" HorizontalAlignment="Right" VerticalAlignment="Top"
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <nmControls:NavigationButton Margin="00 0 3 0" MySource="/MediaScribe;component/Images/export_2.png"
+                                         Command="{Binding ExportExcelCommand}"
+                                         ToolTip="Export notes to Excel"
+                                         Visibility="{Binding IsWritingNotes, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisible}}"/>
+            <nmControls:NavigationButton Margin="00 0 3 0" MySource="/MediaScribe;component/Images/expand.png"
+                                         Command="{Binding ToggleFullscreenCommand}"
+                                         ToolTip="Go Fullscreen Mode"
+                                         Visibility="{Binding IsWritingNotes, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisible}}"/>
+        <nmControls:NavigationButton Margin="00 0 3 0" MySource="/MediaScribe;component/Images/info32.png"
                                                                 Command="{Binding ShowAboutDialog}"
                                                                 ToolTip="About" />
+        </StackPanel>
     </Grid>
 </Window>

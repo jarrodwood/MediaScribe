@@ -10,6 +10,8 @@ namespace JayDev.MediaScribe.View
     {
         List<Course> AllCourses { get; }
 
+        Course LastCourse { get; }
+
         void Initialize(MainWindow mainWindow, JayDev.MediaScribe.View.Controls.MediaScribeMainTabControl tabControl, UnityContainer unityContainer);
 
         void UpdateCourseInMemory(Course course);

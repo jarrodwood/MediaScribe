@@ -7,7 +7,7 @@
              xmlns:nmControls="clr-namespace:JayDev.MediaScribe.View.Controls"
              mc:Ignorable="d" 
              x:Name="NavigationButtonName"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="50" d:DesignWidth="50">
 <UserControl.Resources>
     <Style x:Key="ChangeMyFonts" TargetType="{x:Type TextBlock}">
         <Setter Property="FontSize" Value="11" />
@@ -54,8 +54,7 @@
         </ControlTemplate>
 
     </UserControl.Resources>
-    <Grid VerticalAlignment="Stretch">
-        <Button x:Name="myButton" Template="{StaticResource buttonTemplateWithNoWhiteBorder}" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" Command="{Binding ElementName=NavigationButtonName, Path=Command}" CommandParameter="{Binding ElementName=NavigationButtonName, Path=CommandParameter}">
+        <Button VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="myButton" Template="{StaticResource buttonTemplateWithNoWhiteBorder}" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" Command="{Binding ElementName=NavigationButtonName, Path=Command}" CommandParameter="{Binding ElementName=NavigationButtonName, Path=CommandParameter}">
             <Button.Style>
                 <Style TargetType="{x:Type Button}">
                     <Style.Triggers>
@@ -65,14 +64,10 @@
                     </Style.Triggers>
                 </Style>
             </Button.Style>
-            <StackPanel>
-                <Image x:Name="myImage" Source="{Binding ElementName=NavigationButtonName, Path=MySource, Mode=TwoWay}" Height="16" Width="16">
+        <Image VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="myImage" Stretch="UniformToFill" Height="16" Width="16" Source="{Binding ElementName=NavigationButtonName, Path=MySource, Mode=OneWay}">
                     <Image.Effect>
                         <effect:GrayscaleEffect DesaturationFactor="{Binding ElementName=myButton, Path=IsEnabled}"/>
                     </Image.Effect>
                 </Image>
-                <!--<TextBlock Style="{StaticResource ChangeMyFonts}" Margin="0 5 0 0" HorizontalAlignment="Center" TextAlignment="Center" Text="{Binding ElementName=NavigationButtonName, Path=Text}" LineHeight="8pt" LineStackingStrategy="BlockLineHeight" TextOptions.TextFormattingMode="Display" />-->
-            </StackPanel>
         </Button>
-    </Grid>
 </UserControl>

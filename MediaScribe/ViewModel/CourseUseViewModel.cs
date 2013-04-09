@@ -40,18 +40,6 @@ namespace JayDev.MediaScribe.ViewModel
 
         #region Public Properties & Backing Fields
 
-        #region CurrentPage
-
-        public NavigateMessage CurrentPage
-        {
-            get
-            {
-                return NavigateMessage.WriteCourseNotes;
-            }
-        }
-
-        #endregion
-
         #region Notes
 
         private ObservableCollection<Note> _notes;
@@ -814,24 +802,6 @@ namespace JayDev.MediaScribe.ViewModel
                                           {
                                               context.StartTrackNumber = _currentTrack.TrackNumber;
                                               context.StartTime = CurrentTrackPlayPosition;
-
-                                              ////NOTE: if we already have a 'start' tracktime, don't replace it - update it. this is to save
-                                              ////us NHibernate pain
-                                              //if (null == context.Start)
-                                              //{
-                                              //    context.Start = new TrackTime()
-                                              //    {
-                                              //        Track = _currentTrack,
-                                              //        Time = CurrentTrackPlayPosition,
-                                              //        ParentCourse = _currentCourse
-                                              //    };
-                                              //}
-                                              //else
-                                              //{
-                                              //    context.Start.Track = _currentTrack;
-                                              //    context.Start.Time = CurrentTrackPlayPosition;
-                                              //    context.Start.ParentCourse = _currentCourse;
-                                              //}
                                           },
                                           (Note context) => true));
             }
@@ -972,7 +942,7 @@ namespace JayDev.MediaScribe.ViewModel
                     ?? (_toggleFullscreenCommand = new RelayCommand(
                                           () =>
                                           {
-                                              Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen, TabChangeSource.Application), MessageType.Navigate);
+                                              Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen, TabChangeSource.Application), MessageType.PerformNavigation);
                                           },
                                           () => true
                     //{
@@ -995,7 +965,7 @@ namespace JayDev.MediaScribe.ViewModel
                     ?? (_navigateCommand = new RelayCommand<NavigateMessage>(
                                           (NavigateMessage message) =>
                                           {
-                                              Messenger.Default.Send(new NavigateArgs(message, _currentCourse, TabChangeSource.Application), MessageType.Navigate);
+                                              Messenger.Default.Send(new NavigateArgs(message, _currentCourse, TabChangeSource.Application), MessageType.PerformNavigation);
                                           }));
             }
         }
@@ -1086,6 +1056,11 @@ namespace JayDev.MediaScribe.ViewModel
             Messenger.Default.Register<ApplicationSettings>(this, MessageType.ApplicationSettingsChanged, (message) =>
             {
                 RaisePropertyChanged(ControlledFullscreenNotePanelWidthPropertyName);
+            });
+
+            Messenger.Default.Register<string>(this, MessageType.SaveCourseAndExportToExcel, (message) => {
+                SaveCourse();
+                ExportCourseToExcel(_currentCourse);
             });
 
         }
@@ -1213,7 +1188,7 @@ namespace JayDev.MediaScribe.ViewModel
                     switch (match.Function)
                     {
                         case HotkeyFunction.ToggleFullscreen:
-                            Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen, TabChangeSource.Application), MessageType.Navigate);
+                            Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen, TabChangeSource.Application), MessageType.PerformNavigation);
                             e.Handled = true;
                             break;
                         case HotkeyFunction.TogglePause:

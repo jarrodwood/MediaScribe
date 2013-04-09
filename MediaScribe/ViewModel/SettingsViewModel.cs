@@ -88,7 +88,7 @@ namespace JayDev.MediaScribe.ViewModel
                                           (NavigateMessage message) =>
                                           {
                                               //JDW: if we're navigating from the list view, we have no context course.
-                                              Messenger.Default.Send(new NavigateArgs(message, TabChangeSource.Application), MessageType.Navigate);
+                                              Messenger.Default.Send(new NavigateArgs(message, TabChangeSource.Application), MessageType.PerformNavigation);
                                           }));
             }
         }
@@ -333,14 +333,6 @@ namespace JayDev.MediaScribe.ViewModel
             }
         }
 
-        public NavigateMessage CurrentPage
-        {
-            get
-            {
-                return NavigateMessage.Settings;
-            }
-        }
-
         #endregion
 
         #region Constructor
@@ -360,7 +352,8 @@ namespace JayDev.MediaScribe.ViewModel
             };
         }
 
-        
+        #endregion
+
         List<Hotkey> GetDefaultHotkeySet()
         {
             List<Hotkey> hotkeys = new List<Hotkey>();
@@ -387,7 +380,5 @@ namespace JayDev.MediaScribe.ViewModel
 
             return hotkeys;
         }
-
-        #endregion
     }
 }

@@ -121,6 +121,7 @@
     <Compile Include="Core\NavigationHelper.cs" />
     <Compile Include="Core\ThumbnailGenerator.cs" />
     <Compile Include="ViewModel\AboutViewModel.cs" />
+    <Compile Include="ViewModel\WindowHeaderViewModel.cs" />
     <Compile Include="View\Controls\MediaScribeMainTabControl.cs" />
     <Compile Include="Domain\Hotkey.cs" />
     <Compile Include="Model\CourseRepositorySqlite.cs" />
@@ -489,6 +490,10 @@
     <Resource Include="Letter M blue.ico" />
     <Resource Include="Images\throbber.gif" />
     <Resource Include="appcast.xml" />
+    <Resource Include="Images\expand.png" />
+    <Resource Include="Images\export.png" />
+    <Resource Include="Images\export_1.png" />
+    <Resource Include="Images\export_2.png" />
     <Content Include="LICENSE.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

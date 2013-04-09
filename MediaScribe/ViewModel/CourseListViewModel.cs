@@ -39,7 +39,7 @@ namespace JayDev.MediaScribe.ViewModel
                                           (NavigateMessage message) =>
                                           {
                                               //JDW: if we're navigating from the list view, we have no context course.
-                                              Messenger.Default.Send(new NavigateArgs(message, TabChangeSource.Application), MessageType.Navigate);
+                                              Messenger.Default.Send(new NavigateArgs(message, TabChangeSource.Application), MessageType.PerformNavigation);
                                           }));
             }
         }
@@ -335,7 +335,7 @@ namespace JayDev.MediaScribe.ViewModel
                                               //ensure that an item is selected first.
                                               if (null != SelectedCourse)
                                               {
-                                                  Messenger.Default.Send(new NavigateArgs(NavigateMessage.WriteCourseNotes, SelectedCourse, TabChangeSource.Application), MessageType.Navigate);
+                                                  Messenger.Default.Send(new NavigateArgs(NavigateMessage.WriteCourseNotes, SelectedCourse, TabChangeSource.Application), MessageType.PerformNavigation);
                                               }
                                           }));
             }
@@ -410,45 +410,7 @@ namespace JayDev.MediaScribe.ViewModel
                     ?? (_exportExcelCommand = new RelayCommand(
                                           () =>
                                           {
-                                              
-                                              //TODO: refactor so we don't use dialogs in viewmodels
-                                              Microsoft.Win32.SaveFileDialog saveFileDialog1 = new Microsoft.Win32.SaveFileDialog();
-                                              saveFileDialog1.OverwritePrompt = true;
-                                              saveFileDialog1.RestoreDirectory = true;
-                                              saveFileDialog1.DefaultExt = "xslx";
-                                              // Adds a extension if the user does not
-                                              saveFileDialog1.AddExtension = true;
-                                              saveFileDialog1.InitialDirectory = Convert.ToString(Environment.SpecialFolder.MyDocuments);
-                                              saveFileDialog1.Filter = "Excel Spreadsheet|*.xlsx";
-                                              saveFileDialog1.FileName = string.Format("Exported Notes for {0} - {1}.xlsx", SelectedCourse.Name, DateTime.Now.ToString("dd-MM-yyyy HH.mm.ss"));
-                                              saveFileDialog1.Title = "Save Exported Notes";
-
-                                              if (saveFileDialog1.ShowDialog() == true)
-                                              {
-                                                  try
-                                                  {
-                                                      using (System.IO.FileStream fs = (System.IO.FileStream)saveFileDialog1.OpenFile())
-                                                      {
-                                                          XslsExporter exporter = new XslsExporter();
-                                                          exporter.CreateSpreadsheet(fs, SelectedCourse.Tracks.ToList(), SelectedCourse.Notes.ToList());
-
-                                                          fs.Close();
-                                                      }
-
-                                                      var openResult = System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Export successful! Would you like to open the file?", "Open exported file confirmation", System.Windows.MessageBoxButton.YesNo);
-                                                      if (openResult == System.Windows.MessageBoxResult.Yes)
-                                                      {
-                                                          System.Diagnostics.ProcessStartInfo info = new System.Diagnostics.ProcessStartInfo();
-                                                          info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Maximized;
-                                                          info.FileName = saveFileDialog1.FileName;
-                                                          var process = System.Diagnostics.Process.Start(info);
-                                                      }
-                                                  }
-                                                  catch (Exception e)
-                                                  {
-                                                      System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Error exporting :( - " + e.ToString());
-                                                  }
-                                              }
+                                              ExportCourseToExcel(SelectedCourse);
                                           }));
             }
         }
@@ -506,14 +468,6 @@ namespace JayDev.MediaScribe.ViewModel
         #endregion
 
         #region Notified Properties
-
-        public NavigateMessage CurrentPage
-        {
-            get
-            {
-                return NavigateMessage.ListCourses;
-            }
-        }
 
         #region Courses
 
