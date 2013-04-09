@@ -494,7 +494,7 @@
     <Resource Include="Images\export.png" />
     <Resource Include="Images\export_1.png" />
     <Resource Include="Images\export_2.png" />
-    <Content Include="LICENSE.txt">
+    <Content Include="..\LICENSE.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="log4netoff.xml">
