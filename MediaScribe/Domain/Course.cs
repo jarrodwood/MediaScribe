@@ -29,8 +29,6 @@ namespace JayDev.MediaScribe
 
         public int? LastPlayedTrackID { get; set; }
         [DataMember]
-        public Track LastPlayedTrack { get; set; }
-        [DataMember]
         public TimeSpan LastPlayedTrackPosition { get; set; }
 
         public DateTime DateCreated { get; set; }

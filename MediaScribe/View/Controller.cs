@@ -34,7 +34,7 @@ namespace JayDev.MediaScribe.View
 
         private ViewModelBase currentViewModel = null;
 
-        private Dispatcher _currentDispatcher;
+        private Dispatcher _uiDispatcher;
 
         public Course LastCourse { get; set; }
 
@@ -74,7 +74,7 @@ namespace JayDev.MediaScribe.View
             //TODO
 
             //Note the UI dispatcher
-            _currentDispatcher = Dispatcher.CurrentDispatcher;
+            _uiDispatcher = Dispatcher.CurrentDispatcher;
 
             //Due to mplayer being an external process and has no way of telling when /this/ application closes, if MediaScribe is killed
             //old mplayer.exe processes can remain hanging around. So we should try to see if this has happened, and kill the old instances.
@@ -126,33 +126,6 @@ namespace JayDev.MediaScribe.View
             if (false == loadedLastCourse)
             {
                 Navigate(new NavigateArgs(NavigateMessage.ListCourses, TabChangeSource.Application));
-            }
-
-            _tabControl.SelectionChanged += new SelectionChangedEventHandler(_tabControl_SelectionChanged);
-        }
-
-        void _tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //SelectionChanged is a routed event; we want to ignore any controls other than the tab control itself, which may be firing it.
-            if (e.OriginalSource == this._tabControl)
-            {
-                e.Handled = true;
-                if (e.AddedItems.Count > 0)
-                {
-                    TabItem tabItem = e.AddedItems[0] as TabItem;
-                    if (tabItem.Content is CourseListView)
-                    {
-                        Navigate(new NavigateArgs(NavigateMessage.ListCourses, TabChangeSource.User));
-                    }
-                    else if (tabItem.Content is SettingsView)
-                    {
-                        Navigate(new NavigateArgs(NavigateMessage.Settings, TabChangeSource.User));
-                    }
-                    else if (tabItem.Content is CourseUseView)
-                    {
-                        Navigate(new NavigateArgs(NavigateMessage.WriteCourseNotes, TabChangeSource.User));
-                    }
-                }
             }
         }
 
@@ -234,8 +207,13 @@ namespace JayDev.MediaScribe.View
 
         public bool IsFullscreen { get; private set; }
 
+        private NavigateMessage? _currentNavigateState;
+
         private void Navigate(NavigateArgs args)
         {
+            if (null != _currentNavigateState && args.Message == _currentNavigateState.Value)
+                return;
+
             try
             {
                 switch (args.Message)
@@ -307,7 +285,7 @@ namespace JayDev.MediaScribe.View
                                 if (null == AllCourses || AllCourses.Count == 0)
                                 {
                                     MessageBox.Show(_mainWindow, "Please create a course, before going to the Write Notes section");
-                                    _tabControl.SelectedIndex = ApplicationTab.CourseList;
+                                    SetTab(ApplicationTab.CourseList);
                                     return;
                                 }
                                 LastCourse = AllCourses.First();
@@ -332,7 +310,7 @@ namespace JayDev.MediaScribe.View
                             LastCourse = courseToLoad;
 
                             currentViewModel.EnteringViewModel();
-                            _tabControl.SelectedIndex = ApplicationTab.WriteNotes;
+                            SetTab(ApplicationTab.WriteNotes);
                         }
                         break;
                     case NavigateMessage.ListCourses:
@@ -343,6 +321,7 @@ namespace JayDev.MediaScribe.View
                         currentViewModel = courseListViewModel;
 
                         currentViewModel.EnteringViewModel();
+                        SetTab(ApplicationTab.CourseList);
                         break;
                     case NavigateMessage.Settings:
                         if (null != currentViewModel)
@@ -352,14 +331,24 @@ namespace JayDev.MediaScribe.View
                         currentViewModel = settingsViewModel;
 
                         currentViewModel.EnteringViewModel();
+                        SetTab(ApplicationTab.Settings);
                         break;
                 }
             }
             finally
             {
+                _currentNavigateState = args.Message;
                 //notify whoever's interested that navigation has been performed
                 Messenger.Default.Send<NavigateMessage>(args.Message, MessageType.NavigationPerformed);
             }
+        }
+
+        private void SetTab(int index)
+        {
+            ThreadHelper.ExecuteAsyncUI(_uiDispatcher, delegate
+            {
+                _tabControl.SelectedIndex = index;
+            });
         }
 
         /// <summary>

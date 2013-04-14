@@ -4,6 +4,10 @@
     xmlns:shell="http://schemas.microsoft.com/winfx/2006/xaml/presentation/shell"
     xmlns:local="clr-namespace:JayDev.MediaScribe.View"
     xmlns:nmControls="clr-namespace:JayDev.MediaScribe.View.Controls"
+    xmlns:nmCommon="clr-namespace:JayDev.MediaScribe.Common;assembly=MediaScribe.Common"
+            xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"        
+    xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
+
     xmlns:nmConverters="clr-namespace:JayDev.MediaScribe.Converters"
     WindowState="Maximized" 
         Name="MainWindowName" Background="Transparent"
@@ -159,15 +163,42 @@
     <Grid>
 
         <nmControls:MediaScribeMainTabControl x:Name="tabControl1" Padding="0">
-            <TabItem Header="Course List" Name="tabCourseList">
+            <TabItem Name="tabCourseList">
+                <TabItem.Header>
+                    <Label Content="Course List">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                <cmd:EventToCommand Command="{Binding NavigateCommand}" CommandParameter="{x:Static nmCommon:NavigateMessage.ListCourses}"  />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Label>
+                </TabItem.Header>
             </TabItem>
-            <TabItem Header="Settings" Name="tabSettings">
+            <TabItem Name="tabSettings">
+                <TabItem.Header>
+                    <Label Content="Settings">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                <cmd:EventToCommand Command="{Binding NavigateCommand}" CommandParameter="{x:Static nmCommon:NavigateMessage.Settings}"  />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Label>
+                </TabItem.Header>
                 <Grid />
             </TabItem>
             <!--<TabItem Header="Import/Export" Name="tabImportExport">
                 <Grid />
             </TabItem>-->
-            <TabItem Header="Write Notes" Name="tabNotes">
+            <TabItem Name="tabNotes">
+                <TabItem.Header>
+                    <Label Content="Write Notes">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                <cmd:EventToCommand Command="{Binding NavigateCommand}" CommandParameter="{x:Static nmCommon:NavigateMessage.WriteCourseNotes}"  />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Label>
+                </TabItem.Header>
                 <Grid />
             </TabItem>
         </nmControls:MediaScribeMainTabControl>

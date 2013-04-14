@@ -84,7 +84,7 @@
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
 
 
-                                        <Button Focusable="False" Style="{StaticResource minusButtonStyle}"  Command="{Binding DeleteCourseCommand}" CommandParameter="{x:Static nmCommon:NavigateMessage.ListCourses}">
+                                        <Button Focusable="False" Style="{StaticResource minusButtonStyle}"  Command="{Binding DeleteCourseCommand}">
                                             <Path Data="M0,0 L70,0 99,0 99,41 70,41 0,41 z" Margin="0 0 0 0" Stretch="Uniform" Width="13.5" Height="5" Style="{DynamicResource minusStyle}"/>
                                         </Button>
 

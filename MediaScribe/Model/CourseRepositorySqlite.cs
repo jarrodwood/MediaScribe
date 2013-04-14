@@ -26,7 +26,6 @@ namespace JayDev.MediaScribe.Model
                         List<Note> notes = ReadAll<Note>(connection);
 
                         List<Track> tracks = ReadAll<Track>(connection);
-                        Dictionary<int, Track> tracksByNumber = tracks.ToDictionary(x => x.TrackNumber.Value);
 
                         foreach (var note in notes)
                         {
@@ -40,6 +39,12 @@ namespace JayDev.MediaScribe.Model
                             Course parentCourse = coursesByID[track.ParentCourseID];
                             track.ParentCourse = parentCourse;
                             parentCourse.Tracks.Add(track);
+                        }
+
+                        //sort the courses' track collection by track number
+                        foreach (Course course in courses)
+                        {
+                            course.Tracks.Sort((x, y) => x.TrackNumber.Value.CompareTo(y.TrackNumber.Value));
                         }
                     }
                 mytransaction.Commit();

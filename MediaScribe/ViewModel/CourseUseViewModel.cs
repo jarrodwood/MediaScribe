@@ -919,6 +919,9 @@ namespace JayDev.MediaScribe.ViewModel
                     ?? (_selectTrackCommand = new RelayCommand<Track>(
                                           (Track track) =>
                                           {
+                                              if (null == track)
+                                                  return;
+
                                               int trackIndex = Tracks.IndexOf(track);
                                               PlayFile(Tracks.ToList(), trackIndex, TimeSpan.Zero, false);
                                           }));
@@ -952,24 +955,6 @@ namespace JayDev.MediaScribe.ViewModel
             }
         }
 
-        #endregion
-
-        #region NavigateCommand
-
-        private RelayCommand<NavigateMessage> _navigateCommand;
-        public RelayCommand<NavigateMessage> NavigateCommand
-        {
-            get
-            {
-                return _navigateCommand
-                    ?? (_navigateCommand = new RelayCommand<NavigateMessage>(
-                                          (NavigateMessage message) =>
-                                          {
-                                              Messenger.Default.Send(new NavigateArgs(message, _currentCourse, TabChangeSource.Application), MessageType.PerformNavigation);
-                                          }));
-            }
-        }
-        
         #endregion
 
         #region NotesLoadedCommand
@@ -1314,7 +1299,7 @@ namespace JayDev.MediaScribe.ViewModel
             }
             _currentCourse.EmbeddedVideoHeight = LastEmbeddedVideoHeight;
             _currentCourse.EmbeddedVideoWidth = LastEmbeddedVideoWidth;
-            _currentCourse.LastPlayedTrack = _currentTrack;
+            _currentCourse.LastPlayedTrackID = _currentTrack.ID;
             _currentCourse.LastPlayedTrackPosition = _currentTrackPlayPosition;
             _currentCourse.DateViewed = DateTime.Now;
             _currentCourse.Notes = Notes.ToList();
@@ -1343,14 +1328,26 @@ namespace JayDev.MediaScribe.ViewModel
             if (MediaPlayerWPFDisplayControl.Instance.IsVideoPanelInitialized)
             {
                 //auto-load the appropriate file
-                if (null != _currentCourse.LastPlayedTrack)
+                if (null != _currentCourse.LastPlayedTrackID)
                 {
                     //JDW: track may have been removed
-                    if (_currentCourse.Tracks.Any(x => x.FilePath == _currentCourse.LastPlayedTrack.FilePath))
+                    int trackIndex = _currentCourse.Tracks.FindIndex(x => x.ID == _currentCourse.LastPlayedTrackID);
+
+                    //since we haven't found the track, there's clearly an issue. log it. set the initial track
+                    //to be the first... but if there are no tracks, simply exit out of there.
+                    if (trackIndex == -1)
                     {
-                        int trackIndex = _currentCourse.Tracks.IndexOf(_currentCourse.LastPlayedTrack);
-                        PlayFile(_currentCourse.Tracks, trackIndex, _currentCourse.LastPlayedTrackPosition, true);
+                        Logging.Log(LoggingSource.Errors, "SetInitialTrack - track not found??");
+
+                        if (_currentCourse.Tracks.Count == 0)
+                        {
+                            return;
+                        }
+
+                        trackIndex = 0;
                     }
+
+                    PlayFile(_currentCourse.Tracks, trackIndex, _currentCourse.LastPlayedTrackPosition, true);
                 }
             }
         }

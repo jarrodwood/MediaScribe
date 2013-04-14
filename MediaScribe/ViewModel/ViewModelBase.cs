@@ -13,6 +13,7 @@ using Microsoft.Practices.Unity;
 using JayDev.MediaScribe.View;
 using JayDev.MediaScribe.Common;
 using JayDev.MediaScribe.Core;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace JayDev.MediaScribe.ViewModel
 {
@@ -55,6 +56,26 @@ namespace JayDev.MediaScribe.ViewModel
                                           }));
             }
         }
+        
+        #region NavigateCommand
+
+        private RelayCommand<NavigateMessage> _navigateCommand;
+        public RelayCommand<NavigateMessage> NavigateCommand
+        {
+            get
+            {
+                return _navigateCommand
+                    ?? (_navigateCommand = new RelayCommand<NavigateMessage>(
+                                          (NavigateMessage message) =>
+                                          {
+                                              //JDW: if we're navigating from the list view, we have no context course.
+                                              Messenger.Default.Send(new NavigateArgs(message, TabChangeSource.Application), MessageType.PerformNavigation);
+                                          }));
+            }
+        }
+
+        #endregion
+
 
         public ViewModelBase(UnityContainer unityContainer) : base()
         {
