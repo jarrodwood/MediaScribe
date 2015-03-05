@@ -130,7 +130,7 @@ namespace JayDev.MediaScribe.View
                         case HotkeyFunction.NoteSetStartTime:
                             if (IsVisible)
                             {
-                                Note currentNote = notesGrid.CurrentNote;
+                                Note currentNote = notesGrid.CurrentSelectedNote;
                                 bool isDirty = currentNote.IsDirty;
                                 if (false == isDirty)
                                 {
@@ -148,7 +148,7 @@ namespace JayDev.MediaScribe.View
                         case HotkeyFunction.NoteRating:
                             if (IsVisible)
                             {
-                                Note currentNote = notesGrid.CurrentNote;
+                                Note currentNote = notesGrid.CurrentSelectedNote;
                                 bool isDirty = currentNote.IsDirty;
                                 if (false == isDirty)
                                 {
@@ -176,10 +176,10 @@ namespace JayDev.MediaScribe.View
                                 //if it's not the placeholder row, get delete confirmation, and delete the note.
                                 if (notesGrid.noteDataGrid.SelectedItem.ToString() != Constants.NEW_ITEM_PLACEHOLDER_NAME)
                                 {
-                                    MessageBoxResult result = MessageBox.Show("Are you sure you wish to delete the note?");
-                                    if (result == MessageBoxResult.OK)
+                                    MessageBoxResult result = MessageBox.Show("Are you sure you wish to delete the note?", "Note deletion confirmation", MessageBoxButton.YesNo);
+                                    if (result == MessageBoxResult.Yes)
                                     {
-                                        Note currentNote = notesGrid.CurrentNote;
+                                        Note currentNote = notesGrid.CurrentSelectedNote;
                                         notesGrid.DeleteSelectedNote.Execute(currentNote);
                                     }
                                 }

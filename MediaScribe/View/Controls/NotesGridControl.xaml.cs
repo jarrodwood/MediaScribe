@@ -30,7 +30,7 @@ namespace JayDev.MediaScribe.View.Controls
         Dispatcher _uiDispatcher;
 
 
-        public Note CurrentNote { get { return (Note)noteDataGrid.SelectedItem; } }
+        public Note CurrentSelectedNote { get { return (Note)noteDataGrid.SelectedItem; } }
 
 
         public bool IsLoaded { get { return noteDataGrid.IsLoaded; } }
@@ -363,7 +363,10 @@ namespace JayDev.MediaScribe.View.Controls
             //TODO: change logic to execute on textbox content change (i.e. when they hit a key), rather than size change. This will be
             //      a lot more sensible, but more expensive to implement and i'll have to figure out just /how much/ more later.
             noteDataGrid.UpdateLayout();
-            noteDataGrid.ScrollIntoView(noteDataGrid.Items[noteDataGrid.Items.Count - 1]);
+            
+            //year 2015, was: noteDataGrid.ScrollIntoView(noteDataGrid.Items[noteDataGrid.Items.Count - 1]);
+            //but the problem was, it didn't work for editing cells in high pages, only the bottom one.
+            noteDataGrid.ScrollIntoView(noteDataGrid.CurrentCell.Item);
         }
     }
 }

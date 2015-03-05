@@ -211,7 +211,10 @@ namespace JayDev.MediaScribe.View
 
         private void Navigate(NavigateArgs args)
         {
-            if (null != _currentNavigateState && args.Message == _currentNavigateState.Value)
+            //if we've already navigated to the view we want, don't do anything
+            //NOTE: this doesn't apply to toggle fullscreen.
+            if (args.Message != NavigateMessage.ToggleFullscreen
+                && (null != _currentNavigateState && args.Message == _currentNavigateState.Value))
                 return;
 
             try

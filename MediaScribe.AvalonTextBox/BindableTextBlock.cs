@@ -35,6 +35,7 @@ namespace AvalonTextBox
                         }
                         else
                         {
+
                             textBlock.Text = null;
                             textBlock.FontStyle = FontStyles.Normal;
                             textBlock.Opacity = 1;

@@ -33,13 +33,14 @@
                                                        PlayNoteCommand="{Binding PlayNoteCommand}"
                                                        SetNoteStartTimeCommand="{Binding SetNoteStartTimeCommand}"
                                                        NoteEditCompletedCommand="{Binding NoteEditCompletedCommand}"/>
-
+        <!-- TODO: reenable autohide controls! -->
         <MediaScribeControl:VideoControl  x:Name="videoControl"
                                                            VideoPanelPointer="{Binding VideoPanelPointer, Mode=OneWayToSource}"
                                                            AspectRatio="{Binding CurrentTrackVideoAspectRatio}"
                                                            IsShowingVideo="{Binding IsCurrentTrackVideo}"
                                                            PlayPauseCommand="{Binding ToggleFullscreenCommand}"
-                                                           EnableAutohideControls="True"/>
+                                                           EnableAutohideControls="False"/>
+       
         
     </DockPanel>
 </UserControl>

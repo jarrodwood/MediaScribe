@@ -219,6 +219,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_8CAEA67739B30179DE98307E39DEF8E2"
+        "OwnerKey" = "8:_000ECC0723D24F2FAF6002A5B34FC411"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_8E3C50CEE8234B72986EF80D7BE24830"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -279,12 +285,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_DD81198FA92B68D516755D672A676231"
-        "OwnerKey" = "8:_000ECC0723D24F2FAF6002A5B34FC411"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_E7C9D642739CA80E6CF36E8C6A76BD04"
         "OwnerKey" = "8:_000ECC0723D24F2FAF6002A5B34FC411"
         "MsmSig" = "8:_UNDEFINED"
@@ -335,12 +335,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_65C8375C1F7E471CA73A13E2B1C553B6"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_DD81198FA92B68D516755D672A676231"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -449,6 +443,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_A7AC12EB090FCD9BE14A153A7CAAC666"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_8CAEA67739B30179DE98307E39DEF8E2"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -973,6 +973,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8CAEA67739B30179DE98307E39DEF8E2"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:AppLimit.NetSparkle.Net40, Version=1.0.83.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_8CAEA67739B30179DE98307E39DEF8E2"
+                    {
+                    "Name" = "8:AppLimit.NetSparkle.Net40.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:AppLimit.NetSparkle.Net40.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_299A926B10DC4933BA4CB8C1DB058E4D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A7AC12EB090FCD9BE14A153A7CAAC666"
             {
             "AssemblyRegister" = "3:1"
@@ -1049,37 +1080,6 @@
                     }
                 }
             "SourcePath" = "8:Mono.Cecil.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_299A926B10DC4933BA4CB8C1DB058E4D"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_DD81198FA92B68D516755D672A676231"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:AppLimit.NetSparkle.Net40, Version=1.0.22.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_DD81198FA92B68D516755D672A676231"
-                    {
-                    "Name" = "8:AppLimit.NetSparkle.Net40.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:AppLimit.NetSparkle.Net40.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_299A926B10DC4933BA4CB8C1DB058E4D"
@@ -1258,7 +1258,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:MediaScribe"
         "ProductCode" = "8:{B9C680D9-6104-48E0-88A8-8B74AA33E8B7}"
-        "PackageCode" = "8:{CA8AF9DB-FE2F-4A15-A1C4-8DF297C6A36F}"
+        "PackageCode" = "8:{4F5B2F4C-B0C7-4FF0-9B6F-664A1DA7CA72}"
         "UpgradeCode" = "8:{0E3ECEF1-D28E-4E8E-AE91-31B0AD297AAA}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -1863,7 +1863,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_000ECC0723D24F2FAF6002A5B34FC411"
             {
-            "SourcePath" = "8:..\\MediaScribe\\obj\\x86\\Debug\\MediaScribe.exe"
+            "SourcePath" = "8:..\\MediaScribe\\obj\\x86\\Release\\MediaScribe.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_299A926B10DC4933BA4CB8C1DB058E4D"
@@ -2059,7 +2059,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_65C8375C1F7E471CA73A13E2B1C553B6"
             {
-            "SourcePath" = "8:..\\MediaScribe.Common\\obj\\Debug\\MediaScribe.Common.dll"
+            "SourcePath" = "8:..\\MediaScribe.Common\\obj\\Release\\MediaScribe.Common.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_299A926B10DC4933BA4CB8C1DB058E4D"
@@ -2227,7 +2227,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_8E3C50CEE8234B72986EF80D7BE24830"
             {
-            "SourcePath" = "8:..\\MediaScribe.AvalonTextBox\\obj\\Debug\\MediaScribe.AvalonTextBox.dll"
+            "SourcePath" = "8:..\\MediaScribe.AvalonTextBox\\obj\\Release\\MediaScribe.AvalonTextBox.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_299A926B10DC4933BA4CB8C1DB058E4D"
@@ -2283,7 +2283,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_915C97647D8444BF9F676FDAE6737AD3"
             {
-            "SourcePath" = "8:..\\MediaScribe.LibMPlayerCommon\\obj\\Debug\\LibMplayerCommon.dll"
+            "SourcePath" = "8:..\\MediaScribe.LibMPlayerCommon\\obj\\Release\\LibMplayerCommon.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_299A926B10DC4933BA4CB8C1DB058E4D"

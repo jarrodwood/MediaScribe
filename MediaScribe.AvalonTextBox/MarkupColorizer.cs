@@ -58,7 +58,9 @@ namespace AvalonTextBox
                             element.TextRunProperties.SetTypeface(new Typeface(
                                 tf.FontFamily,
                                 currentSection.Style == NoteStyle.Italic ? FontStyles.Italic : FontStyles.Normal,
-                                currentSection.Weight == NoteWeight.Bold ? FontWeights.Bold : FontWeights.Thin,
+                                //HACK: the text by default is narrow, e.g.:
+                                //currentSection.Weight == NoteWeight.Bold ? FontWeights.Bold : FontWeights.Normal,
+                                currentSection.Weight == NoteWeight.Bold ? FontWeights.Bold : FontWeights.Normal,
                                 tf.Stretch
                             ));
                             //TODO: highlighting doesn't remove colour yet...

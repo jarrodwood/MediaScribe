@@ -269,12 +269,13 @@ namespace JayDev.MediaScribe
             //JDW: DataGrid control calls CancelEdit twice. this is known datagrid behaviour. ref: http://stackoverflow.com/questions/4450878/wpf-datagrid-calls-beginedit-on-an-ieditableobject-two-times
             if (IsDirty)
             {
+                //ensure we clear the 'IsDirty' flag first, so we can correctly detect whether the note needs saving.
+                this.IsDirty = false;
                 if (null != ChangeCommitted)
                 {
                     ChangeCommitted(this, new EventArgs());
                 }
                 _versionBeforeEdit = null;
-                this.IsDirty = false;
             }
         }
     }

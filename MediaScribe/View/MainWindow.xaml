@@ -10,8 +10,7 @@
 
     xmlns:nmConverters="clr-namespace:JayDev.MediaScribe.Converters"
     WindowState="Maximized" 
-        Name="MainWindowName" Background="Transparent"
-        Title="{Binding ElementName=MainWindowName, Path=DefaultTitle}" Height="300" Width="679"  Icon="/MediaScribe;component/Images/Letter%20M%20blue%2032.png">
+        Name="MainWindowName" Title="{Binding ElementName=MainWindowName, Path=DefaultTitle}" Height="300" Width="679"  Icon="/MediaScribe;component/Images/Letter%20M%20blue%2032.png">
         <!--Style="{DynamicResource GlassStyle}">-->
     <Window.Resources>
         <Style x:Key="GlassStyle" TargetType="{x:Type local:MainWindow}">
@@ -70,7 +69,7 @@
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="Padding" Value="6,1,6,1"/>
             <Setter Property="BorderBrush" Value="{StaticResource TabControlNormalBorderBrush}"/>
-            <Setter Property="Background" Value="{StaticResource ButtonNormalBackground}"/>
+            <Setter Property="Background" Value="Transparent"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="VerticalContentAlignment" Value="Stretch"/>
             <Setter Property="Template">
@@ -161,8 +160,14 @@
 
     </Window.Resources>
     <Grid>
-
-        <nmControls:MediaScribeMainTabControl x:Name="tabControl1" Padding="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="348*" />
+            <ColumnDefinition Width="309*" />
+        </Grid.ColumnDefinitions>
+        <nmControls:MediaScribeMainTabControl x:Name="tabControl1" Padding="0" Grid.ColumnSpan="2">
+            <nmControls:MediaScribeMainTabControl.Background>
+                <SolidColorBrush />
+            </nmControls:MediaScribeMainTabControl.Background>
             <TabItem Name="tabCourseList">
                 <TabItem.Header>
                     <Label Content="Course List">
@@ -202,12 +207,12 @@
                 <Grid />
             </TabItem>
         </nmControls:MediaScribeMainTabControl>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
-            <nmControls:NavigationButton Margin="00 0 3 0" MySource="/MediaScribe;component/Images/export_2.png"
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="1">
+            <nmControls:NavigationButton Margin="00 0 3 0" MySource="/MediaScribe;component/Images/refresh_24.png"
                                          Command="{Binding ExportExcelCommand}"
                                          ToolTip="Export notes to Excel"
                                          Visibility="{Binding IsWritingNotes, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisible}}"/>
-            <nmControls:NavigationButton Margin="00 0 3 0" MySource="/MediaScribe;component/Images/expand.png"
+            <nmControls:NavigationButton Margin="00 0 3 0" MySource="/MediaScribe;component/Images/expand_48.png"
                                          Command="{Binding ToggleFullscreenCommand}"
                                          ToolTip="Go Fullscreen Mode"
                                          Visibility="{Binding IsWritingNotes, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisible}}"/>
@@ -216,4 +221,17 @@
                                                                 ToolTip="About" />
         </StackPanel>
     </Grid>
+    <Window.Background>
+        <LinearGradientBrush
+		StartPoint="0.06,0" EndPoint="0.91,0.99" 
+		SpreadMethod="Pad" ColorInterpolationMode="SRgbLinearInterpolation" >
+            <GradientStop Color="#FFEEF6FF" Offset="0" />
+            <GradientStop Color="#FFDEE6EF" Offset="1" />
+            <GradientStop Color="#FFEEF6FF" Offset="0.81" />
+            <GradientStop Color="#FFF2F6F8" Offset="0.66" />
+            <GradientStop Color="#FFD9E2EB" Offset="0.46" />
+            <GradientStop Color="#FFEEF6FF" Offset="0.2" />
+            <GradientStop Color="#FFD9E3EB" Offset="0.4" />
+        </LinearGradientBrush>
+    </Window.Background>
 </Window>

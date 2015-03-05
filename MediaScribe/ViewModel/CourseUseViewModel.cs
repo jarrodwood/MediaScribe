@@ -51,11 +51,15 @@ namespace JayDev.MediaScribe.ViewModel
                 if (null != _notes)
                 {
                     _notes.CollectionChanged -= _notes_CollectionChanged;
+                    foreach (Note note in _notes)
+                    {
+                        note.PropertyChanged -= new PropertyChangedEventHandler(note_PropertyChanged);
+                        note.ChangeCommitted -= new Note.ObjectChangeCommittedEventHandler(note_ChangeCommitted);
+                    }
                 }
                 _notes = value;
                 if (null != value)
                 {
-                    this.RaisePropertyChanged("Notes");
                     _notes.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(_notes_CollectionChanged);
 
                     //hook up event handlers for the notes, so we can save any changes to them
@@ -64,6 +68,8 @@ namespace JayDev.MediaScribe.ViewModel
                         note.PropertyChanged += new PropertyChangedEventHandler(note_PropertyChanged);
                         note.ChangeCommitted += new Note.ObjectChangeCommittedEventHandler(note_ChangeCommitted);
                     }
+
+                    this.RaisePropertyChanged("Notes");
                 }
             }
         }
@@ -736,6 +742,8 @@ namespace JayDev.MediaScribe.ViewModel
                                           {
                                               if(_currentTrack != null && string.IsNullOrEmpty(context.Body)) {
                                                   context.StartTime = CurrentTrackPlayPosition;
+                                                  //TODO - make this configurable.
+                                                  context.StartTime = context.StartTime.Value.Subtract(new TimeSpan(0, 0, 8));
                                                   context.StartTrackNumber = _currentTrack.TrackNumber;
                                               }
                                           },
@@ -1149,7 +1157,24 @@ namespace JayDev.MediaScribe.ViewModel
             Note note = sender as Note;
             if (false == string.IsNullOrWhiteSpace(note.Body))
             {
+                bool isNewNote = null == note.ID;
+
                 _repo.SaveNote(_currentCourse, note);
+
+                //TODO: this resorting won't work if they simply update the start time. make it work for that too!
+                if (isNewNote)
+                {
+                    //Ensure that the entire collection is ordered by track, time, ID#.
+                    bool isLastTrack = note.StartTrackNumber >= Notes[Notes.Count - 2].StartTrackNumber && note.StartTime >= Notes[Notes.Count - 2].StartTime;
+                    if (false == isLastTrack)
+                    {
+                        var oldNotes = Notes;
+                        var filter1 = Notes.Where(x => x.ID != null);
+                        var filter2 = filter1.OrderBy(x => x.StartTrackNumber).ThenBy(x => x.StartTime).ThenBy(x => x.ID ?? int.MaxValue);
+                        var newNotes = new ObservableCollection<Note>(filter2);
+                        Notes = newNotes;
+                    }
+                }
             }
             else
             {

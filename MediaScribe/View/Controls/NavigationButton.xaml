@@ -54,7 +54,12 @@
         </ControlTemplate>
 
     </UserControl.Resources>
-        <Button VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="myButton" Template="{StaticResource buttonTemplateWithNoWhiteBorder}" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" Command="{Binding ElementName=NavigationButtonName, Path=Command}" CommandParameter="{Binding ElementName=NavigationButtonName, Path=CommandParameter}">
+        <Button VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="myButton"
+                Template="{StaticResource buttonTemplateWithNoWhiteBorder}"
+                Background="Transparent" BorderThickness="0" BorderBrush="Transparent"
+                Command="{Binding ElementName=NavigationButtonName, Path=Command}"
+                CommandParameter="{Binding ElementName=NavigationButtonName, Path=CommandParameter}"
+                Padding="1 1 0 0">
             <Button.Style>
                 <Style TargetType="{x:Type Button}">
                     <Style.Triggers>
@@ -64,7 +69,7 @@
                     </Style.Triggers>
                 </Style>
             </Button.Style>
-        <Image VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="myImage" Stretch="UniformToFill" Height="16" Width="16" Source="{Binding ElementName=NavigationButtonName, Path=MySource, Mode=OneWay}">
+        <Image VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="myImage" Stretch="UniformToFill" Height="20" Width="20" Source="{Binding ElementName=NavigationButtonName, Path=MySource, Mode=OneWay}">
                     <Image.Effect>
                         <effect:GrayscaleEffect DesaturationFactor="{Binding ElementName=myButton, Path=IsEnabled}"/>
                     </Image.Effect>

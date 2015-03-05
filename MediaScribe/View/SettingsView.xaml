@@ -232,7 +232,7 @@
 
 
     </UserControl.Resources>
-    <Grid Background="#FFEEF6FF">
+    <Grid Background="Transparent">
         <DockPanel Name="windowContents">
             <!--<nmControls:NavigationControl2 DockPanel.Dock="Top"
                                                 NavigateCommand="{Binding NavigateCommand}"

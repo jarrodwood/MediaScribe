@@ -77,6 +77,20 @@ namespace JayDev.MediaScribe.View
                 // Obtain the window handle for WPF application
                 IntPtr mainWindowPtr = new WindowInteropHelper(this).Handle;
                 HwndSource mainWindowSrc = HwndSource.FromHwnd(mainWindowPtr);
+                
+                LinearGradientBrush linear = new LinearGradientBrush();
+                linear.StartPoint = new Point(0.06, 0);
+                linear.EndPoint = new Point(0.91, 0.99);
+                linear.SpreadMethod = GradientSpreadMethod.Pad;
+                linear.ColorInterpolationMode = ColorInterpolationMode.SRgbLinearInterpolation;
+                linear.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0xDE, 0xDE, 0xEF), 0));
+                linear.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0xDE, 0xDE, 0xEF), 1));
+                linear.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0xDE, 0xDE, 0xEF), 0.81));
+                linear.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0xE6, 0xE6, 0xF3), 0.66));
+                linear.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0xCF, 0xCF, 0xE3), 0.46));
+                linear.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0xDE, 0xDE, 0xEF), 0.2));
+                linear.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0xCB, 0xCB, 0xE2), 0.4));
+
                 mainWindowSrc.CompositionTarget.BackgroundColor = ColorHelper.FromString("#FFDEE6EF");
 
                 // Get System Dpi

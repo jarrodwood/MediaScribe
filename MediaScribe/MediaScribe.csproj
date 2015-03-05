@@ -497,6 +497,14 @@
     <Content Include="..\LICENSE.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Images\convert_128.png" />
+    <Resource Include="Images\expand_48.png" />
+    <Resource Include="Images\gnome_view_fullscreen_64.png" />
+    <Resource Include="Images\refresh-icon_128.png" />
+    <Resource Include="Images\transfer_up_down_32.png" />
+    <Resource Include="Images\transfer_up_down_48.png" />
+    <Resource Include="Images\refresh_jarrod_128.png" />
+    <Resource Include="Images\refresh_24.png" />
     <Content Include="log4netoff.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

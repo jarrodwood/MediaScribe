@@ -20,9 +20,9 @@
     </UserControl.Resources>
     <Grid>
         <local:DelayedBindDataGrid MinWidth="300"
-            VirtualizingStackPanel.VirtualizationMode="Recycling"
+            VirtualizingStackPanel.VirtualizationMode="Standard"
             VirtualizingStackPanel.IsVirtualizing="True"
-            EnableColumnVirtualization="True"
+            EnableColumnVirtualization="False"
             EnableRowVirtualization="True"
             SelectionMode="Single"  
             AutoGenerateColumns="False" x:Name="noteDataGrid" HeadersVisibility="Column" CanUserSortColumns="True" CanUserResizeRows="False" CanUserAddRows="True"
@@ -94,8 +94,7 @@
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <atb:AvalonTextBox MarkedupText="{Binding Path=Body, Mode=TwoWay, UpdateSourceTrigger=LostFocus, TargetNullValue=''}"
-                                               FontFamily="Verdana"
-                                               FontSize="11"
+                                               
                                                TextOptions.TextFormattingMode="Display"
                                                
                                                Width="auto" WordWrap="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" />
