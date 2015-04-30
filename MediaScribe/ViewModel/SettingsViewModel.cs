@@ -357,6 +357,8 @@ namespace JayDev.MediaScribe.ViewModel
             hotkeys.Add(new Hotkey(HotkeyFunction.NoteRating, ModifierKeys.Control, Key.D2) { Rating = 2 });
             hotkeys.Add(new Hotkey(HotkeyFunction.NoteRating, ModifierKeys.Control, Key.D3) { Rating = 3 });
             hotkeys.Add(new Hotkey(HotkeyFunction.NoteDelete, ModifierKeys.None, Key.Delete));
+            hotkeys.Add(new Hotkey(HotkeyFunction.SpeedDecrease, ModifierKeys.Control, Key.OemOpenBrackets));
+            hotkeys.Add(new Hotkey(HotkeyFunction.SpeedIncrease, ModifierKeys.Control, Key.Oem6));
 
             return hotkeys;
         }

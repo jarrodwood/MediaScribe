@@ -23,6 +23,8 @@
                 VisibleFrom="33" VisibleTo="66" />
             <nmConverters:NumericRangeVisibilityConverter x:Key="maxVolumeConverter" 
                 VisibleFrom="67" VisibleTo="100" />
+            <nmConverters:NumericRangeVisibilityConverter x:Key="speedVisibilityControlDisplayConverter" 
+                VisibleFrom="0.99" VisibleTo="1.01" Inverted="True" />
             <!--<DataTemplate x:Key="PreviewDataTemplate">
                 <TextBlock Text="{Binding StringFormat=\{0:00.00\}, Converter={StaticResource secondsConverter}}"/>
             </DataTemplate>-->
@@ -167,15 +169,20 @@
                     </Grid.ColumnDefinitions>
                     <DockPanel>
                         <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="20 0 0 0">
-                        <TextBlock Foreground="#FF3F3F3F" Name="currentPlayTime" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=CurrentPlayTime, StringFormat=h\\:mm\\:ss}"/>
-                        <TextBlock Foreground="#FF3F3F3F" HorizontalAlignment="Left" xml:space="preserve"> / </TextBlock>
-                        <TextBlock Foreground="#FF3F3F3F" Name="totalTrackTime" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=MaxPlayTime, StringFormat=h\\:mm\\:ss}"/>
-                        <TextBlock Foreground="#FF3F3F3F" HorizontalAlignment="Left" xml:space="preserve"> - </TextBlock>
-                        <TextBlock Foreground="#FF3F3F3F" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=TrackTitle, StringFormat=h\\:mm\\:ss, TargetNullValue='No track selected'}"/>
+                            <TextBlock Foreground="#FF3F3F3F" Name="currentPlayTime" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=CurrentPlayTime, StringFormat=h\\:mm\\:ss}"/>
+                            <TextBlock Foreground="#FF3F3F3F" HorizontalAlignment="Left" xml:space="preserve"> / </TextBlock>
+                            <TextBlock Foreground="#FF3F3F3F" Name="totalTrackTime" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=MaxPlayTime, StringFormat=h\\:mm\\:ss}"/>
+                            <TextBlock Foreground="#FF3F3F3F" HorizontalAlignment="Left" xml:space="preserve"> - </TextBlock>
+                            <TextBlock Foreground="#FF3F3F3F" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=TrackTitle, StringFormat=h\\:mm\\:ss, TargetNullValue='No track selected'}"/>
 
-
+                        <StackPanel Visibility="{Binding ElementName=MediaControlsControlName, Path=Speed, Converter={StaticResource speedVisibilityControlDisplayConverter}}" Grid.Column="0" Orientation="Horizontal" Margin="20 0 0 0">
+                            <!--<StackPanel Grid.Column="0" Orientation="Horizontal" Margin="10 0 0 0">-->
+                            <TextBlock Foreground="#FF3F3F3F" HorizontalAlignment="Left" xml:space="preserve">(Speed: </TextBlock>
+                            <TextBlock Foreground="#FF3F3F3F" HorizontalAlignment="Left" Text="{Binding ElementName=MediaControlsControlName, Path=Speed, StringFormat=P0}"/>
+                            <TextBlock Foreground="#FF3F3F3F" HorizontalAlignment="Left" xml:space="preserve">)</TextBlock>
                         </StackPanel>
-                    </DockPanel>
+                    </StackPanel>
+                </DockPanel>
                 </Grid>
 
 

@@ -274,10 +274,11 @@ namespace JayDev.MediaScribe.View.Controls
             if (e.EditAction == DataGridEditAction.Commit)
             {
                 Note context = e.Row.DataContext as Note;
+
                 //operation to perform on row edit ended
                 this.Dispatcher.BeginInvoke(new DispatcherOperationCallback((param) =>
                 {
-                    NoteEditCompletedCommand.Execute(context);
+                    noteDataGrid.ScrollIntoView(noteDataGrid.Items[noteDataGrid.Items.Count - 1]);
                     return null;
                 }), DispatcherPriority.Normal, new object[] { null });
             }

@@ -32,5 +32,6 @@ namespace JayDev.MediaScribe.Common
 
         public virtual int Rating { get; set; }
 
+        public virtual int SpeedModifierPercent { get; set; }
     }
 }

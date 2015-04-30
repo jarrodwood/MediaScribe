@@ -501,6 +501,40 @@ namespace JayDev.MediaScribe.ViewModel
 
         #endregion Volume
 
+        #region Speed
+
+        /// <summary>
+        /// The <see cref="Speed" /> property's name.
+        /// </summary>
+        public const string SpeedPropertyName = "Speed";
+
+        private double _speed = 1f;
+
+        /// <summary>
+        /// Sets and gets the Speed property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public double Speed
+        {
+            get
+            {
+                return _speed;
+            }
+
+            set
+            {
+                if (_speed == value)
+                {
+                    return;
+                }
+
+                _speed = value;
+                RaisePropertyChanged(SpeedPropertyName);
+            }
+        }
+
+        #endregion Speed
+
         #region IsMuted
 
         /// <summary>
@@ -1160,21 +1194,6 @@ namespace JayDev.MediaScribe.ViewModel
                 bool isNewNote = null == note.ID;
 
                 _repo.SaveNote(_currentCourse, note);
-
-                //TODO: this resorting won't work if they simply update the start time. make it work for that too!
-                if (isNewNote)
-                {
-                    //Ensure that the entire collection is ordered by track, time, ID#.
-                    bool isLastTrack = note.StartTrackNumber >= Notes[Notes.Count - 2].StartTrackNumber && note.StartTime >= Notes[Notes.Count - 2].StartTime;
-                    if (false == isLastTrack)
-                    {
-                        var oldNotes = Notes;
-                        var filter1 = Notes.Where(x => x.ID != null);
-                        var filter2 = filter1.OrderBy(x => x.StartTrackNumber).ThenBy(x => x.StartTime).ThenBy(x => x.ID ?? int.MaxValue);
-                        var newNotes = new ObservableCollection<Note>(filter2);
-                        Notes = newNotes;
-                    }
-                }
             }
             else
             {
@@ -1209,6 +1228,18 @@ namespace JayDev.MediaScribe.ViewModel
                             int seconds = match.SeekDirection == Direction.Forward ? match.SeekSeconds : match.SeekSeconds * -1;
                             _player.SeekRelative(seconds);
                             e.Handled = true;
+                            break;
+                        case HotkeyFunction.SpeedIncrease:
+                            Speed += (double)match.SpeedModifierPercent / 100f;
+                            _player.SetSpeed(Speed);
+                            break;
+                        case HotkeyFunction.SpeedDecrease:
+                            Speed -= (double)match.SpeedModifierPercent / 100f;
+                            _player.SetSpeed(Speed);
+                            break;
+                        case HotkeyFunction.SpeedReset:
+                            Speed = 1f;
+                            _player.SetSpeed(Speed);
                             break;
                     }
                 }

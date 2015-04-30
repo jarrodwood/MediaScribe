@@ -63,6 +63,8 @@ namespace JayDev.MediaScribe.Model
                 }
                 foreach (Hotkey hotkey in toCreate)
                 {
+                    //In case we're updating an existing hotkey... the existing copy will be removed, and now we need to save a new copy. So we clear out the ID.
+                    hotkey.ID = null;
                     Save<Hotkey>(hotkey, connection);
                 }
 

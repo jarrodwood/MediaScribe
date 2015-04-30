@@ -121,7 +121,8 @@ namespace JayDev.MediaScribe.ViewModel
                 }
                 else
                 {
-                    backend = MplayerBackends.Direct3D;
+                    //The Direct3D backend in the version of mplayer I'm using, has issues on 64bit windows
+                    backend = MplayerBackends.DirectX;
                 }
 
                 _play = new MPlayer((int)handle, backend);
@@ -220,6 +221,13 @@ namespace JayDev.MediaScribe.ViewModel
             }
         }
 
+        public void SetSpeed(double speedPercent)
+        {
+            if (null != _play)
+            {
+                _play.Speed(speedPercent);
+            }
+        }
 
         public void Volume(double volumePercent)
         {

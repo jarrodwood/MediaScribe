@@ -146,6 +146,20 @@ namespace JayDev.MediaScribe.View.Controls
 
         #endregion
 
+        #region Speed
+
+        public double Speed
+        {
+            get { return (double)GetValue(SpeedProperty); }
+            set { SetValue(SpeedProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Speed.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SpeedProperty =
+            DependencyProperty.Register("Speed", typeof(double), typeof(MediaControlsControl), new UIPropertyMetadata(0d));
+
+        #endregion
+
         public bool IsMuted
         {
             get { return (bool)GetValue(IsMutedProperty); }

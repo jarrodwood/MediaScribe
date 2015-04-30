@@ -11,12 +11,22 @@
              xmlns:local="clr-namespace:JayDev.MediaScribe.View.Controls"
              xmlns:nmConverters="clr-namespace:JayDev.MediaScribe.Converters"
              xmlns:syswin="clr-namespace:System.Windows;assembly=PresentationCore"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              x:Name="NotesGridControlName">
     <UserControl.Resources>
         <!--<nmConverters:NullToVisibilityConverter 
                 x:Key="NullToVisibilityConverterNotNullIsVisible" 
                 NullValue="Collapsed" 
                 NotNullValue="Visible" />-->
+        <!-- ensure that the notes data grid is sorted by: track number, time, and ID. -->
+        <!--<CollectionViewSource x:Key="ItemListViewSource" Source="{Binding Notes}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="StartTrackNumber" />
+                <scm:SortDescription PropertyName="StartTime" />
+                <scm:SortDescription PropertyName="ID" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>-->
+
     </UserControl.Resources>
     <Grid>
         <local:DelayedBindDataGrid MinWidth="300"

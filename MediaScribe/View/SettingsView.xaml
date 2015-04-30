@@ -106,6 +106,24 @@
             </StackPanel>
         </DataTemplate>
 
+        <!--<DataTemplate x:Key="SpeedIncreaseViewTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Path=SpeedModifierPercent}" />
+                <TextBlock Text=" percent" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="SpeedIncreaseEditTemplate">
+            <StackPanel Orientation="Horizontal">
+                <ComboBox ItemsSource="{Binding Source={StaticResource dataFromDirectionEnum}}"
+                          SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=SelectedItem.MyDirection}">
+                </ComboBox>
+                <TextBlock Text=" " xml:space="preserve" />
+                <TextBox Text="{Binding Path=Seconds}" PreviewTextInput="TextBox_PreviewTextInput" />
+                <TextBlock Text=" seconds" />
+            </StackPanel>
+        </DataTemplate>-->
+
         <Style TargetType="TextBox" x:Key="controlledTextBox">
             <EventSetter Event="PreviewTextInput" Handler="TextBox_PreviewTextInput" />
         </Style>
@@ -182,6 +200,7 @@
                         </Setter.Value>
                     </Setter>
                 </MultiDataTrigger>
+                <!-- RATING -->
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
                         <Condition Binding="{Binding Function}" Value="{x:Static nmCommon:HotkeyFunction.NoteRating}" />
@@ -207,6 +226,72 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBox Text="{Binding Path=Rating}" Style="{StaticResource controlledTextBox}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiDataTrigger>
+                <!-- SPEED INCREASE -->
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Function}" Value="{x:Static nmCommon:HotkeyFunction.SpeedIncrease}" />
+                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEditing}" Value="False" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Path=SpeedModifierPercent}" />
+                                    <TextBlock Text="%" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Function}" Value="{x:Static nmCommon:HotkeyFunction.SpeedIncrease}" />
+                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEditing}" Value="True" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox Text="{Binding Path=SpeedModifierPercent}" Style="{StaticResource controlledTextBox}" />
+                                    <TextBlock Text="%" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiDataTrigger>
+                <!-- SPEED DECREASE -->
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Function}" Value="{x:Static nmCommon:HotkeyFunction.SpeedDecrease}" />
+                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEditing}" Value="False" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Path=SpeedModifierPercent}" />
+                                    <TextBlock Text="%" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Function}" Value="{x:Static nmCommon:HotkeyFunction.SpeedDecrease}" />
+                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEditing}" Value="True" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox Text="{Binding Path=SpeedModifierPercent}" Style="{StaticResource controlledTextBox}" />
+                                    <TextBlock Text="%" />
                                 </StackPanel>
                             </DataTemplate>
                         </Setter.Value>

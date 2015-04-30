@@ -14,8 +14,9 @@ namespace JayDev.MediaScribe.Converters
         {
         }
 
-        public int VisibleFrom { get; set; }
-        public int VisibleTo { get; set; }
+        public double VisibleFrom { get; set; }
+        public double VisibleTo { get; set; }
+        public bool Inverted { get; set; }
 
         public virtual object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -24,14 +25,24 @@ namespace JayDev.MediaScribe.Converters
                 throw new ArgumentException("Value must be double or int");
             }
 
-            int intValue = value is int ? (int)value : System.Convert.ToInt32(value);
+            double intValue = value is double ? (double)value : System.Convert.ToDouble(value);
+            Visibility result = Visibility.Visible;
             if (intValue >= VisibleFrom && intValue <= VisibleTo)
             {
-                return Visibility.Visible;
+                result = Visibility.Visible;
             }
             else
             {
-                return Visibility.Collapsed;
+                result = Visibility.Collapsed;
+            }
+
+            if (Inverted)
+            {
+                return result == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+            }
+            else
+            {
+                return result;
             }
         }
 

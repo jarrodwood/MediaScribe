@@ -116,6 +116,7 @@ namespace JayDev.MediaScribe.Model
             hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "SeekDirection", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "SeekDirection") });
             hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "SeekSeconds", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "SeekSeconds") });
             hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "Rating", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "Rating") });
+            hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "SpeedModifierPercent", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "SpeedModifierPercent") });
             MappingsByType.Add(typeof(Hotkey), hotkeyMappings);
 
             TableNamesByType.Add(typeof(ApplicationSettings), "Settings");

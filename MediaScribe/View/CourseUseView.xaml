@@ -42,6 +42,7 @@
                                                    StopCommand="{Binding StopCommand}"
                                                    NextTrackCommand="{Binding NextTrackCommand}"
                                                    PrevTrackCommand="{Binding PrevTrackCommand}"
+                                                   Speed="{Binding Speed}"
                                                    />
 
             <Border Background="#FFEEF6FF">

@@ -71,6 +71,8 @@ namespace JayDev.MediaScribe
 
         public override int Rating { get; set; }
 
+        public override int SpeedModifierPercent { get; set; }
+
         private int _orderWeight = -1;
         public virtual int OrderWeight
         {
@@ -135,6 +137,7 @@ namespace JayDev.MediaScribe
                 && this.Rating == other.Rating
                 && this.SeekDirection == other.SeekDirection
                 && this.SeekSeconds == other.SeekSeconds
+                && this.SpeedModifierPercent == other.SpeedModifierPercent
                 && this.Key == other.Key);
         }
     }

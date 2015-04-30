@@ -163,6 +163,10 @@ namespace LibMPlayerCommon
             {
                 backend = "direct3d";
             }
+            if (this._mplayerBackend == MplayerBackends.DirectX)
+            {
+                backend = "directx";
+            }
 			else if (this._mplayerBackend == MplayerBackends.X11)
             {
                 backend = "x11";
@@ -235,7 +239,8 @@ namespace LibMPlayerCommon
 
             string backend = MplayerBackend();
             //noautosub disables subtiles... which were causing mplayer to go into an infinite loop. not cool.
-            MediaPlayer.StartInfo.Arguments = string.Format("-slave -noautosub -nofontconfig -quiet -idle -v -vo {0} -wid {1}", backend, this._wid);
+            //NOTE: the "-af scaletempo" makes it so that when we change playback speed, the pitch stays the same.
+            MediaPlayer.StartInfo.Arguments = string.Format("-slave -noautosub -af scaletempo -nofontconfig -quiet -idle -v -vo {0} -wid {1}", backend, this._wid);
             MediaPlayer.StartInfo.FileName = BackendPrograms.MPlayer;
 
             MediaPlayer.Start();
@@ -568,6 +573,12 @@ namespace LibMPlayerCommon
 
         }
 
+        public void Speed(double speed)
+        {
+            Debug.Assert(speed >= 0 && speed <= 10);
+            MediaPlayer.StandardInput.WriteLine(string.Format("speed_set {0}", speed));
+            MediaPlayer.StandardInput.Flush();
+        }
 
 
         /// <summary>

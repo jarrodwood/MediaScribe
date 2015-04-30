@@ -23,6 +23,7 @@
                                                    StopCommand="{Binding StopCommand}"
                                                    NextTrackCommand="{Binding NextTrackCommand}"
                                                    PrevTrackCommand="{Binding PrevTrackCommand}"
+                                                   Speed="{Binding Speed}"
                                                />
 
         <MediaScribeControl:NotesGridControl x:Name="notesGrid" DockPanel.Dock="Right" Width="{Binding ControlledFullscreenNotePanelWidth}"
