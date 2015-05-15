@@ -1338,9 +1338,17 @@ namespace JayDev.MediaScribe.ViewModel
                 return;
             }
 
+            //notify the main window that we want to change title
+            Messenger.Default.Send<SetWindowTitleMessage>(new SetWindowTitleMessage()
+            {
+                Mode = SetWindowTitleMode.ReplaceTitle,
+                Text = _currentTrackName
+            });
+
 
             track.IsPlaying = true;
 
+            //actually play the file
             JayDev.MediaScribe.ViewModel.MediaPlayer.PlayAction action = maintainPlayStatus ? JayDev.MediaScribe.ViewModel.MediaPlayer.PlayAction.MaintainStatus : JayDev.MediaScribe.ViewModel.MediaPlayer.PlayAction.Play;
             _player.PlayFile(tracks, trackIndex, position, action);
         }
@@ -1392,6 +1400,12 @@ namespace JayDev.MediaScribe.ViewModel
 
         public override void LeavingViewModel()
         {
+            //notify the main window that we want to change title
+            Messenger.Default.Send<SetWindowTitleMessage>(new SetWindowTitleMessage()
+            {
+                Mode = SetWindowTitleMode.ResetToDefaultTitle
+            });
+
             SaveCourse();
             Stop();
         }
@@ -1423,6 +1437,11 @@ namespace JayDev.MediaScribe.ViewModel
 
                     PlayFile(_currentCourse.Tracks, trackIndex, _currentCourse.LastPlayedTrackPosition, true);
                 }
+            }
+            else
+            {
+                Logging.Log(LoggingSource.CourseUseViewModel, "SetInitialTrack call, and video panel is not initialized.");
+                // throw new Exception("error - setting initial track before mplayer display control initialized. if i ever run into this error, figure out a way around it!");
             }
         }
     }

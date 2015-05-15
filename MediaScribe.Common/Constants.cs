@@ -33,6 +33,13 @@ namespace JayDev.MediaScribe.Common
         public ShowSource Source { get; set; }
     }
 
+    public enum SetWindowTitleMode { ReplaceTitle, AppendToDefaultTitle, ResetToDefaultTitle }
+    public struct SetWindowTitleMessage
+    {
+        public string Text { get; set; }
+        public SetWindowTitleMode Mode { get; set; }
+    }
+
     public struct HotkeyMessage
     {
         public HotkeyFunction Function { get; set; }

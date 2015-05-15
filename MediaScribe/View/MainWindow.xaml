@@ -10,7 +10,7 @@
 
     xmlns:nmConverters="clr-namespace:JayDev.MediaScribe.Converters"
     WindowState="Maximized" 
-        Name="MainWindowName" Title="{Binding ElementName=MainWindowName, Path=DefaultTitle}" Height="300" Width="679"  Icon="/MediaScribe;component/Images/Letter%20M%20blue%2032.png">
+        Name="MainWindowName" Title="{Binding WindowTitle}" Height="300" Width="679"  Icon="/MediaScribe;component/Images/Letter%20M%20blue%2032.png">
         <!--Style="{DynamicResource GlassStyle}">-->
     <Window.Resources>
         <Style x:Key="GlassStyle" TargetType="{x:Type local:MainWindow}">

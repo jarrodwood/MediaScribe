@@ -30,15 +30,6 @@ namespace JayDev.MediaScribe.View
     /// </summary>
     public partial class MainWindow
     {
-        private const string DEFAULT_TITLE = "MediaScribe";
-        public string DefaultTitle
-        {
-            get
-            {
-                return DEFAULT_TITLE;
-            }
-        }
-
         private Sparkle _sparkle;
 
         public MainWindow()

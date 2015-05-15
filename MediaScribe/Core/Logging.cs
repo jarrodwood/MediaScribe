@@ -8,7 +8,16 @@ using System.IO;
 
 namespace JayDev.MediaScribe.Core
 {
-    enum LoggingSource { ThumbnailGeneration, MPlayerWindow, AsyncWorker, Errors, DragEnabledDataGrid, FullscreenToggle }
+    enum LoggingSource
+    {
+        ThumbnailGeneration,
+        MPlayerWindow,
+        AsyncWorker,
+        Errors,
+        DragEnabledDataGrid,
+        FullscreenToggle,
+        CourseUseViewModel
+    }
     internal class Logging
     {
         static List<LoggingSource> sourcesToWriteToDebug = new List<LoggingSource>();
