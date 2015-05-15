@@ -9,6 +9,22 @@ namespace JayDev.MediaScribe.Model
 {
     public class CourseRepository : RepositoryBase
     {
+        /// <summary>
+        /// Create a CourseRepository that connects to the default MediaScribe dataabase
+        /// </summary>
+        public CourseRepository()
+            : base(DefaultDatabaseFilePath)
+        {
+        }
+
+        /// <summary>
+        /// Create a CourseRepository that connects to a specific MediaScribe database, intended for when importing notes from old MediaScribe versions
+        /// </summary>
+        /// <param name="connectionString"></param>
+        public CourseRepository(string databaseFilePath)
+            : base(databaseFilePath)
+        {
+        }
 
         public List<Course> GetCourseList()
         {
@@ -60,26 +76,41 @@ namespace JayDev.MediaScribe.Model
             return GetCourseList().First(x => x.ID == courseID);
         }
 
-        public void SaveCourseOnly(Course course)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="course"></param>
+        /// <param name="saveTracks"></param>
+        /// <param name="saveNotes"></param>
+        /// <param name="saveAsNewCourse">If set to true, all IDs will be wiped meaning the course will be appended as a new one to the list of courses, rather than any existing version updated</param>
+        public void SaveCourse(Course course, bool saveTracks = false, bool saveNotes = false, bool saveAsNewCourse = false)
         {
             PrepareConnection();
             using (SQLiteTransaction mytransaction = connection.BeginTransaction())
             {
+                if (saveAsNewCourse)
+                {
+                    course.ID = null;
+                    course.Tracks.ForEach(x => x.ID = null);
+                    course.Notes.ForEach(x => x.ID = null);
+                    ////ensure the notes and tracks are ordered sensibly, which may be useful...
+                    //course.Tracks = course.Tracks.OrderBy(x => x.TrackNumber).ToList();
+                    //course.Notes = course.Notes.OrderBy(x => x.StartTrackNumber).ThenBy(x => x.StartTime).ToList();
+                }
+
                 Save<Course>(course, connection);
 
-                mytransaction.Commit();
-            }
-        }
+                if (saveTracks)
+                {
+                    course.Tracks.ForEach(x => x.ParentCourseID = course.ID.Value);
+                    Save<Track>(course.Tracks, connection);
+                }
 
-        public void SaveCourseAndTracks(Course course)
-        {
-            PrepareConnection();
-            using (SQLiteTransaction mytransaction = connection.BeginTransaction())
-            {
-                Save<Course>(course, connection);
-
-                course.Tracks.ForEach(x => x.ParentCourseID = course.ID.Value);
-                Save<Track>(course.Tracks, connection);
+                if (saveNotes)
+                {
+                    course.Notes.ForEach(x => x.ParentCourseID = course.ID.Value);
+                    Save<Note>(course.Notes, connection);
+                }
 
                 mytransaction.Commit();
             }

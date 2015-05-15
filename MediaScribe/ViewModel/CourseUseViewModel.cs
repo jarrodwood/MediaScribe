@@ -1134,6 +1134,24 @@ namespace JayDev.MediaScribe.ViewModel
 
                 //auto-load the last track
                 SetInitialTrack();
+
+                //Load the monitor application, so that if somehow mediascribe gets killed and the mplayer process lingers, that can be terminated too.
+                int mediaScribePID = System.Diagnostics.Process.GetCurrentProcess().Id;
+                int mplayerPID = _player.MPlayerPID.Value;
+                var monitorApp = new System.Diagnostics.Process
+                {
+                    EnableRaisingEvents = true,
+                    StartInfo =
+                        {
+                            CreateNoWindow = true,
+                            WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
+                            FileName = "MediaScribe.Monitor.exe",
+                            UseShellExecute = false,
+                            ErrorDialog = false,
+                            Arguments = string.Format("{0} {1}", mediaScribePID, mplayerPID)
+                        }
+                };
+                monitorApp.Start();
             }
         }
 
@@ -1359,7 +1377,7 @@ namespace JayDev.MediaScribe.ViewModel
             _currentCourse.LastPlayedTrackPosition = _currentTrackPlayPosition;
             _currentCourse.DateViewed = DateTime.Now;
             _currentCourse.Notes = Notes.ToList();
-            _repo.SaveCourseOnly(_currentCourse);
+            _repo.SaveCourse(_currentCourse);
 
             _controller.UpdateCourseInMemory(_currentCourse);
         }

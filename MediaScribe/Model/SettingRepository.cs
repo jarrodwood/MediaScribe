@@ -5,12 +5,18 @@ using System.Text;
 using System.Data.SQLite;
 using System.Runtime.Serialization.Json;
 using System.IO;
+using System.Configuration;
 
 namespace JayDev.MediaScribe.Model
 {
     public class SettingRepository : RepositoryBase
     {
         private object _destructiveOperationLockToken = new object();
+
+        public SettingRepository()
+            : base(DefaultDatabaseFilePath)
+        {
+        }
 
         public List<Hotkey> GetHotkeys()
         {

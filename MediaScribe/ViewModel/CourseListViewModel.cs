@@ -93,7 +93,7 @@ namespace JayDev.MediaScribe.ViewModel
                                               courseToSave.Tracks.Clear();
                                               SelectedCourseTracks.ToList().ForEach(x => courseToSave.Tracks.Add(x));
 
-                                              _repo.SaveCourseAndTracks(courseToSave);
+                                              _repo.SaveCourse(courseToSave, saveTracks: true);
                                               //if (false == result.IsSaveSuccessful)
                                               //{
                                               //    Messenger.Default.Send<string>(result.ToString(), "errors");
@@ -445,6 +445,115 @@ namespace JayDev.MediaScribe.ViewModel
         }
 
         #endregion
+
+        #region ExportCourseCommand
+
+        private RelayCommand _exportCourseCommand;
+
+        public RelayCommand ExportCourseCommand
+        {
+            get
+            {
+                return _exportCourseCommand
+                    ?? (_exportCourseCommand = new RelayCommand(
+                                          () =>
+                                          {
+                                              ExportCourse(SelectedCourse);
+                                          }));
+            }
+        }
+
+        #endregion ExportCourseCommand
+
+        #region ImportCourseCommand
+
+        private RelayCommand _importCourseCommand;
+
+        public RelayCommand ImportCourseCommand
+        {
+            get
+            {
+                return _importCourseCommand
+                    ?? (_importCourseCommand = new RelayCommand(
+                                          () =>
+                                          {
+
+                                              Microsoft.Win32.OpenFileDialog openFileDialog1 = new Microsoft.Win32.OpenFileDialog();
+                                              openFileDialog1.RestoreDirectory = true;
+                                              openFileDialog1.DefaultExt = "mediascribe";
+                                              openFileDialog1.AddExtension = true;
+                                              openFileDialog1.InitialDirectory = Convert.ToString(Environment.SpecialFolder.MyDocuments);
+                                              openFileDialog1.Filter = "MediaScribe Courses|*.mediascribe";
+                                              openFileDialog1.Title = "Import Shared Course";
+
+
+                                              if (openFileDialog1.ShowDialog() == true)
+                                              {
+                                                  try
+                                                  {
+                                                      string sourceFilePath = openFileDialog1.FileName;
+
+                                                      //TODO: open file as an update repository, check the version... if it's old, copy it to a temp dir, update it, then open THAT instead of the original file.
+
+                                                      var sourceRepository = new JayDev.MediaScribe.Model.CourseRepository(sourceFilePath);
+                                                      Course courseToImport = sourceRepository.GetCourseList().First();
+
+                                                      //change the course's name, so it doesn't collide with any existing course
+                                                      string originalCourseName = courseToImport.Name;
+                                                      bool collisionCheckPassed = false;
+                                                      int collisionChecksPerformed = 0;
+                                                      do
+                                                      {
+                                                          courseToImport.Name = string.Format("{0} (imported on {1})", originalCourseName, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+
+                                                          if (false == _courses.Any(x => x.Name == courseToImport.Name))
+                                                          {
+                                                              collisionCheckPassed = true;
+                                                          }
+                                                          collisionChecksPerformed++;
+                                                      }
+                                                      while (false == collisionCheckPassed && collisionChecksPerformed < 5);
+
+                                                      //if we failed to find a unique name, something weird happened - throw exception.
+                                                      if (!collisionCheckPassed)
+                                                      {
+                                                          throw new Exception("Attempted to generate unique for imported courses, but it kept on colliding with existing names. this shouldn't happen. investigate! Last tried name is: " + courseToImport.Name);
+                                                      }
+
+                                                      //TODO: check to see if the files exist. If any don't, pop up a window that helps the user to specify where the files are on his system.
+                                                      courseToImport.Tracks.ForEach(x => x.CheckTrackMissing());
+                                                      var missingTracks = courseToImport.Tracks.Where(x => x.IsMissing);
+                                                      if (missingTracks.Any())
+                                                          throw new Exception("Error - tracks are missing. must make a dialog to allow user to specify where they are.");
+
+
+                                                      _repo.SaveCourse(
+                                                          courseToImport,
+                                                          saveTracks: true,
+                                                          saveNotes: true,
+                                                          saveAsNewCourse: true);
+
+                                                      System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow,
+                                                          messageBoxText: string.Format("Successfully imported the course as '{0}'", courseToImport.Name),
+                                                          caption: "Export successful",
+                                                          button: System.Windows.MessageBoxButton.OK);
+
+                                                      //TODO: make it pop up an explorer window, highlighting the new file for them to copy/share/whatever.
+                                                      //TODO: also update the 'export successful' message with tips of what the user can do.
+                                                      
+                                                      //make sure that it pops up in the list of courses
+                                                      _courses.Add(courseToImport);
+                                                  }
+                                                  catch (Exception e)
+                                                  {
+                                                      System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Error importing :( - " + e.ToString());
+                                                  }
+                                              }
+                                          }));
+            }
+        }
+
+        #endregion ImportCourseCommand
 
         #endregion
 

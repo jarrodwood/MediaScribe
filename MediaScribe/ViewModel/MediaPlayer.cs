@@ -21,6 +21,20 @@ namespace JayDev.MediaScribe.ViewModel
         private const int PLAY_POSITION_UPDATE_INTERVAL_MILLISECONDS = 500;
 
         private static MPlayer _play;
+
+        /// <summary>
+        /// MPlayer's PID
+        /// </summary>
+        public int? MPlayerPID
+        {
+            get
+            {
+                if (null == _play || null == _play.MediaPlayer)
+                    return null;
+                return _play.MediaPlayer.Id;
+            }
+        }
+
         private Timer _playPositionTimer = new Timer();
         private IntPtr _handle;
 
@@ -242,7 +256,12 @@ namespace JayDev.MediaScribe.ViewModel
         {
             if (null != _play)
             {
+                //HACK: if you've paused mplayer, and you call 'stop', it'll resume playback for half a second before stopping.
+                //      this feels really weird during use, since the audio will play when we switch tabs away from the note
+                //      writing tab... so as a work-around, we'll temporarily mute the player during the stop operation.
+                _play.Volume(0, true);
                 _play.Stop();
+                _play.Volume((int)_currentVolume, true);
                 SetPlayStatus();
                 this.CurrentPlayPosition = TimeSpan.Zero;
                 _playPositionTimer.Stop();

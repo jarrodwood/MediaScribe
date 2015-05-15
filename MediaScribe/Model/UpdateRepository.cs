@@ -10,7 +10,20 @@ namespace JayDev.MediaScribe.Model
 {
     public class UpdateRepository : RepositoryBase
     {
-        static UpdateRepository()
+        /// <summary>
+        /// Create an UpdateRepository that connects to the default MediaScribe dataabase
+        /// </summary>
+        public UpdateRepository()
+            : base(DefaultDatabaseFilePath)
+        {
+        }
+
+        /// <summary>
+        /// Create an UpdateRepository that connects to a specific MediaScribe database, intended for when importing notes from old MediaScribe versions
+        /// </summary>
+        /// <param name="connectionString"></param>
+        public UpdateRepository(string databaseFilePath)
+            : base(databaseFilePath)
         {
         }
 
@@ -23,31 +36,6 @@ namespace JayDev.MediaScribe.Model
             {
                 using (SQLiteCommand mycommand = new SQLiteCommand(connection))
                 {
-                }
-            }
-        }
-
-        private string GetDatabaseVersionNumber() {
-            PrepareConnection();
-            using (SQLiteTransaction mytransaction = connection.BeginTransaction())
-            {
-                using (SQLiteCommand mycommand = new SQLiteCommand(connection))
-                {
-                    string versionNumber = null;
-                    try {
-                    mycommand.CommandText = "SELECT DatabaseVersion FROM Version";
-                    string stringResult = Convert.ToString(mycommand.ExecuteScalar());
-                        versionNumber = stringResult;
-                    }
-                    catch(SQLiteException exception) {
-                        if(exception.Message.Contains("no such table")) {
-                            versionNumber = "0.9.0.0";
-                        }
-                        else {
-                            throw;
-                        }
-                    }
-                    return versionNumber;
                 }
             }
         }

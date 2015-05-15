@@ -13,7 +13,7 @@ namespace JayDev.MediaScribe
     [Serializable]
     public class Note : INotifyPropertyChanged, IEditableObject, ICloneable
     {
-        public virtual int? ID { get; protected set; }
+        public virtual int? ID { get; set; }
 
         public virtual int ParentCourseID { get; set; }
         public virtual Course ParentCourse { get; set; }

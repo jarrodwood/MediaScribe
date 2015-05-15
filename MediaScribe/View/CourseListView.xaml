@@ -92,8 +92,10 @@
                                             <Path Data="M35,0 L70,0 70,30 100,30 100,70 70,70 70,100 30,100 30,70 0,70 0,30 35,30 z" Margin="0 0 0 0" Stretch="Fill" Width="13.5" Height="13" Style="{DynamicResource PlusStyle}"/>
                                         </Button>
 
+                                            <Button Margin="10 0 0 0" Padding="5 1" Command="{Binding ImportCourseCommand}">Import Course</Button>
 
-                                        <!--<nmControls:ImageButton MySource="/MediaScribe;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding CreateCourseCommand}" />
+
+                                            <!--<nmControls:ImageButton MySource="/MediaScribe;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding CreateCourseCommand}" />
 
                                         <nmControls:ImageButton MySource="/MediaScribe;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteCourseCommand}" CommandParameter="{x:Static nmCommon:NavigateMessage.ListCourses}" />-->
 
@@ -233,8 +235,9 @@
                                                 <TextBlock Margin="0 0 0 0" Foreground="White" FontSize="12" VerticalAlignment="Center"><Run Text="Go To Course"/></TextBlock>
                                             </Grid>
                                         </Button>-->
-                                        <Button Padding="5 1" Command="{Binding MaintenanceModeEditCommand}">Edit</Button>
-                                        <Button Margin="10 0 0 0" Padding="5 1" Command="{Binding ExportExcelCommand}">Export Notes</Button>
+                                        <Button Padding="5 1" Command="{Binding MaintenanceModeEditCommand}">Edit Tracks</Button>
+                                        <Button Margin="10 0 0 0" Padding="5 1" Command="{Binding ExportExcelCommand}">Export To Excel</Button>
+                                        <Button Margin="10 0 0 0" Padding="5 1" Command="{Binding ExportCourseCommand}">Share/Export Course</Button>
                                         <Button Margin="10 0 0 0" Padding="5 1" Command="{Binding WriteNotesCommand}">Go To Course</Button>
 
                                     </StackPanel>

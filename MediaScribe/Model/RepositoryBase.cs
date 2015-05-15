@@ -9,15 +9,20 @@ using JayDev.MediaScribe.Common;
 using System.Configuration;
 using System.IO;
 using JayDev.MediaScribe.Core;
+using System.Diagnostics;
 
 namespace JayDev.MediaScribe.Model
 {
     /// <summary>
     /// The base class for all SQLite repositories.
     /// </summary>
-    public class RepositoryBase
+    public abstract class RepositoryBase
     {
+        #region Generic repository code
+
         #region Private Static Fields
+
+        private const bool debugMode = false;
 
         /// <summary>
         /// Stores the database table names that are mapped to given Domain object types. This is populated in the static constructor.
@@ -48,89 +53,7 @@ namespace JayDev.MediaScribe.Model
         /// </summary>
         private static readonly Dictionary<Type, string> InsertQueriesByType = new Dictionary<Type, string>();
         
-        private static readonly string DatabaseFileName = "MediaScribe.db";
         private static readonly string InitialDatabaseScriptFileName = "JayDev.MediaScribe.Resources.create_db.sql";
-
-        #endregion
-
-        #region Static Constructor
-
-        /// <summary>
-        /// Static constructor, configuring the mapping of the Domain objects to the SQLite tables. This populates the TableNamesByType and
-        /// MappingsByType static dictionaries.
-        /// </summary>
-        static RepositoryBase()
-        {
-            /***********************
-             * Prepare database mappings
-             ***********************/
-
-            TableNamesByType.Add(typeof(Course), "Courses");
-            PropertyInfo[] courseProperties = typeof(Course).GetProperties();
-            List<SqliteDataMapping> courseMappings = new List<SqliteDataMapping>();
-            courseMappings.Add(new SqliteDataMapping() { ColumnName = "CourseID", PropertyDataType = DataType.Int, PropertyInfo = courseProperties.First(x => x.Name == "ID"), PrimaryKey = true });
-            courseMappings.Add(new SqliteDataMapping() { ColumnName = "Name", PropertyDataType = DataType.String, PropertyInfo = courseProperties.First(x => x.Name == "Name") });
-            courseMappings.Add(new SqliteDataMapping() { ColumnName = "LastPlayedTrackID", PropertyDataType = DataType.Int, PropertyInfo = courseProperties.First(x => x.Name == "LastPlayedTrackID") });
-            courseMappings.Add(new SqliteDataMapping() { ColumnName = "LastPlayedTrackPosition", PropertyDataType = DataType.TimeSpan, PropertyInfo = courseProperties.First(x => x.Name == "LastPlayedTrackPosition") });
-            courseMappings.Add(new SqliteDataMapping() { ColumnName = "EmbeddedVideoWidth", PropertyDataType = DataType.Double, PropertyInfo = courseProperties.First(x => x.Name == "EmbeddedVideoWidth") });
-            courseMappings.Add(new SqliteDataMapping() { ColumnName = "EmbeddedVideoHeight", PropertyDataType = DataType.Double, PropertyInfo = courseProperties.First(x => x.Name == "EmbeddedVideoHeight") });
-            courseMappings.Add(new SqliteDataMapping() { ColumnName = "DateCreated", PropertyDataType = DataType.DateTime, PropertyInfo = courseProperties.First(x => x.Name == "DateCreated") });
-            courseMappings.Add(new SqliteDataMapping() { ColumnName = "DateViewed", PropertyDataType = DataType.DateTime, PropertyInfo = courseProperties.First(x => x.Name == "DateViewed") });
-            MappingsByType.Add(typeof(Course), courseMappings);
-
-            TableNamesByType.Add(typeof(Note), "Notes");
-            PropertyInfo[] noteProperties = typeof(Note).GetProperties();
-            List<SqliteDataMapping> noteMappings = new List<SqliteDataMapping>();
-            noteMappings.Add(new SqliteDataMapping() { ColumnName = "NoteID", PropertyDataType = DataType.Int, PropertyInfo = noteProperties.First(x => x.Name == "ID"), PrimaryKey = true });
-            noteMappings.Add(new SqliteDataMapping() { ColumnName = "CourseID", PropertyDataType = DataType.Int, PropertyInfo = noteProperties.First(x => x.Name == "ParentCourseID") });
-            noteMappings.Add(new SqliteDataMapping() { ColumnName = "Body", PropertyDataType = DataType.String, PropertyInfo = noteProperties.First(x => x.Name == "Body") });
-            noteMappings.Add(new SqliteDataMapping() { ColumnName = "StartTrackNumber", PropertyDataType = DataType.Int, PropertyInfo = noteProperties.First(x => x.Name == "StartTrackNumber") });
-            noteMappings.Add(new SqliteDataMapping() { ColumnName = "StartTime", PropertyDataType = DataType.TimeSpan, PropertyInfo = noteProperties.First(x => x.Name == "StartTime") });
-            noteMappings.Add(new SqliteDataMapping() { ColumnName = "EndTrackNumber", PropertyDataType = DataType.Int, PropertyInfo = noteProperties.First(x => x.Name == "EndTrackNumber") });
-            noteMappings.Add(new SqliteDataMapping() { ColumnName = "EndTime", PropertyDataType = DataType.TimeSpan, PropertyInfo = noteProperties.First(x => x.Name == "EndTime") });
-            noteMappings.Add(new SqliteDataMapping() { ColumnName = "Rating", PropertyDataType = DataType.Int, PropertyInfo = noteProperties.First(x => x.Name == "Rating") });
-            MappingsByType.Add(typeof(Note), noteMappings);
-            
-            TableNamesByType.Add(typeof(Track), "Tracks");
-            PropertyInfo[] trackProperties = typeof(Track).GetProperties();
-            List<SqliteDataMapping> trackMappings = new List<SqliteDataMapping>();
-            trackMappings.Add(new SqliteDataMapping() { ColumnName = "TrackID", PropertyDataType = DataType.Int, PropertyInfo = trackProperties.First(x => x.Name == "ID"), PrimaryKey = true });
-            trackMappings.Add(new SqliteDataMapping() { ColumnName = "CourseID", PropertyDataType = DataType.Int, PropertyInfo = trackProperties.First(x => x.Name == "ParentCourseID") });
-            trackMappings.Add(new SqliteDataMapping() { ColumnName = "FilePath", PropertyDataType = DataType.String, PropertyInfo = trackProperties.First(x => x.Name == "FilePath") });
-            trackMappings.Add(new SqliteDataMapping() { ColumnName = "Title", PropertyDataType = DataType.String, PropertyInfo = trackProperties.First(x => x.Name == "Title") });
-            trackMappings.Add(new SqliteDataMapping() { ColumnName = "Length", PropertyDataType = DataType.TimeSpan, PropertyInfo = trackProperties.First(x => x.Name == "Length") });
-            trackMappings.Add(new SqliteDataMapping() { ColumnName = "IsVideo", PropertyDataType = DataType.Boolean, PropertyInfo = trackProperties.First(x => x.Name == "IsVideo") });
-            trackMappings.Add(new SqliteDataMapping() { ColumnName = "AspectRatio", PropertyDataType = DataType.Float, PropertyInfo = trackProperties.First(x => x.Name == "AspectRatio") });
-            trackMappings.Add(new SqliteDataMapping() { ColumnName = "TrackNumber", PropertyDataType = DataType.Int, PropertyInfo = trackProperties.First(x => x.Name == "TrackNumber") });
-            trackMappings.Add(new SqliteDataMapping() { ColumnName = "FileSize", PropertyDataType = DataType.Long, PropertyInfo = trackProperties.First(x => x.Name == "FileSize") });
-            MappingsByType.Add(typeof(Track), trackMappings);
-
-            TableNamesByType.Add(typeof(Hotkey), "Hotkeys");
-            PropertyInfo[] hotkeyProperties = typeof(Hotkey).GetProperties();
-            List<SqliteDataMapping> hotkeyMappings = new List<SqliteDataMapping>();
-            hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "HotkeyID", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "ID"), PrimaryKey = true });
-            hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "Function", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "Function") });
-            hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "ModifierKey", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "ModifierKey") });
-            hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "Key", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "Key") });
-            hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "Colour", PropertyDataType = DataType.Colour, PropertyInfo = hotkeyProperties.First(x => x.Name == "Colour") });
-            hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "SeekDirection", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "SeekDirection") });
-            hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "SeekSeconds", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "SeekSeconds") });
-            hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "Rating", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "Rating") });
-            hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "SpeedModifierPercent", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "SpeedModifierPercent") });
-            MappingsByType.Add(typeof(Hotkey), hotkeyMappings);
-
-            TableNamesByType.Add(typeof(ApplicationSettings), "Settings");
-            PropertyInfo[] settingsProperties = typeof(ApplicationSettings).GetProperties();
-            List<SqliteDataMapping> settingsMappings = new List<SqliteDataMapping>();
-            settingsMappings.Add(new SqliteDataMapping() { ColumnName = "SettingID", PropertyDataType = DataType.Int, PropertyInfo = settingsProperties.First(x => x.Name == "ID"), PrimaryKey = true });
-            settingsMappings.Add(new SqliteDataMapping() { ColumnName = "SerializedData", PropertyDataType = DataType.String, PropertyInfo = settingsProperties.First(x => x.Name == "SerializedData") });
-            MappingsByType.Add(typeof(ApplicationSettings), settingsMappings);
-
-            /***********************
-             * Prepare database upgrade scripts
-             ***********************/
-
-        }
 
         #endregion
 
@@ -165,6 +88,8 @@ namespace JayDev.MediaScribe.Model
                             {
                                 SetParameterValues<T>(item, insertCommand);
 
+                                Debug.WriteLineIf(debugMode, "DB INSERT: " + insertCommand.CommandText);
+                            
                                 int id = insertCommand.ExecuteNonQuery();
                                 if (id >= 0)
                                 {
@@ -179,6 +104,8 @@ namespace JayDev.MediaScribe.Model
                             else
                             {
                                 SetParameterValues<T>(item, updateCommand);
+
+                                Debug.WriteLineIf(debugMode, "DB UPDATE: " + updateCommand.CommandText);
 
                                 int affectedCount = updateCommand.ExecuteNonQuery();
                                 if (affectedCount == 0)
@@ -215,6 +142,8 @@ namespace JayDev.MediaScribe.Model
                     insertCommand.CommandText = CreateInsertQuery<T>();
                     SetParameterValues<T>(itemToSave, insertCommand);
 
+                    Debug.WriteLineIf(debugMode, "DB INSERT: " + insertCommand.CommandText);
+
                     int affectedCount = insertCommand.ExecuteNonQuery();
                     if (affectedCount >= 0)
                     {
@@ -237,6 +166,8 @@ namespace JayDev.MediaScribe.Model
                 {
                     updateCommand.CommandText = CreateUpdateQuery<T>();
                     SetParameterValues<T>(itemToSave, updateCommand);
+
+                    Debug.WriteLineIf(debugMode, "DB UPDATE: " + updateCommand.CommandText);
 
                     int affectedCount = updateCommand.ExecuteNonQuery();
                     if (affectedCount == 0)
@@ -281,7 +212,7 @@ namespace JayDev.MediaScribe.Model
             List<SqliteDataMapping> mappings = MappingsByType[typeof(T)];
             SqliteDataMapping primaryKeyMapping = mappings.First(x => true == x.PrimaryKey);
 
-            using (SQLiteCommand mycommand = new SQLiteCommand(connection))
+            using (SQLiteCommand deleteCommand = new SQLiteCommand(connection))
             {
                 object primaryKey = primaryKeyMapping.PropertyInfo.GetValue(itemToDelete, null);
                 if (null == primaryKey)
@@ -289,13 +220,15 @@ namespace JayDev.MediaScribe.Model
                     throw new ApplicationException("error: cannot delete an object with no ID...");
                 }
 
-                mycommand.CommandText = string.Format("DELETE FROM [{0}] WHERE [{1}] = @{1}", tableName, primaryKeyMapping.ColumnName);
-                var parameter = mycommand.CreateParameter();
+                deleteCommand.CommandText = string.Format("DELETE FROM [{0}] WHERE [{1}] = @{1}", tableName, primaryKeyMapping.ColumnName);
+                var parameter = deleteCommand.CreateParameter();
                 parameter.ParameterName = string.Format("@{0}", primaryKeyMapping.ColumnName);
                 parameter.Value = primaryKey;
-                mycommand.Parameters.Add(parameter);
+                deleteCommand.Parameters.Add(parameter);
 
-                var affectedCount = mycommand.ExecuteNonQuery();
+                Debug.WriteLineIf(debugMode, "DB DELETE: " + deleteCommand.CommandText);
+
+                var affectedCount = deleteCommand.ExecuteNonQuery();
                 if (affectedCount == 0)
                 {
                     throw new ApplicationException("affected rows should be at least 1");
@@ -597,10 +530,41 @@ namespace JayDev.MediaScribe.Model
 
         #endregion
 
+        #region Protected & Private Instance Members
+
+        protected const string ConnectionStringFormat = "Data Source={0};Version=3";
+
         protected SQLiteConnection connection = null;
 
-        protected static bool isDatabaseReady = false;
-        protected static object isDatabaseReadyLock = new object();
+        /// <summary>
+        /// flag used internally to indicate which databases have been prepared and are ready for use.
+        /// </summary>
+        private static HashSet<string> readyDatabasesSet = new HashSet<string>();
+        /// <summary>
+        /// Lock token used to ensure that only /one/ thread prepares any database for use at a given time.
+        /// NOTE: this ideally would be done per-database, but that's overkill.
+        /// </summary>
+        private static object isDatabaseReadyLock = new object();
+
+        private string _databaseFilePath = null;
+        protected string DatabaseFilePath
+        {
+            get
+            {
+                if (null == _databaseFilePath)
+                    throw new Exception("Error: databaseFilePath hasn't been set");
+                return _databaseFilePath;
+            }
+            set
+            {
+                _databaseFilePath = value;
+            }
+        }
+
+        protected RepositoryBase(string databaseFilePath)
+        {
+            this._databaseFilePath = databaseFilePath;
+        }
 
         /// <summary>
         /// Prepares a connection to the MediaScribe database.
@@ -616,27 +580,131 @@ namespace JayDev.MediaScribe.Model
             }
         }
 
-        protected SQLiteConnection CreateOpenConnection()
+        /// <summary>
+        /// Creates & opens a connection to an already-existing database
+        /// </summary>
+        /// <returns></returns>
+        private SQLiteConnection CreateOpenConnection()
         {
             SQLiteFactory factory = new SQLiteFactory();
-            var result = factory.CreateConnection() as SQLiteConnection;
-            var connString = ConfigurationManager.ConnectionStrings["MediaScribeDB"].ConnectionString.Replace("%AppData%", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
-            result.ConnectionString = connString;
-            result.Open();
-            return result;
+            var connection = factory.CreateConnection() as SQLiteConnection;
+            string connectionString = GetConnectionStringForDatabaseFile(DatabaseFilePath);
+            connection.ConnectionString = connectionString;
+            connection.Open();
+            return connection;
+        }
+
+        protected static string GetConnectionStringForDatabaseFile(string filePath)
+        {
+            return string.Format(ConnectionStringFormat, filePath);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region MediaScribe specific configuration
+
+        #region Static Constructor - sets up mappings between domain objects and SQLite tables
+
+        /// <summary>
+        /// Static constructor, configuring the mapping of the Domain objects to the SQLite tables. This populates the TableNamesByType and
+        /// MappingsByType static dictionaries.
+        /// </summary>
+        static RepositoryBase()
+        {
+            /***********************
+             * Prepare database mappings
+             ***********************/
+
+            TableNamesByType.Add(typeof(Course), "Courses");
+            PropertyInfo[] courseProperties = typeof(Course).GetProperties();
+            List<SqliteDataMapping> courseMappings = new List<SqliteDataMapping>();
+            courseMappings.Add(new SqliteDataMapping() { ColumnName = "CourseID", PropertyDataType = DataType.Int, PropertyInfo = courseProperties.First(x => x.Name == "ID"), PrimaryKey = true });
+            courseMappings.Add(new SqliteDataMapping() { ColumnName = "Name", PropertyDataType = DataType.String, PropertyInfo = courseProperties.First(x => x.Name == "Name") });
+            courseMappings.Add(new SqliteDataMapping() { ColumnName = "LastPlayedTrackID", PropertyDataType = DataType.Int, PropertyInfo = courseProperties.First(x => x.Name == "LastPlayedTrackID") });
+            courseMappings.Add(new SqliteDataMapping() { ColumnName = "LastPlayedTrackPosition", PropertyDataType = DataType.TimeSpan, PropertyInfo = courseProperties.First(x => x.Name == "LastPlayedTrackPosition") });
+            courseMappings.Add(new SqliteDataMapping() { ColumnName = "EmbeddedVideoWidth", PropertyDataType = DataType.Double, PropertyInfo = courseProperties.First(x => x.Name == "EmbeddedVideoWidth") });
+            courseMappings.Add(new SqliteDataMapping() { ColumnName = "EmbeddedVideoHeight", PropertyDataType = DataType.Double, PropertyInfo = courseProperties.First(x => x.Name == "EmbeddedVideoHeight") });
+            courseMappings.Add(new SqliteDataMapping() { ColumnName = "DateCreated", PropertyDataType = DataType.DateTime, PropertyInfo = courseProperties.First(x => x.Name == "DateCreated") });
+            courseMappings.Add(new SqliteDataMapping() { ColumnName = "DateViewed", PropertyDataType = DataType.DateTime, PropertyInfo = courseProperties.First(x => x.Name == "DateViewed") });
+            MappingsByType.Add(typeof(Course), courseMappings);
+
+            TableNamesByType.Add(typeof(Note), "Notes");
+            PropertyInfo[] noteProperties = typeof(Note).GetProperties();
+            List<SqliteDataMapping> noteMappings = new List<SqliteDataMapping>();
+            noteMappings.Add(new SqliteDataMapping() { ColumnName = "NoteID", PropertyDataType = DataType.Int, PropertyInfo = noteProperties.First(x => x.Name == "ID"), PrimaryKey = true });
+            noteMappings.Add(new SqliteDataMapping() { ColumnName = "CourseID", PropertyDataType = DataType.Int, PropertyInfo = noteProperties.First(x => x.Name == "ParentCourseID") });
+            noteMappings.Add(new SqliteDataMapping() { ColumnName = "Body", PropertyDataType = DataType.String, PropertyInfo = noteProperties.First(x => x.Name == "Body") });
+            noteMappings.Add(new SqliteDataMapping() { ColumnName = "StartTrackNumber", PropertyDataType = DataType.Int, PropertyInfo = noteProperties.First(x => x.Name == "StartTrackNumber") });
+            noteMappings.Add(new SqliteDataMapping() { ColumnName = "StartTime", PropertyDataType = DataType.TimeSpan, PropertyInfo = noteProperties.First(x => x.Name == "StartTime") });
+            noteMappings.Add(new SqliteDataMapping() { ColumnName = "EndTrackNumber", PropertyDataType = DataType.Int, PropertyInfo = noteProperties.First(x => x.Name == "EndTrackNumber") });
+            noteMappings.Add(new SqliteDataMapping() { ColumnName = "EndTime", PropertyDataType = DataType.TimeSpan, PropertyInfo = noteProperties.First(x => x.Name == "EndTime") });
+            noteMappings.Add(new SqliteDataMapping() { ColumnName = "Rating", PropertyDataType = DataType.Int, PropertyInfo = noteProperties.First(x => x.Name == "Rating") });
+            MappingsByType.Add(typeof(Note), noteMappings);
+
+            TableNamesByType.Add(typeof(Track), "Tracks");
+            PropertyInfo[] trackProperties = typeof(Track).GetProperties();
+            List<SqliteDataMapping> trackMappings = new List<SqliteDataMapping>();
+            trackMappings.Add(new SqliteDataMapping() { ColumnName = "TrackID", PropertyDataType = DataType.Int, PropertyInfo = trackProperties.First(x => x.Name == "ID"), PrimaryKey = true });
+            trackMappings.Add(new SqliteDataMapping() { ColumnName = "CourseID", PropertyDataType = DataType.Int, PropertyInfo = trackProperties.First(x => x.Name == "ParentCourseID") });
+            trackMappings.Add(new SqliteDataMapping() { ColumnName = "FilePath", PropertyDataType = DataType.String, PropertyInfo = trackProperties.First(x => x.Name == "FilePath") });
+            trackMappings.Add(new SqliteDataMapping() { ColumnName = "Title", PropertyDataType = DataType.String, PropertyInfo = trackProperties.First(x => x.Name == "Title") });
+            trackMappings.Add(new SqliteDataMapping() { ColumnName = "Length", PropertyDataType = DataType.TimeSpan, PropertyInfo = trackProperties.First(x => x.Name == "Length") });
+            trackMappings.Add(new SqliteDataMapping() { ColumnName = "IsVideo", PropertyDataType = DataType.Boolean, PropertyInfo = trackProperties.First(x => x.Name == "IsVideo") });
+            trackMappings.Add(new SqliteDataMapping() { ColumnName = "AspectRatio", PropertyDataType = DataType.Float, PropertyInfo = trackProperties.First(x => x.Name == "AspectRatio") });
+            trackMappings.Add(new SqliteDataMapping() { ColumnName = "TrackNumber", PropertyDataType = DataType.Int, PropertyInfo = trackProperties.First(x => x.Name == "TrackNumber") });
+            trackMappings.Add(new SqliteDataMapping() { ColumnName = "FileSize", PropertyDataType = DataType.Long, PropertyInfo = trackProperties.First(x => x.Name == "FileSize") });
+            MappingsByType.Add(typeof(Track), trackMappings);
+
+            TableNamesByType.Add(typeof(Hotkey), "Hotkeys");
+            PropertyInfo[] hotkeyProperties = typeof(Hotkey).GetProperties();
+            List<SqliteDataMapping> hotkeyMappings = new List<SqliteDataMapping>();
+            hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "HotkeyID", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "ID"), PrimaryKey = true });
+            hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "Function", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "Function") });
+            hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "ModifierKey", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "ModifierKey") });
+            hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "Key", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "Key") });
+            hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "Colour", PropertyDataType = DataType.Colour, PropertyInfo = hotkeyProperties.First(x => x.Name == "Colour") });
+            hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "SeekDirection", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "SeekDirection") });
+            hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "SeekSeconds", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "SeekSeconds") });
+            hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "Rating", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "Rating") });
+            hotkeyMappings.Add(new SqliteDataMapping() { ColumnName = "SpeedModifierPercent", PropertyDataType = DataType.Int, PropertyInfo = hotkeyProperties.First(x => x.Name == "SpeedModifierPercent") });
+            MappingsByType.Add(typeof(Hotkey), hotkeyMappings);
+
+            TableNamesByType.Add(typeof(ApplicationSettings), "Settings");
+            PropertyInfo[] settingsProperties = typeof(ApplicationSettings).GetProperties();
+            List<SqliteDataMapping> settingsMappings = new List<SqliteDataMapping>();
+            settingsMappings.Add(new SqliteDataMapping() { ColumnName = "SettingID", PropertyDataType = DataType.Int, PropertyInfo = settingsProperties.First(x => x.Name == "ID"), PrimaryKey = true });
+            settingsMappings.Add(new SqliteDataMapping() { ColumnName = "SerializedData", PropertyDataType = DataType.String, PropertyInfo = settingsProperties.First(x => x.Name == "SerializedData") });
+            MappingsByType.Add(typeof(ApplicationSettings), settingsMappings);
+
+            /***********************
+             * Prepare database upgrade scripts
+             ***********************/
+
+        }
+
+        #endregion
+
+        protected static string DefaultDatabaseFilePath
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["MediaScribeDBFilePath"].Replace("%AppData%", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+            }
         }
 
         protected void CreateDatabaseIfNotExists()
         {
-            if (false == isDatabaseReady)
+            string databaseFilePath = DatabaseFilePath;
+            if (false == readyDatabasesSet.Contains(databaseFilePath))
             {
                 lock (isDatabaseReadyLock)
                 {
                     //because of the lock, if we got into here /after/ a previous thread's finished, return.
-                    if (isDatabaseReady)
+                    if (readyDatabasesSet.Contains(databaseFilePath))
                         return;
 
-                    string databaseFilePath = string.Format(Constants.ApplicationGenericFilePath, DatabaseFileName);
 
                     if (false == File.Exists(databaseFilePath))
                     {
@@ -679,9 +747,36 @@ namespace JayDev.MediaScribe.Model
                     }
 
                     //flag that the database is ready for use.
-                    isDatabaseReady = true;
+                    readyDatabasesSet.Add(databaseFilePath);
                 }
             }
         }
+
+        protected string GetDatabaseVersionNumber() {
+            PrepareConnection();
+            using (SQLiteTransaction mytransaction = connection.BeginTransaction())
+            {
+                using (SQLiteCommand mycommand = new SQLiteCommand(connection))
+                {
+                    string versionNumber = null;
+                    try {
+                    mycommand.CommandText = "SELECT DatabaseVersion FROM Version";
+                    string stringResult = Convert.ToString(mycommand.ExecuteScalar());
+                        versionNumber = stringResult;
+                    }
+                    catch(SQLiteException exception) {
+                        if(exception.Message.Contains("no such table")) {
+                            versionNumber = "0.9.0.0";
+                        }
+                        else {
+                            throw;
+                        }
+                    }
+                    return versionNumber;
+                }
+            }
+        }
+
+        #endregion MediaScribe specific configuration
     }
 }

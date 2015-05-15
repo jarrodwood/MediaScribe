@@ -136,5 +136,43 @@ namespace JayDev.MediaScribe.ViewModel
                 }
             }
         }
+
+        internal void ExportCourse(Course courseToExport)
+        {
+            //TODO: refactor so we don't use dialogs in viewmodels
+            Microsoft.Win32.SaveFileDialog saveFileDialog1 = new Microsoft.Win32.SaveFileDialog();
+            saveFileDialog1.OverwritePrompt = true;
+            saveFileDialog1.RestoreDirectory = true;
+            saveFileDialog1.DefaultExt = "mediascribe";
+            // Adds a extension if the user does not
+            saveFileDialog1.AddExtension = true;
+            saveFileDialog1.InitialDirectory = Convert.ToString(Environment.SpecialFolder.MyDocuments);
+            saveFileDialog1.Filter = "MediaScribe Courses|*.mediascribe";
+            saveFileDialog1.FileName = string.Format("Shared Notes for {0} - {1}.mediascribe", courseToExport.Name, DateTime.Now.ToString("dd-MM-yyyy HH.mm.ss"));
+            saveFileDialog1.Title = "Save Shared Notes";
+
+            if (saveFileDialog1.ShowDialog() == true)
+            {
+                try
+                {
+                    string destinationFilePath = saveFileDialog1.FileName;
+                    var destinationRepository = new JayDev.MediaScribe.Model.CourseRepository(destinationFilePath);
+                    destinationRepository.SaveCourse(
+                        course: courseToExport,
+                        saveTracks: true, 
+                        saveNotes: true,
+                        saveAsNewCourse: true);
+
+                    System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Successfully created the notes file for you to share.", "Export successful", MessageBoxButton.OK);
+
+                    //TODO: make it pop up an explorer window, highlighting the new file for them to copy/share/whatever.
+                    //TODO: also update the 'export successful' message with tips of what the user can do.
+                }
+                catch (Exception e)
+                {
+                    System.Windows.MessageBox.Show(System.Windows.Application.Current.MainWindow, "Error exporting :( - " + e.ToString());
+                }
+            }
+        }
     }
 }

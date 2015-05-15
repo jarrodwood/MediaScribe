@@ -124,11 +124,10 @@
     <Compile Include="ViewModel\WindowHeaderViewModel.cs" />
     <Compile Include="View\Controls\MediaScribeMainTabControl.cs" />
     <Compile Include="Domain\Hotkey.cs" />
-    <Compile Include="Model\CourseRepositorySqlite.cs" />
-    <Compile Include="Model\ExportImportRepository.cs" />
-    <Compile Include="Model\ImportExportRepository.cs" />
+    <Compile Include="Model\CourseRepository.cs" />
+    <Compile Include="Model\ExportFileRepository.cs" />
     <Compile Include="Model\RepositoryBase.cs" />
-    <Compile Include="Model\SettingRepositorySqlite.cs" />
+    <Compile Include="Model\SettingRepository.cs" />
     <Compile Include="Model\UpdateRepository.cs" />
     <Compile Include="ViewModel\ImportExportViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
@@ -357,6 +356,10 @@
     <ProjectReference Include="..\MediaScribe.Common\MediaScribe.Common.csproj">
       <Project>{7BE13DBC-C110-469E-92E7-49720938A62E}</Project>
       <Name>MediaScribe.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MediaScribe.Monitor\MediaScribe.Monitor.csproj">
+      <Project>{264abba0-6903-478a-8a65-dacf8ed3d3e1}</Project>
+      <Name>MediaScribe.Monitor</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

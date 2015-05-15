@@ -472,7 +472,7 @@ namespace LibMPlayerCommon
         {
             if (this.CurrentStatus != MediaStatus.Stopped)
             {
-                MediaPlayer.StandardInput.WriteLine("stop");
+                MediaPlayer.StandardInput.WriteLine("pausing_keep stop");
                 MediaPlayer.StandardInput.Flush();
                 this.CurrentStatus = MediaStatus.Stopped;
             }
