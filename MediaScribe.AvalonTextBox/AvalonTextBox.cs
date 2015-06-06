@@ -431,6 +431,16 @@ namespace AvalonTextBox
                 }
             }
 
+
+            //the user might have removed all the text in the textbox, which has the effect of removing all of the (now empty) sections.
+            //however, we need at least ONE empty section for the user to type into.
+            //NOTE: we can't REPLACE the collection, since it's hooked up to the colorizer. we must add to it.
+            //NOTE 2: we do this HERE, after removals but before insertions... in case the user ctrl-a's to select all, and starts typing - we'll have removed ALL SECTIONS, and also have an insertion to perform - which needs a section to go in. 
+            if (sections.Count == 0)
+            {
+                sections.AddRange(AvalonHelper.GetInitialSectionsForBlankString());
+            }
+
             if (e.InsertionLength > 0)
             {
                 int position = 0;
@@ -484,14 +494,6 @@ namespace AvalonTextBox
                     sections.RemoveAt(i);
                     sections[i - 1] = mergedSection;
                 }
-            }
-
-            //the user might have removed all the text in the textbox, which has the effect of removing all of the (now empty) sections.
-            //however, we need at least ONE empty section for the user to type into.
-            //NOTE: we can't REPLACE the collection, since it's hooked up to the colorizer. we must add to it.
-            if (sections.Count == 0)
-            {
-                sections.AddRange(AvalonHelper.GetInitialSectionsForBlankString());
             }
         }
 
