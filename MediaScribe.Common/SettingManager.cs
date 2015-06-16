@@ -38,11 +38,6 @@ namespace MediaScribe.Common
             lock (lockToken)
             {
                 var modifiers = (((System.Windows.Input.KeyboardEventArgs)(e)).KeyboardDevice).Modifiers;
-                //if there are more than one flags set (bit operation), return
-                if ((modifiers & (modifiers - 1)) != 0)
-                {
-                    return null;
-                }
 
                 keyMatch keyMatch = new keyMatch() { Key = e.Key, Modifier = modifiers };
                 List<HotkeyBase> matches;

@@ -53,6 +53,9 @@ namespace JayDev.MediaScribe.View
             base.OnPreviewTextInput(e);
         }
 
+        private void TextBox_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+        }
 
         /// <summary>
         /// Used for the 'Key' column, providing the user with a textbox that they can press a keyboard key into -- and we'll detect what
@@ -62,10 +65,51 @@ namespace JayDev.MediaScribe.View
         /// <param name="e"></param>
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            DetermineKeyPress(e);
+        }
+
+        private void DetermineKeyPress(KeyEventArgs e)
+        {
             if (null != hotkeyGrid.SelectedItem)
             {
                 Hotkey selected = (Hotkey)hotkeyGrid.SelectedItem;
-                selected.Key = e.Key;
+
+                selected.ModifierKey = Keyboard.Modifiers;
+                //selected.ModifierKeys.Clear();
+                //if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+                //{
+                //    selected.ModifierKeys.Add(ModifierKeys.Shift);
+                //}
+                //if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                //{
+                //    selected.ModifierKeys.Add(ModifierKeys.Control);
+                //}
+                //if ((Keyboard.Modifiers & ModifierKeys.Alt) == ModifierKeys.Alt)
+                //{
+                //    selected.ModifierKeys.Add(ModifierKeys.Alt);
+                //}
+                //if ((Keyboard.Modifiers & ModifierKeys.Windows) == ModifierKeys.Windows)
+                //{
+                //    selected.ModifierKeys.Add(ModifierKeys.Windows);
+                //}
+
+                switch (e.Key)
+                {
+                    //ignore the modifier keys
+                    case Key.LeftAlt:
+                    case Key.LeftCtrl:
+                    case Key.LeftShift:
+                    case Key.LWin:
+                    case Key.RightAlt:
+                    case Key.RightCtrl:
+                    case Key.RightShift:
+                    case Key.RWin:
+                        break;
+                    default:
+                        selected.Key = e.Key;
+                        break;
+                }
+
                 e.Handled = true;
             }
         }

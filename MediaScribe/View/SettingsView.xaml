@@ -35,6 +35,8 @@
         <nmConverters:EnumInfoLabelToStringConverter x:Key="EnumInfoLabelToStringConverter" />
         <nmConverters:EnumToTooltipTextBlockConverter x:Key="EnumToTooltipTextBlockConverter" />
         <nmConverters:EnumToStringConverter x:Key="EnumToStringConverter" />
+        <nmConverters:ModifierKeysCollectionToStringConverter x:Key="ModifierKeysCollectionToStringConverter" />
+        <nmConverters:KeyEnumToStringConverter x:Key="KeyEnumToStringConverter" />
         <nmConverters:ColourToBrushConverter x:Key="ColourToBrushConverter" />
         <nmConverters:ColourToNameStringConverter x:Key="ColourToNameStringConverter" />
 
@@ -427,10 +429,10 @@
 
                                                 <DataGridTemplateColumn Header="Parameter" Width="165" CanUserSort="False" CellStyle="{StaticResource dynamicCellBasedOnFunctionType}" />
 
-                                                <DataGridTemplateColumn Header="Modifier" Width="105" SortMemberPath="ModifierKey" CanUserSort="True">
+                                                <!--<DataGridTemplateColumn Header="Modifier" Width="105" SortMemberPath="ModifierKey" CanUserSort="True">
                                                     <DataGridTemplateColumn.CellTemplate>
                                                         <DataTemplate>
-                                                            <TextBlock Text="{Binding ModifierKey, Converter={StaticResource EnumToStringConverter}}" />
+                                                            <TextBlock Text="{Binding ModifierKey, Converter={StaticResource EnumToStringConverter}, Mode=TwoWay}" />
                                                         </DataTemplate>
                                                     </DataGridTemplateColumn.CellTemplate>
                                                     <DataGridTemplateColumn.CellEditingTemplate>
@@ -440,22 +442,54 @@
                                                             </ComboBox>
                                                         </DataTemplate>
                                                     </DataGridTemplateColumn.CellEditingTemplate>
-                                                </DataGridTemplateColumn>
+                                                </DataGridTemplateColumn>-->
 
                                                 <DataGridTemplateColumn Header="Key" Width="*" SortMemberPath="Key" CanUserSort="True">
                                                     <DataGridTemplateColumn.CellTemplate>
                                                         <DataTemplate>
-                                                            <TextBlock Text="{Binding Key, Converter={StaticResource EnumToStringConverter}}" />
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <!-- modifier keys list... but hide if it's empty -->
+                                                                <TextBlock Foreground="Gray" Text="{Binding ModifierKey, Converter={StaticResource ModifierKeysCollectionToStringConverter}}" Padding="0 0 5 0">
+                                                                    <TextBlock.Style>
+                                                                        <Style TargetType="TextBlock">
+                                                                            <Style.Triggers>
+                                                                                <Trigger Property="Text" Value="">
+                                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                                </Trigger>
+                                                                                <Trigger Property="Text" Value="{x:Null}">
+                                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                                </Trigger>
+                                                                            </Style.Triggers>
+                                                                        </Style>
+                                                                    </TextBlock.Style>
+                                                                </TextBlock>
+                                                                <TextBlock Text="{Binding Key, Converter={StaticResource KeyEnumToStringConverter}}" />
+                                                            </StackPanel>
                                                         </DataTemplate>
                                                     </DataGridTemplateColumn.CellTemplate>
                                                     <DataGridTemplateColumn.CellEditingTemplate>
                                                         <DataTemplate>
                                                             <StackPanel Orientation="Horizontal">
+                                                                <!-- modifier keys list... but hide if it's empty -->
+                                                                <TextBlock Text="{Binding ModifierKey, Converter={StaticResource ModifierKeysCollectionToStringConverter}}" Padding="0 0 5 0">
+                                                                    <TextBlock.Style>
+                                                                        <Style TargetType="TextBlock">
+                                                                            <Style.Triggers>
+                                                                                <Trigger Property="Text" Value="">
+                                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                                </Trigger>
+                                                                                <Trigger Property="Text" Value="{x:Null}">
+                                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                                </Trigger>
+                                                                            </Style.Triggers>
+                                                                        </Style>
+                                                                    </TextBlock.Style>
+                                                                </TextBlock>
                                                                 <!--FocusManager.FocusedElement="{Binding ElementName=hitTextbox}"-->
-                                                                <ComboBox MinWidth="110" Text="Select key..." ItemsSource="{Binding Source={StaticResource dataFromKeyEnum}}"
-                                          SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=SelectedItem.Key, Mode=TwoWay}">
-                                                                </ComboBox>
-                                                                <TextBox Margin="5 0 0 0" Text="Click here &amp; Press key" PreviewKeyDown="TextBox_PreviewKeyDown" Name="hitTextbox"></TextBox>
+                                                                <TextBlock Text="{Binding Key, Converter={StaticResource KeyEnumToStringConverter}}">
+                                                                        </TextBlock>
+                                                                <TextBox Margin="5 0 0 0" Text="Click here &amp; Press key" PreviewKeyUp="TextBox_PreviewKeyUp" PreviewKeyDown="TextBox_PreviewKeyDown" Name="hitTextbox"
+                                                                         FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"></TextBox>
                                                             </StackPanel>
                                                         </DataTemplate>
                                                     </DataGridTemplateColumn.CellEditingTemplate>

@@ -41,7 +41,24 @@ namespace JayDev.MediaScribe
                 }
             }
         }
-        public override ModifierKeys ModifierKey { get; set; }
+
+        private ModifierKeys _modifierKey;
+        public override ModifierKeys ModifierKey
+        {
+            get
+            {
+                return _modifierKey;
+            }
+            set
+            {
+                bool isChanged = _modifierKey != value;
+                _modifierKey = value;
+                if (isChanged)
+                {
+                    OnPropertyChanged("ModifierKey");
+                }
+            }
+        }
 
         private HotkeyFunction _function;
 

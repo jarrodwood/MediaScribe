@@ -16,7 +16,8 @@ namespace JayDev.MediaScribe.Core
         Errors,
         DragEnabledDataGrid,
         FullscreenToggle,
-        CourseUseViewModel
+        CourseUseViewModel,
+        Temp
     }
     internal class Logging
     {
@@ -28,6 +29,7 @@ namespace JayDev.MediaScribe.Core
             {
                 LoggingSource.ThumbnailGeneration,
                 LoggingSource.Errors,
+                LoggingSource.Temp
             };
             sourcesToWriteToFile = new List<LoggingSource>()
             {
