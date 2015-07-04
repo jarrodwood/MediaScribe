@@ -46,7 +46,7 @@
                                                    />
 
             <Border Background="#FFEEF6FF">
-            <Grid Name="mainGrid">
+                 <Grid Name="mainGrid">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{Binding Path=LastEmbeddedVideoWidth, Mode=TwoWay, Converter={StaticResource gridLengthConverter}, TargetNullValue='300'}"/>
                     <ColumnDefinition Width="5"/>
@@ -141,16 +141,28 @@
 
                 <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" DragCompleted="GridSplitter_DragCompleted" />
 
-                <DockPanel Grid.Column="2" VerticalAlignment="Top">
-                    <nmControls:NotesGridControl x:Name="notesGrid"
+                <Grid Grid.Column="2" VerticalAlignment="Top">
+                        
+                        <nmControls:NotesGridControl x:Name="notesGrid"
                                                        PrepareNoteForEditCommand="{Binding PrepareNoteForEditCommand}"
                                                        NoteSavedCommand="{Binding NoteSavedCommand}"
                                                        Notes="{ Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                        PlayNoteCommand="{Binding PlayNoteCommand}"
                                                        SetNoteStartTimeCommand="{Binding SetNoteStartTimeCommand}"
-                                                       NoteEditCompletedCommand="{Binding NoteEditCompletedCommand}">
+                                                       NoteEditCompletedCommand="{Binding NoteEditCompletedCommand}"
+                                                       CurrentHighlightMatchNote="{Binding FindTextMatchNote}"
+                                                    
+                                                     FindTextPreviousMatchCommand="{Binding FindTextPreviousMatchCommand}"
+                                                     FindTextNextMatchCommand="{Binding FindTextNextMatchCommand}"
+                                                     FindTextCloseCommand="{Binding FindTextCloseCommand}"
+                                                     
+                                                      FindTextMatchIndex="{Binding FindTextMatchIndex}"
+                                                     FindTextMatchCount="{Binding FindTextMatchCount}"
+                                                     
+                                                     FindTextInput="{Binding FindTextInput, Mode=TwoWay}"
+                                                     >
                     </nmControls:NotesGridControl>
-                </DockPanel>
+                </Grid>
             </Grid>
             </Border>
         </DockPanel>

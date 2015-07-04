@@ -17,6 +17,7 @@ using JayDev.MediaScribe.Core;
 using MediaScribe.Common;
 using JayDev.MediaScribe.View;
 using Microsoft.Practices.Unity;
+using System.Threading.Tasks;
 
 namespace JayDev.MediaScribe.ViewModel
 {
@@ -37,6 +38,10 @@ namespace JayDev.MediaScribe.ViewModel
         //TODO: MOVE THIS OUT OF VIEWMODEL!
         [DllImport("user32.dll")]
         static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        AsyncWorker findTextWorker = new AsyncWorker();
+        object findTextMatchesLockToken = new object();
+        List<Tuple<Note, HighlightMatch>> findTextMatches = new List<Tuple<Note, HighlightMatch>>();
 
         #region Public Properties & Backing Fields
 
@@ -116,6 +121,149 @@ namespace JayDev.MediaScribe.ViewModel
         }
 
         #endregion CourseName
+
+        
+        #region FindTextInput
+
+        /// <summary>
+        /// The <see cref="FindTextInput" /> property's name.
+        /// </summary>
+        public const string FindTextInputPropertyName = "FindTextInput";
+
+        private string _findTextInput;
+
+        /// <summary>
+        /// Sets and gets the FindTextInput property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public string FindTextInput
+        {
+            get
+            {
+                return _findTextInput;
+            }
+
+            set
+            {
+                if (_findTextInput == value)
+                {
+                    return;
+                }
+
+                _findTextInput = value;
+                RaisePropertyChanged(FindTextInputPropertyName);
+            }
+        }
+
+        #endregion FindTextInput
+
+
+        
+        #region FindTextMatchCount
+
+        /// <summary>
+        /// The <see cref="FindTextMatchCount" /> property's name.
+        /// </summary>
+        public const string FindTextMatchCountPropertyName = "FindTextMatchCount";
+
+        private int _findTextMatchCount;
+
+        /// <summary>
+        /// Sets and gets the FindTextMatchCount property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public int FindTextMatchCount
+        {
+            get
+            {
+                return _findTextMatchCount;
+            }
+
+            set
+            {
+                if (_findTextMatchCount == value)
+                {
+                    return;
+                }
+
+                _findTextMatchCount = value;
+                RaisePropertyChanged(FindTextMatchCountPropertyName);
+            }
+        }
+
+        #endregion FindTextMatchCount
+
+        
+        #region FindTextMatchIndex
+
+        /// <summary>
+        /// The <see cref="FindTextMatchIndex" /> property's name.
+        /// </summary>
+        public const string FindTextMatchIndexPropertyName = "FindTextMatchIndex";
+
+        private int _findTextMatchIndex;
+
+        /// <summary>
+        /// Sets and gets the FindTextMatchIndex property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public int FindTextMatchIndex
+        {
+            get
+            {
+                return _findTextMatchIndex;
+            }
+
+            set
+            {
+                if (_findTextMatchIndex == value)
+                {
+                    return;
+                }
+
+                _findTextMatchIndex = value;
+                RaisePropertyChanged(FindTextMatchIndexPropertyName);
+            }
+        }
+
+        #endregion FindTextMatchIndex
+
+        
+        #region FindTextMatchNote
+
+        /// <summary>
+        /// The <see cref="FindTextMatchNote" /> property's name.
+        /// </summary>
+        public const string FindTextMatchNotePropertyName = "FindTextMatchNote";
+
+        private Note _findTextMatchNote;
+
+        /// <summary>
+        /// Sets and gets the FindTextMatchNote property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public Note FindTextMatchNote
+        {
+            get
+            {
+                return _findTextMatchNote;
+            }
+
+            set
+            {
+                if (_findTextMatchNote == value)
+                {
+                    return;
+                }
+
+                _findTextMatchNote = value;
+                RaisePropertyChanged(FindTextMatchNotePropertyName);
+            }
+        }
+
+        #endregion FindTextMatchNote
+						
+				
 
         #region CurrentTrackName
 
@@ -1050,6 +1198,83 @@ namespace JayDev.MediaScribe.ViewModel
 
         #endregion
 
+
+        #region FindTextNextMatchCommand
+
+        private RelayCommand _findTextNextMatchCommand;
+
+        /// <summary>
+        /// Gets the FindTextNextMatchCommand.
+        /// </summary>
+        public RelayCommand FindTextNextMatchCommand
+        {
+            get
+            {
+                return _findTextNextMatchCommand
+                    ?? (_findTextNextMatchCommand = new RelayCommand(
+                                          () =>
+                                          {
+                                              HandleFindTextMatchNextAndPrevious(moveNext: true);
+                                          }));
+            }
+        }
+
+        #endregion
+        
+
+        #region FindTextPreviousMatchCommand
+
+        private RelayCommand _findTextPreviousMatchCommand;
+
+        /// <summary>
+        /// Gets the FindTextPreviousMatchCommand.
+        /// </summary>
+        public RelayCommand FindTextPreviousMatchCommand
+        {
+            get
+            {
+                return _findTextPreviousMatchCommand
+                    ?? (_findTextPreviousMatchCommand = new RelayCommand(
+                                          () =>
+                                          {
+                                              HandleFindTextMatchNextAndPrevious(moveNext: false);
+                                          }));
+            }
+        }
+
+        #endregion
+
+        #region FindTextCloseCommand
+
+        private RelayCommand _findTextCloseCommand;
+
+        /// <summary>
+        /// Gets the FindTextCloseCommand.
+        /// </summary>
+        public RelayCommand FindTextCloseCommand
+        {
+            get
+            {
+                return _findTextCloseCommand
+                    ?? (_findTextCloseCommand = new RelayCommand(
+                                          () =>
+                                          {
+                                              FindTextInput = null;
+                                              _lastFindTextInput = null;
+                                              findTextMatches.Clear();
+                                          }));
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// When we're finding text, it's useful to know what the last input WAS so we can determine if this will filter down the last result
+        /// set, or effectively add more results into it. (e.g. typing "abc" then changed to "abcd" means we only have to search in the results
+        /// that matched "abc", whereas if it goes from "abc" to "ac" it means we need to re-search all notes.
+        /// </summary>
+        private string _lastFindTextInput;
+        
         #endregion
 
         #region Constructor
@@ -1078,6 +1303,7 @@ namespace JayDev.MediaScribe.ViewModel
             if (null == ThumbnailGenerator)
                 ThumbnailGenerator = new Core.ThumbnailGenerator();
 
+
             //when the application settings change, ensure we're notified about it so that any derived
             //properties can be updated too.
             Messenger.Default.Register<ApplicationSettings>(this, MessageType.ApplicationSettingsChanged, (message) =>
@@ -1093,7 +1319,6 @@ namespace JayDev.MediaScribe.ViewModel
         }
 
         #endregion
-
 
 
         int lastUpdatedAtMillisecond = 0;
@@ -1152,6 +1377,79 @@ namespace JayDev.MediaScribe.ViewModel
                         }
                 };
                 monitorApp.Start();
+            }
+
+            if (e.PropertyName == FindTextInputPropertyName)
+            {
+                findTextWorker.AbortAllWork();
+                if (string.IsNullOrEmpty(FindTextInput))
+                {
+                    FindTextMatchCount = 0;
+                    findTextMatches.Select(x => x.Item1).Distinct().ToList().ForEach(x => x.HighlightSections = new List<HighlightMatch>());
+                }
+                else
+                {
+                    findTextWorker.QueueWorkItem((DoWorkEventArgs args) =>
+                    {
+                        string findText = FindTextInput.ToLowerInvariant();
+                        bool cancelled = false;
+                        int matchCount = 0;
+                        List<Tuple<Note, HighlightMatch>> matches = new List<Tuple<Note, HighlightMatch>>();
+                        object findTextLockToken = new object();
+
+                        //for efficiency... if we're starting a new search, search all notes... if we're typing and effectively filtering down a search, use the list of notes that matche
+                        bool filterExistingResults = !string.IsNullOrEmpty(_lastFindTextInput) && (findText.StartsWith(_lastFindTextInput) || findText.EndsWith(_lastFindTextInput));
+                        List<Note> notesToSearch = filterExistingResults ? findTextMatches.Select(x => x.Item1).Distinct().ToList() : new List<Note>(Notes);
+                        //save /this/ search for next time the user changes it.
+                        _lastFindTextInput = findText;
+
+                        Parallel.ForEach(notesToSearch, new ParallelOptions() { MaxDegreeOfParallelism = 4 }, (note, loopstate) =>
+                        {
+                            if (args.Cancel)
+                            {
+                                cancelled = true;
+                                loopstate.Stop();
+                            }
+
+                            var noteMatches = note.BodyStripped.AllIndexesOf(findText);
+                            lock (findTextLockToken)
+                            {
+                                matchCount += noteMatches.Count();
+                                List<HighlightMatch> matchesForNote = new List<HighlightMatch>();
+                                foreach (var noteMatch in noteMatches)
+                                {
+                                    HighlightMatch highlightMatch = new HighlightMatch(noteMatch, findText.Length);
+                                    matches.Add(new Tuple<Note, HighlightMatch>(note, highlightMatch));
+                                    matchesForNote.Add(highlightMatch);
+                                 }
+
+                                note.HighlightSections = matchesForNote;
+                            }
+                        });
+
+                        matches = matches.OrderBy(x => x.Item1.StartTrackNumber)
+                            .ThenBy(x => x.Item1.StartTime)
+                            .ThenBy(x => x.Item2.MatchStartIndex).ToList();
+
+                        if (false == cancelled)
+                        {
+                            FindTextMatchCount = matchCount;
+                            lock(findTextMatchesLockToken) {
+                                findTextMatches.Clear();
+                                findTextMatches.AddRange(matches);
+                            }
+
+                            FindTextMatchIndex = matchCount > 0 ? 1 : 0;
+
+                            //if there is at least one match, set the first as the current match.
+                            if (matches.Count > 0)
+                            {
+                                matches[0].Item2.CurrentMatch = true;
+                                FindTextMatchNote = matches[0].Item1; //set this so that the notes datagrid jumps to it
+                            }
+                        }
+                    });
+                }
             }
         }
 
@@ -1443,6 +1741,39 @@ namespace JayDev.MediaScribe.ViewModel
                 Logging.Log(LoggingSource.CourseUseViewModel, "SetInitialTrack call, and video panel is not initialized.");
                 // throw new Exception("error - setting initial track before mplayer display control initialized. if i ever run into this error, figure out a way around it!");
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="moveNext">true if we move next, false if we move back</param>
+        private void HandleFindTextMatchNextAndPrevious(bool moveNext)
+        {
+
+            var currentMatch = findTextMatches[FindTextMatchIndex - 1]; //we subtract 1 because the index is 1-based.
+            //set the current matche's "current" field to false. 
+            currentMatch.Item2.CurrentMatch = false;
+            //let the note know we've updated the match status
+            currentMatch.Item1.HighlightSections = new List<HighlightMatch>(currentMatch.Item1.HighlightSections);
+
+            //move to the next index
+            if (moveNext)
+            {
+                FindTextMatchIndex = FindTextMatchIndex < FindTextMatchCount ? FindTextMatchIndex + 1 : 1;
+            }
+            else
+            {
+                FindTextMatchIndex = FindTextMatchIndex > 1 ? FindTextMatchIndex - 1 : FindTextMatchCount;
+            }
+
+            currentMatch = findTextMatches[FindTextMatchIndex - 1]; //we subtract 1 because the index is 1-based.
+            //set the current matche's "current" field to false. 
+            currentMatch.Item2.CurrentMatch = true;
+            //let the note know we've updated the match status
+            currentMatch.Item1.HighlightSections = new List<HighlightMatch>(currentMatch.Item1.HighlightSections);
+
+            //set the DP for the note, so that the notes grid can scroll to it.
+            FindTextMatchNote = currentMatch.Item1;
         }
     }
 }

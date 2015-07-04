@@ -1312,7 +1312,7 @@ namespace JayDev.MediaScribe {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to \ (backslash).
         /// </summary>
         internal static string Oem5 {
             get {
@@ -1366,7 +1366,7 @@ namespace JayDev.MediaScribe {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to \.
+        ///   Looks up a localized string similar to \ (backslash).
         /// </summary>
         internal static string OemBackslash {
             get {

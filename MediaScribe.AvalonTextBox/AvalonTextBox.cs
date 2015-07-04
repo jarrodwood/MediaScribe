@@ -49,6 +49,20 @@ namespace AvalonTextBox
                 (a as AvalonTextBox).SetMarkedupText((string)b.NewValue);
             })));
 
+
+
+        public string OutStrippedText
+        {
+            get { return (string)GetValue(OutStrippedTextProperty); }
+            set { SetValue(OutStrippedTextProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for OutStrippedText.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty OutStrippedTextProperty =
+            DependencyProperty.Register("OutStrippedText", typeof(string), typeof(AvalonTextBox), new PropertyMetadata(null));
+
+        
+
         #endregion
 
         #region Constructor
@@ -77,19 +91,19 @@ namespace AvalonTextBox
 
         #region Public Methods
 
-        public void ApplyBold()
+        public void ApplyBoldToSelection()
         {
-            Apply(true, false, null);
+            ApplyToSelection(true, false, null);
         }
 
-        public void ApplyItalics()
+        public void ApplyItalicsToSelection()
         {
-            Apply(false, true, null);
+            ApplyToSelection(false, true, null);
         }
 
-        public void ApplyColour(Color? colour)
+        public void ApplyColourToSelection(Color? colour)
         {
-            Apply(false, false, colour);
+            ApplyToSelection(false, false, colour);
         }
 
         #endregion
@@ -106,18 +120,23 @@ namespace AvalonTextBox
             _cachedMarkedupText = markedupText;
             PrepareSections();
 
-            StringBuilder strippedText = new StringBuilder();
-            foreach (var section in sections)
-            {
-                strippedText.Append(section.Text);
-            }
-            this.Text = strippedText.ToString();
-
             colorizer.Sections = sections;
             this.TextArea.TextView.LineTransformers.Clear();
             this.TextArea.TextView.LineTransformers.Add(colorizer);
             this.Document.Changed -= Document_Changed;
             this.Document.Changed += new EventHandler<DocumentChangeEventArgs>(Document_Changed);
+
+
+            #region HIGHLIGHTING - extract stripped text
+            StringBuilder strippedTextBuilder = new StringBuilder();
+            foreach (var section in sections)
+            {
+                strippedTextBuilder.Append(section.Text.ToLowerInvariant());
+            }
+            string strippedText = strippedTextBuilder.ToString();
+            this.Text = strippedText;
+            this.OutStrippedText = strippedText;
+            #endregion
 
         }
 
@@ -155,13 +174,18 @@ namespace AvalonTextBox
             return section;
         }
 
-        void Apply(bool toggleBold, bool toggleItalics, Color? colour)
+        void ApplyToSelection(bool toggleBold, bool toggleItalics, Color? colour)
+        {
+            Apply(toggleBold, toggleItalics, colour, this.SelectionStart, this.SelectionLength);
+        }
+
+        void Apply(bool toggleBold, bool toggleItalics, Color? colour, int selectionStart, int selectionLength)
         {
             _isTextUpdatedSinceCachedMarkedupText = true;
 
             //if the selection length is 0, toggle the style on the selection. otherwise, create a new, empty section with the appropriate
             //styling.
-            if (this.SelectionLength > 0)
+            if (selectionLength > 0)
             {
                 int position = 0;
                 int firstAppliceableSectionIndex = -1;
@@ -171,7 +195,7 @@ namespace AvalonTextBox
                 {
                     Section currentSection = sections[i];
                     //if we're not at the position, keep on going through the list until we are.
-                    if (this.SelectionStart >= position + currentSection.Text.Length)
+                    if (selectionStart >= position + currentSection.Text.Length)
                     {
                         position += currentSection.Text.Length;
                     }
@@ -182,11 +206,11 @@ namespace AvalonTextBox
                         if (firstAppliceableSectionIndex == -1)
                         {
                             firstAppliceableSectionIndex = i;
-                            firstAppliceableSectionTextChangeFromIndex = this.SelectionStart - position;
+                            firstAppliceableSectionTextChangeFromIndex = selectionStart - position;
                         }
 
                         //if this is the last section affected by the change, note it.
-                        if (this.SelectionStart + this.SelectionLength <= position + currentSection.Text.Length)
+                        if (selectionStart + selectionLength <= position + currentSection.Text.Length)
                         {
                             numberAffectedSections = (i - firstAppliceableSectionIndex) + 1;
                             break;
@@ -212,7 +236,7 @@ namespace AvalonTextBox
                 }
 
                 int currentSectionIndex = firstAppliceableSectionIndex;
-                int changeLengthLeft = this.SelectionLength;
+                int changeLengthLeft = selectionLength;
                 //loop through the affected sections... NOTE: we don't iterate through the collection, because we'll likely be inserting new
                 //entries as we go and it'll be difficult to track.
                 for (int q = 0; q < numberAffectedSections; q++)
@@ -277,7 +301,7 @@ namespace AvalonTextBox
                     Section currentSection = sections[i];
 
                     //if the start of the selection doesn't fall within this section, keep on going through the sections until it does.
-                    if (this.SelectionStart > position + currentSection.Text.Length)
+                    if (selectionStart > position + currentSection.Text.Length)
                     {
                         position += currentSection.Text.Length;
                     }
@@ -293,7 +317,7 @@ namespace AvalonTextBox
                             //if it's at the END of the section... and there's been nothing selected, and there's an empty section next...
                             //we've already split the section before, and we're stacking up style changes. so, apply the style to the blank
                             //section, and leave.
-                            if (this.SelectionLength == 0 && this.SelectionStart == position + currentSection.Text.Length
+                            if (selectionLength == 0 && selectionStart == position + currentSection.Text.Length
                                 && i < sections.Count - 1 && sections[i + 1].Text.Length == 0)
                             {
                                 Section stackingSection = sections[i + 1];
@@ -335,7 +359,7 @@ namespace AvalonTextBox
                 }
             }
 
-            bool userChangedStylingsAtCaret = this.SelectionLength == 0;
+            bool userChangedStylingsAtCaret = selectionLength == 0;
             //JDW: only merge sections if we've been changing the stylings of chunks of sections. this is because if the user creates a new,
             //empty section with a different style... we need to be able to insert into there.
             if (false == userChangedStylingsAtCaret)
@@ -508,15 +532,15 @@ namespace AvalonTextBox
                     switch (match.Function)
                     {
                         case HotkeyFunction.NoteColour:
-                            ApplyColour(match.Colour);
+                            ApplyColourToSelection(match.Colour);
                             e.Handled = true;
                             break;
                         case HotkeyFunction.NoteItalic:
-                            ApplyItalics();
+                            ApplyItalicsToSelection();
                             e.Handled = true;
                             break;
                         case HotkeyFunction.NoteBold:
-                            ApplyBold();
+                            ApplyBoldToSelection();
                             e.Handled = true;
                             break;
                     }

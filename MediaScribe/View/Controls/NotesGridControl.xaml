@@ -10,6 +10,7 @@
              xmlns:GalaSoft_MvvmLight_Command="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
              xmlns:local="clr-namespace:JayDev.MediaScribe.View.Controls"
              xmlns:nmConverters="clr-namespace:JayDev.MediaScribe.Converters"
+             xmlns:nmCore="clr-namespace:JayDev.MediaScribe.Core"
              xmlns:syswin="clr-namespace:System.Windows;assembly=PresentationCore"
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              x:Name="NotesGridControlName">
@@ -29,6 +30,34 @@
 
     </UserControl.Resources>
     <Grid>
+        <Border x:Name="findTextPanel"
+                                Visibility="Collapsed"
+                                BorderBrush="#FF004F89" Background="#FFB8E1FF"
+                                Margin="0 0 8 0" BorderThickness="1,0,1,1" CornerRadius="0,0,4,4"
+                                Panel.ZIndex="1000"
+                                Height="30"
+                                Width="330"
+                                HorizontalAlignment="Right" VerticalAlignment="Top">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Height="20" Margin="5 0 0 0" x:Name="textboxFindTextInput" Text="{Binding FindTextInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" KeyDown="FindTextInput_KeyDown"></TextBox>
+                <StackPanel Grid.Column="0" Panel.ZIndex="1001" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 5 0" Orientation="Horizontal">
+                    <TextBlock Text="{Binding FindTextMatchIndex, FallbackValue=1}" />
+                    <TextBlock Text=" of " />
+                    <TextBlock Text="{Binding FindTextMatchCount, FallbackValue=24}" />
+                </StackPanel>
+                <Button Grid.Column="1" Height="20" Command="{Binding FindTextPreviousMatchCommand}">▲</Button>
+                <Button Grid.Column="2" Height="20" Command="{Binding FindTextNextMatchCommand}">▼</Button>
+                <Button Grid.Column="3" Margin="4" Command="{Binding FindTextCloseCommand}" Click="FindTextCloseButton_Click" x:Name="FindTextCloseButton">✕</Button>
+            </Grid>
+        </Border>
+
         <local:DelayedBindDataGrid MinWidth="300"
             VirtualizingStackPanel.VirtualizationMode="Standard"
             VirtualizingStackPanel.IsVirtualizing="True"
@@ -104,7 +133,7 @@
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <atb:AvalonTextBox MarkedupText="{Binding Path=Body, Mode=TwoWay, UpdateSourceTrigger=LostFocus, TargetNullValue=''}"
-                                               
+                                               OutStrippedText="{Binding Path=BodyStripped, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
                                                TextOptions.TextFormattingMode="Display"
                                                
                                                Width="auto" WordWrap="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" />
@@ -113,7 +142,11 @@
                     <!-- standard template -->
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <atb:BindableTextBlock TextWrapping="Wrap" TextOptions.TextFormattingMode="Display" MarkedupText="{Binding Path=Body}" DefaultText="Double-click here to write a note..." />
+                            <atb:BindableTextBlock TextWrapping="Wrap" TextOptions.TextFormattingMode="Display"
+                                                   MarkedupText="{Binding Path=Body}"
+                                                   HighlightSections="{Binding HighlightSections}" 
+                                                   OutStrippedText="{Binding Path=BodyStripped, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
+                                                   DefaultText="Double-click here to write a note..." />
                             <!--<TextBlock TextWrapping="Wrap"   TextOptions.TextFormattingMode="Display" Text="{Binding Path=TitleBody}" />-->
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

@@ -29,7 +29,7 @@ namespace JayDev.MediaScribe.Core
         /// </summary>
         DoWorkEventArgs args = new DoWorkEventArgs(null);
 
-        public AsyncWorker()
+        public AsyncWorker(ThreadPriority threadPriority = ThreadPriority.AboveNormal)
         {
             //we create an above-normal priority background thread to manage the BackgroundWorker's
             //consumption. The reason we need this, is because we feed the BackgroundWorker its new
@@ -42,7 +42,7 @@ namespace JayDev.MediaScribe.Core
                 worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
                 worker.RunWorkerAsync();
             });
-            thread.Priority = ThreadPriority.AboveNormal;
+            thread.Priority = threadPriority;
             thread.IsBackground = true;
             thread.Start();
         }

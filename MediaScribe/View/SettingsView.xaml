@@ -488,7 +488,7 @@
                                                                 <!--FocusManager.FocusedElement="{Binding ElementName=hitTextbox}"-->
                                                                 <TextBlock Text="{Binding Key, Converter={StaticResource KeyEnumToStringConverter}}">
                                                                         </TextBlock>
-                                                                <TextBox Margin="5 0 0 0" Text="Click here &amp; Press key" PreviewKeyUp="TextBox_PreviewKeyUp" PreviewKeyDown="TextBox_PreviewKeyDown" Name="hitTextbox"
+                                                                <TextBox Margin="5 0 0 0" Text="Click here &amp; Press key" PreviewKeyUp="TextBox_PreviewKeyUp" PreviewKeyDown="TextBox_PreviewKeyDown" Name="hitTextbox" AcceptsReturn="True" AcceptsTab="True"
                                                                          FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"></TextBox>
                                                             </StackPanel>
                                                         </DataTemplate>

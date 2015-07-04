@@ -82,12 +82,14 @@ namespace JayDev.MediaScribe.Common
         NoteEditCancel = 12,
         //NoteSetEndTime,
         //NoteToggleEndTime,
-        [Information(120, "Decrease speed", "Decreases the playback speed by x%", "only on the course notes screen.")]
+        [Information(130, "Decrease speed", "Decreases the playback speed by x%", "only on the course notes screen.")]
         SpeedDecrease = 13,
-        [Information(120, "Increase speed", "Increases the playback speed by x%", "only on the course notes screen.")]
+        [Information(140, "Increase speed", "Increases the playback speed by x%", "only on the course notes screen.")]
         SpeedIncrease = 14,
-        [Information(120, "Reset speed", "Resets the playback speed by x%", "only on the course notes screen.")]
+        [Information(150, "Reset speed", "Resets the playback speed by x%", "only on the course notes screen.")]
         SpeedReset = 15,
+        [Information(160, "Find Text", "Opens the 'find text' panel", "only on the course notes screen.")]
+        FindText = 16,
     }
 
     #endregion

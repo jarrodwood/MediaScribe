@@ -39,9 +39,6 @@ namespace JayDev.MediaScribe.View.Controls
 
         #region Dependency Properties
 
-
-        
-
         public ObservableCollection<Note> Notes
         {
             get { return (ObservableCollection<Note>)GetValue(NotesProperty); }
@@ -52,6 +49,28 @@ namespace JayDev.MediaScribe.View.Controls
         public static readonly DependencyProperty NotesProperty =
             DependencyProperty.Register("Notes", typeof(ObservableCollection<Note>), typeof(NotesGridControl), new UIPropertyMetadata(null));
 
+
+
+
+        public Note CurrentHighlightMatchNote
+        {
+            get { return (Note)GetValue(CurrentHighlightMatchNoteProperty); }
+            set { SetValue(CurrentHighlightMatchNoteProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CurrentHighlightMatchNote.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CurrentHighlightMatchNoteProperty =
+            DependencyProperty.Register("CurrentHighlightMatchNote", typeof(Note), typeof(NotesGridControl), new UIPropertyMetadata(new PropertyChangedCallback((sender, args) =>
+            {
+                if (args.NewValue == null)
+                    return;
+
+                Note currentNote = (Note)args.NewValue;
+                NotesGridControl gridControl = sender as NotesGridControl;
+                
+                gridControl.noteDataGrid.ScrollIntoView(currentNote);
+            })));
+        
         #endregion
 
         #region Commands
@@ -176,6 +195,93 @@ namespace JayDev.MediaScribe.View.Controls
 
         #endregion
 
+
+
+        public ICommand FindTextPreviousMatchCommand
+        {
+            get { return (ICommand)GetValue(FindTextPreviousMatchCommandProperty); }
+            set { SetValue(FindTextPreviousMatchCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for FindTextPreviousMatchCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty FindTextPreviousMatchCommandProperty =
+            DependencyProperty.Register("FindTextPreviousMatchCommand", typeof(ICommand), typeof(NotesGridControl));
+
+
+
+
+
+
+        public ICommand FindTextNextMatchCommand
+        {
+            get { return (ICommand)GetValue(FindTextNextMatchCommandProperty); }
+            set { SetValue(FindTextNextMatchCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for FindTextNextMatchCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty FindTextNextMatchCommandProperty =
+            DependencyProperty.Register("FindTextNextMatchCommand", typeof(ICommand), typeof(NotesGridControl));
+
+
+
+
+
+
+        public ICommand FindTextCloseCommand
+        {
+            get { return (ICommand)GetValue(FindTextCloseCommandProperty); }
+            set { SetValue(FindTextCloseCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for FindTextCloseCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty FindTextCloseCommandProperty =
+            DependencyProperty.Register("FindTextCloseCommand", typeof(ICommand), typeof(NotesGridControl));
+
+
+
+
+
+
+
+        public int FindTextMatchIndex
+        {
+            get { return (int)GetValue(FindTextMatchIndexProperty); }
+            set { SetValue(FindTextMatchIndexProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for FindTextMatchIndex.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty FindTextMatchIndexProperty =
+            DependencyProperty.Register("FindTextMatchIndex", typeof(int), typeof(NotesGridControl));
+
+
+
+
+        public int FindTextMatchCount
+        {
+            get { return (int)GetValue(FindTextMatchCountProperty); }
+            set { SetValue(FindTextMatchCountProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for FindTextMatchCount.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty FindTextMatchCountProperty =
+            DependencyProperty.Register("FindTextMatchCount", typeof(int), typeof(NotesGridControl));
+
+
+
+
+        public string FindTextInput
+        {
+            get { return (string)GetValue(FindTextInputProperty); }
+            set { SetValue(FindTextInputProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for FindTextInput.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty FindTextInputProperty =
+            DependencyProperty.Register("FindTextInput", typeof(string), typeof(NotesGridControl));
+
+        
+        
+
         #endregion
 
         public NotesGridControl()
@@ -183,10 +289,9 @@ namespace JayDev.MediaScribe.View.Controls
             InitializeComponent();
             _uiDispatcher = Dispatcher.CurrentDispatcher;
             this.IsVisibleChanged += new DependencyPropertyChangedEventHandler(NotesGridControl_IsVisibleChanged);
-           
-
             
         }
+
 
 
         private static NotesGridControl _lastNotesGridControlVisible = null;
@@ -201,6 +306,10 @@ namespace JayDev.MediaScribe.View.Controls
 
         public void BeginEditNewNote()
         {
+            //before we begin editing a note, if we're been finding text, cancel that
+            FindTextCloseButton_Click(null, null); //hide the panel
+            FindTextCloseButton.Command.Execute(null); //clear the find results in the viewmodel
+
             //NOTE: we need to scroll down to the bottom row, to make sure the placeholder row is in view. if it isn't in view, the cells
             //      aren't rendered, and we can't get a reference to the cells to start editing.
             //NOTE: always update layout before scrolling
@@ -333,6 +442,13 @@ namespace JayDev.MediaScribe.View.Controls
             noteDataGrid.CancelEdit(DataGridEditingUnit.Row);
         }
 
+
+        public void OpenFindTextPanel()
+        {
+            findTextPanel.Visibility = System.Windows.Visibility.Visible;
+            textboxFindTextInput.Focus();
+        }
+
         /// <summary>
         /// Code to execute when we begin editing a cell. NOTE: this is called for /any/ cell, so may contain different logic depending on
         /// which column the cell belongs to.
@@ -368,6 +484,23 @@ namespace JayDev.MediaScribe.View.Controls
             //year 2015, was: noteDataGrid.ScrollIntoView(noteDataGrid.Items[noteDataGrid.Items.Count - 1]);
             //but the problem was, it didn't work for editing cells in high pages, only the bottom one.
             noteDataGrid.ScrollIntoView(noteDataGrid.CurrentCell.Item);
+        }
+
+
+        private void FindTextCloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            findTextPanel.Visibility = System.Windows.Visibility.Collapsed;
+        }
+
+        private void FindTextInput_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                findTextPanel.Visibility = System.Windows.Visibility.Collapsed;
+
+                //trigger the find text input close button, which will clear the find results
+                FindTextCloseButton.Command.Execute(null);
+            }
         }
     }
 }

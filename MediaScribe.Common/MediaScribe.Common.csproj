@@ -57,6 +57,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="GridLengthConverter.cs" />
+    <Compile Include="HighlightHelper.cs" />
     <Compile Include="Hotkey.cs" />
     <Compile Include="SettingManager.cs" />
     <Compile Include="InformationAttribute.cs" />

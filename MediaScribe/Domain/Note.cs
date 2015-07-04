@@ -7,6 +7,7 @@ using System.ComponentModel;
 using JayDev.MediaScribe.Common;
 using System.Reflection;
 using System.Collections.ObjectModel;
+using JayDev.MediaScribe.Core;
 
 namespace JayDev.MediaScribe
 {
@@ -103,7 +104,20 @@ namespace JayDev.MediaScribe
             }
         }
 
-        public virtual string BodyStripped { get; set; }
+        private List<HighlightMatch> _highlightSections;
+        public virtual List<HighlightMatch> HighlightSections
+        {
+            get { return _highlightSections; }
+            set
+            {
+                _highlightSections = value;
+                OnPropertyChanged("HighlightSections");
+            }
+        }
+
+
+
+        public string BodyStripped { get; set; }
 
         private ObservableCollection<Tag> _tags;
         [DataMember]
@@ -212,6 +226,10 @@ namespace JayDev.MediaScribe
             }
         }
 
+        public void NotifyHighlightSectionsChanges()
+        {
+            OnPropertyChanged("HighlightSections");
+        }
 
         private Note _versionBeforeEdit = null;
         // Summary:

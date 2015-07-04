@@ -8,6 +8,7 @@ using System.Windows;
 using AvalonTextBox.Converters;
 using System.Windows.Media;
 using System.Windows.Threading;
+using JayDev.MediaScribe.Common;
 
 namespace AvalonTextBox
 {
@@ -20,37 +21,97 @@ namespace AvalonTextBox
             set { SetValue(MarkedupTextProperty, value); }
         }
 
+
         // Using a DependencyProperty as the backing store for MarkedupText.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MarkedupTextProperty =
             DependencyProperty.Register("MarkedupText", typeof(string), typeof(BindableTextBlock), new UIPropertyMetadata(new PropertyChangedCallback((sender, args) => {
                 BindableTextBlock textBlock = sender as BindableTextBlock;
-                textBlock.Dispatcher.BeginInvoke(
-                    DispatcherPriority.Loaded,
-                    new Action(() => {
-                        if (null == args.NewValue || string.IsNullOrEmpty((string)args.NewValue))
-                        {
-                            textBlock.Text = "Double-click here to write a note...";
-                            textBlock.FontStyle = FontStyles.Italic;
-                            textBlock.Opacity = 0.5;
-                        }
-                        else
-                        {
-
-                            textBlock.Text = null;
-                            textBlock.FontStyle = FontStyles.Normal;
-                            textBlock.Opacity = 1;
-
-                            textBlock.Inlines.Clear();
-                            var inlines = new MarkedupTextToInlineListConverter().Convert(args.NewValue, typeof(List<Inline>), null, null) as List<Inline>;
-                            //trying to add 'null' throws exceptions
-                            if (null != inlines && inlines.Count > 0)
-                            {
-                                textBlock.Inlines.AddRange(inlines);
-                            }
-                        }
-                    }));
+                textBlock.lastMarkedupText = (string)args.NewValue;
+                SetText(textBlock, args.NewValue as string, textBlock.HighlightSections);
             })));
 
+
+
+
+        public List<HighlightMatch> HighlightSections
+        {
+            get { return (List<HighlightMatch>)GetValue(HighlightSectionsProperty); }
+            set { SetValue(HighlightSectionsProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for HighlightSections.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty HighlightSectionsProperty =
+            DependencyProperty.Register("HighlightSections", typeof(List<HighlightMatch>), typeof(BindableTextBlock), new UIPropertyMetadata(new PropertyChangedCallback((sender, args) =>
+            {
+                BindableTextBlock textBlock = sender as BindableTextBlock;
+                List<HighlightMatch> highlightSections = (List<HighlightMatch>)args.NewValue;
+
+                SetText(textBlock, textBlock.lastMarkedupText, highlightSections);
+            })));
+
+
+
+        public string OutStrippedText
+        {
+            get { return (string)GetValue(OutStrippedTextProperty); }
+            set { SetValue(OutStrippedTextProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for OutStrippedText.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty OutStrippedTextProperty =
+            DependencyProperty.Register("OutStrippedText", typeof(string), typeof(BindableTextBlock), new PropertyMetadata(null));
+
+        
+
+        public string lastMarkedupText;
+
+        private static void SetText(BindableTextBlock textBlock, string markedupText, List<HighlightMatch> highlightSections)
+        {
+            textBlock.Dispatcher.BeginInvoke(
+                       DispatcherPriority.Loaded,
+                       new Action(() =>
+                       {
+                           if (null == markedupText || string.IsNullOrEmpty((string)markedupText))
+                           {
+                               textBlock.Text = "Double-click here to write a note...";
+                               textBlock.FontStyle = FontStyles.Italic;
+                               textBlock.Opacity = 0.5;
+                           }
+                           else
+                           {
+
+                               textBlock.Text = null;
+                               textBlock.FontStyle = FontStyles.Normal;
+                               textBlock.Opacity = 1;
+
+                               textBlock.Inlines.Clear();
+
+                               List<Section> sections = new MarkedupTextToNoteSectionsConverter().Convert(markedupText, typeof(List<Section>), null, null) as List<Section>;
+                               List<Inline> inlines = new NoteSectionsToInlineListConverter().Convert(sections, typeof(List<Inline>), null, null, highlightSections) as List<Inline>;
+
+                               
+                               //var converter = new MarkedupTextToInlineListConverter() { HighlightSections = highlightSections };
+                               //var inlines = converter.Convert(markedupText, typeof(List<Inline>), null, null) as List<Inline>;
+                               //trying to add 'null' throws exceptions
+                               if (null != inlines && inlines.Count > 0)
+                               {
+                                   textBlock.Inlines.AddRange(inlines);
+                               }
+
+
+
+                               #region HIGHLIGHTING - extract stripped text
+                               StringBuilder strippedTextBuilder = new StringBuilder();
+                               foreach (var section in sections)
+                               {
+                                   strippedTextBuilder.Append(section.Text.ToLowerInvariant());
+                               }
+                               string strippedText = strippedTextBuilder.ToString();
+                               textBlock.OutStrippedText = strippedText;
+                               #endregion
+                           }
+                       }));
+        }
         
 
         public IEnumerable<Inline> InlineCollection

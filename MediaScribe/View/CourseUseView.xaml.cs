@@ -186,9 +186,13 @@ namespace JayDev.MediaScribe.View
                                 e.Handled = true;
                             }
                             break;
+                        case HotkeyFunction.FindText:
+                            notesGrid.OpenFindTextPanel();
+                            break;
                     }
                 }
             }
         }
+
     }
 }

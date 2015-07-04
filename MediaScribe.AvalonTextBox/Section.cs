@@ -11,6 +11,7 @@ namespace AvalonTextBox
     {
         public string Text { get; set; }
         public Color Colour { get; set; }
+        public Brush Background { get; set; }
         public NoteStyle Style { get; set; }
         public NoteWeight Weight { get; set; }
         public Section(string text)
@@ -20,6 +21,17 @@ namespace AvalonTextBox
             Colour = ColorHelper.ApplicationDefaultTextColour;
             Style = NoteStyle.Normal;
             Weight = NoteWeight.Normal;
+        }
+
+        public Section Clone()
+        {
+            return new Section()
+            {
+                Text = Text,
+                Colour = Colour,
+                Style = Style,
+                Weight = Weight
+            };
         }
     }
 }
