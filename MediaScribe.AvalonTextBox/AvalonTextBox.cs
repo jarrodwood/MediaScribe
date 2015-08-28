@@ -50,7 +50,9 @@ namespace AvalonTextBox
             })));
 
 
-
+        /// <summary>
+        /// Used to return the LOWERCASE, tag-stripped text used for the search functionality
+        /// </summary>
         public string OutStrippedText
         {
             get { return (string)GetValue(OutStrippedTextProperty); }
@@ -120,23 +122,25 @@ namespace AvalonTextBox
             _cachedMarkedupText = markedupText;
             PrepareSections();
 
+
+            #region HIGHLIGHTING - extract stripped text
+            StringBuilder strippedTextBuilder = new StringBuilder();
+            foreach (var section in sections)
+            {
+                //keep the original casing here for the text box, and we'll make lowercase for the 'OutStrippedText' property later.
+                strippedTextBuilder.Append(section.Text);
+            }
+            string strippedText = strippedTextBuilder.ToString();
+            this.OutStrippedText = strippedText.ToLowerInvariant(); //make lowercase for search functionality
+            #endregion
+            this.Text = strippedText;
+
             colorizer.Sections = sections;
             this.TextArea.TextView.LineTransformers.Clear();
             this.TextArea.TextView.LineTransformers.Add(colorizer);
             this.Document.Changed -= Document_Changed;
             this.Document.Changed += new EventHandler<DocumentChangeEventArgs>(Document_Changed);
 
-
-            #region HIGHLIGHTING - extract stripped text
-            StringBuilder strippedTextBuilder = new StringBuilder();
-            foreach (var section in sections)
-            {
-                strippedTextBuilder.Append(section.Text.ToLowerInvariant());
-            }
-            string strippedText = strippedTextBuilder.ToString();
-            this.Text = strippedText;
-            this.OutStrippedText = strippedText;
-            #endregion
 
         }
 

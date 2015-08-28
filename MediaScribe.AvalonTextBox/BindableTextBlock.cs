@@ -50,7 +50,9 @@ namespace AvalonTextBox
             })));
 
 
-
+        /// <summary>
+        /// Used to return the LOWERCASE, tag-stripped text used for the search functionality
+        /// </summary>
         public string OutStrippedText
         {
             get { return (string)GetValue(OutStrippedTextProperty); }
