@@ -214,7 +214,8 @@ namespace LibVLC.NET
             m_libvlc_media_player_can_pause = (libvlc_media_player_can_pause_signature)LoadDelegate<libvlc_media_player_can_pause_signature>("libvlc_media_player_can_pause");
             m_libvlc_media_player_next_frame = (libvlc_media_player_next_frame_signature)LoadDelegate<libvlc_media_player_next_frame_signature>("libvlc_media_player_next_frame");
             m_libvlc_track_description_list_release = (libvlc_track_description_list_release_signature)LoadDelegate<libvlc_track_description_list_release_signature>("libvlc_track_description_list_release");
-
+            m_libvlc_media_player_set_rate = (libvlc_media_player_set_rate_signature)LoadDelegate<libvlc_media_player_set_rate_signature>("libvlc_media_player_set_rate");
+            
             // MediaPlayer.AudioControls
             m_libvlc_audio_get_volume = (libvlc_audio_get_volume_signature)LoadDelegate<libvlc_audio_get_volume_signature>("libvlc_audio_get_volume");
             m_libvlc_audio_set_volume = (libvlc_audio_set_volume_signature)LoadDelegate<libvlc_audio_set_volume_signature>("libvlc_audio_set_volume");
@@ -234,6 +235,10 @@ namespace LibVLC.NET
             m_libvlc_video_get_spu = (libvlc_video_get_spu_signature)LoadDelegate<libvlc_video_get_spu_signature>("libvlc_video_get_spu");
             m_libvlc_video_get_spu_description = (libvlc_video_get_spu_description_signature)LoadDelegate<libvlc_video_get_spu_description_signature>("libvlc_video_get_spu_description");
             m_libvlc_video_set_spu = (libvlc_video_set_spu_signature)LoadDelegate<libvlc_video_set_spu_signature>("libvlc_video_set_spu");
+            m_libvlc_video_take_snapshot = (libvlc_video_take_snapshot_signature)LoadDelegate<libvlc_video_take_snapshot_signature>("libvlc_video_take_snapshot");
+            m_libvlc_video_get_crop_geometry = (libvlc_video_get_crop_geometry_signature)LoadDelegate<libvlc_video_get_crop_geometry_signature>("libvlc_video_get_crop_geometry");
+            m_libvlc_video_set_crop_geometry = (libvlc_video_set_crop_geometry_signature)LoadDelegate<libvlc_video_set_crop_geometry_signature>("libvlc_video_set_crop_geometry");
+            m_libvlc_video_get_aspect_ratio = (libvlc_video_get_aspect_ratio_signature)LoadDelegate<libvlc_video_get_aspect_ratio_signature>("libvlc_video_get_aspect_ratio");
 
             // Media Lists
             m_libvlc_media_list_release = (libvlc_media_list_release_signature)LoadDelegate<libvlc_media_list_release_signature>("libvlc_media_list_release");

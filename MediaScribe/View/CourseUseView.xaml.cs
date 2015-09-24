@@ -18,6 +18,8 @@ using JayDev.MediaScribe.Common;
 using System.Timers;
 using MediaScribe.Common;
 using JayDev.MediaScribe.View.Controls;
+using GalaSoft.MvvmLight.Messaging;
+using JayDev.MediaScribe.Core;
 
 namespace JayDev.MediaScribe.View
 {
@@ -40,8 +42,30 @@ namespace JayDev.MediaScribe.View
             this.DataContext = _viewModel;
             _currentDispatcher = Dispatcher.CurrentDispatcher;
             notesGrid.Loaded += new RoutedEventHandler(notesGrid_Loaded);
+
+            //mediaElement.MediaPlayer = viewModel.VlcPlayer;
+            //mediaElement.Source = new Uri(@"C:\stuff\series\Bloodline.S01E01.WEBRip.x264-2HD.mp4");
+            //mediaElement.Play();
+
+            mediaElement.OnMouseDoubleClick += mediaElement_OnMouseDoubleClick;
+            
+            mediaElement.Attach();
         }
 
+        void mediaElement_OnMouseDoubleClick(object sender, EventArgs e)
+        {
+            Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen, TabChangeSource.Application), MessageType.PerformNavigation);
+        }
+
+        public void Detach()
+        {
+            mediaElement.Detach();
+        }
+
+        public void Attach()
+        {
+            mediaElement.Attach();
+        }
 
         void notesGrid_Loaded(object sender, RoutedEventArgs e)
         {

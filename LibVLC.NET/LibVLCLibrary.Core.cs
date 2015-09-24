@@ -61,6 +61,13 @@ namespace LibVLC.NET
       return m_libvlc_new(0, null);
     }
 
+    public IntPtr libvlc_new(string[] args)
+    {
+        VerifyAccess();
+
+        return m_libvlc_new(args == null ? 0 : args.Length, args);
+    }
+
     // void libvlc_release (libvlc_instance_t *p_instance)
 
     //==========================================================================

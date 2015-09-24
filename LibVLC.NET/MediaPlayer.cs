@@ -493,8 +493,7 @@ namespace LibVLC.NET
     //==========================================================================
     public void Pause()
     {
-      if(m_Library.libvlc_media_player_pause(m_MediaPlayerHandle) != 0)
-        throw new LibVLCException(m_Library);
+        m_Library.libvlc_media_player_pause(m_MediaPlayerHandle);
     }
 
     //==========================================================================
@@ -592,6 +591,12 @@ namespace LibVLC.NET
         if(m_VideoBuffer != value)
           m_VideoBuffer = value;
       }
+    }
+
+    public void Test1()
+    {
+        IntPtr media = m_Library.libvlc_media_player_get_media(m_MediaPlayerHandle);
+        m_Library.libvlc_media_release(media);
     }
 
     //==========================================================================                
@@ -989,6 +994,18 @@ namespace LibVLC.NET
       }
     }
 
+    //==========================================================================
+      /// <summary>
+      /// Playback rate (speed)
+      /// </summary>
+    public float Rate
+    {
+        set
+        {
+            m_Library.libvlc_media_player_set_rate(m_MediaPlayerHandle, value);
+        }
+    }
+
     #endregion // Properties
 
     #region Events
@@ -1104,6 +1121,7 @@ namespace LibVLC.NET
     #endregion // Event
 
     #endregion // Events
+
 
   } // class MediaPlayer
 

@@ -66,6 +66,9 @@
     <Reference Include="ICSharpCode.AvalonEdit">
       <HintPath>..\Dependencies\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
+    <Reference Include="MediaInfoDotNet">
+      <HintPath>..\Dependencies\MediaInfoDotNet.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\Dependencies\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
@@ -122,6 +125,7 @@
     <Compile Include="Core\CsvExporter.cs" />
     <Compile Include="Core\NavigationHelper.cs" />
     <Compile Include="Core\ThumbnailGenerator.cs" />
+    <Compile Include="Core\ThumbnailGeneratorVLC.cs" />
     <Compile Include="Core\VirtualizingStackPanelBehaviors.cs" />
     <Compile Include="KeyNames.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -129,6 +133,7 @@
       <DependentUpon>KeyNames.resx</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\AboutViewModel.cs" />
+    <Compile Include="ViewModel\MediaPlayerVLC.cs" />
     <Compile Include="ViewModel\WindowHeaderViewModel.cs" />
     <Compile Include="View\Controls\MediaScribeMainTabControl.cs" />
     <Compile Include="Domain\Hotkey.cs" />
@@ -357,6 +362,14 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LibVLC.NET.Presentation\LibVLC.NET.Presentation.csproj">
+      <Project>{6757603c-3613-4cd6-86cc-5a25cf023cfa}</Project>
+      <Name>LibVLC.NET.Presentation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LibVLC.NET\LibVLC.NET.csproj">
+      <Project>{bb06dff7-4f41-4b9d-a3c3-3b6d2b8702b6}</Project>
+      <Name>LibVLC.NET</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MediaScribe.AvalonTextBox\MediaScribe.AvalonTextBox.csproj">
       <Project>{CA7E4D71-3858-48F2-AF68-7E6DA88F79C9}</Project>
       <Name>MediaScribe.AvalonTextBox</Name>
@@ -369,9 +382,9 @@
       <Project>{7BE13DBC-C110-469E-92E7-49720938A62E}</Project>
       <Name>MediaScribe.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MediaScribe.Monitor\MediaScribe.Monitor.csproj">
-      <Project>{264abba0-6903-478a-8a65-dacf8ed3d3e1}</Project>
-      <Name>MediaScribe.Monitor</Name>
+    <ProjectReference Include="..\ThumbnailGenerator\ThumbnailGenerator.csproj">
+      <Project>{0d5221ed-2d33-41e5-bf10-12ff07c39256}</Project>
+      <Name>ThumbnailGenerator</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
@@ -489,6 +502,9 @@
     <Resource Include="Images\icon_512.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="MediaInfo.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <EmbeddedResource Include="Resources\create_db.sql" />
     <Resource Include="Images\Letter N blue.ico" />
     <Resource Include="Images\fullscreen.png" />

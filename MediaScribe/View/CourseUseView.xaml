@@ -8,6 +8,8 @@
              xmlns:nmConverters="clr-namespace:JayDev.MediaScribe.Converters"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
+             
+             xmlns:vlc="clr-namespace:LibVLC.NET.Presentation;assembly=LibVLC.NET.Presentation"
              x:Name="CourseUseViewName"
              d:DesignHeight="419" d:DesignWidth="1388">
     <UserControl.Resources>
@@ -59,15 +61,10 @@
                         <RowDefinition Height="6" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                        <DockPanel Grid.Row="0" Background="LightGray" DockPanel.Dock="Top"  LastChildFill="True" Visibility="{Binding IsCurrentTrackVideo, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisibleFalseIsHidden}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
-                        <!--<TextBlock DockPanel.Dock="Top">Video</TextBlock>
+                        <DockPanel Grid.Row="0" Background="Black" DockPanel.Dock="Top"  LastChildFill="True" Visibility="{Binding IsCurrentTrackVideo, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisibleFalseIsHidden}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
+                                <!--<TextBlock DockPanel.Dock="Top">Video</TextBlock>
                         <DockPanel Name="videoControlHolder">-->
-                            <nmControls:VideoControl x:Name="videoControl"
-                                                           VideoPanelPointer="{Binding VideoPanelPointer, Mode=OneWayToSource}"
-                                                           AspectRatio="{Binding CurrentTrackVideoAspectRatio}"
-                                                           IsShowingVideo="{Binding IsCurrentTrackVideo}"
-                                                           PlayPauseCommand="{Binding ToggleFullscreenCommand}"
-                                                           EnableAutohideControls="False"/>
+                            <vlc:MediaElement x:Name="mediaElement" Stretch="Uniform" />
                         <!--</DockPanel>-->
                     </DockPanel>
                     <GridSplitter

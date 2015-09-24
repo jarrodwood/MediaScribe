@@ -24,10 +24,13 @@ namespace JayDev.MediaScribe.Converters
             {
                 throw new ArgumentException("Value is not of correct type");
             }
+            Visibility result = Visibility.Visible;
             if (((PlayStatus)value) == PlayStatus.Playing)
-                return Visibility.Visible;
+                result = Visibility.Visible;
             else
-                return Visibility.Hidden;
+                result = Visibility.Hidden;
+
+            return result;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

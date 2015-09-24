@@ -235,12 +235,12 @@ namespace JayDev.MediaScribe.View
                                 };
                                 _fullscreenWindow.Content = new FullscreenCourseView(courseUseViewModel);
                                 _fullscreenWindow.PreviewKeyDown += new KeyEventHandler(FullscreenWindow_KeyDown);
-                                ((FullscreenCourseView)_fullscreenWindow.Content).videoControl.AssociateVideoWithControl();
                             }
-                            else
-                            {
-                                ((FullscreenCourseView)_fullscreenWindow.Content).videoControl.AssociateVideoWithControl();
-                            }
+
+                            CourseUseView courseUseView = ((TabItem)_tabControl.Items[ApplicationTab.WriteNotes]).Content as CourseUseView;
+                            courseUseView.Detach();
+                            FullscreenCourseView fullscreenCourseView = ((FullscreenCourseView)_fullscreenWindow.Content);
+                            fullscreenCourseView.Attach();
 
                             _fullscreenWindow.Visibility = Visibility.Visible;
                             _mainWindow.Visibility = Visibility.Collapsed;
@@ -260,11 +260,16 @@ namespace JayDev.MediaScribe.View
                         }
                         else
                         {
+                            FullscreenCourseView fullscreenCourseView = ((FullscreenCourseView)_fullscreenWindow.Content);
+                            fullscreenCourseView.Detach();
+                            CourseUseView courseUseView = ((TabItem)_tabControl.Items[ApplicationTab.WriteNotes]).Content as CourseUseView;
+                            courseUseView.Attach();
+
                             _mainWindow.Visibility = Visibility.Visible;
                             _fullscreenWindow.Visibility = Visibility.Collapsed;
 
-                            CourseUseView courseUseView = ((TabItem)_tabControl.Items[ApplicationTab.WriteNotes]).Content as CourseUseView;
-                            courseUseView.videoControl.AssociateVideoWithControl();
+                            //CourseUseView courseUseView = ((TabItem)_tabControl.Items[ApplicationTab.WriteNotes]).Content as CourseUseView;
+                            //courseUseView.videoControl.AssociateVideoWithControl();
 
                             currentViewModel = courseUseViewModel;
 

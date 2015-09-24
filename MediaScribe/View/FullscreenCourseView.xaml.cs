@@ -41,6 +41,27 @@ namespace JayDev.MediaScribe.View
             _currentDispatcher = Dispatcher.CurrentDispatcher;
 
             Messenger.Default.Register<ShowMessage>(this, MessageType.SetFullscreenMode, (message) => HandleShowMessage(message));
+
+            mediaElement.OnMouseDoubleClick += mediaElement_OnMouseDoubleClick;
+            mediaElement.MediaPlayer = LibVLC.NET.Presentation.MediaElement.SingletonPlayer;
+
+            AutoHideInit();
+        }
+
+        public void Detach()
+        {
+            mediaElement.Detach();
+        }
+
+        public void Attach()
+        {
+            mediaElement.Attach();
+        }
+
+        void mediaElement_OnMouseDoubleClick(object sender, EventArgs e)
+        {
+            //mediaElement.Detach();
+            Messenger.Default.Send(new NavigateArgs(NavigateMessage.ToggleFullscreen, TabChangeSource.Application), MessageType.PerformNavigation);
         }
 
         public void HandleWindowKeypress(object sender, KeyEventArgs e)
@@ -68,7 +89,7 @@ namespace JayDev.MediaScribe.View
 
         private void HandleShowMessage(ShowMessage message)
         {
-            MediaPlayerWPFDisplayControl.Instance.ReceiveHotkeyHideNotification(message);
+            ReceiveHotkeyHideNotification(message);
             Debug.WriteLine("Handling message: " + message.Show.ToString() + ", source: " + message.Source.ToString());
             if (message.Show)
             {
@@ -101,5 +122,124 @@ namespace JayDev.MediaScribe.View
 
         }
 
+        #region auto-hide code
+        /*********************
+         * When the user hovers their cursor in the VIDEO, in full-screen mode (i.e. not over the controls, if they moved their mouse there
+         * to type a note), we automatically hide the controls after half a second. Unfortunately, it's not SO simple... because when you
+         * resize the panel, it creates a 'mouse move' event (presumably because the mouse moves relative to the panel)... and while we
+         * receive notification that the mouse has moved OUT of the video, we don't receive notification that the mouse has moved INTO the
+         * panel.
+         * 
+         * So... here's a little table of how this is going to work:
+         * User hits create note hotkey:            We show the controls, and allow one 'buffer' mouse-move event before we begin the timer to hide the controls
+         * User hits commit/cancel note hotkey:     We hide the controls, and allow one 'buffer' mouse-move event before we show the controls immediately
+         * Go Fullscreen:                           Let nature take its course
+         * Leave Fullscreen:                        Not our concern
+         * Mouse move somewhere IN the video panel: Stop & re-start the auto-hide timer... so when the mouse stops moving for 500ms, the controls hide
+         * mouse move OUT OF the video panel:       stop the auto-hide timer.
+         * 
+         * The 'buffer' is going to be handled with an int, called '_bufferCountdown'. When the above events occur that require a buffer,
+         * the value of '_bufferCountdown' will be set to two... and every mouse-move event will reduce the value by 1. Once it reaches 0,
+         * the auto-hide timer will begin.
+         *********************/
+
+        /// <summary>
+        /// The default number to reset the '_bufferCountdown' variable to.
+        /// </summary>
+        const int COUNTDOWN_DEFAULT = 2;
+        /// <summary>
+        /// The 'buffer' used, to allow us to gracefully accept a single 'mouse-move' event when we show or hide the controls, without
+        /// triggering any further actions.
+        /// </summary>
+        int _bufferCountdown = COUNTDOWN_DEFAULT;
+        Timer hoverTimer;
+        Point lastMoveLocation = new Point();
+
+        /// <summary>
+        /// The timer to auto-hide the controls has elapsed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void hoverTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            Messenger.Default.Send(new ShowMessage() { Show = false, Source = ShowSource.MouseStoppedTimer }, MessageType.SetFullscreenMode);
+            Logging.Log(LoggingSource.MPlayerWindow, "HIDING NOW");
+            _bufferCountdown = COUNTDOWN_DEFAULT;
+        }
+
+        void AutoHideInit()
+        {
+            hoverTimer = new Timer();
+            hoverTimer.AutoReset = false;
+            hoverTimer.Elapsed += new ElapsedEventHandler(hoverTimer_Elapsed);
+            hoverTimer.Interval = 500;
+
+            this.mediaElement.MouseMove += mediaElement_MouseMove;
+            this.mediaElement.MouseLeave += mediaElement_MouseLeave;
+        }
+
+        /// <summary>
+        /// We've received notification from the FullScreen course view, that a hotkey combo has been pressed which will affect the showing
+        /// of the controls
+        /// </summary>
+        /// <param name="show"></param>
+        public void ReceiveHotkeyHideNotification(ShowMessage show)
+        {
+            if (show.Source == ShowSource.Hotkey)
+            {
+                _bufferCountdown = COUNTDOWN_DEFAULT;
+            }
+        }
+
+        public void EnableAutoHide()
+        {
+            _autohide = true;
+        }
+
+        public void DisableAutoHide()
+        {
+            _autohide = false;
+            if (null != hoverTimer)
+            {
+                hoverTimer.Stop();
+            }
+        }
+
+        private bool _autohide = true;
+
+        void mediaElement_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (_autohide)
+            {
+                //for a mouse-move event, the location of the cursor is stored as an int in the lParam parameter.
+                Point currentMoveLocation = Mouse.GetPosition(mediaElement);
+                if (currentMoveLocation != lastMoveLocation)
+                {
+                    //if the coundown falls to zero, we've used the buffer and the user is obviously using the mouse. So show the controls,
+                    //and stop & start the auto-hide timer
+                    if (_bufferCountdown <= 0)
+                    {
+                        Messenger.Default.Send(new ShowMessage() { Show = true, Source = ShowSource.MouseMove }, MessageType.SetFullscreenMode);
+                        hoverTimer.Stop();
+                        hoverTimer.Start();
+                    }
+                    else
+                    {
+                        _bufferCountdown--;
+                    }
+
+                    lastMoveLocation = Mouse.GetPosition(mediaElement);
+                }
+            }
+        }
+
+        void mediaElement_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (_autohide)
+            {
+                hoverTimer.Stop();
+            }
+        }
+        #endregion
     }
 }

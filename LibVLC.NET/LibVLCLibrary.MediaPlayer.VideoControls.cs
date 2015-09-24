@@ -110,7 +110,27 @@ namespace LibVLC.NET
     //int libvlc_video_get_cursor (libvlc_media_player_t *p_mi, unsigned num, int *px, int *py)
     //float libvlc_video_get_scale (libvlc_media_player_t *p_mi)
     //void libvlc_video_set_scale (libvlc_media_player_t *p_mi, float f_factor)
+
+      
+    //==========================================================================
     //char * libvlc_video_get_aspect_ratio (libvlc_media_player_t *p_mi)
+
+    //==========================================================================
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate string libvlc_video_get_aspect_ratio_signature(IntPtr p_mi);
+
+    //==========================================================================
+    private readonly libvlc_video_get_aspect_ratio_signature m_libvlc_video_get_aspect_ratio;
+
+    //==========================================================================
+    public string libvlc_video_get_aspect_ratio(IntPtr p_mi)
+    {
+        VerifyAccess();
+
+        return m_libvlc_video_get_aspect_ratio(p_mi);
+    }
+
+
     // void libvlc_video_set_aspect_ratio (libvlc_media_player_t *p_mi, const char *psz_aspect)
 
 
@@ -194,8 +214,46 @@ namespace LibVLC.NET
     //int libvlc_video_set_subtitle_file (libvlc_media_player_t *p_mi, const char *psz_subtitle)
     //libvlc_track_description_t * libvlc_video_get_title_description (libvlc_media_player_t *p_mi)
     //libvlc_track_description_t * libvlc_video_get_chapter_description (libvlc_media_player_t *p_mi, int i_title)
+
+
+    //==========================================================================
     //char * libvlc_video_get_crop_geometry (libvlc_media_player_t *p_mi)
+
+    //==========================================================================
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate string libvlc_video_get_crop_geometry_signature(IntPtr p_mi);
+
+    //==========================================================================
+    private readonly libvlc_video_get_crop_geometry_signature m_libvlc_video_get_crop_geometry;
+
+    //==========================================================================
+    public string libvlc_video_get_crop_geometry(IntPtr p_mi)
+    {
+        VerifyAccess();
+
+        return m_libvlc_video_get_crop_geometry(p_mi);
+    }
+
+      
+    //==========================================================================
     //void libvlc_video_set_crop_geometry (libvlc_media_player_t *p_mi, const char *psz_geometry)
+
+    //==========================================================================
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate void libvlc_video_set_crop_geometry_signature(IntPtr p_mi, string psz_geometry);
+
+    //==========================================================================
+    private readonly libvlc_video_set_crop_geometry_signature m_libvlc_video_set_crop_geometry;
+
+    //==========================================================================
+    public void libvlc_video_set_crop_geometry(IntPtr p_mi, string psz_geometry)
+    {
+        VerifyAccess();
+
+        m_libvlc_video_set_crop_geometry(p_mi, psz_geometry);
+    }
+
+
     //int libvlc_video_get_teletext (libvlc_media_player_t *p_mi)
     //void libvlc_video_set_teletext (libvlc_media_player_t *p_mi, int i_page)
     //void libvlc_toggle_teletext (libvlc_media_player_t *p_mi)
@@ -296,7 +354,26 @@ namespace LibVLC.NET
       return m_libvlc_video_set_track(p_mi, i_track);
     }
 
-    //int libvlc_video_take_snapshot (libvlc_media_player_t *p_mi, unsigned num, const char *psz_filepath, unsigned int i_width, unsigned int i_height)
+
+    //==========================================================================
+    //  int libvlc_video_take_snapshot (libvlc_media_player_t *p_mi, unsigned num, const char *psz_filepath, unsigned int i_width, unsigned int i_height)
+
+    //==========================================================================
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate int libvlc_video_take_snapshot_signature(IntPtr p_mi, uint num, string filepath, uint i_width, uint i_height);
+
+    //==========================================================================
+    private readonly libvlc_video_take_snapshot_signature m_libvlc_video_take_snapshot;
+
+    //==========================================================================
+    public int libvlc_video_take_snapshot(IntPtr p_mi, uint num, string filepath, uint i_width, uint i_height)
+    {
+        VerifyAccess();
+
+        int result = m_libvlc_video_take_snapshot(p_mi, num, filepath, i_width, i_height);
+        return result;
+    }
+      
     //void libvlc_video_set_deinterlace (libvlc_media_player_t *p_mi, const char *psz_mode)
     //int libvlc_video_get_marquee_int (libvlc_media_player_t *p_mi, unsigned option)
     //char * libvlc_video_get_marquee_string (libvlc_media_player_t *p_mi, unsigned option)

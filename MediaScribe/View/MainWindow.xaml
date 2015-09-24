@@ -208,7 +208,7 @@
             </TabItem>
         </nmControls:MediaScribeMainTabControl>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="1">
-            <Button>Export</Button>
+            <Button Command="{Binding ExportExcelCommand}">Export</Button>
             <ToggleButton Margin="00 0 3 0" ToolTip="Filter notes to current track only" Width="50">
                 <TextBlock>Filter</TextBlock>
             </ToggleButton>

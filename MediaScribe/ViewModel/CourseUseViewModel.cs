@@ -28,8 +28,8 @@ namespace JayDev.MediaScribe.ViewModel
         private Course _currentCourse;
         private Track _currentTrack;
         private CourseRepository _repo;
-        private MediaPlayer _player;
         private Dispatcher _uiDispatcher;
+        private MediaPlayerVLC _player;
 
         private const bool IsKeepingBlankRowForEdit = true;
 
@@ -87,6 +87,7 @@ namespace JayDev.MediaScribe.ViewModel
         public ObservableCollection<Track> Tracks { get { return _tracks; } }
 
         #endregion
+		
 
         #region CourseName
 
@@ -1348,35 +1349,16 @@ namespace JayDev.MediaScribe.ViewModel
             }
 
             //we only want to execute this once, when the video panel pointer is initially set... not afterwrds.
-            if (e.PropertyName == VideoPanelPointerPropertyName
-                && (int)VideoPanelPointer != 0)
+            if (null == _player)
             {
-                _player = new MediaPlayer(VideoPanelPointer);
+                _player = new MediaPlayerVLC();
                 _player.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(_player_PropertyChanged);
                 //the volume will have been given an initial value before this event is raised
                 _player.Volume(_volume);
-                _player.TrackFinished += new MediaPlayer.TrackFinishedEventHandler(_player_TrackFinished);
+                _player.TrackFinished += new MediaPlayerVLC.TrackFinishedEventHandler(_player_TrackFinished);
 
                 //auto-load the last track
                 SetInitialTrack();
-
-                //Load the monitor application, so that if somehow mediascribe gets killed and the mplayer process lingers, that can be terminated too.
-                int mediaScribePID = System.Diagnostics.Process.GetCurrentProcess().Id;
-                int mplayerPID = _player.MPlayerPID.Value;
-                var monitorApp = new System.Diagnostics.Process
-                {
-                    EnableRaisingEvents = true,
-                    StartInfo =
-                        {
-                            CreateNoWindow = true,
-                            WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
-                            FileName = "MediaScribe.Monitor.exe",
-                            UseShellExecute = false,
-                            ErrorDialog = false,
-                            Arguments = string.Format("{0} {1}", mediaScribePID, mplayerPID)
-                        }
-                };
-                monitorApp.Start();
             }
 
             if (e.PropertyName == FindTextInputPropertyName)
@@ -1458,7 +1440,7 @@ namespace JayDev.MediaScribe.ViewModel
             int trackIndex = Tracks.IndexOf(_currentTrack);
             if (trackIndex < Tracks.Count - 1)
             {
-                PlayFile(Tracks.ToList(), trackIndex + 1, TimeSpan.Zero, true);
+                PlayFile(Tracks.ToList(), trackIndex + 1, TimeSpan.Zero, maintainPlayStatus:false);
             }
             else
             {
@@ -1616,7 +1598,8 @@ namespace JayDev.MediaScribe.ViewModel
             if (_currentTrack != track
                 && true == SettingManager.ApplicationSettings.GenerateThumbnails)
             {
-                ThumbnailGenerator.Generate(track);
+                //VLC todo:
+                //ThumbnailGenerator.Generate(track);
             }
 
             _currentTrack = track;
@@ -1647,8 +1630,9 @@ namespace JayDev.MediaScribe.ViewModel
             track.IsPlaying = true;
 
             //actually play the file
-            JayDev.MediaScribe.ViewModel.MediaPlayer.PlayAction action = maintainPlayStatus ? JayDev.MediaScribe.ViewModel.MediaPlayer.PlayAction.MaintainStatus : JayDev.MediaScribe.ViewModel.MediaPlayer.PlayAction.Play;
+            JayDev.MediaScribe.ViewModel.MediaPlayerVLC.PlayAction action = maintainPlayStatus ? JayDev.MediaScribe.ViewModel.MediaPlayerVLC.PlayAction.MaintainStatus : JayDev.MediaScribe.ViewModel.MediaPlayerVLC.PlayAction.Play;
             _player.PlayFile(tracks, trackIndex, position, action);
+
         }
 
         private void PlayPause()
@@ -1679,7 +1663,7 @@ namespace JayDev.MediaScribe.ViewModel
             }
             _currentCourse.EmbeddedVideoHeight = LastEmbeddedVideoHeight;
             _currentCourse.EmbeddedVideoWidth = LastEmbeddedVideoWidth;
-            _currentCourse.LastPlayedTrackID = _currentTrack.ID;
+            _currentCourse.LastPlayedTrackID = null == _currentTrack ? null : _currentTrack.ID;
             _currentCourse.LastPlayedTrackPosition = _currentTrackPlayPosition;
             _currentCourse.DateViewed = DateTime.Now;
             _currentCourse.Notes = Notes.ToList();

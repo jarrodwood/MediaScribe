@@ -6,6 +6,8 @@
              mc:Ignorable="d" 
              xmlns:nmCommon="clr-namespace:MediaScribe.Common;assembly=MediaScribe.Common"
              xmlns:MediaScribeControl="clr-namespace:JayDev.MediaScribe.View.Controls"
+             xmlns:vlc="clr-namespace:LibVLC.NET.Presentation;assembly=LibVLC.NET.Presentation"
+             
              d:DesignHeight="300" d:DesignWidth="700" x:Name="FullscreenCourseViewName">
     <DockPanel>
 
@@ -26,7 +28,7 @@
                                                    Speed="{Binding Speed}"
                                                />
 
-        <MediaScribeControl:NotesGridControl x:Name="notesGrid" DockPanel.Dock="Right" Width="{Binding ControlledFullscreenNotePanelWidth}"
+            <MediaScribeControl:NotesGridControl DockPanel.Dock="Right" x:Name="notesGrid" Width="{Binding ControlledFullscreenNotePanelWidth}"
                                            VerticalAlignment="Top"
                                                        PrepareNoteForEditCommand="{Binding PrepareNoteForEditCommand}"
                                                        NoteSavedCommand="{Binding NoteSavedCommand}"
@@ -34,14 +36,10 @@
                                                        PlayNoteCommand="{Binding PlayNoteCommand}"
                                                        SetNoteStartTimeCommand="{Binding SetNoteStartTimeCommand}"
                                                        NoteEditCompletedCommand="{Binding NoteEditCompletedCommand}"/>
-        <!-- TODO: reenable autohide controls! -->
-        <MediaScribeControl:VideoControl  x:Name="videoControl"
-                                                           VideoPanelPointer="{Binding VideoPanelPointer, Mode=OneWayToSource}"
-                                                           AspectRatio="{Binding CurrentTrackVideoAspectRatio}"
-                                                           IsShowingVideo="{Binding IsCurrentTrackVideo}"
-                                                           PlayPauseCommand="{Binding ToggleFullscreenCommand}"
-                                                           EnableAutohideControls="False"/>
-       
-        
+        <DockPanel Background="Black" DockPanel.Dock="Top"  LastChildFill="True">
+
+            <vlc:MediaElement x:Name="mediaElement" Stretch="Uniform" />
+
+        </DockPanel>
     </DockPanel>
 </UserControl>

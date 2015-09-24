@@ -13,6 +13,7 @@ using JayDev.MediaScribe.Core;
 using System.IO;
 using JayDev.MediaScribe.View;
 using Microsoft.Practices.Unity;
+using MediaInfoDotNet;
 
 namespace JayDev.MediaScribe.ViewModel
 {
@@ -218,15 +219,15 @@ namespace JayDev.MediaScribe.ViewModel
                                                       foreach (String file in dlg.FileNames)
                                                       {
                                                           FileInfo fi = new FileInfo(file);
-                                                          Discover discoverer = new Discover(file);
+
+                                                          var mediaFile = new MediaFile(file);
                                                           Track track = new Track()
                                                           {
                                                               FilePath = file,
-                                                              Title = discoverer.Title,
-                                                              Length = new TimeSpan(0, 0, discoverer.Length),
-                                                              IsVideo = discoverer.Video,
+                                                              Title = mediaFile.title,
+                                                              Length = new TimeSpan(0, 0, 0, 0, mediaFile.duration),
+                                                              IsVideo = mediaFile.Video.Count > 0, //if there's at least one video track..
                                                               FileSize = fi.Length,
-                                                              AspectRatio = discoverer.Video ? (float?)discoverer.AspectRatio : null
                                                           };
                                                           ThreadHelper.ExecuteAsyncUI(_uiDispatcher, delegate
                                                           {

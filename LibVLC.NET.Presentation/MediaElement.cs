@@ -35,6 +35,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace LibVLC.NET.Presentation
 {
@@ -46,6 +47,21 @@ namespace LibVLC.NET.Presentation
   public class MediaElement
     : FrameworkElement
   {
+      public event EventHandler OnMouseDoubleClick;
+      protected override void OnMouseDown(MouseButtonEventArgs e)
+      {
+          if (e.LeftButton == MouseButtonState.Pressed)
+          {
+              if (e.ClickCount == 2)
+              {
+                  EventHandler handler = OnMouseDoubleClick;
+                  if (handler != null)
+                  {
+                      handler(this, e);
+                  }
+              }
+          }
+      } 
 
     //==========================================================================
     private static readonly ConcurrentDictionary<MediaPlayer, WeakReference<MediaElement>> m_MediaElements = new ConcurrentDictionary<MediaPlayer, WeakReference<MediaElement>>();
@@ -248,7 +264,9 @@ namespace LibVLC.NET.Presentation
       }
       else
       {
-        MediaPlayer.Stop();
+        //commented this out, because it was causing problems. You're not allowed to call back to VLC from within the callback thread.
+        //Reference: http://stackoverflow.com/questions/23067040/playing-next-song-in-vlclib-when-vlclib-event-manager-notifies-me
+        //MediaPlayer.Stop();
 
         State = MediaElementState.EndReached;
         RaiseEndReached();
@@ -348,7 +366,19 @@ namespace LibVLC.NET.Presentation
     /// </summary>
     public MediaElement()
     {
-      // ...
+        // ...
+        if (!(bool)(DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue))
+        {
+            if (null == SingletonPlayer)
+            {
+                MediaPlayer = new MediaPlayer(m_Library, null);
+                SingletonPlayer = MediaPlayer;
+            }
+            else
+            {
+                MediaPlayer = SingletonPlayer;
+            }
+        }
     }
 
     #region Layout and rendering
@@ -573,10 +603,31 @@ namespace LibVLC.NET.Presentation
 
     #endregion // IsOpen
 
+
+    //public MediaPlayer BindableMediaPlayer
+    //{
+    //    get { return (MediaPlayer)GetValue(BindableMediaPlayerProperty); }
+    //    set { SetValue(BindableMediaPlayerProperty, value); }
+    //}
+
+
+    //// Using a DependencyProperty as the backing store for MarkedupText.  This enables animation, styling, binding, etc...
+    //public static readonly DependencyProperty BindableMediaPlayerProperty =
+    //    DependencyProperty.Register("BindableMediaPlayer", typeof(MediaPlayer), typeof(MediaElement), new UIPropertyMetadata(new PropertyChangedCallback((sender, args) =>
+    //    {
+    //        MediaElement mediaElement = sender as MediaElement;
+    //        var mediaPlayer = (MediaPlayer)args.NewValue;
+    //        mediaElement.MediaPlayer = mediaPlayer;
+    //        //SetText(textBlock, args.NewValue as string, textBlock.HighlightSections);
+    //    })));
+
+    public static MediaPlayer SingletonPlayer = null;
+
+
     #region MediaPlayer
 
     //==========================================================================                
-    private MediaPlayer MediaPlayer
+    public MediaPlayer MediaPlayer
     {
       get
       {
@@ -589,52 +640,82 @@ namespace LibVLC.NET.Presentation
       }
     }
 
+      public void Detach()
+    {
+        WeakReference<MediaElement> reference;
+        m_MediaElements.TryRemove(SingletonPlayer, out reference);
+
+        MediaPlayer_VideoCleanup();
+
+        SingletonPlayer.VideoCleanup -= MediaPlayer_VideoCleanup;
+        SingletonPlayer.Display -= MediaPlayer_Display;
+        SingletonPlayer.VideoFormat -= MediaPlayer_VideoFormat;
+        SingletonPlayer.Event -= MediaPlayer_Event;
+        //SingletonPlayer.Dispose();
+    }
+
+      public void Attach()
+      {
+          m_MediaElements.TryAdd(SingletonPlayer, new WeakReference<MediaElement>(this));
+
+          SingletonPlayer.Event += MediaPlayer_Event;
+          SingletonPlayer.VideoFormat += MediaPlayer_VideoFormat;
+          SingletonPlayer.Display += MediaPlayer_Display;
+          SingletonPlayer.VideoCleanup += MediaPlayer_VideoCleanup;
+
+          MediaPlayer_VideoFormat();
+
+          //SingletonPlayer.Volume = (int)Math.Round(Volume * 100);
+          //SingletonPlayer.Location = Source;
+
+          //State = MediaElementState.Stopped;   
+      }
     //==========================================================================
     private void OnMediaPlayerChanged(MediaPlayer oldValue, MediaPlayer newValue)
     {
-      if(oldValue != null)
-      {
-        WeakReference<MediaElement> reference;
-        m_MediaElements.TryRemove(oldValue, out reference);
+      //if(oldValue != null)
+      //{
+      //  WeakReference<MediaElement> reference;
+      //  m_MediaElements.TryRemove(oldValue, out reference);
 
-        oldValue.VideoCleanup -= MediaPlayer_VideoCleanup;
-        oldValue.Display -= MediaPlayer_Display;
-        oldValue.VideoFormat -= MediaPlayer_VideoFormat;
-        oldValue.Event -= MediaPlayer_Event;
-        oldValue.Dispose();
-      }
+      //  oldValue.VideoCleanup -= MediaPlayer_VideoCleanup;
+      //  oldValue.Display -= MediaPlayer_Display;
+      //  oldValue.VideoFormat -= MediaPlayer_VideoFormat;
+      //  oldValue.Event -= MediaPlayer_Event;
+      //  oldValue.Dispose();
+      //}
 
-      if(newValue != null)
-      {
-        m_MediaElements.TryAdd(newValue, new WeakReference<MediaElement>(this));
+      //if(newValue != null)
+      //{
+      //  m_MediaElements.TryAdd(newValue, new WeakReference<MediaElement>(this));
 
-        newValue.Event += MediaPlayer_Event;
-        newValue.VideoFormat += MediaPlayer_VideoFormat;
-        newValue.Display += MediaPlayer_Display;
-        newValue.VideoCleanup += MediaPlayer_VideoCleanup;
+      //  newValue.Event += MediaPlayer_Event;
+      //  newValue.VideoFormat += MediaPlayer_VideoFormat;
+      //  newValue.Display += MediaPlayer_Display;
+      //  newValue.VideoCleanup += MediaPlayer_VideoCleanup;
 
-        newValue.Volume = (int)Math.Round(Volume * 100);
-        newValue.Location = Source;
+      //  newValue.Volume = (int)Math.Round(Volume * 100);
+      //  newValue.Location = Source;
 
-        State = MediaElementState.Stopped;
-      }
-      else
-        State = MediaElementState.Empty;
+      //  State = MediaElementState.Stopped;
+      //}
+      //else
+      //  State = MediaElementState.Empty;
 
-      IsOpen = false;
-      VideoBufferBitmap = null;
-      ActualFPS = null;
-      FPS = null;
-      Length = null;
-      Position = null;
-      VideoStreams = null;
-      CurrentVideoStream = null;
-      AudioStreams = null;
-      CurrentAudioStream = null;
-      SubtitleStreams = null;
-      CurrentSubtitleStream = null;
-      ChapterCount = null;
-      CurrentChapter = null;
+      //IsOpen = false;
+      //VideoBufferBitmap = null;
+      //ActualFPS = null;
+      //FPS = null;
+      //Length = null;
+      //Position = null;
+      //VideoStreams = null;
+      //CurrentVideoStream = null;
+      //AudioStreams = null;
+      //CurrentAudioStream = null;
+      //SubtitleStreams = null;
+      //CurrentSubtitleStream = null;
+      //ChapterCount = null;
+      //CurrentChapter = null;
     }
 
     //==========================================================================
@@ -742,6 +823,7 @@ namespace LibVLC.NET.Presentation
     private void OnSourceChanged(Uri oldSource, Uri newSource)
     {
       MediaPlayer = newSource == null ? null : new MediaPlayer(m_Library, null);
+      SingletonPlayer = MediaPlayer;
       ActualSource = null;
     }
 
@@ -1874,6 +1956,7 @@ namespace LibVLC.NET.Presentation
       if(!(bool)(DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue))
         m_Library = LibVLCLibrary.Load(null);
     }
+
 
   } // class MediaElement
 

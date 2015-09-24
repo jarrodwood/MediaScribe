@@ -3,43 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vlc="clr-namespace:LibVLC.NET.Presentation;assembly=LibVLC.NET.Presentation"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
-             xmlns:nm="clr-namespace:JayDev.MediaScribe.View.Controls" Background="Transparent" SizeChanged="UserControl_SizeChanged"
+             Height="300" Width="300"
              x:Name="VideoControlName">
     <Grid Background="Transparent" Name="entireControl">
         <DockPanel LastChildFill="True" Background="Black">
-            <Grid Name="ControlPanel" DockPanel.Dock="Bottom" Height="30" Background="Gray" Visibility="Collapsed">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="50"/>
-                    <ColumnDefinition Width="50"/>
-                    <ColumnDefinition Width="50"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <!--<Grid Grid.Column="0" VerticalAlignment="Center">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" HorizontalAlignment="Left">34:03/1:02:50</Label>
-                </Grid>-->
-                <Button Grid.Column="1" Height="30px">3:4</Button>
-                <Button Grid.Column="2" Height="30px">16:9</Button>
-                <Button Grid.Column="3" Height="30px">16:10</Button>
-                <!--<Button Height="30px" Command="{Binding ElementName=VideoControlName, Path=ToggleFullscreenCommand}">sdf</Button>-->
-                <!--<StackPanel Grid.Column="4" Orientation="Horizontal"></StackPanel>-->
-                <!--<Grid Grid.Column="4" VerticalAlignment="Center">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="65"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label HorizontalAlignment="Right">Volume</Label>
-                    <Slider Grid.Column="1" />
-                </Grid>-->
-                
-            </Grid>
-            <ContentControl Grid.Row="1" x:Name="videoPlaceholder" />
+            <vlc:MediaElement Grid.Row="1" x:Name="mediaElement" />
         </DockPanel>
         
     </Grid>

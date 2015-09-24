@@ -110,15 +110,15 @@ namespace JayDev.MediaScribe.View.Controls
             //method yanks the video from whoever has it, and gives it to this control.
             AssociateVideoWithControl();
 
-            //Ensure that when the video panel pointer property of the native win32 control is updated, we update our reference to it.
-            DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(MediaPlayerWPFDisplayControl.VideoPanelHandlePropertyProperty, typeof(MediaPlayerWPFDisplayControl));
-            if (dpd != null)
-            {
-                dpd.AddValueChanged(MediaPlayerWPFDisplayControl.Instance, delegate
-                {
-                    VideoPanelPointer = MediaPlayerWPFDisplayControl.Instance.VideoPanelHandleProperty;
-                });
-            }
+            ////Ensure that when the video panel pointer property of the native win32 control is updated, we update our reference to it.
+            //DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(MediaPlayerWPFDisplayControl.VideoPanelHandlePropertyProperty, typeof(MediaPlayerWPFDisplayControl));
+            //if (dpd != null)
+            //{
+            //    dpd.AddValueChanged(MediaPlayerWPFDisplayControl.Instance, delegate
+            //    {
+            //        VideoPanelPointer = MediaPlayerWPFDisplayControl.Instance.VideoPanelHandleProperty;
+            //    });
+            //}
         }
 
         /// <summary>
@@ -127,23 +127,23 @@ namespace JayDev.MediaScribe.View.Controls
         /// </summary>
         public void AssociateVideoWithControl()
         {
-            var mPlayerWPFControl1 = MediaPlayerWPFDisplayControl.Instance;
+            //var mPlayerWPFControl1 = MediaPlayerWPFDisplayControl.Instance;
 
-            //since we re-use the video control (since we don't want to keep on re-running mplayer), we need to ensure we disconnect the
-            //panel from its existing parent, before attaching it to us.
-            if (null != mPlayerWPFControl1.Parent)
-            {
-                (mPlayerWPFControl1.Parent as ContentControl).Content = null;
-            }
+            ////since we re-use the video control (since we don't want to keep on re-running mplayer), we need to ensure we disconnect the
+            ////panel from its existing parent, before attaching it to us.
+            //if (null != mPlayerWPFControl1.Parent)
+            //{
+            //    (mPlayerWPFControl1.Parent as ContentControl).Content = null;
+            //}
 
-            this.videoPlaceholder.Content = mPlayerWPFControl1;
+            //this.videoPlaceholder.Content = mPlayerWPFControl1;
 
-            //hook up the event handler so the user can double-click in the panel to toggle fullscreen
-            MediaPlayerWPFDisplayControl.Instance.OnDoubleClick -= mPlayerWPFControl1_OnDoubleClick;
-            MediaPlayerWPFDisplayControl.Instance.OnDoubleClick += new MediaPlayerWPFDisplayControl.DoubleClickHandler(mPlayerWPFControl1_OnDoubleClick);
+            ////hook up the event handler so the user can double-click in the panel to toggle fullscreen
+            //MediaPlayerWPFDisplayControl.Instance.OnDoubleClick -= mPlayerWPFControl1_OnDoubleClick;
+            //MediaPlayerWPFDisplayControl.Instance.OnDoubleClick += new MediaPlayerWPFDisplayControl.DoubleClickHandler(mPlayerWPFControl1_OnDoubleClick);
 
-            //ensure that the panel is the right size.
-            SetPanelSizeForAspectRatio();
+            ////ensure that the panel is the right size.
+            //SetPanelSizeForAspectRatio();
 
             if (EnableAutohideControls)
             {
@@ -167,49 +167,49 @@ namespace JayDev.MediaScribe.View.Controls
 
         public void SetMode(VideoControlMode mode)
         {
-            if (mode == VideoControlMode.Embedded)
-            {
-                ControlPanel.Visibility = System.Windows.Visibility.Visible;
-            }
-            else if (mode == VideoControlMode.Fullscreen)
-            {
-                ControlPanel.Visibility = System.Windows.Visibility.Collapsed;
-            }
+            //if (mode == VideoControlMode.Embedded)
+            //{
+            //    ControlPanel.Visibility = System.Windows.Visibility.Visible;
+            //}
+            //else if (mode == VideoControlMode.Fullscreen)
+            //{
+            //    ControlPanel.Visibility = System.Windows.Visibility.Collapsed;
+            //}
         }
 
-        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            SetPanelSizeForAspectRatio(e.NewSize.Width, e.NewSize.Height);
-        }
+        //private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        //{
+        //    SetPanelSizeForAspectRatio(e.NewSize.Width, e.NewSize.Height);
+        //}
 
-        public void SetPanelSizeForAspectRatio()
-        {
-            SetPanelSizeForAspectRatio(this.ActualWidth, this.ActualHeight);
-        }
-        private void SetPanelSizeForAspectRatio(double newWidth, double newHeight)
-        {
-                double aspectRatio = AspectRatio ?? defaultAspectRatio;
-                //this.play.ForceAspectRatio(this.panelVideo.Width, this.panelVideo.Height);
-                double width = newWidth;
-                double height = newHeight - this.ControlPanel.ActualHeight;
-                double correctedWidth = -1;
-                double correctedHeight = -1;
-                float panelAspectRatio = (float)width / (float)height;
-                if (panelAspectRatio >= aspectRatio)
-                {
-                    correctedHeight = height;
-                    correctedWidth = Convert.ToInt32((float)height * aspectRatio);
-                    MediaPlayerWPFDisplayControl.Instance.Width = correctedWidth;
-                    MediaPlayerWPFDisplayControl.Instance.Height = correctedHeight;
-                }
-                else
-                {
-                    correctedWidth = width;
-                    correctedHeight = Convert.ToInt32((float)width / aspectRatio);
-                    MediaPlayerWPFDisplayControl.Instance.Height = correctedHeight;
-                    MediaPlayerWPFDisplayControl.Instance.Width = correctedWidth;
-                }
-        }
+        //public void SetPanelSizeForAspectRatio()
+        //{
+        //    SetPanelSizeForAspectRatio(this.ActualWidth, this.ActualHeight);
+        //}
+        //private void SetPanelSizeForAspectRatio(double newWidth, double newHeight)
+        //{
+        //        double aspectRatio = AspectRatio ?? defaultAspectRatio;
+        //        //this.play.ForceAspectRatio(this.panelVideo.Width, this.panelVideo.Height);
+        //        double width = newWidth;
+        //        double height = newHeight - this.ControlPanel.ActualHeight;
+        //        double correctedWidth = -1;
+        //        double correctedHeight = -1;
+        //        float panelAspectRatio = (float)width / (float)height;
+        //        if (panelAspectRatio >= aspectRatio)
+        //        {
+        //            correctedHeight = height;
+        //            correctedWidth = Convert.ToInt32((float)height * aspectRatio);
+        //            MediaPlayerWPFDisplayControl.Instance.Width = correctedWidth;
+        //            MediaPlayerWPFDisplayControl.Instance.Height = correctedHeight;
+        //        }
+        //        else
+        //        {
+        //            correctedWidth = width;
+        //            correctedHeight = Convert.ToInt32((float)width / aspectRatio);
+        //            MediaPlayerWPFDisplayControl.Instance.Height = correctedHeight;
+        //            MediaPlayerWPFDisplayControl.Instance.Width = correctedWidth;
+        //        }
+        //}
 
 
 

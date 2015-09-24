@@ -648,6 +648,27 @@ namespace LibVLC.NET
       return 0;
     }
 
+
+
+    //==========================================================================
+    // void libvlc_media_player_set_rate (libvlc_media_player_t *p_mi, float f_rate)
+
+    //==========================================================================
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate void libvlc_media_player_set_rate_signature(IntPtr p_mi, float f_rate);
+
+    //==========================================================================
+    private readonly libvlc_media_player_set_rate_signature m_libvlc_media_player_set_rate;
+
+    //==========================================================================
+    public void libvlc_media_player_set_rate(IntPtr p_mi, float f_rate)
+    {
+        VerifyAccess();
+
+        m_libvlc_media_player_set_rate(p_mi, f_rate);
+    }
+
+
   } // class LibVLCLibrary
 
 }
