@@ -13,7 +13,6 @@ using System.Windows.Shapes;
 using JayDev.MediaScribe.ViewModel;
 using JayDev.MediaScribe.Model;
 using System.Collections.ObjectModel;
-using LibMPlayerCommon;
 using GalaSoft.MvvmLight.Messaging;
 using JayDev.MediaScribe.Common;
 using System.Diagnostics;

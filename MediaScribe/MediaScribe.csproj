@@ -266,7 +266,6 @@
     <Compile Include="Core\PreviewSliderHelper.cs" />
     <Compile Include="View\Controls\Base\DragEnabledDataGrid.cs" />
     <Compile Include="ViewModel\CourseListViewModel.cs" />
-    <Compile Include="ViewModel\MediaPlayer.cs" />
     <Compile Include="View\Controller.cs" />
     <Compile Include="View\Controls\NavigationButton.xaml.cs">
       <DependentUpon>NavigationButton.xaml</DependentUpon>
@@ -373,10 +372,6 @@
     <ProjectReference Include="..\MediaScribe.AvalonTextBox\MediaScribe.AvalonTextBox.csproj">
       <Project>{CA7E4D71-3858-48F2-AF68-7E6DA88F79C9}</Project>
       <Name>MediaScribe.AvalonTextBox</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MediaScribe.LibMPlayerCommon\MediaScribe.LibMPlayerCommon.csproj">
-      <Project>{5D3616D0-160D-4601-AB67-E1ED9111C676}</Project>
-      <Name>MediaScribe.LibMPlayerCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\MediaScribe.Common\MediaScribe.Common.csproj">
       <Project>{7BE13DBC-C110-469E-92E7-49720938A62E}</Project>

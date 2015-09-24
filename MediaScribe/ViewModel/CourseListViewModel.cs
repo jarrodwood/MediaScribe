@@ -7,7 +7,6 @@ using GalaSoft.MvvmLight.Command;
 using JayDev.MediaScribe.Common;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections.ObjectModel;
-using LibMPlayerCommon;
 using System.Windows.Threading;
 using JayDev.MediaScribe.Core;
 using System.IO;

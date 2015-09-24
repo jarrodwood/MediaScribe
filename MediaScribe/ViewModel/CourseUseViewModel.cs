@@ -1547,15 +1547,15 @@ namespace JayDev.MediaScribe.ViewModel
 
         void _player_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == MediaPlayer.CurrentPlayPositionPropertyName)
+            if (e.PropertyName == MediaPlayerVLC.CurrentPlayPositionPropertyName)
             {
                 CurrentTrackPlayPosition = _player.CurrentPlayPosition;
             }
-            if (e.PropertyName == MediaPlayer.PlayStatusPropertyName)
+            if (e.PropertyName == MediaPlayerVLC.PlayStatusPropertyName)
             {
                 PlayStatus = _player.PlayStatus;
             }
-            if (e.PropertyName == MediaPlayer.CurrentTrackPropertyName)
+            if (e.PropertyName == MediaPlayerVLC.CurrentTrackPropertyName)
             {
                 _currentTrack = _player.CurrentTrack;
 
