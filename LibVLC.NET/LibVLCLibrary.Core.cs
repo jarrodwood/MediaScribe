@@ -56,6 +56,11 @@ namespace LibVLC.NET
     /// </returns>
     public IntPtr libvlc_new()
     {
+        //return libvlc_new(new[] { "--video-filter=crop", "--crop-geometry=150x150+50+50" }); BROKEN
+        //return libvlc_new(new[] { "--video-filter=transform", "--transform-type=vflip" }); WORKS
+        //return libvlc_new(new[] { "--video-filter=croppadd", "--croppadd-cropbottom=100" }); WORKS
+        //return libvlc_new(new[] { "--video-filter=croppadd", "--croppadd-cropbottom=50", "--croppadd-croptop=50" }); WORKS
+
       VerifyAccess();
 
       return m_libvlc_new(0, null);

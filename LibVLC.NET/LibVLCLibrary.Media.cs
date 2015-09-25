@@ -180,9 +180,26 @@ namespace LibVLC.NET
       return m_libvlc_media_new_as_node(p_instance, psz_mrl);
     }
 
+      
+    //==========================================================================
+    // void libvlc_media_add_option (libvlc_media_t *p_md, const char *ppsz_options)
+
+    //==========================================================================
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate void libvlc_media_add_option_signature(IntPtr p_md, string ppsz_options);
+
+    //==========================================================================
+    private readonly libvlc_media_add_option_signature m_libvlc_media_add_option;
+
+    //==========================================================================
+    public void libvlc_media_add_option(IntPtr p_md, string ppsz_options)
+    {
+        VerifyAccess();
+
+        m_libvlc_media_add_option(p_md, ppsz_options);
+    }
 
     /*
-    void libvlc_media_add_option (libvlc_media_t *p_md, const char *ppsz_options)
     void libvlc_media_add_option_flag (libvlc_media_t *p_md, const char *ppsz_options, unsigned i_flags)
     void libvlc_media_retain (libvlc_media_t *p_md)
     */

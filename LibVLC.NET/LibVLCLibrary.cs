@@ -184,6 +184,7 @@ namespace LibVLC.NET
             m_libvlc_media_parse_async = (libvlc_media_parse_async_signature)LoadDelegate<libvlc_media_parse_async_signature>("libvlc_media_parse_async");
             m_libvlc_media_is_parsed = (libvlc_media_is_parsed_signature)LoadDelegate<libvlc_media_is_parsed_signature>("libvlc_media_is_parsed");
             m_libvlc_media_get_tracks_info = (libvlc_media_get_tracks_info_signature)LoadDelegate<libvlc_media_get_tracks_info_signature>("libvlc_media_get_tracks_info");
+            m_libvlc_media_add_option = (libvlc_media_add_option_signature)LoadDelegate<libvlc_media_add_option_signature>("libvlc_media_add_option");
 
             // MediaPlayer
             m_libvlc_media_player_new = (libvlc_media_player_new_signature)LoadDelegate<libvlc_media_player_new_signature>("libvlc_media_player_new");
