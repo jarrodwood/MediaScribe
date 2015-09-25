@@ -291,7 +291,11 @@ namespace JayDev.MediaScribe.ViewModel
                     || playStatusAtMethodCall == Common.PlayStatus.Stopped)
                 {
                     //libvlc.net quirk - need to "stop" first before it'll actually play.
-                    MediaElement.SingletonPlayer.Stop();
+                    //NOTE: it appears it's safest to run this on a new thread...
+                    ThreadHelper.ExecuteSyncBackground(() => {
+                        MediaElement.SingletonPlayer.Stop();
+                    });
+                    
                     MediaElement.SingletonPlayer.Location = new Uri(track.FilePath);
                     _loadedTrack = track;
                     MediaElement.SingletonPlayer.Play();

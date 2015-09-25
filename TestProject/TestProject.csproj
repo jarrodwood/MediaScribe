@@ -56,6 +56,10 @@
     <Reference Include="Microsoft.Windows.Shell">
       <HintPath>..\Dependencies\Microsoft.Windows.Shell.dll</HintPath>
     </Reference>
+    <Reference Include="NamedPipeWrapper, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NamedPipeWrapper.1.4.0\lib\net40\NamedPipeWrapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
@@ -99,6 +103,7 @@
   <ItemGroup>
     <Compile Include="AsyncWorkerTest.cs" />
     <Compile Include="HighlightTest.cs" />
+    <Compile Include="NamedPipesTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +119,9 @@
       <Project>{1EB1F07A-CCF1-49E0-B369-CE038CAB98FC}</Project>
       <Name>MediaScribe</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

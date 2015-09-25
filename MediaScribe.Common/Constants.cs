@@ -353,28 +353,11 @@ namespace JayDev.MediaScribe.Common
         public const int DEFAULT_VOLUME = 100;
 
         public const int TRACKBAR_THUMBNAIL_WIDTH = 200;
-        public const int TRACKBAR_THUMBNAIL_QUALITY = 100;
 
 
 
         public static readonly string ApplicationFolderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + @"\MediaScribe";
         public static readonly string ApplicationGenericFilePath = ApplicationFolderPath + @"\{0}";
-
-        /// <summary>
-        /// Return the path of the mplayer executable
-        /// </summary>
-        /// <returns></returns>
-        public static string MPlayerExecutablePath
-        {
-            get
-            {
-                string location = System.Reflection.Assembly.GetExecutingAssembly().Location;
-                location = System.IO.Path.GetDirectoryName(location);
-
-                string t = System.IO.Path.Combine(location, "backend2");
-                return System.IO.Path.Combine(t, "mplayer2.exe");
-            }
-        }
 
     }
 }

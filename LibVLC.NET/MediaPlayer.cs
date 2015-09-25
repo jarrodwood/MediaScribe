@@ -1006,6 +1006,38 @@ namespace LibVLC.NET
         }
     }
 
+      /// <summary>
+      /// Set the crop geometry.
+      /// //TODO: this appears to be broken in libvlc... figure out a way to make it work.
+      /// </summary>
+    public string Crop
+    {
+        get
+        {
+            return m_Library.libvlc_video_get_crop_geometry(m_MediaPlayerHandle);
+        }
+        set
+        {
+            m_Library.libvlc_video_set_crop_geometry(m_MediaPlayerHandle, value);
+        }
+    }
+
+    /// <summary>
+    /// Set the aspect ratio.
+    /// //TODO: this appears to be broken in libvlc... figure out a way to make it work.
+    /// </summary>
+    public string AspectRatio
+    {
+        get
+        {
+            return m_Library.libvlc_video_get_aspect_ratio(m_MediaPlayerHandle);
+        }
+        set
+        {
+            m_Library.libvlc_video_set_aspect_ratio(m_MediaPlayerHandle, value);
+        }
+    }
+
     #endregion // Properties
 
     #region Events

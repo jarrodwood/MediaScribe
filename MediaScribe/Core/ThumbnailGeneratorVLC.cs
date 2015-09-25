@@ -10,6 +10,9 @@ using System.ComponentModel;
 using System.Threading;
 using System.Drawing;
 using LibVLC.NET;
+using System.Threading.Tasks;
+using System.IO.Pipes;
+using NamedPipeWrapper;
 
 namespace JayDev.MediaScribe.Core
 {
@@ -34,23 +37,32 @@ namespace JayDev.MediaScribe.Core
 
     public class ThumbnailGenerator : IDisposable
     {
+        const bool RunExternalProcess = false;
+
         public int SecondStep { get; private set; }
         public string RootImageDirectory { get; private set; }
         public List<Thumbnail> Thumbnails { get; private set; }
         private string videoFile;
         private int lengthSeconds;
-        private Process mplayer = null;
         public bool IsTrackVideo { get; set; }
 
-        private AsyncWorker worker;
         private Random random = new Random();
 
         public Tuple<TimeSpan, Action<Thumbnail>> NotifyWhenThumbnailReady { get; set; }
 
 
+        /// <summary>
+        /// used for debugging, allows the thumbnail generator to run in the current process.
+        /// </summary>
+        private ThumbnailGeneratorHelper.ThumbnailGeneratorHost host = null;
+
+        NamedPipeServer<string> generatorServer = null;
         public ThumbnailGenerator(int secondStep = 10)
         {
-            worker = new AsyncWorker();
+            generatorServer = new NamedPipeServer<string>("MediaScribe-ThumbnailGenerator");
+            generatorServer.Start();
+            generatorServer.ClientMessage += server_ClientMessage;
+
             SecondStep = secondStep;
             Thumbnails = new List<Thumbnail>();
 
@@ -63,6 +75,56 @@ namespace JayDev.MediaScribe.Core
                     Directory.CreateDirectory(Constants.ApplicationFolderPath);
                 }
                 Directory.CreateDirectory(RootImageDirectory);
+            }
+
+            if (RunExternalProcess)
+            {
+                ProcessStartInfo psi = new ProcessStartInfo()
+                {
+                    FileName = "ThumbnailGeneratorHelper.exe",
+                    WorkingDirectory = Directory.GetCurrentDirectory(),
+                    Arguments = null,
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                };
+                var proc = Process.Start(psi);
+                proc.PriorityClass = ProcessPriorityClass.BelowNormal;
+            }
+            else
+            {
+                host = new ThumbnailGeneratorHelper.ThumbnailGeneratorHost();
+            }
+        }
+
+        void server_ClientMessage(NamedPipeConnection<string, string> connection, string message)
+        {
+            int seconds = Int32.Parse(message.Substring(0, 6));
+            TimeSpan time = new TimeSpan(0, 0, seconds);
+            string thumbnailFilename = message.Substring(7);
+            //TODO: need to make sure that we don't accidentally add a thumbnail from an OLD track to the NEXT one when we change before the last one's finished.
+            //      need to, for example, pass the track name back to check which one it is.
+            if (currentGeneratorInfo != null)
+            {
+                //determine the thumbnail height... since for each track, this could be different
+                if (currentGeneratorInfo.ThumbnailHeight == null)
+                {
+                    string thumbnailFullPath = Path.Combine(currentGeneratorInfo.ThumbnailDirectory, thumbnailFilename);
+                    if (File.Exists(thumbnailFullPath))
+                    {
+                        Bitmap img = new Bitmap(thumbnailFullPath);
+                        currentGeneratorInfo.ThumbnailHeight = img.Height;
+                    }
+                }
+
+                Thumbnails.Add(new Thumbnail()
+                {
+                    Time = time,
+                    Filename = thumbnailFilename,
+                    FileDirectory = currentGeneratorInfo.ThumbnailDirectory,
+                    Width = currentGeneratorInfo.ThumbnailWidth,
+                    Height = currentGeneratorInfo.ThumbnailHeight.Value
+                });
             }
         }
 
@@ -113,7 +175,15 @@ namespace JayDev.MediaScribe.Core
             catch (UnauthorizedAccessException) { }
         }
 
+        class GenInfo
+        {
+            public string TrackFilePath { get; set; }
+            public string ThumbnailDirectory { get; set; }
+            public int ThumbnailWidth { get; set; }
+            public int? ThumbnailHeight { get; set; }
+        }
 
+        GenInfo currentGeneratorInfo = null;
         public void Generate(Track track)
         {
             //if we've just generated the thumbnails for this track, there's nothing left to do.
@@ -121,7 +191,8 @@ namespace JayDev.MediaScribe.Core
                 return;
 
             //if we were part way through doing anything, stop it now.
-            worker.AbortAllWork();
+            generatorServer.PushMessage("ABORT");
+            currentGeneratorInfo = null;
 
             NotifyWhenThumbnailReady = null;
 
@@ -140,79 +211,31 @@ namespace JayDev.MediaScribe.Core
             {
                 this.lengthSeconds = Convert.ToInt32(track.Length.TotalSeconds);
 
-                worker.QueueWorkItem((DoWorkEventArgs args) =>
+                //before we do /anything/, since we've been instructed to generate the thumbnails for a new track, clear out any existing thumbnails.
+                Thumbnails.Clear();
+
+                //and clear out the physical thumbnails from the generation folder.
+                foreach (var d in Directory.EnumerateDirectories(RootImageDirectory))
                 {
-                    try
-                    {
-                        //before we do /anything/, since we've been instructed to generate the thumbnails for a new track, clear out any existing thumbnails.
-                        Thumbnails.Clear();
+                    DeleteDir(d);
+                }
+                //JDW NOTE: we use subdirs w/ timestamp + random number because of issues deleting thumbnails
+                //          when changing tracks -- there's a lock kept on them temporarily.
+                string thumbnailDir = string.Format("{0}\\{1}_{2}", RootImageDirectory, DateTime.Now.ToString("HHmmss"), random.Next(10000));
+                if (false == Directory.Exists(thumbnailDir))
+                    Directory.CreateDirectory(thumbnailDir);
 
-                        //and clear out the physical thumbnails from the generation folder.
-                        foreach (var d in Directory.EnumerateDirectories(RootImageDirectory))
-                        {
-                            DeleteDir(d);
-                        }
-                        //JDW NOTE: we use subdirs w/ timestamp + random number because of issues deleting thumbnails
-                        //          when changing tracks -- there's a lock kept on them temporarily.
-                        string thumbnailDir = string.Format("{0}\\{1}_{2}", RootImageDirectory, DateTime.Now.ToString("HHmmss"), random.Next(10000));
-                        if (false == Directory.Exists(thumbnailDir))
-                            Directory.CreateDirectory(thumbnailDir);
+                int thumbnailWidth = Common.Constants.TRACKBAR_THUMBNAIL_WIDTH;
 
-                        int thumbnailWidth = Common.Constants.TRACKBAR_THUMBNAIL_WIDTH;
+                string thumbnailGenArgs = String.Join(@"|", new string[] { thumbnailWidth.ToString(), SecondStep.ToString(), "\"" + thumbnailDir + "\"", "\"" + track.FilePath + "\"" });
 
-                        int thumbnailHeight = -1;
-                        string thumbnailGenArgs = String.Join(" ", new string[] { thumbnailWidth.ToString(), SecondStep.ToString(), "\"" + thumbnailDir + "\"", "\"" + track.FilePath + "\"" });
-                        ProcessStartInfo psi = new ProcessStartInfo()
-                        {
-                            FileName = "ThumbnailGeneratorHelper.exe",
-                            WorkingDirectory = Directory.GetCurrentDirectory(),
-                            Arguments = thumbnailGenArgs,
-                            CreateNoWindow = true,
-                            UseShellExecute = false,
-                            RedirectStandardOutput = true,
-                        };
-                        var proc = Process.Start(psi);
-                        proc.PriorityClass = ProcessPriorityClass.BelowNormal;
-                        while (!proc.StandardOutput.EndOfStream)
-                        {
-                            string line = proc.StandardOutput.ReadLine();
-                            int seconds = Int32.Parse(line.Substring(0, 6));
-                            TimeSpan time = new TimeSpan(0,0,seconds);
-                            string thumbnailFilename = line.Substring(7);
-                            if (args.Cancel)
-                            {
-                                proc.Kill();
-                                break;
-                            }
-
-                            //determine the thumbnail height... since for each track, this could be different
-                            if (thumbnailHeight == -1)
-                            {
-                                string thumbnailFullPath = Path.Combine(thumbnailDir, thumbnailFilename);
-                                if (File.Exists(thumbnailFullPath))
-                                {
-                                    Bitmap img = new Bitmap(thumbnailFullPath);
-                                    thumbnailHeight = img.Height;
-                                }
-                            }
-
-                            Thumbnails.Add(new Thumbnail()
-                            {
-                                Time = time,
-                                Filename = thumbnailFilename,
-                                FileDirectory = thumbnailDir,
-                                Width = thumbnailWidth,
-                                Height = thumbnailHeight
-                            });
-                        }
-
-                    }
-                    catch (Exception e)
-                    {
-                        Logging.Log(LoggingSource.ThumbnailGeneration, "*** libvlc error ***");
-                        Logging.Log(LoggingSource.ThumbnailGeneration, e.ToString());
-                    }
-                });
+                currentGeneratorInfo = new GenInfo()
+                {
+                    ThumbnailDirectory = thumbnailDir,
+                    ThumbnailWidth = thumbnailWidth,
+                    TrackFilePath = track.FilePath,
+                };
+                generatorServer.PushMessage(thumbnailGenArgs);
             }
         }
 

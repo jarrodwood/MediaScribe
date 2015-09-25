@@ -1598,8 +1598,7 @@ namespace JayDev.MediaScribe.ViewModel
             if (_currentTrack != track
                 && true == SettingManager.ApplicationSettings.GenerateThumbnails)
             {
-                //VLC todo:
-                //ThumbnailGenerator.Generate(track);
+                ThumbnailGenerator.Generate(track);
             }
 
             _currentTrack = track;

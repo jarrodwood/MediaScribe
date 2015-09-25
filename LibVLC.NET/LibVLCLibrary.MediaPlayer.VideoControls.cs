@@ -131,7 +131,23 @@ namespace LibVLC.NET
     }
 
 
+    //==========================================================================
     // void libvlc_video_set_aspect_ratio (libvlc_media_player_t *p_mi, const char *psz_aspect)
+
+    //==========================================================================
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate string libvlc_video_set_aspect_ratio_signature(IntPtr p_mi, string psz_aspect);
+
+    //==========================================================================
+    private readonly libvlc_video_set_aspect_ratio_signature m_libvlc_video_set_aspect_ratio;
+
+    //==========================================================================
+    public void libvlc_video_set_aspect_ratio(IntPtr p_mi, string psz_aspect)
+    {
+        VerifyAccess();
+
+        m_libvlc_video_set_aspect_ratio(p_mi, psz_aspect);
+    }
 
 
     //==========================================================================

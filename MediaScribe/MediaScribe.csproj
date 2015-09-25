@@ -75,6 +75,10 @@
     <Reference Include="Microsoft.Windows.Shell">
       <HintPath>..\Dependencies\Microsoft.Windows.Shell.dll</HintPath>
     </Reference>
+    <Reference Include="NamedPipeWrapper, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NamedPipeWrapper.1.4.0\lib\net40\NamedPipeWrapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -124,7 +128,6 @@
     <Compile Include="Converters\StringToXamlConverter.cs" />
     <Compile Include="Core\CsvExporter.cs" />
     <Compile Include="Core\NavigationHelper.cs" />
-    <Compile Include="Core\ThumbnailGenerator.cs" />
     <Compile Include="Core\ThumbnailGeneratorVLC.cs" />
     <Compile Include="Core\VirtualizingStackPanelBehaviors.cs" />
     <Compile Include="KeyNames.Designer.cs">
@@ -354,6 +357,7 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

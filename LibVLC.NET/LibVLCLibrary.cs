@@ -239,6 +239,7 @@ namespace LibVLC.NET
             m_libvlc_video_get_crop_geometry = (libvlc_video_get_crop_geometry_signature)LoadDelegate<libvlc_video_get_crop_geometry_signature>("libvlc_video_get_crop_geometry");
             m_libvlc_video_set_crop_geometry = (libvlc_video_set_crop_geometry_signature)LoadDelegate<libvlc_video_set_crop_geometry_signature>("libvlc_video_set_crop_geometry");
             m_libvlc_video_get_aspect_ratio = (libvlc_video_get_aspect_ratio_signature)LoadDelegate<libvlc_video_get_aspect_ratio_signature>("libvlc_video_get_aspect_ratio");
+            m_libvlc_video_set_aspect_ratio = (libvlc_video_set_aspect_ratio_signature)LoadDelegate<libvlc_video_set_aspect_ratio_signature>("libvlc_video_set_aspect_ratio");
 
             // Media Lists
             m_libvlc_media_list_release = (libvlc_media_list_release_signature)LoadDelegate<libvlc_media_list_release_signature>("libvlc_media_list_release");

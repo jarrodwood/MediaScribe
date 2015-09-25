@@ -76,10 +76,6 @@ namespace JayDev.MediaScribe.View
             //Note the UI dispatcher
             _uiDispatcher = Dispatcher.CurrentDispatcher;
 
-            //Due to mplayer being an external process and has no way of telling when /this/ application closes, if MediaScribe is killed
-            //old mplayer.exe processes can remain hanging around. So we should try to see if this has happened, and kill the old instances.
-            TryKillOldMPlayerProccesses();
-            
             //we need to hook into the key pressing events in the main window, for use with hotkeys.
             _mainWindow.PreviewKeyDown += new KeyEventHandler(MainWindow_KeyDown);
 
@@ -359,29 +355,8 @@ namespace JayDev.MediaScribe.View
             });
         }
 
-        /// <summary>
-        /// When MediaScribe is killed in Visual Studio, it often leaves the child mplayer processes running. This will find all old mplayer
-        /// instances started by MediaScribe, and kill them.
-        /// </summary>
-        private void TryKillOldMPlayerProccesses()
-        {
-            string currentAssemblyDirectoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-            var oldChildMPlayerProcesses = (from procs in Process.GetProcesses()
-                                            where (procs.ProcessName == "mplayer" || procs.ProcessName == "mplayer2")
-                                            && Path.GetDirectoryName(procs.MainModule.FileName).Contains(currentAssemblyDirectoryName)
-                                            select procs).ToList();
-
-            try
-            {
-                oldChildMPlayerProcesses.ForEach(x => x.Kill());
-            }
-            catch { }
-        }
-
         public void Dispose()
         {
-            TryKillOldMPlayerProccesses();
         }
     }
 }

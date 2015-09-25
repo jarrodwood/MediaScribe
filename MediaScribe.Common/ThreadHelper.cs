@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Threading;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace JayDev.MediaScribe.Common
 {
@@ -35,6 +36,16 @@ namespace JayDev.MediaScribe.Common
             dispatcher.Invoke(action, priority);
         }
 
+        public static void ExecuteSyncBackground(Action action)
+        {
+            Task task = Task.Factory.StartNew(action);
+            task.Wait();
+        }
+
+        public static void ExecuteAsyncBackground(Action action)
+        {
+            Task.Factory.StartNew(action);
+        }
 
         public static void ExecuteBackground(Action action)
         {
