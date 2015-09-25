@@ -282,10 +282,6 @@
     <Compile Include="Domain\CourseList.cs" />
     <Compile Include="Domain\Course.cs" />
     <Compile Include="Core\SingleInstance.cs" />
-    <Page Include="View\Controls\VideoControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\CourseUseView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -304,16 +300,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="View\Controls\Base\MediaPlayerWPFDisplayControl.cs" />
     <Compile Include="Domain\Note.cs" />
     <Compile Include="Domain\Track.cs" />
     <Compile Include="Domain\TrackTime.cs" />
     <Compile Include="Domain\Tag.cs" />
     <Compile Include="View\Controls\ImageButton.xaml.cs">
       <DependentUpon>ImageButton.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Controls\VideoControl.xaml.cs">
-      <DependentUpon>VideoControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\CourseListView.xaml.cs">
       <DependentUpon>CourseListView.xaml</DependentUpon>

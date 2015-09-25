@@ -1356,9 +1356,6 @@ namespace JayDev.MediaScribe.ViewModel
                 //the volume will have been given an initial value before this event is raised
                 _player.Volume(_volume);
                 _player.TrackFinished += new MediaPlayerVLC.TrackFinishedEventHandler(_player_TrackFinished);
-
-                //auto-load the last track
-                SetInitialTrack();
             }
 
             if (e.PropertyName == FindTextInputPropertyName)
@@ -1693,36 +1690,27 @@ namespace JayDev.MediaScribe.ViewModel
 
         private void SetInitialTrack()
         {
-            //NOTE: can only instruct mplayer to load a file, AFTER we've initialized the panel it will display to.
-            if (MediaPlayerWPFDisplayControl.Instance.IsVideoPanelInitialized)
+            //auto-load the appropriate file
+            if (null != _currentCourse.LastPlayedTrackID)
             {
-                //auto-load the appropriate file
-                if (null != _currentCourse.LastPlayedTrackID)
+                //JDW: track may have been removed
+                int trackIndex = _currentCourse.Tracks.FindIndex(x => x.ID == _currentCourse.LastPlayedTrackID);
+
+                //since we haven't found the track, there's clearly an issue. log it. set the initial track
+                //to be the first... but if there are no tracks, simply exit out of there.
+                if (trackIndex == -1)
                 {
-                    //JDW: track may have been removed
-                    int trackIndex = _currentCourse.Tracks.FindIndex(x => x.ID == _currentCourse.LastPlayedTrackID);
+                    Logging.Log(LoggingSource.Errors, "SetInitialTrack - track not found??");
 
-                    //since we haven't found the track, there's clearly an issue. log it. set the initial track
-                    //to be the first... but if there are no tracks, simply exit out of there.
-                    if (trackIndex == -1)
+                    if (_currentCourse.Tracks.Count == 0)
                     {
-                        Logging.Log(LoggingSource.Errors, "SetInitialTrack - track not found??");
-
-                        if (_currentCourse.Tracks.Count == 0)
-                        {
-                            return;
-                        }
-
-                        trackIndex = 0;
+                        return;
                     }
 
-                    PlayFile(_currentCourse.Tracks, trackIndex, _currentCourse.LastPlayedTrackPosition, true);
+                    trackIndex = 0;
                 }
-            }
-            else
-            {
-                Logging.Log(LoggingSource.CourseUseViewModel, "SetInitialTrack call, and video panel is not initialized.");
-                // throw new Exception("error - setting initial track before mplayer display control initialized. if i ever run into this error, figure out a way around it!");
+
+                PlayFile(_currentCourse.Tracks, trackIndex, _currentCourse.LastPlayedTrackPosition, true);
             }
         }
 

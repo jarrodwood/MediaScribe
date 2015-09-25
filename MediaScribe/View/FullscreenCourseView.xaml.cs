@@ -117,11 +117,6 @@ namespace JayDev.MediaScribe.View
             }
         }
 
-        private void videoControl_AccessKeyPressed(object sender, AccessKeyPressedEventArgs e)
-        {
-
-        }
-
         #region auto-hide code
         /*********************
          * When the user hovers their cursor in the VIDEO, in full-screen mode (i.e. not over the controls, if they moved their mouse there
