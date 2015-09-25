@@ -81,26 +81,6 @@ namespace JayDev.MediaScribe.View
             e.Row.Header = (e.Row.GetIndex() + 1).ToString();
         }
 
-        /// <summary>
-        /// the vertical splitter
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void GridSplitter_DragCompleted(object sender, DragCompletedEventArgs e)
-        {
-            //_viewModel.LastEmbeddedVideoWidth = mainGrid.ColumnDefinitions[0].Width.Value;
-        }
-
-        /// <summary>
-        /// the horizontal splitter
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void GridSplitter_DragCompleted_1(object sender, DragCompletedEventArgs e)
-        {
-            //_viewModel.LastEmbeddedVideoHeight = leftGridColumn.RowDefinitions[0].Height.Value;
-        }
-
         #endregion
 
         public void HandleWindowKeypress(object sender, KeyEventArgs e)
