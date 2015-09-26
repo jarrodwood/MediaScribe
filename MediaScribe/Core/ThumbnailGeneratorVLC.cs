@@ -117,14 +117,26 @@ namespace JayDev.MediaScribe.Core
                     }
                 }
 
-                Thumbnails.Add(new Thumbnail()
+                var thumbnail = new Thumbnail()
                 {
                     Time = time,
                     Filename = thumbnailFilename,
                     FileDirectory = currentGeneratorInfo.ThumbnailDirectory,
                     Width = currentGeneratorInfo.ThumbnailWidth,
                     Height = currentGeneratorInfo.ThumbnailHeight.Value
-                });
+                }; 
+                Thumbnails.Add(thumbnail);
+
+                //if the trackbar's been waiting for this thumbnail to be generated, notify it!
+                var notify = NotifyWhenThumbnailReady; //take a copy in case it's cleared and replaced.
+                if (null != notify)
+                {
+                    if (thumbnail.Time <= notify.Item1
+                    && thumbnail.Time.Add(new TimeSpan(0, 0, SecondStep)) > notify.Item1)
+                    {
+                        notify.Item2(thumbnail);
+                    }
+                }
             }
         }
 
@@ -249,14 +261,18 @@ namespace JayDev.MediaScribe.Core
 
             int binSearchResult = Thumbnails.BinarySearch(new Thumbnail() { Time = forTime }, new ThumbnailComparer());
 
-            int index = binSearchResult > 0 ? binSearchResult : ~binSearchResult;
-            //if the thumbnail is after the first one, take the previous thumbnails. this is because
-            //the binary search will take the NEXT thumbnail from the given time; we want the previous.
-            if (index > 0)
-                index -= 1;
+            int index = 0;
+            if(binSearchResult > 0)
+                index = binSearchResult;
+            else if (binSearchResult < 0)
+            {
+                //if the thumbnail is after the first one, take the previous thumbnails. this is because
+                //the binary search will take the NEXT thumbnail from the given time; we want the previous.
+                index = (~binSearchResult) - 1;
+            }
 
-            //if the closest previous thumbnail is the LAST generated one, and its time gap is bigger than 3 * the minimum gap, then we probably haven't generated the thumbnail yet. simply return null to show we have no appropriate thumbnail.
-            if (index == Thumbnails.Count - 1 && forTime.TotalSeconds - Thumbnails[index].Time.TotalSeconds > 3 * SecondStep)
+            //if the closest previous thumbnail is the LAST generated one, and its time gap is bigger than 1.5 * the minimum gap, then we probably haven't generated the thumbnail yet. simply return null to show we have no appropriate thumbnail.
+            if (index == Thumbnails.Count - 1 && forTime.TotalSeconds - Thumbnails[index].Time.TotalSeconds > 1.5 * SecondStep)
                 return null;
 
             var result = Thumbnails[index];

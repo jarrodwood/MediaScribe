@@ -14,23 +14,23 @@
         </Style>
     </UserControl.Resources>
     <StackPanel VerticalAlignment="Bottom">
-    <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="1*"/>
-                                    <!--<RowDefinition Height="10"/>-->
-                                </Grid.RowDefinitions>
-                                <Grid.Effect>
-                                    <DropShadowEffect BlurRadius="5"  ShadowDepth="2"/>
-                                </Grid.Effect>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <!--<RowDefinition Height="10"/>-->
+            </Grid.RowDefinitions>
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="5"  ShadowDepth="2"/>
+            </Grid.Effect>
             <Rectangle Stroke="#FF3F3F3F" StrokeThickness="1"  VerticalAlignment="Stretch">
-                                    <Rectangle.Fill>
-                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                            <GradientStop Color="#FFDAC9FF" Offset="0"/>
-                                            <GradientStop Color="#FFAC7EFF" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Rectangle.Fill>
-                                </Rectangle>
-                                <!--<Path Stretch="Fill" Stroke="#FF3F3F3F" HorizontalAlignment="Center" Margin="20,-1,19.5,-1" VerticalAlignment="Stretch" Width="0.5" Data="M18.875,30.200352 L19.125,40" Grid.Row="1" />-->
+                <Rectangle.Fill>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFDAC9FF" Offset="0"/>
+                        <GradientStop Color="#FFAC7EFF" Offset="1"/>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <!--<Path Stretch="Fill" Stroke="#FF3F3F3F" HorizontalAlignment="Center" Margin="20,-1,19.5,-1" VerticalAlignment="Stretch" Width="0.5" Data="M18.875,30.200352 L19.125,40" Grid.Row="1" />-->
 
 
             <StackPanel VerticalAlignment="Stretch">
