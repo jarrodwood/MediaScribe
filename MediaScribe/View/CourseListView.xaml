@@ -121,18 +121,32 @@
                                             SortMemberPath="CourseLength"
                                             CanUserSort="True"
                                             IsReadOnly="True"/>
-                                        <DataGridTextColumn Header="Files"
+                                            <DataGridTextColumn Header="Files"
                                             Width="55"
                                             Binding="{Binding Path=Tracks.Count}" 
                                             SortMemberPath="Tracks.Count"
                                             CanUserSort="True"
-                                            IsReadOnly="True"/>
-                                        <DataGridTextColumn Header="Notes"
+                                            IsReadOnly="True">
+                                                <DataGridTextColumn.ElementStyle>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="TextBlock.HorizontalAlignment" Value="Right" />
+                                                        <Setter Property="Padding" Value="0 0 3 0" />
+                                                    </Style>
+                                                </DataGridTextColumn.ElementStyle>
+                                            </DataGridTextColumn>
+                                            <DataGridTextColumn Header="Notes"
                                             Width="55"
                                             Binding="{Binding Path=Notes.Count}" 
                                             SortMemberPath="Notes.Count"
                                             CanUserSort="True"
-                                            IsReadOnly="True"/>
+                                            IsReadOnly="True">
+                                                <DataGridTextColumn.ElementStyle>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="TextBlock.HorizontalAlignment" Value="Right" />
+                                                        <Setter Property="Padding" Value="0 0 3 0" />
+                                                    </Style>
+                                                </DataGridTextColumn.ElementStyle>
+                                            </DataGridTextColumn>
                                         <DataGridTextColumn Header="Date Created"
                                             Width="140"
                                             Binding="{Binding Path=DateCreated}" 
