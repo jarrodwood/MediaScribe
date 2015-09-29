@@ -36,6 +36,18 @@ namespace JayDev.MediaScribe
             }
         }
 
+        private int? _newNoteRewindSeconds;
+        [DataMember]
+        public int? NewNoteRewindSeconds
+        {
+            get { return _newNoteRewindSeconds; }
+            set
+            {
+                _newNoteRewindSeconds = value;
+                OnPropertyChanged("NewNoteRewindSeconds");
+            }
+        }
+
         public string SerializedData { get; set; }
 
         public virtual event PropertyChangedEventHandler PropertyChanged;
@@ -55,6 +67,7 @@ namespace JayDev.MediaScribe
             ApplicationSettings settings = new ApplicationSettings();
             settings.GenerateThumbnails = true;
             settings.FullscreenNotePanelWidth = 600;
+            settings.NewNoteRewindSeconds = 8;
             return settings;
         }
     }

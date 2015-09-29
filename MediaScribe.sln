@@ -511,7 +511,6 @@ Global
 		{D21917AD-6DE7-4AF4-B1F3-B77F5FB0C23F}.Release|Any CPU.ActiveCfg = Release
 		{D21917AD-6DE7-4AF4-B1F3-B77F5FB0C23F}.Release|Any CPU.Build.0 = Release
 		{D21917AD-6DE7-4AF4-B1F3-B77F5FB0C23F}.Release|Mixed Platforms.ActiveCfg = Release
-		{D21917AD-6DE7-4AF4-B1F3-B77F5FB0C23F}.Release|Mixed Platforms.Build.0 = Release
 		{D21917AD-6DE7-4AF4-B1F3-B77F5FB0C23F}.Release|x86.ActiveCfg = Release
 		{D21917AD-6DE7-4AF4-B1F3-B77F5FB0C23F}.Release|x86.Build.0 = Release
 		{D21917AD-6DE7-4AF4-B1F3-B77F5FB0C23F}.SingleImage|Any CPU.ActiveCfg = Release
