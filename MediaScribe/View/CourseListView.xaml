@@ -55,7 +55,7 @@
                 <DockPanel>
                     <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                     <StackPanel>
-                        <GroupBox Header="Welcome to MediaScribe!"  Foreground="#FF3F3F3F" Margin="10 10 10 10" Padding="10" BorderBrush="#FF75B2DE">
+                            <GroupBox Header="Welcome to MediaScribe!"  Foreground="#FF3F3F3F" BorderBrush="#FF75B2AE" BorderThickness="0.9" Margin="10 10 10 10" Padding="10">
                             <TextBlock TextWrapping="Wrap">
                                 To get started, create a course in the list below, by clicking in the + button. You can type in a name,
                                 select the tracks for the course (MediaScribe supports virtually any type of video or audio files), then once
@@ -71,7 +71,7 @@
                                 bugs and many features which are yet to be implemented. Please write suggestions to jwood@galt.co.nz. Cheers!
                             </TextBlock>
                         </GroupBox>
-                        <GroupBox Header="Courses" Foreground="#FF3F3F3F" BorderBrush="#FF75B2DE" Margin="10 0 10 10" Padding="5">
+                            <GroupBox Header="Courses" Foreground="#FF3F3F3F" BorderBrush="#FF75B2AE" BorderThickness="0.9" Margin="10 0 10 10" Padding="5">
 
                             <DockPanel>
                                 <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
@@ -170,7 +170,7 @@
 
                 <DockPanel Grid.Column="2" LastChildFill="True">
                     <ScrollViewer DockPanel.Dock="Top" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Width="auto">
-                        <GroupBox Header="Selected Course" Foreground="#FF3F3F3F" Margin="15" Padding="15" BorderBrush="#FF75B2DE">
+                        <GroupBox Header="Selected Course" Foreground="#FF3F3F3F" BorderBrush="#FF75B2AE" BorderThickness="0.9" Margin="15" Padding="15">
                             <StackPanel>
 
 

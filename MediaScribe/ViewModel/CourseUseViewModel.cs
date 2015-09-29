@@ -925,8 +925,15 @@ namespace JayDev.MediaScribe.ViewModel
                                           {
                                               if(_currentTrack != null && string.IsNullOrEmpty(context.Body)) {
                                                   context.StartTime = CurrentTrackPlayPosition;
-                                                  //TODO - make this configurable.
-                                                  context.StartTime = context.StartTime.Value.Subtract(new TimeSpan(0, 0, 8));
+                                                  //if the user's configured it, let's push back the start time by a configured number of settings.
+                                                  if (null != SettingManager.ApplicationSettings.NewNoteRewindSeconds && SettingManager.ApplicationSettings.NewNoteRewindSeconds > 0)
+                                                  {
+                                                      context.StartTime = context.StartTime.Value.Subtract(new TimeSpan(0, 0, SettingManager.ApplicationSettings.NewNoteRewindSeconds.Value));
+                                                      //ensure that it's never below zero.
+                                                      //TODO: perhaps this should should jump back to the end of the previous track instad?
+                                                      if (context.StartTime.Value.TotalMilliseconds < 0)
+                                                          context.StartTime = new TimeSpan();
+                                                  }
                                                   context.StartTrackNumber = _currentTrack.TrackNumber;
                                               }
                                           },

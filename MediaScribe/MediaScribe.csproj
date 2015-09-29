@@ -52,6 +52,10 @@
     <Reference Include="EPPlus">
       <HintPath>..\Dependencies\EPPlus.dll</HintPath>
     </Reference>
+    <Reference Include="FirstFloor.ModernUI, Version=1.0.6.0, Culture=neutral, PublicKeyToken=2d21ec3cd074c59a, processorArchitecture=MSIL">
+      <HintPath>..\packages\ModernUI.WPF.1.0.6\lib\net40\FirstFloor.ModernUI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1673db7d5906b0ad, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\GalaSoft.MvvmLight.Extras.WPF4.dll</HintPath>
@@ -72,8 +76,9 @@
     <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\Dependencies\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Windows.Shell">
-      <HintPath>..\Dependencies\Microsoft.Windows.Shell.dll</HintPath>
+    <Reference Include="Microsoft.Windows.Shell, Version=3.5.41019.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\ModernUI.WPF.1.0.6\lib\net40\Microsoft.Windows.Shell.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NamedPipeWrapper, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NamedPipeWrapper.1.4.0\lib\net40\NamedPipeWrapper.dll</HintPath>
@@ -519,14 +524,6 @@
     <Content Include="..\LICENSE.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Images\convert_128.png" />
-    <Resource Include="Images\expand_48.png" />
-    <Resource Include="Images\gnome_view_fullscreen_64.png" />
-    <Resource Include="Images\refresh-icon_128.png" />
-    <Resource Include="Images\transfer_up_down_32.png" />
-    <Resource Include="Images\transfer_up_down_48.png" />
-    <Resource Include="Images\refresh_jarrod_128.png" />
-    <Resource Include="Images\refresh_24.png" />
     <Content Include="log4netoff.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

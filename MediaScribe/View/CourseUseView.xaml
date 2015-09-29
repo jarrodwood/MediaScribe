@@ -124,6 +124,19 @@
                                             Width="*"
                                            Binding="{Binding StringDisplayValue}" 
                                            IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Notes"
+                                            Width="55"
+                                            Binding="{Binding Path=Notes.Count}" 
+                                            SortMemberPath="Notes.Count"
+                                            CanUserSort="True"
+                                            IsReadOnly="True">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="TextBlock.HorizontalAlignment" Value="Right" />
+                                            <Setter Property="Padding" Value="0 0 3 0" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
                                 <DataGridTextColumn Header="Length"
                                             Width="55"
                                            Binding="{Binding Length}" 
