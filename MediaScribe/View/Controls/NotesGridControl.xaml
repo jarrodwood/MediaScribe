@@ -97,6 +97,21 @@
 
 
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <!--VLC TODO: i can't make this look good...
+                                <Button Click="playNoteButton_Click"
+                                ToolTip="Play from this note's start time"
+                        Width="23"
+                        Height="23"
+                        Style="{DynamicResource MetroCircleButtonStyle}">
+                                    <Rectangle Width="9"
+                               Height="9"
+                               Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                                        <Rectangle.OpacityMask>
+                                            <VisualBrush Stretch="Uniform"
+                                         Visual="{StaticResource appbar_control_play}" />
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                </Button>-->
                                 <nmControls:UndecoratedButton VerticalAlignment="Center" Click="playNoteButton_Click">
                                     <Image>
                                         <Image.Style>
