@@ -9,9 +9,16 @@
                 <ResourceDictionary Source="/Styles/JarrodDatagrid.xaml"/>
                 <ResourceDictionary Source="/Styles/JarrodSlider.xaml"/>
                 <ResourceDictionary Source="/Styles/JarrodGlassButton.xaml"/>
-                <ResourceDictionary Source="/Styles/JarrodToggleButton.xaml"/>
-                <ResourceDictionary Source="/Styles/JarrodBlueButton.xaml"/>
+                <!--<ResourceDictionary Source="/Styles/JarrodToggleButton.xaml"/>
+                <ResourceDictionary Source="/Styles/JarrodBlueButton.xaml"/>-->
                 <ResourceDictionary Source="/Styles/JarrodPlusMinusButtons.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
+                <ResourceDictionary Source="/Resources/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

@@ -70,6 +70,9 @@
                 </Setter>
                 <Setter Property="Foreground" Value="#FF3F3F3F"/>
             </Style>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatSlider.xaml" />
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 
     </UserControl.Resources>
@@ -139,14 +142,15 @@
             <!-- NOTE 2: There is also a 'MouseLeftButtonDown' event, which is hooked up in the class contructor (since the event is
                          swallowed by the slider, we need to instruct it to capture handled events too, which can't be done via XAML)-->
             <Grid x:Name="TrackBar" Margin="0 0 0 0" Height="12" VerticalAlignment="Top">
-                <Slider Name="timeSlider" SmallChange="0.5" TickFrequency="0.5" Height="15" 
-                    Style="{DynamicResource JarrodSlider}" 
+                <Slider Name="timeSlider" SmallChange="0.5" TickFrequency="0.5" Height="15" IsMoveToPointEnabled="True"
+                    Style="{DynamicResource FlatSlider}" Width="auto"
         		local:MediaTrackbarTooltip.PreviewEnabled="True"  
         		local:MediaTrackbarTooltip.ContentStyle="{StaticResource PreviewStyle}" 
         		local:MediaTrackbarTooltip.ThumbnailGenerator="{Binding ElementName=MediaControlsControlName, Path=ThumbnailGenerator}"      
                 Value="{Binding ElementName=MediaControlsControlName, Path=CurrentPlayTime, Converter={StaticResource timespanConverter}, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                 Maximum="{Binding ElementName=MediaControlsControlName, Path=MaxPlayTime, Converter={StaticResource timespanConverter}}"
                 Minimum="0"
+                        Foreground="#FFAC7EFF"
                 />
             </Grid>
 

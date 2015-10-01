@@ -56,7 +56,13 @@ namespace JayDev.MediaScribe.View
         /// <summary>
         /// The tab control in the main window. We need this reference to change the current tab, when we need to navigate.
         /// </summary>
-        private JayDev.MediaScribe.View.Controls.MediaScribeMainTabControl _tabControl;
+        private TabControl _tabControl;
+
+        public bool IsFullscreen { get; private set; }
+
+
+        private NavigateMessage? _currentNavigateState;
+
 
         /// <summary>
         /// Initialize the constructor. This logic is not in the constructor, because we require input parameters. TODO: see if we can pass
@@ -65,7 +71,7 @@ namespace JayDev.MediaScribe.View
         /// </summary>
         /// <param name="mainWindow"></param>
         /// <param name="tabControl"></param>
-        public void Initialize(MainWindow mainWindow, JayDev.MediaScribe.View.Controls.MediaScribeMainTabControl tabControl, UnityContainer unityContainer)
+        public void Initialize(MainWindow mainWindow, TabControl tabControl, UnityContainer unityContainer)
         {
             this._tabControl = tabControl;
             this._mainWindow = mainWindow;
@@ -200,10 +206,6 @@ namespace JayDev.MediaScribe.View
                 }
             }
         }
-
-        public bool IsFullscreen { get; private set; }
-
-        private NavigateMessage? _currentNavigateState;
 
         private void Navigate(NavigateArgs args)
         {
@@ -351,7 +353,10 @@ namespace JayDev.MediaScribe.View
         {
             ThreadHelper.ExecuteAsyncUI(_uiDispatcher, delegate
             {
+                //HACK: i can't find a better, easy way of detecting if the tab control's selection is being set programmatically vs click via gui.
+                _tabControl.Tag = Constants.SUPPRESS_NAVIGATION_TAB_CONTROL;
                 _tabControl.SelectedIndex = index;
+                _tabControl.Tag = null;
             });
         }
 

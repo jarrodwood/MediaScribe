@@ -13,7 +13,7 @@
              xmlns:effect="clr-namespace:GrayscaleEffect;assembly=GrayscaleEffect"
              
              x:Name="CourseMaintenanceViewName"
-             d:DesignHeight="368" d:DesignWidth="1380">
+             d:DesignHeight="1368" d:DesignWidth="1380">
     <UserControl.Resources>
         <nmConverters:GridLengthValueConverter x:Key="gridLengthConverter" />
         <nmConverters:BooleanToVisibilityConverter 
@@ -38,479 +38,422 @@
         <Style x:Key="BoldFont" TargetType="{x:Type TextBlock}">
             <Setter Property="FontWeight" Value="Bold" />
         </Style>
+        <Style TargetType="{x:Type nmControls:DoubleClickableDataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}" />
+        <Style TargetType="{x:Type nmControls:DragEnabledDataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}" />
     </UserControl.Resources>
-    <!--<Grid Background="#FFEFF5FF">-->
-    <Grid Background="#FFEEF6FF">
-        <DockPanel Name="windowContents">
-            <!--<nmControls:NavigationControl2 DockPanel.Dock="Top"
-                                                NavigateCommand="{Binding NavigateCommand}"
-                                                
-                                                />-->
-            <Grid Name="mainGrid">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5*"/>
-                    <ColumnDefinition Width="5px"/>
-                    <ColumnDefinition Width="3*"/>
-                </Grid.ColumnDefinitions>
-                <DockPanel>
-                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                    <StackPanel>
-                            <GroupBox Header="Welcome to MediaScribe!"  Foreground="#FF3F3F3F" BorderBrush="#FF75B2AE" BorderThickness="0.9" Margin="10 10 10 10" Padding="10">
-                            <TextBlock TextWrapping="Wrap">
-                                To get started, create a course in the list below, by clicking in the + button. You can type in a name,
-                                select the tracks for the course (MediaScribe supports virtually any type of video or audio files), then once
-                                you save you can click on the 'Go To Course' button to begin writing notes for your course.
-                                <LineBreak />
-                                <LineBreak />
-                                You may also want to check out the 'Settings' in the menu above - you can configure a variety of hotkeys to
-                                allow for quicker note writing, quick-seeking (i.e. jumping back a few seconds to repeat what was just said)
-                                and also to style your notes with bolding, italics, and user-defined colours.
-                                <LineBreak />
-                                <LineBreak />
-                                This is a pre-release version of the app, and while the core functionality is here, there <Italic>are</Italic>
-                                bugs and many features which are yet to be implemented. Please write suggestions to jwood@galt.co.nz. Cheers!
-                            </TextBlock>
-                        </GroupBox>
-                            <GroupBox Header="Courses" Foreground="#FF3F3F3F" BorderBrush="#FF75B2AE" BorderThickness="0.9" Margin="10 0 10 10" Padding="5">
+    <Grid Name="mainGrid" MaxWidth="1200">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="5px"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-                            <DockPanel>
-                                <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
-                                <StackPanel DockPanel.Dock="Bottom">
-                                    <Border DockPanel.Dock="Bottom" BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#FFFF" Visibility="{Binding AreCoursesExisting, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
-                                        <StackPanel MinHeight="30">
-                                            <TextBlock Text="Please add a new course!" Margin="0 5 0 0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
-                                        </StackPanel>
-                                    </Border>
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
+        <GroupBox Grid.Row="0" Grid.ColumnSpan="3" Header="Welcome to MediaScribe!"  Foreground="#FF3F3F3F" BorderBrush="#FF75B2AE" BorderThickness="0.9" Margin="10 10 10 10" Padding="10">
+            <TextBlock TextWrapping="Wrap">
+                        To get started, create a course in the list below, by clicking in the + button. You can type in a name,
+                        select the tracks for the course (MediaScribe supports virtually any type of video or audio files), then once
+                        you save you can click on the 'Go To Course' button to begin writing notes for your course.
+                        <LineBreak />
+                        <LineBreak />
+                        You may also want to check out the 'Settings' in the menu above - you can configure a variety of hotkeys to
+                        allow for quicker note writing, quick-seeking (i.e. jumping back a few seconds to repeat what was just said)
+                        and also to style your notes with bolding, italics, and user-defined colours.
+                        <LineBreak />
+                        <LineBreak />
+                        This is a pre-release version of the app, and while the core functionality is here, there <Italic>are</Italic>
+                        bugs and many features which are yet to be implemented. Please write suggestions to jwood@galt.co.nz. Cheers!
+            </TextBlock>
+        </GroupBox>
+
+        <GroupBox VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" Header="Courses" Foreground="#FF3F3F3F" BorderBrush="#FF75B2AE" BorderThickness="0.9" Margin="10 0 10 10" Padding="5">
+
+            <DockPanel VerticalAlignment="Top" LastChildFill="True">
+                <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
+                <StackPanel DockPanel.Dock="Bottom">
+                    <Border BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#FFFF" Visibility="{Binding AreCoursesExisting, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
+                        <StackPanel MinHeight="30">
+                            <TextBlock Text="Please add a new course!" Margin="0 5 0 0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
 
 
-                                        <Button Focusable="False" Style="{StaticResource minusButtonStyle}"  Command="{Binding DeleteCourseCommand}">
-                                            <Path Data="M0,0 L70,0 99,0 99,41 70,41 0,41 z" Margin="0 0 0 0" Stretch="Uniform" Width="13.5" Height="5" Style="{DynamicResource minusStyle}"/>
-                                        </Button>
+                        <Button Command="{Binding DeleteCourseCommand}"
+                                ToolTip="Delete selected course"
+                        Width="25"
+                        Height="25"
+                        Style="{DynamicResource MetroCircleButtonStyle}">
+                            <Rectangle Width="10"
+                               Height="10"
+                               Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Stretch="Uniform"
+                                         Visual="{StaticResource appbar_minus}" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
 
-                                        <Button Focusable="False" Margin="5 0 0 0" Style="{StaticResource plusButtonStyle}"  Command="{Binding CreateCourseCommand}">
-                                            <Path Data="M35,0 L70,0 70,30 100,30 100,70 70,70 70,100 30,100 30,70 0,70 0,30 35,30 z" Margin="0 0 0 0" Stretch="Fill" Width="13.5" Height="13" Style="{DynamicResource PlusStyle}"/>
-                                        </Button>
+                        <Button Command="{Binding CreateCourseCommand}"
+                                ToolTip="Create new course"
+                        Width="25"
+                        Height="25"
+                        Style="{DynamicResource MetroCircleButtonStyle}">
+                            <Rectangle Width="10"
+                               Height="10"
+                               Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Stretch="Uniform"
+                                         Visual="{StaticResource appbar_add}" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
 
-                                            <Button Margin="10 0 0 0" Padding="5 1" Command="{Binding ImportCourseCommand}">Import Course</Button>
+
+                        <Button Margin="10 0 0 0" Command="{Binding ImportCourseCommand}">Import Course</Button>
 
 
-                                            <!--<nmControls:ImageButton MySource="/MediaScribe;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding CreateCourseCommand}" />
+                        <!--<nmControls:ImageButton MySource="/MediaScribe;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding CreateCourseCommand}" />
 
-                                        <nmControls:ImageButton MySource="/MediaScribe;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteCourseCommand}" CommandParameter="{x:Static nmCommon:NavigateMessage.ListCourses}" />-->
+                            <nmControls:ImageButton MySource="/MediaScribe;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteCourseCommand}" CommandParameter="{x:Static nmCommon:NavigateMessage.ListCourses}" />-->
 
-                                    </StackPanel>
-                                </StackPanel>
-                                <!--</ContentControl>-->
-                                <nmControls:DoubleClickableDataGrid VerticalAlignment="Top" AutoGenerateColumns="False" x:Name="courseGrid" HeadersVisibility="Column" CanUserAddRows="False"                                                                 
-                                  SelectionMode="Single"
-                                  CanUserSortColumns="True" CanUserReorderColumns="False" CanUserResizeRows="False"
-                                  ItemsSource="{Binding Courses}"
-                                  SelectedItem="{Binding SelectedCourse, Mode=TwoWay}"
-                                  RowDoubleClickCommand="{Binding WriteNotesCommand}"  Style="{StaticResource DataGridStyle1}">
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Course Name"
-                                            Width="*"
-                                            Binding="{Binding Name}" 
-                                            SortMemberPath="Name"
-                                            CanUserSort="True"
-                                            IsReadOnly="True"/>
-                                        <DataGridTextColumn Header="Length"
-                                            Width="55"
-                                            Binding="{Binding CourseLength}" 
-                                            SortMemberPath="CourseLength"
-                                            CanUserSort="True"
-                                            IsReadOnly="True"/>
-                                            <DataGridTextColumn Header="Files"
-                                            Width="55"
-                                            Binding="{Binding Path=Tracks.Count}" 
-                                            SortMemberPath="Tracks.Count"
-                                            CanUserSort="True"
-                                            IsReadOnly="True">
-                                                <DataGridTextColumn.ElementStyle>
-                                                    <Style TargetType="TextBlock">
-                                                        <Setter Property="TextBlock.HorizontalAlignment" Value="Right" />
-                                                        <Setter Property="Padding" Value="0 0 3 0" />
-                                                    </Style>
-                                                </DataGridTextColumn.ElementStyle>
-                                            </DataGridTextColumn>
-                                            <DataGridTextColumn Header="Notes"
-                                            Width="55"
-                                            Binding="{Binding Path=Notes.Count}" 
-                                            SortMemberPath="Notes.Count"
-                                            CanUserSort="True"
-                                            IsReadOnly="True">
-                                                <DataGridTextColumn.ElementStyle>
-                                                    <Style TargetType="TextBlock">
-                                                        <Setter Property="TextBlock.HorizontalAlignment" Value="Right" />
-                                                        <Setter Property="Padding" Value="0 0 3 0" />
-                                                    </Style>
-                                                </DataGridTextColumn.ElementStyle>
-                                            </DataGridTextColumn>
-                                        <DataGridTextColumn Header="Date Created"
-                                            Width="140"
-                                            Binding="{Binding Path=DateCreated}" 
-                                            SortMemberPath="DateCreated"
-                                            CanUserSort="True"
-                                            IsReadOnly="True"/>
-                                        <DataGridTextColumn Header="Last Viewed"
-                                            Width="140"
-                                            Binding="{Binding Path=DateViewed}" 
-                                            SortMemberPath="DateViewed"
-                                            CanUserSort="True"
-                                            IsReadOnly="True"/>
-                                    </DataGrid.Columns>
-                                    </nmControls:DoubleClickableDataGrid>
-                            </DockPanel>
-                        </GroupBox>
                     </StackPanel>
-                    </ScrollViewer>
-                </DockPanel>
-                <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+                </StackPanel>
+                <nmControls:DoubleClickableDataGrid VerticalAlignment="Top" AutoGenerateColumns="False" x:Name="courseGrid" HeadersVisibility="Column" CanUserAddRows="False"                                                                 
+                        SelectionMode="Single"
+                        CanUserSortColumns="True" CanUserReorderColumns="False" CanUserResizeRows="False"
+                        ItemsSource="{Binding Courses}"
+                        SelectedItem="{Binding SelectedCourse, Mode=TwoWay}"
+                        RowDoubleClickCommand="{Binding WriteNotesCommand}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Course Name"
+                                Width="*"
+                                Binding="{Binding Name}" 
+                                SortMemberPath="Name"
+                                CanUserSort="True"
+                                IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Length"
+                                Width="55"
+                                Binding="{Binding CourseLength}" 
+                                SortMemberPath="CourseLength"
+                                CanUserSort="True"
+                                IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Files"
+                                Width="55"
+                                Binding="{Binding Path=Tracks.Count}" 
+                                SortMemberPath="Tracks.Count"
+                                CanUserSort="True"
+                                IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextBlock.HorizontalAlignment" Value="Right" />
+                                    <Setter Property="Padding" Value="0 0 3 0" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Notes"
+                                Width="55"
+                                Binding="{Binding Path=Notes.Count}" 
+                                SortMemberPath="Notes.Count"
+                                CanUserSort="True"
+                                IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextBlock.HorizontalAlignment" Value="Right" />
+                                    <Setter Property="Padding" Value="0 0 3 0" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Date Created"
+                                Width="140"
+                                Binding="{Binding Path=DateCreated}" 
+                                SortMemberPath="DateCreated"
+                                CanUserSort="True"
+                                IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Last Viewed"
+                                Width="140"
+                                Binding="{Binding Path=DateViewed}" 
+                                SortMemberPath="DateViewed"
+                                CanUserSort="True"
+                                IsReadOnly="True"/>
+                    </DataGrid.Columns>
+                </nmControls:DoubleClickableDataGrid>
+            </DockPanel>
+        </GroupBox>
 
-                <DockPanel Grid.Column="2" LastChildFill="True">
-                    <ScrollViewer DockPanel.Dock="Top" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Width="auto">
-                        <GroupBox Header="Selected Course" Foreground="#FF3F3F3F" BorderBrush="#FF75B2AE" BorderThickness="0.9" Margin="15" Padding="15">
-                            <StackPanel>
+        <GridSplitter Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" />
 
-
-                                <!-- The XAML for 'when no course is selected' panel -->
-                                <StackPanel Name="_noneCoursePanel" Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_NoneVisible}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
-                                    <Canvas DockPanel.Dock="Right" />
-                                    <TextBlock HorizontalAlignment="Center" Style="{StaticResource HeaderFont}" xml:space="preserve" FontSize="12" Text="Please select a course on the left." />
-                                </StackPanel>
-
-
-                                <!-- The XAML for the 'view a course' panel -->
-                                <StackPanel Name="_viewCoursePanel" Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_ViewVisible}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
-
-                                    <TextBlock HorizontalAlignment="Center" Style="{StaticResource HeaderFont}" xml:space="preserve" Text="{Binding SelectedCourseName, TargetNullValue='no name?'}" />
-
-                                    <DockPanel Margin="0 15 0 0">
-                                        <nmControls:DragEnabledDataGrid VerticalAlignment="Top"
-                                                                             AutoGenerateColumns="False" HeadersVisibility="All" CanUserAddRows="False"
-                                                CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks, Mode=TwoWay}"
-                                                                             OnDragDisplayPropertyName="StringDisplayValue"
-                                                                             CanDrag="False"
-                                                                             ReadOnlySelectedItems="{Binding SelectedCourseSelectedTracks, Mode=OneWayToSource}"
-                                                                             MoveItemsCommand="{Binding Path=MoveItemsCommand}" Style="{StaticResource DataGridStyle1}"
-                                                                             nmCore:DataGridExtensions.ShowRowNumbersInHeader="True">
-                                            <DataGrid.Columns>
-                                                <DataGridTextColumn Header="Name"
-                                                Width="*"
-                                               Binding="{Binding StringDisplayValue}" 
-                                               IsReadOnly="True"/>
-                                                <DataGridTextColumn Header="Length"
-                                                Width="55"
-                                               Binding="{Binding Length}" 
-                                               IsReadOnly="True"/>
-                                            </DataGrid.Columns>
-                                            <DataGrid.CellStyle>
-                                                <Style TargetType="DataGridCell">
-                                                    <Style.Triggers>
-                                                        <!--TODO: this code block is used several times; move into staticresource-->
-                                                        <DataTrigger Binding="{Binding Path=IsMissing, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                                            <Setter Property="Foreground">
-                                                                <Setter.Value>
-                                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                                                        <GradientStop Color="#FFFF2E05" Offset="0"/>
-                                                                        <GradientStop Color="#FFFF0515" Offset="1"/>
-                                                                    </LinearGradientBrush>
-                                                                </Setter.Value>
-                                                            </Setter>
-                                                            <Setter Property="ToolTip" Value="Track cannot be found" />
-                                                            <Setter Property="ToolTipService.BetweenShowDelay" Value="0" />
-                                                            <Setter Property="ToolTipService.InitialShowDelay" Value="0" />
-                                                            <Setter Property="ToolTipService.HasDropShadow" Value="True" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </DataGrid.CellStyle>
-                                        </nmControls:DragEnabledDataGrid>
-                                    </DockPanel>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 0">
-
-                                        <!--<Button Grid.Column="3" Height="25" Width="40" Margin="0 0 0 0" Style="{DynamicResource JarrodBlueButton}" VerticalAlignment="Center"
-                              Command="{Binding MaintenanceModeEditCommand}">
-                                            <Grid>
-                                                <TextBlock Margin="0 0 0 0" Foreground="#FF00388D" FontSize="12" VerticalAlignment="Center"><TextBlock.Effect> 
-								<BlurEffect Radius="4" RenderingBias="Quality" />  
-							</TextBlock.Effect><Run Text="Edit"/></TextBlock>
-                                                <TextBlock Margin="0 0 0 0" Foreground="White" FontSize="12" VerticalAlignment="Center"><Run Text="Edit"/></TextBlock>
-                                            </Grid>
-                                        </Button>
-
-                                        <Button Margin="10 0 0 0" Grid.Column="3" Height="25" Width="90"  Style="{DynamicResource JarrodBlueButton}" VerticalAlignment="Center"
-                              Command="{Binding WriteNotesCommand}">
-                                            <Grid>
-                                                <TextBlock Margin="0 0 0 0" Foreground="#FF00388D" FontSize="12" VerticalAlignment="Center"><TextBlock.Effect> 
-								<BlurEffect Radius="4" RenderingBias="Quality" />  
-							</TextBlock.Effect><Run Text="Go To Course"/></TextBlock>
-                                                <TextBlock Margin="0 0 0 0" Foreground="White" FontSize="12" VerticalAlignment="Center"><Run Text="Go To Course"/></TextBlock>
-                                            </Grid>
-                                        </Button>-->
-                                        <Button Padding="5 1" Command="{Binding MaintenanceModeEditCommand}">Edit Tracks</Button>
-                                        <Button Margin="10 0 0 0" Padding="5 1" Command="{Binding ExportExcelCommand}">Export To Excel</Button>
-                                        <Button Margin="10 0 0 0" Padding="5 1" Command="{Binding ExportCourseCommand}">Share/Export Course</Button>
-                                        <Button Margin="10 0 0 0" Padding="5 1" Command="{Binding WriteNotesCommand}">Go To Course</Button>
-
-                                    </StackPanel>
-                                </StackPanel>
+        <GroupBox VerticalAlignment="Top" Grid.Row="1" Grid.Column="2" Header="Selected Course" Foreground="#FF3F3F3F" BorderBrush="#FF75B2AE" BorderThickness="0.9" Margin="10 0 10 10" Padding="5">
+            <Grid>
 
 
+                <!-- The XAML for 'when no course is selected' panel -->
+                <StackPanel Name="_noneCoursePanel" Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_NoneVisible}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
+                    <TextBlock HorizontalAlignment="Center" Style="{StaticResource HeaderFont}" xml:space="preserve" FontSize="12" Text="Please select a course on the left." />
+                </StackPanel>
 
+                <!-- The XAML for the 'view a course' panel -->
+                <DockPanel Name="_viewCoursePanel" LastChildFill="True" Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_ViewVisible}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}"
+                           VerticalAlignment="Top">
 
+                    <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Center" Style="{StaticResource HeaderFont}" xml:space="preserve" Text="{Binding SelectedCourseName, TargetNullValue='no name?'}" />
 
-                                <!-- The XAML for the 'create a course' panel -->
-                                <StackPanel Name="_createCoursePanel" Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_CreateVisible}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
-                                    <Grid>
-                                        <TextBox  VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding SelectedCourseName, UpdateSourceTrigger=PropertyChanged}">
-                                            <nmCore:WatermarkService.Watermark>
-                                                <TextBlock>Course name...</TextBlock>
-                                            </nmCore:WatermarkService.Watermark>
-                                        </TextBox>
-                                    </Grid>
-                                    <DockPanel Margin="0 15 0 0">
-                                        <DockPanel DockPanel.Dock="Top">
-                                            <StackPanel DockPanel.Dock="Bottom">
-                                                <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
-                                                <Border BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#FFFF"   Visibility="{Binding AreTracksExistingInSelectedCourse, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
-                                                    <StackPanel MinHeight="30">
-                                                        <TextBlock Margin="0 5 0 0"  Text="Please add some tracks!" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
-                                                    </StackPanel>
-                                                </Border>
-                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
-
-
-                                                    <Button Focusable="False" Style="{StaticResource minusButtonStyle}"  Command="{Binding DeleteTracksCommand}" CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}">
-                                                        <Path Data="M0,0 L70,0 99,0 99,41 70,41 0,41 z" Margin="0 0 0 0" Stretch="Uniform" Width="13.5" Height="5" Style="{DynamicResource minusStyle}"/>
-                                                    </Button>
-
-                                                    <Button Focusable="False" Margin="5 0 0 0" Style="{StaticResource plusButtonStyle}"  Command="{Binding AddTracksCommand}">
-                                                        <Path Data="M35,0 L70,0 70,30 100,30 100,70 70,70 70,100 30,100 30,70 0,70 0,30 35,30 z" Margin="0 0 0 0" Stretch="Fill" Width="13.5" Height="13" Style="{DynamicResource PlusStyle}"/>
-                                                    </Button>
-
-                                                    <!--<nmControls:ImageButton MySource="/MediaScribe;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding AddTracksCommand}" />
-
-                                                    <nmControls:ImageButton MySource="/MediaScribe;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteTracksCommand}" CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}" />-->
-
-                                                </StackPanel>
-                                            </StackPanel>
-                                            <nmControls:DragEnabledDataGrid VerticalAlignment="Top"
-                                                                             AutoGenerateColumns="False"  x:Name="trackGrid" HeadersVisibility="Column" CanUserAddRows="False"
-                               CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks, Mode=TwoWay}"
-                                                                             OnDragDisplayPropertyName="StringDisplayValue"
-                                                                             CanDrag="True"
-                                                                             ReadOnlySelectedItems="{Binding SelectedCourseSelectedTracks, Mode=OneWayToSource}"
-                                                                             MoveItemsCommand="{Binding Path=MoveItemsCommand}" Style="{StaticResource DataGridStyle1}"
-                                                                             nmCore:DataGridExtensions.ShowRowNumbersInHeader="False">
-                                                <DataGrid.ContextMenu>
-                                                    <ContextMenu>
-                                                        <MenuItem Header="Remove Track" Command="Delete" />
-                                                    </ContextMenu>
-                                                </DataGrid.ContextMenu>
-                                                <!--<i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="MouseDoubleClick">
-                                                <cmd:EventToCommand Command="{Binding SelectTrackCommand,Mode=OneWay}"
-                                                CommandParameter="{Binding SelectedItem, ElementName=trackGrid, Mode=OneWay}"
-                                                MustToggleIsEnabledValue="True" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>-->
-                                                <DataGrid.Columns>
-                                                    <DataGridTextColumn Header="Name"
-                                                Width="*"
-                                               Binding="{Binding StringDisplayValue}" 
-                                               IsReadOnly="True"/>
-                                                    <DataGridTextColumn Header="Length"
-                                                Width="55"
-                                               Binding="{Binding Length}" 
-                                               IsReadOnly="True"/>
-                                                </DataGrid.Columns>
-                                            </nmControls:DragEnabledDataGrid>
-                                        </DockPanel>
-                                        <!--Empty content control, which 'fills' the dockpanel. As the grid grows, this will shrink away to nothing... and as the grid continues to grow, it'll get scrollbars.-->
-                                        <ContentControl>
-                                        </ContentControl>
-                                    </DockPanel>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 0">
-
-                                        <!--<Button Grid.Column="3" Height="25" Width="40" Margin="0 0 0 0" Style="{DynamicResource JarrodBlueButton}" VerticalAlignment="Center" IsEnabled="False"
-                              Command="{Binding MaintenanceModeEditCommand}">
-                                            <Grid>
-                                                <TextBlock Margin="0 0 0 0" Foreground="#FF00388D" FontSize="12" VerticalAlignment="Center"><TextBlock.Effect> 
-								<BlurEffect Radius="4" RenderingBias="Quality" />  
-							</TextBlock.Effect><Run Text="Edit"/></TextBlock>
-                                                <TextBlock Margin="0 0 0 0" Foreground="White" FontSize="12" VerticalAlignment="Center"><Run Text="Edit"/></TextBlock>
-                                            </Grid>
-                                        </Button>-->
-                                        <Button Command="{Binding CancelCommand}" Padding="5 1">Cancel</Button>
-                                        <Button Padding="5 1" Margin="10 0 0 0" Command="{Binding SaveCourseCommand}">Save</Button>
-                                    </StackPanel>
-                                </StackPanel>
-
-
-
-
-                                <!-- The XAML for the 'edit a course' panel -->
-                                <StackPanel Name="_editCoursePanel" Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_EditVisible}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBox HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Text="{Binding SelectedCourseName, UpdateSourceTrigger=PropertyChanged}" />
-                                    </StackPanel>
-                                    <DockPanel Margin="0 15 0 0">
-                                        <DockPanel DockPanel.Dock="Top">
-                                            <StackPanel DockPanel.Dock="Bottom">
-                                                <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
-                                                <Border BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#EAEAEA"  Visibility="{Binding AreTracksExistingInSelectedCourse, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}" >
-                                                    <StackPanel MinHeight="30">
-                                                        <TextBlock Margin="0 5 0 0"  Text="Please add some tracks!" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
-                                                    </StackPanel>
-                                                </Border>
-                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
-
-
-
-                                                    <Button Focusable="False" Style="{StaticResource minusButtonStyle}"  Command="{Binding DeleteTracksCommand}" CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}">
-                                                        <Path Data="M0,0 L70,0 99,0 99,41 70,41 0,41 z" Margin="0 0 0 0" Stretch="Uniform" Width="13.5" Height="5" Style="{DynamicResource minusStyle}"/>
-                                                    </Button>
-
-                                                    <Button Focusable="False" Margin="5 0 0 0" Style="{StaticResource plusButtonStyle}"  Command="{Binding AddTracksCommand}">
-                                                        <Path Data="M35,0 L70,0 70,30 100,30 100,70 70,70 70,100 30,100 30,70 0,70 0,30 35,30 z" Margin="0 0 0 0" Stretch="Fill" Width="13.5" Height="13" Style="{DynamicResource PlusStyle}"/>
-                                                    </Button>
-
-                                                    <!--<nmControls:ImageButton MySource="/MediaScribe;component/Images/list-add-7.png" Height="24" Width="24" Command="{Binding AddTracksCommand}" />
-
-                                                    <nmControls:ImageButton MySource="/MediaScribe;component/Images/list-remove-6.png" Height="24" Width="24" Command="{Binding DeleteTracksCommand}" CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}" />-->
-
-                                                </StackPanel>
-                                            </StackPanel>
-                                            <nmControls:DragEnabledDataGrid VerticalAlignment="Top"
-                                                                             AutoGenerateColumns="False" HeadersVisibility="Column" CanUserAddRows="False"
-                               CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks, Mode=TwoWay}"
-                                                                             OnDragDisplayPropertyName="StringDisplayValue"
-                                                                             CanDrag="True"
-                                                                             ReadOnlySelectedItems="{Binding SelectedCourseSelectedTracks, Mode=OneWayToSource}"
-                                                                             MoveItemsCommand="{Binding Path=MoveItemsCommand}" Style="{StaticResource DataGridStyle1}"
-                                                                                 nmCore:DataGridExtensions.ShowRowNumbersInHeader="False">
-                                                <DataGrid.ContextMenu>
-                                                    <ContextMenu>
-                                                        <MenuItem Header="Remove Track" Command="Delete" />
-                                                    </ContextMenu>
-                                                </DataGrid.ContextMenu>
-                                                <!--<i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="MouseDoubleClick">
-                                                <cmd:EventToCommand Command="{Binding SelectTrackCommand,Mode=OneWay}"
-                                                CommandParameter="{Binding SelectedItem, ElementName=trackGrid, Mode=OneWay}"
-                                                MustToggleIsEnabledValue="True" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>-->
-                                                <DataGrid.Columns>
-                                                    <DataGridTextColumn Header="Name"
-                                                Width="*"
-                                               Binding="{Binding StringDisplayValue}" 
-                                               IsReadOnly="True"/>
-                                                    <DataGridTextColumn Header="Length"
-                                                Width="55"
-                                               Binding="{Binding Length}" 
-                                               IsReadOnly="True"/>
-                                                </DataGrid.Columns>
-                                                <DataGrid.CellStyle>
-                                                    <Style TargetType="DataGridCell">
-                                                        <Style.Triggers>
-                                                            <!--TODO: this code block is used several times; move into staticresource-->
-                                                            <DataTrigger Binding="{Binding Path=IsMissing, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                                                <Setter Property="Foreground">
-                                                                    <Setter.Value>
-                                                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                                                            <GradientStop Color="#FFFF2E05" Offset="0"/>
-                                                                            <GradientStop Color="#FFFF0515" Offset="1"/>
-                                                                        </LinearGradientBrush>
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                                <Setter Property="ToolTip" Value="Track cannot be found" />
-                                                                <Setter Property="ToolTipService.BetweenShowDelay" Value="0" />
-                                                                <Setter Property="ToolTipService.InitialShowDelay" Value="0" />
-                                                                <Setter Property="ToolTipService.HasDropShadow" Value="True" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </DataGrid.CellStyle>
-                                            </nmControls:DragEnabledDataGrid>
-                                        </DockPanel>
-                                        <!--Empty content control, which 'fills' the dockpanel. As the grid grows, this will shrink away to nothing... and as the grid continues to grow, it'll get scrollbars.-->
-                                        <ContentControl>
-                                        </ContentControl>
-                                    </DockPanel>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 0">
-                                        <Button Padding="5 1" Command="{Binding SaveCourseCommand}">Save</Button>
-                                        <Button Margin="10 0 0 0" Command="{Binding CancelCommand}" Padding="5 1">Cancel</Button>
-                                    </StackPanel>
-                                </StackPanel>
-
-
-
-                            </StackPanel>
-
-
-                            <!--<StackPanel Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_ViewVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
-                                <TextBlock Grid.Row="0" HorizontalAlignment="Center" Style="{StaticResource HeaderFont}">Heston's Feast</TextBlock>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="125" />
-                                        <ColumnDefinition Width="100" />
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 10 0 0" Style="{StaticResource BoldFont}">Course Information</TextBlock>
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">Total number of notes:</TextBlock>
-                                    <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">35</TextBlock>
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">Total duration:</TextBlock>
-                                    <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">5:34 hours</TextBlock>
-                                    <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">Created on:</TextBlock>
-                                    <TextBlock Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">16/02/2012</TextBlock>
-                                </Grid>
-                                <DataGrid VerticalAlignment="Top" AutoGenerateColumns="False"  Name="trackGrid" HeadersVisibility="All" CanUserAddRows="False"
-                           CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding Tracks}">
-  
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Name"
-                                            Width="*"
-                                           Binding="{Binding StringDisplayValue}" 
-                                           IsReadOnly="True"/>
-                                        <DataGridTextColumn Header="Length"
-                                            Width="55"
-                                           Binding="{Binding Length}" 
-                                           IsReadOnly="True"/>
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </StackPanel>-->
-                        </GroupBox>
-                    </ScrollViewer>
-                    <!--<DataGrid DockPanel.Dock="Bottom" VerticalAlignment="Top" AutoGenerateColumns="False"  Name="trackGrid" HeadersVisibility="All" CanUserAddRows="False"
-                           CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks}">
-
+                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"  VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
+                        <Button Padding="5 1" Command="{Binding MaintenanceModeEditCommand}">Edit</Button>
+                        <Button Margin="10 0 0 0" Padding="5 1" Command="{Binding ExportExcelCommand}">Export To Excel</Button>
+                        <Button Margin="10 0 0 0" Padding="5 1" Command="{Binding ExportCourseCommand}">Share/Export Course</Button>
+                        <Button Margin="10 0 0 0" Padding="5 1" Command="{Binding WriteNotesCommand}">Go To Course</Button>
+                    </StackPanel>
+                    
+                    <nmControls:DragEnabledDataGrid VerticalAlignment="Top"
+                                                    SelectionMode="Extended"
+                                                                        AutoGenerateColumns="False" HeadersVisibility="All" CanUserAddRows="False"
+                                        CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks, Mode=TwoWay}"
+                                                                        OnDragDisplayPropertyName="StringDisplayValue"
+                                                                        CanDrag="False"
+                                                                        ReadOnlySelectedItems="{Binding SelectedCourseSelectedTracks, Mode=OneWayToSource}"
+                                                                        MoveItemsCommand="{Binding Path=MoveItemsCommand}"
+                                                                        nmCore:DataGridExtensions.ShowRowNumbersInHeader="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Name"
-                                            Width="*"
-                                           Binding="{Binding StringDisplayValue}" 
-                                           IsReadOnly="True"/>
+                                        Width="*"
+                                        Binding="{Binding StringDisplayValue}" 
+                                        IsReadOnly="True"/>
                             <DataGridTextColumn Header="Length"
-                                            Width="55"
-                                           Binding="{Binding Length}" 
-                                           IsReadOnly="True"/>
+                                        Width="55"
+                                        Binding="{Binding Length}" 
+                                        IsReadOnly="True"/>
                         </DataGrid.Columns>
-                    </DataGrid>-->
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Style.Triggers>
+                                    <!--TODO: this code block is used several times; move into staticresource-->
+                                    <DataTrigger Binding="{Binding Path=IsMissing, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                        <Setter Property="Foreground">
+                                            <Setter.Value>
+                                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                    <GradientStop Color="#FFFF2E05" Offset="0"/>
+                                                    <GradientStop Color="#FFFF0515" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="ToolTip" Value="Track cannot be found" />
+                                        <Setter Property="ToolTipService.BetweenShowDelay" Value="0" />
+                                        <Setter Property="ToolTipService.InitialShowDelay" Value="0" />
+                                        <Setter Property="ToolTipService.HasDropShadow" Value="True" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.CellStyle>
+                    </nmControls:DragEnabledDataGrid>
 
-                    <!--Empty content control, which 'fills' the dockpanel. As the grid grows, this will shrink away to nothing... and as the grid continues to grow, it'll get scrollbars.-->
-                    <ContentControl>
-                    </ContentControl>
+                </DockPanel>
+
+
+                <!-- The XAML for the 'create a course' panel -->
+                <DockPanel VerticalAlignment="Top" LastChildFill="True"  Name="_createCoursePanel" Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_CreateVisible}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
+                        <TextBox DockPanel.Dock="Top" VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding SelectedCourseName, UpdateSourceTrigger=PropertyChanged}"
+                                  nmCore:TextBoxAttached.IsFocused="{Binding IsCreateCourseNameTextboxFocused, Mode=TwoWay}">
+                            <nmCore:WatermarkService.Watermark>
+                                <TextBlock>Course name...</TextBlock>
+                            </nmCore:WatermarkService.Watermark>
+                    </TextBox>
+                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 0">
+                        <Button Command="{Binding CancelCommand}" Padding="5 1">Cancel</Button>
+                        <Button Padding="5 1" Margin="10 0 0 0" Command="{Binding SaveCourseCommand}">Save</Button>
+                    </StackPanel>
+                    <StackPanel DockPanel.Dock="Bottom">
+                                <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
+                                <Border BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#FFFF"   Visibility="{Binding AreTracksExistingInSelectedCourse, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
+                                    <StackPanel MinHeight="30">
+                                        <TextBlock Margin="0 5 0 0"  Text="Please add some tracks!" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
+                                    </StackPanel>
+                                </Border>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
+
+
+                                    <Button Command="{Binding DeleteTracksCommand}"
+                                            CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}"
+                                ToolTip="Remove selected tracks from the course"
+                        Width="25"
+                        Height="25"
+                        Style="{DynamicResource MetroCircleButtonStyle}">
+                                        <Rectangle Width="10"
+                               Height="10"
+                               Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                                            <Rectangle.OpacityMask>
+                                                <VisualBrush Stretch="Uniform"
+                                         Visual="{StaticResource appbar_minus}" />
+                                            </Rectangle.OpacityMask>
+                                        </Rectangle>
+                                    </Button>
+
+                                    <Button Command="{Binding AddTracksCommand}"
+                                ToolTip="Add tracks to the course"
+                        Width="25"
+                        Height="25"
+                        Style="{DynamicResource MetroCircleButtonStyle}">
+                                        <Rectangle Width="10"
+                               Height="10"
+                               Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                                            <Rectangle.OpacityMask>
+                                                <VisualBrush Stretch="Uniform"
+                                         Visual="{StaticResource appbar_add}" />
+                                            </Rectangle.OpacityMask>
+                                        </Rectangle>
+                                    </Button>
+
+                                </StackPanel>
+                    </StackPanel>
+                    <nmControls:DragEnabledDataGrid VerticalAlignment="Top"
+                                                                        AutoGenerateColumns="False"  x:Name="trackGrid" HeadersVisibility="Column" CanUserAddRows="False"
+                        CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks, Mode=TwoWay}"
+                                                                        OnDragDisplayPropertyName="StringDisplayValue"
+                                                                        CanDrag="True"
+                                                                        ReadOnlySelectedItems="{Binding SelectedCourseSelectedTracks, Mode=OneWayToSource}"
+                                                                        MoveItemsCommand="{Binding Path=MoveItemsCommand}" 
+                                                                        nmCore:DataGridExtensions.ShowRowNumbersInHeader="False">
+                                <DataGrid.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Remove Track" Command="Delete" />
+                                    </ContextMenu>
+                                </DataGrid.ContextMenu>
+                                <!--<i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDoubleClick">
+                                        <cmd:EventToCommand Command="{Binding SelectTrackCommand,Mode=OneWay}"
+                                        CommandParameter="{Binding SelectedItem, ElementName=trackGrid, Mode=OneWay}"
+                                        MustToggleIsEnabledValue="True" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>-->
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Name"
+                                        Width="*"
+                                        Binding="{Binding StringDisplayValue}" 
+                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="Length"
+                                        Width="55"
+                                        Binding="{Binding Length}" 
+                                        IsReadOnly="True"/>
+                                </DataGrid.Columns>
+                            </nmControls:DragEnabledDataGrid>
+                </DockPanel>
+
+
+                <!-- The XAML for the 'edit a course' panel -->
+                <DockPanel Name="_editCoursePanel" Visibility="{Binding MaintenanceMode, Mode=OneWay, Converter={StaticResource MaintenanceModeConverter_EditVisible}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                        <TextBox HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Text="{Binding SelectedCourseName, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <DockPanel Margin="0 15 0 0">
+                        <StackPanel DockPanel.Dock="Bottom">
+                            <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
+                            <Border BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#EAEAEA"  Visibility="{Binding AreTracksExistingInSelectedCourse, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}" >
+                                <StackPanel MinHeight="30">
+                                    <TextBlock Margin="0 5 0 0"  Text="Please add some tracks!" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
+                                </StackPanel>
+                            </Border>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
+
+
+
+                                <Button Command="{Binding DeleteTracksCommand}"
+                                            CommandParameter="{Binding ElementName=CourseCreatePanelName, Path=DeleteTracksCommandParameter}"
+                                ToolTip="Remove selected tracks from the course"
+                        Width="25"
+                        Height="25"
+                        Style="{DynamicResource MetroCircleButtonStyle}">
+                                    <Rectangle Width="10"
+                               Height="10"
+                               Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                                        <Rectangle.OpacityMask>
+                                            <VisualBrush Stretch="Uniform"
+                                         Visual="{StaticResource appbar_minus}" />
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                </Button>
+
+                                <Button Command="{Binding AddTracksCommand}"
+                                ToolTip="Add tracks to the course"
+                        Width="25"
+                        Height="25"
+                        Style="{DynamicResource MetroCircleButtonStyle}">
+                                    <Rectangle Width="10"
+                               Height="10"
+                               Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                                        <Rectangle.OpacityMask>
+                                            <VisualBrush Stretch="Uniform"
+                                         Visual="{StaticResource appbar_add}" />
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                </Button>
+
+                            </StackPanel>
+                        </StackPanel>
+                        <nmControls:DragEnabledDataGrid VerticalAlignment="Top"
+                                                                        AutoGenerateColumns="False" HeadersVisibility="Column" CanUserAddRows="False"
+                        CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedCourseTracks, Mode=TwoWay}"
+                                                                        OnDragDisplayPropertyName="StringDisplayValue"
+                                                                        CanDrag="True"
+                                                                        ReadOnlySelectedItems="{Binding SelectedCourseSelectedTracks, Mode=OneWayToSource}"
+                                                                        MoveItemsCommand="{Binding Path=MoveItemsCommand}"
+                                                                            nmCore:DataGridExtensions.ShowRowNumbersInHeader="False">
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Remove Track" Command="Delete" />
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+                            <!--<i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDoubleClick">
+                                        <cmd:EventToCommand Command="{Binding SelectTrackCommand,Mode=OneWay}"
+                                        CommandParameter="{Binding SelectedItem, ElementName=trackGrid, Mode=OneWay}"
+                                        MustToggleIsEnabledValue="True" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>-->
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Name"
+                                        Width="*"
+                                        Binding="{Binding StringDisplayValue}" 
+                                        IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Length"
+                                        Width="55"
+                                        Binding="{Binding Length}" 
+                                        IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                            <DataGrid.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Style.Triggers>
+                                        <!--TODO: this code block is used several times; move into staticresource-->
+                                        <DataTrigger Binding="{Binding Path=IsMissing, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                            <Setter Property="Foreground">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="#FFFF2E05" Offset="0"/>
+                                                        <GradientStop Color="#FFFF0515" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="ToolTip" Value="Track cannot be found" />
+                                            <Setter Property="ToolTipService.BetweenShowDelay" Value="0" />
+                                            <Setter Property="ToolTipService.InitialShowDelay" Value="0" />
+                                            <Setter Property="ToolTipService.HasDropShadow" Value="True" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.CellStyle>
+                        </nmControls:DragEnabledDataGrid>
+                    </DockPanel>
+                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 0">
+                        <Button Padding="5 1" Command="{Binding SaveCourseCommand}">Save</Button>
+                        <Button Margin="10 0 0 0" Command="{Binding CancelCommand}" Padding="5 1">Cancel</Button>
+                    </StackPanel>
                 </DockPanel>
 
             </Grid>
-        </DockPanel>
+
+        </GroupBox>
+
     </Grid>
 </UserControl>

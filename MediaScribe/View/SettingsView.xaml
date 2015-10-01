@@ -108,29 +108,12 @@
             </StackPanel>
         </DataTemplate>
 
-        <!--<DataTemplate x:Key="SpeedIncreaseViewTemplate">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Path=SpeedModifierPercent}" />
-                <TextBlock Text=" percent" />
-            </StackPanel>
-        </DataTemplate>
-
-        <DataTemplate x:Key="SpeedIncreaseEditTemplate">
-            <StackPanel Orientation="Horizontal">
-                <ComboBox ItemsSource="{Binding Source={StaticResource dataFromDirectionEnum}}"
-                          SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=SelectedItem.MyDirection}">
-                </ComboBox>
-                <TextBlock Text=" " xml:space="preserve" />
-                <TextBox Text="{Binding Path=Seconds}" PreviewTextInput="TextBox_PreviewTextInput" />
-                <TextBlock Text=" seconds" />
-            </StackPanel>
-        </DataTemplate>-->
 
         <Style TargetType="TextBox" x:Key="controlledTextBox">
             <EventSetter Event="PreviewTextInput" Handler="TextBox_PreviewTextInput" />
         </Style>
 
-        <Style TargetType="DataGridCell" x:Key="dynamicCellBasedOnFunctionType" BasedOn="{StaticResource DataGridCellStyle1}">
+        <Style TargetType="DataGridCell" x:Key="dynamicCellBasedOnFunctionType" BasedOn="{StaticResource MetroDataGridCell}">
             <Style.Triggers>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
@@ -317,199 +300,163 @@
             <EventSetter Event="SelectionChanged" Handler="ComboBox_SelectionChanged" />
         </Style>
 
+        <Style TargetType="{x:Type nmControls:DoubleClickableDataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}" />
+        <Style TargetType="{x:Type nmControls:DragEnabledDataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}" />
 
     </UserControl.Resources>
     <Grid Background="Transparent">
-        <DockPanel Name="windowContents">
-            <!--<nmControls:NavigationControl2 DockPanel.Dock="Top"
-                                                NavigateCommand="{Binding NavigateCommand}"
-                                                />-->
-            <Grid Name="mainGrid">
+
+        <DockPanel Grid.Column="1" MaxWidth="800px">
+
+            <GroupBox DockPanel.Dock="Top" Header="Options" Foreground="#FF3F3F3F" BorderBrush="#FF75B2AE" BorderThickness="0.9" Margin="10 10 10 10" Padding="5">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Width="200" Text="Enable trackbar video preview" ToolTip="When you hover the cursor over the trackbar, this will show up a thumbnail preview of the video at that location." ToolTipService.InitialShowDelay="0" />
+                        <CheckBox IsChecked="{Binding Path=ApplicationSettings.GenerateThumbnails, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 5 0 0">
+                        <TextBlock VerticalAlignment="Center" Width="200" Text="Fullscreen video note-editing width" ToolTip="When you are in full-screen mode, this configures the width of the notes list, in pixels. The default value is 600." ToolTipService.InitialShowDelay="0" />
+                        <wpfx:IntegerUpDown Value="{Binding Path=ApplicationSettings.FullscreenNotePanelWidth, Mode=TwoWay}" Increment="50" Maximum="1500" Minimum="400" Width="60" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 5 0 0">
+                        <TextBlock VerticalAlignment="Center" Width="200" Text="New note rewind (in seconds)" ToolTip="When you are creating a new note, this will set the note's start time to [x] seconds earlier than the current play position. This is useful since one usually creates a note when the speaker is part-way through discussing the point you're writing the note for." ToolTipService.InitialShowDelay="0" />
+                        <wpfx:IntegerUpDown Value="{Binding Path=ApplicationSettings.NewNoteRewindSeconds, Mode=TwoWay}" Increment="1" Maximum="59" Minimum="0" Width="60" />
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Hotkeys" Foreground="#FF3F3F3F" BorderBrush="#FF75B2AE" BorderThickness="0.9" Margin="10 10 10 10" Padding="5">
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Bottom">
+                        <Border BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#FFFF" Visibility="{Binding AreSettingsExisting, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
+                            <StackPanel MinHeight="30">
+                                <TextBlock Text="Please add some hotkeys!" Margin="0 5 0 0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+                        <StackPanel Visibility="{Binding IsEditingHotkeys, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
 
 
-                    <DockPanel Grid.Column="1" Width="800px">
-                        <!--<StackPanel DockPanel.Dock="Top" MaxWidth="800">-->
-                            <!--<GroupBox Header="Application Settings"  Foreground="#FF3F3F3F" Margin="10 10 10 0" Padding="10" BorderBrush="#FF75B2DE">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="250" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Row="0" Grid.Column="0" TextWrapping="Wrap">Load last course when the application starts:</TextBlock>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"></CheckBox>
-                                </Grid>
-                            </GroupBox>-->
-                    <GroupBox DockPanel.Dock="Top" Header="Options" Foreground="#FF3F3F3F" BorderBrush="#FF75B2AE" BorderThickness="0.9" Margin="10 10 10 10" Padding="5">
-                                <StackPanel>
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                        <TextBlock Width="200" Text="Enable trackbar video preview" ToolTip="When you hover the cursor over the trackbar, this will show up a thumbnail preview of the video at that location." ToolTipService.InitialShowDelay="0" />
-                                        <CheckBox IsChecked="{Binding Path=ApplicationSettings.GenerateThumbnails, Mode=TwoWay}" />
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 5 0 0">
-                                        <TextBlock VerticalAlignment="Center" Width="200" Text="Fullscreen video note-editing width" ToolTip="When you are in full-screen mode, this configures the width of the notes list, in pixels. The default value is 600." ToolTipService.InitialShowDelay="0" />
-                                        <wpfx:IntegerUpDown Value="{Binding Path=ApplicationSettings.FullscreenNotePanelWidth, Mode=TwoWay}" Increment="50" Maximum="1500" Minimum="400" Width="60" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 5 0 0">
-                                <TextBlock VerticalAlignment="Center" Width="200" Text="New note rewind (in seconds)" ToolTip="When you are creating a new note, this will set the note's start time to [x] seconds earlier than the current play position. This is useful since one usually creates a note when the speaker is part-way through discussing the point you're writing the note for." ToolTipService.InitialShowDelay="0" />
-                                <wpfx:IntegerUpDown Value="{Binding Path=ApplicationSettings.NewNoteRewindSeconds, Mode=TwoWay}" Increment="1" Maximum="59" Minimum="0" Width="60" />
-                            </StackPanel>
+                            <Button Focusable="False" Style="{StaticResource minusButtonStyle}"  Command="{Binding DeleteHotkeysCommand}">
+                                <Path Data="M0,0 L70,0 99,0 99,41 70,41 0,41 z" Margin="0 0 0 0" Stretch="Uniform" Width="13.5" Height="5" Style="{DynamicResource minusStyle}"/>
+                            </Button>
+
+                            <Button Focusable="False" Margin="5 0 0 0" Style="{StaticResource plusButtonStyle}"  Click="addHotkeyButton_Click">
+                                <Path Data="M35,0 L70,0 70,30 100,30 100,70 70,70 70,100 30,100 30,70 0,70 0,30 35,30 z" Margin="0 0 0 0" Stretch="Fill" Width="13.5" Height="13" Style="{DynamicResource PlusStyle}"/>
+                            </Button>
+
+
                         </StackPanel>
-                            </GroupBox>
 
-                    <GroupBox Header="Hotkeys" Foreground="#FF3F3F3F" BorderBrush="#FF75B2AE" BorderThickness="0.9" Margin="10 10 10 10" Padding="5">
-                                <DockPanel>
-                                    <!-- make the border the same colour as the grid's border... we want to make it look like an extension of the grid. -->
-                                    <StackPanel DockPanel.Dock="Bottom">
-                                        <Border BorderThickness="1 0 1 1" BorderBrush="#A3AEB9" Background="#FFFF" Visibility="{Binding AreSettingsExisting, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}">
-                                            <StackPanel MinHeight="30">
-                                                <TextBlock Text="Please add some hotkeys!" Margin="0 5 0 0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
-                                            </StackPanel>
-                                        </Border>
-                                        <StackPanel Visibility="{Binding IsEditingHotkeys, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" MinHeight="30">
-
-
-                                            <Button Focusable="False" Style="{StaticResource minusButtonStyle}"  Command="{Binding DeleteHotkeysCommand}">
-                                                <Path Data="M0,0 L70,0 99,0 99,41 70,41 0,41 z" Margin="0 0 0 0" Stretch="Uniform" Width="13.5" Height="5" Style="{DynamicResource minusStyle}"/>
-                                            </Button>
-
-                                            <Button Focusable="False" Margin="5 0 0 0" Style="{StaticResource plusButtonStyle}"  Click="addHotkeyButton_Click">
-                                                <Path Data="M35,0 L70,0 70,30 100,30 100,70 70,70 70,100 30,100 30,70 0,70 0,30 35,30 z" Margin="0 0 0 0" Stretch="Fill" Width="13.5" Height="13" Style="{DynamicResource PlusStyle}"/>
-                                            </Button>
-
-
-                                        </StackPanel>
-
-                                        <StackPanel Visibility="{Binding IsEditingHotkeys, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 10">
-                                            <Button Padding="5 1" Command="{Binding HotkeysEditCommand}">Edit</Button>
-                                            <Button Margin="10 0 0 0" Padding="5 1" Command="{Binding RestoreDefaultHotkeysCommand}">Restore defaults</Button>
-                                        </StackPanel>
-                                        <StackPanel Visibility="{Binding IsEditingHotkeys, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 10">
-                                            <Button Command="{Binding CancelCommand}" Padding="5 1">Cancel</Button>
-                                            <Button Padding="5 1" Margin="10 0 0 0" Command="{Binding SaveHotkeysCommand}">Save</Button>
-                                        </StackPanel>
-                                    </StackPanel>
-                                    <DockPanel>
-                                        <TextBlock DockPanel.Dock="Top" Margin="0 0 0 5" TextWrapping="Wrap" Text="Double-click on the empty row at the bottom to add a new hotkey. Also, you can hover over the 'Function' entries to get a description of what it does, and when it's usable." />
-
-                                        <nmControls:DragEnabledDataGrid  x:Name="hotkeyGrid" AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top"
+                        <StackPanel Visibility="{Binding IsEditingHotkeys, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterFalseIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 10">
+                            <Button Padding="5 1" Command="{Binding HotkeysEditCommand}">Edit</Button>
+                            <Button Margin="10 0 0 0" Padding="5 1" Command="{Binding RestoreDefaultHotkeysCommand}">Restore defaults</Button>
+                        </StackPanel>
+                        <StackPanel Visibility="{Binding IsEditingHotkeys, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisible}, UpdateSourceTrigger=PropertyChanged, FallbackValue=Visible}" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 10">
+                            <Button Command="{Binding CancelCommand}" Padding="5 1">Cancel</Button>
+                            <Button Padding="5 1" Margin="10 0 0 0" Command="{Binding SaveHotkeysCommand}">Save</Button>
+                        </StackPanel>
+                    </StackPanel>
+                    
+                    <TextBlock DockPanel.Dock="Top" Margin="0 0 0 5" TextWrapping="Wrap" Text="Double-click on the empty row at the bottom to add a new hotkey. Also, you can hover over the 'Function' entries to get a description of what it does, and when it's usable." />
+                    
+                    <nmControls:DragEnabledDataGrid  x:Name="hotkeyGrid" AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top"
                                                                           CanUserAddRows="{Binding IsEditingHotkeys, Mode=OneWay}" HeadersVisibility="Column"
                                                                           ItemsSource="{Binding Hotkeys}" 
                                                                           CanDrag="False"
                                                                           IsReadOnly="{Binding IsEditingHotkeys, Converter={StaticResource InverseBooleanConverter}}"
-                                                                          ReadOnlySelectedItems="{Binding SelectedHotkeys, Mode=OneWayToSource}"
-                                                                          Style="{StaticResource DataGridStyle1}">
-                                            <DataGrid.Columns>
+                                                                          ReadOnlySelectedItems="{Binding SelectedHotkeys, Mode=OneWayToSource}">
+                        <DataGrid.Columns>
 
-                                                <DataGridTemplateColumn Header="Function" Width="200" SortMemberPath="Function" CanUserSort="True">
-                                                    <DataGridTemplateColumn.CellTemplate>
-                                                        <DataTemplate>
-                                                            <TextBlock Text="{Binding Function, Converter={StaticResource EnumInfoLabelToStringConverter}}" ToolTip="{Binding Function, Converter={StaticResource EnumToTooltipTextBlockConverter}}" />
-                                                        </DataTemplate>
-                                                    </DataGridTemplateColumn.CellTemplate>
-                                                    <DataGridTemplateColumn.CellEditingTemplate>
-                                                        <DataTemplate>
-                                                            <ComboBox Text="Select Hotkey Function..." x:Name="functionComboBox" ItemsSource="{Binding Source={StaticResource dataFromHotkeyFunctionEnum}}"
+                            <DataGridTemplateColumn Header="Function" Width="200" SortMemberPath="Function" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Function, Converter={StaticResource EnumInfoLabelToStringConverter}}" ToolTip="{Binding Function, Converter={StaticResource EnumToTooltipTextBlockConverter}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox Text="Select Hotkey Function..." x:Name="functionComboBox" ItemsSource="{Binding Source={StaticResource dataFromHotkeyFunctionEnum}}"
                                       SelectedItem="{Binding Function, Mode=TwoWay}" Style="{StaticResource selectionChangedHandledComboBox}">
-                                                                <ComboBox.ItemTemplate>
-                                                                    <DataTemplate>
-                                                                        <!-- JDW NOTE: there's a problem with trying to have a tooltip on a comboboxitem, which interferes
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <!-- JDW NOTE: there's a problem with trying to have a tooltip on a comboboxitem, which interferes
                                                                     with clicking on the CONTENTS of the comboboxitem - it doesn't register the click, unless you click
                                                                     in the white space around the contents (i.e. next to the textblock, instead of on it). To make it
                                                                     clickable, we set IsHitTestVisible=False... but then it doesn't receive mouse events, and the
                                                                     tooltip won't show up. So I've made a custom ComboBoxItem type which sets the tooltip of the PARENT
                                                                     BORDER object, to the bound tooltip... this means the PARENT will show the tooltip correctly, and we
                                                                     can leave the comboboxitem with IsHitTestVisible=False! :D -->
-                                                                        <nmControls:ComboBoxItemWithTooltip IsHitTestVisible="False" ToolTip="{Binding Path=., Converter={StaticResource EnumToTooltipTextBlockConverter}}">
-                                                                            <nmControls:ComboBoxItemWithTooltip.Content>
-                                                                                <TextBlock  Text="{Binding Path=., Converter={StaticResource EnumInfoLabelToStringConverter}, Mode=TwoWay}"  />
-                                                                            </nmControls:ComboBoxItemWithTooltip.Content>
-                                                                        </nmControls:ComboBoxItemWithTooltip>
-                                                                    </DataTemplate>
-                                                                </ComboBox.ItemTemplate>
-                                                            </ComboBox>
-                                                        </DataTemplate>
-                                                    </DataGridTemplateColumn.CellEditingTemplate>
-                                                </DataGridTemplateColumn>
+                                                    <nmControls:ComboBoxItemWithTooltip IsHitTestVisible="False" ToolTip="{Binding Path=., Converter={StaticResource EnumToTooltipTextBlockConverter}}">
+                                                        <nmControls:ComboBoxItemWithTooltip.Content>
+                                                            <TextBlock  Text="{Binding Path=., Converter={StaticResource EnumInfoLabelToStringConverter}, Mode=TwoWay}"  />
+                                                        </nmControls:ComboBoxItemWithTooltip.Content>
+                                                    </nmControls:ComboBoxItemWithTooltip>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
 
-                                                <DataGridTemplateColumn Header="Parameter" Width="165" CanUserSort="False" CellStyle="{StaticResource dynamicCellBasedOnFunctionType}" />
+                            <DataGridTemplateColumn Header="Parameter" Width="165" CanUserSort="False" CellStyle="{StaticResource dynamicCellBasedOnFunctionType}" />
 
-                                                <!--<DataGridTemplateColumn Header="Modifier" Width="105" SortMemberPath="ModifierKey" CanUserSort="True">
-                                                    <DataGridTemplateColumn.CellTemplate>
-                                                        <DataTemplate>
-                                                            <TextBlock Text="{Binding ModifierKey, Converter={StaticResource EnumToStringConverter}, Mode=TwoWay}" />
-                                                        </DataTemplate>
-                                                    </DataGridTemplateColumn.CellTemplate>
-                                                    <DataGridTemplateColumn.CellEditingTemplate>
-                                                        <DataTemplate>
-                                                            <ComboBox Text="Select modifier..." ItemsSource="{Binding Source={StaticResource dataFromModifierKeysEnum}}"
-                                      SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=SelectedItem.ModifierKey, Mode=TwoWay}">
-                                                            </ComboBox>
-                                                        </DataTemplate>
-                                                    </DataGridTemplateColumn.CellEditingTemplate>
-                                                </DataGridTemplateColumn>-->
 
-                                                <DataGridTemplateColumn Header="Key" Width="*" SortMemberPath="Key" CanUserSort="True">
-                                                    <DataGridTemplateColumn.CellTemplate>
-                                                        <DataTemplate>
-                                                            <StackPanel Orientation="Horizontal">
-                                                                <!-- modifier keys list... but hide if it's empty -->
-                                                                <TextBlock Foreground="Gray" Text="{Binding ModifierKey, Converter={StaticResource ModifierKeysCollectionToStringConverter}}" Padding="0 0 5 0">
-                                                                    <TextBlock.Style>
-                                                                        <Style TargetType="TextBlock">
-                                                                            <Style.Triggers>
-                                                                                <Trigger Property="Text" Value="">
-                                                                                    <Setter Property="Visibility" Value="Collapsed" />
-                                                                                </Trigger>
-                                                                                <Trigger Property="Text" Value="{x:Null}">
-                                                                                    <Setter Property="Visibility" Value="Collapsed" />
-                                                                                </Trigger>
-                                                                            </Style.Triggers>
-                                                                        </Style>
-                                                                    </TextBlock.Style>
-                                                                </TextBlock>
-                                                                <TextBlock Text="{Binding Key, Converter={StaticResource KeyEnumToStringConverter}}" />
-                                                            </StackPanel>
-                                                        </DataTemplate>
-                                                    </DataGridTemplateColumn.CellTemplate>
-                                                    <DataGridTemplateColumn.CellEditingTemplate>
-                                                        <DataTemplate>
-                                                            <StackPanel Orientation="Horizontal">
-                                                                <!-- modifier keys list... but hide if it's empty -->
-                                                                <TextBlock Text="{Binding ModifierKey, Converter={StaticResource ModifierKeysCollectionToStringConverter}}" Padding="0 0 5 0">
-                                                                    <TextBlock.Style>
-                                                                        <Style TargetType="TextBlock">
-                                                                            <Style.Triggers>
-                                                                                <Trigger Property="Text" Value="">
-                                                                                    <Setter Property="Visibility" Value="Collapsed" />
-                                                                                </Trigger>
-                                                                                <Trigger Property="Text" Value="{x:Null}">
-                                                                                    <Setter Property="Visibility" Value="Collapsed" />
-                                                                                </Trigger>
-                                                                            </Style.Triggers>
-                                                                        </Style>
-                                                                    </TextBlock.Style>
-                                                                </TextBlock>
-                                                                <!--FocusManager.FocusedElement="{Binding ElementName=hitTextbox}"-->
-                                                                <TextBlock Text="{Binding Key, Converter={StaticResource KeyEnumToStringConverter}}">
-                                                                        </TextBlock>
-                                                                <TextBox Margin="5 0 0 0" Text="Click here &amp; Press key" PreviewKeyUp="TextBox_PreviewKeyUp" PreviewKeyDown="TextBox_PreviewKeyDown" Name="hitTextbox" AcceptsReturn="True" AcceptsTab="True"
+                            <DataGridTemplateColumn Header="Key" Width="*" SortMemberPath="Key" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <!-- modifier keys list... but hide if it's empty -->
+                                            <TextBlock Foreground="Gray" Text="{Binding ModifierKey, Converter={StaticResource ModifierKeysCollectionToStringConverter}}" Padding="0 0 5 0">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <Trigger Property="Text" Value="">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </Trigger>
+                                                            <Trigger Property="Text" Value="{x:Null}">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                            <TextBlock Text="{Binding Key, Converter={StaticResource KeyEnumToStringConverter}}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <!-- modifier keys list... but hide if it's empty -->
+                                            <TextBlock Text="{Binding ModifierKey, Converter={StaticResource ModifierKeysCollectionToStringConverter}}" Padding="0 0 5 0">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <Trigger Property="Text" Value="">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </Trigger>
+                                                            <Trigger Property="Text" Value="{x:Null}">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                            <!--FocusManager.FocusedElement="{Binding ElementName=hitTextbox}"-->
+                                            <TextBlock Text="{Binding Key, Converter={StaticResource KeyEnumToStringConverter}}">
+                                            </TextBlock>
+                                            <TextBox Margin="5 0 0 0" Text="Click here &amp; Press key" PreviewKeyUp="TextBox_PreviewKeyUp" PreviewKeyDown="TextBox_PreviewKeyDown" Name="hitTextbox" AcceptsReturn="True" AcceptsTab="True"
                                                                          FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"></TextBox>
-                                                            </StackPanel>
-                                                        </DataTemplate>
-                                                    </DataGridTemplateColumn.CellEditingTemplate>
-                                                </DataGridTemplateColumn>
-                                            </DataGrid.Columns>
-                                            </nmControls:DragEnabledDataGrid>
-                                    </DockPanel>
-                                </DockPanel>
-                            </GroupBox>
-                        <!--</StackPanel>-->
-                        <!--Empty content control, which 'fills' the dockpanel. As the grid grows, this will shrink away to nothing... and as the grid continues to grow, it'll get scrollbars.--><!--
-                        <ContentControl>
-                        </ContentControl>-->
-                    </DockPanel>
-                
-            </Grid>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </nmControls:DragEnabledDataGrid>
+                </DockPanel>
+            </GroupBox>
+
         </DockPanel>
+
     </Grid>
 </UserControl>

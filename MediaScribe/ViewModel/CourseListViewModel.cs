@@ -47,6 +47,7 @@ namespace JayDev.MediaScribe.ViewModel
                                               SelectedCourseName = null;
                                               SelectedCourseTracks = new ObservableCollection<Track>();
                                               MaintenanceMode = MaintenanceMode.Create;
+                                              IsCreateCourseNameTextboxFocused = true;
                                           },
                                           () => true));
             }
@@ -719,6 +720,42 @@ namespace JayDev.MediaScribe.ViewModel
         }
 
         #endregion MaintenanceMode
+
+        
+        #region IsCreateCourseNameTextboxFocused
+
+        /// <summary>
+        /// The <see cref="IsCreateCourseNameTextboxFocused" /> property's name.
+        /// </summary>
+        public const string IsCreateCourseNameTextboxFocusedPropertyName = "IsCreateCourseNameTextboxFocused";
+
+        private bool _isCreateCourseNameTextboxFocused;
+
+        /// <summary>
+        /// Sets and gets the IsCreateCourseNameTextboxFocused property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public bool IsCreateCourseNameTextboxFocused
+        {
+            get
+            {
+                return _isCreateCourseNameTextboxFocused;
+            }
+
+            set
+            {
+                if (_isCreateCourseNameTextboxFocused == value)
+                {
+                    return;
+                }
+
+                _isCreateCourseNameTextboxFocused = value;
+                RaisePropertyChanged(IsCreateCourseNameTextboxFocusedPropertyName);
+            }
+        }
+
+        #endregion IsCreateCourseNameTextboxFocused
+				
 
         #region SelectedCourseName
 

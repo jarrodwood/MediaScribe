@@ -8,26 +8,14 @@
              xmlns:atb="clr-namespace:AvalonTextBox;assembly=MediaScribe.AvalonTextBox"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
              xmlns:GalaSoft_MvvmLight_Command="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
-             xmlns:local="clr-namespace:JayDev.MediaScribe.View.Controls"
+             xmlns:nmControls="clr-namespace:JayDev.MediaScribe.View.Controls"
              xmlns:nmConverters="clr-namespace:JayDev.MediaScribe.Converters"
              xmlns:nmCore="clr-namespace:JayDev.MediaScribe.Core"
              xmlns:syswin="clr-namespace:System.Windows;assembly=PresentationCore"
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              x:Name="NotesGridControlName">
     <UserControl.Resources>
-        <!--<nmConverters:NullToVisibilityConverter 
-                x:Key="NullToVisibilityConverterNotNullIsVisible" 
-                NullValue="Collapsed" 
-                NotNullValue="Visible" />-->
-        <!-- ensure that the notes data grid is sorted by: track number, time, and ID. -->
-        <!--<CollectionViewSource x:Key="ItemListViewSource" Source="{Binding Notes}">
-            <CollectionViewSource.SortDescriptions>
-                <scm:SortDescription PropertyName="StartTrackNumber" />
-                <scm:SortDescription PropertyName="StartTime" />
-                <scm:SortDescription PropertyName="ID" />
-            </CollectionViewSource.SortDescriptions>
-        </CollectionViewSource>-->
-
+        <Style TargetType="{x:Type nmControls:DelayedBindDataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}" />
     </UserControl.Resources>
     <Grid>
         <Border x:Name="findTextPanel"
@@ -58,7 +46,7 @@
             </Grid>
         </Border>
 
-        <local:DelayedBindDataGrid MinWidth="300"
+        <nmControls:DelayedBindDataGrid MinWidth="300"
             VirtualizingStackPanel.VirtualizationMode="Standard"
             VirtualizingStackPanel.IsVirtualizing="True"
             EnableColumnVirtualization="False"
@@ -67,7 +55,7 @@
             AutoGenerateColumns="False" x:Name="noteDataGrid" HeadersVisibility="Column" CanUserSortColumns="True" CanUserResizeRows="False" CanUserAddRows="True"
             CanUserDeleteRows="True" RowEditEnding="noteDataGrid_RowEditEnding" BeginningEdit="noteDataGrid_BeginningEdit"
             PreparingCellForEdit="noteDataGrid_PreparingCellForEdit"
-            ItemsSource="{ Binding ElementName=NotesGridControlName, Path=Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, IsAsync=True}"  CellEditEnding="noteDataGrid_CellEditEnding" Style="{StaticResource DataGridStyle1}">
+            ItemsSource="{ Binding ElementName=NotesGridControlName, Path=Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, IsAsync=True}"  CellEditEnding="noteDataGrid_CellEditEnding">
             <DataGrid.InputBindings>
                 <KeyBinding Key="Delete" Command="{Binding ElementName=NotesGridControlName, Path=DoNothing}" />
             </DataGrid.InputBindings>
@@ -85,7 +73,7 @@
                                 <TextBlock Text="{Binding Path=StartStringDisplayValue}" />
                                 <TextBlock xml:space="preserve"></TextBlock>
 
-                                <local:UndecoratedButton Margin="2 0 0 0" VerticalAlignment="Center" Click="setNoteStartTime_Click">
+                                <nmControls:UndecoratedButton Margin="2 0 0 0" VerticalAlignment="Center" Click="setNoteStartTime_Click">
                                 <Image Height="15" Width="15">
                                     
                                     <Image.Style>
@@ -99,7 +87,7 @@
                                         </Style>
                                     </Image.Style>
                                     </Image>
-                                </local:UndecoratedButton>
+                                </nmControls:UndecoratedButton>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
@@ -109,7 +97,7 @@
 
 
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <local:UndecoratedButton VerticalAlignment="Center" Click="playNoteButton_Click">
+                                <nmControls:UndecoratedButton VerticalAlignment="Center" Click="playNoteButton_Click">
                                     <Image>
                                         <Image.Style>
                                             <Style TargetType="{x:Type Image}">
@@ -122,7 +110,7 @@
                                             </Style>
                                         </Image.Style>
                                     </Image>
-                                </local:UndecoratedButton>
+                                </nmControls:UndecoratedButton>
                                 <TextBlock Margin="2 0 0 0" Text="{Binding Path=StartStringDisplayValue}" />
                             </StackPanel>
                         </DataTemplate>
@@ -164,6 +152,6 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
-        </local:DelayedBindDataGrid>
+        </nmControls:DelayedBindDataGrid>
     </Grid>
 </UserControl>

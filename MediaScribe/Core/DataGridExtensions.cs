@@ -60,7 +60,7 @@ namespace JayDev.MediaScribe.Core
                 {
                     // Adding 1 to make the row count start at 1 instead of 0
                     // as pointed out by daub815
-                    e.Row.Header = (e.Row.GetIndex() + 1).ToString();
+                    e.Row.Header = (e.Row.GetIndex() + 1).ToString() + " ";
                 });
 
             }

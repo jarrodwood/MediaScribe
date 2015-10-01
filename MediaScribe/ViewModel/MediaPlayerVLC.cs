@@ -100,8 +100,11 @@ namespace JayDev.MediaScribe.ViewModel
             if (null == MediaElement.SingletonPlayer)
             {
                 var m_Library = LibVLCLibrary.Load(null);
-                MediaElement.SingletonPlayer = new LibVLC.NET.MediaPlayer(m_Library, null);
-                MediaElement.SingletonPlayer.Event += SingletonPlayer_Event;
+                ThreadHelper.ExecuteAsyncBackground(() =>
+                {
+                    MediaElement.SingletonPlayer = new LibVLC.NET.MediaPlayer(m_Library, null);
+                    MediaElement.SingletonPlayer.Event += SingletonPlayer_Event;
+                });
             }
         }
 

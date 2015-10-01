@@ -1,4 +1,4 @@
-﻿<Window
+﻿<Controls:MetroWindow x:Class="JayDev.MediaScribe.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:shell="http://schemas.microsoft.com/winfx/2006/xaml/presentation/shell"
@@ -9,213 +9,81 @@
     xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
 
     xmlns:nmConverters="clr-namespace:JayDev.MediaScribe.Converters"
-    xmlns:mui="http://firstfloorsoftware.com/ModernUI" x:Class="JayDev.MediaScribe.View.MainWindow"
+    xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     WindowState="Maximized" 
-        x:Name="MainWindowName" Title="{Binding WindowTitle}" Height="300" Width="679"  Icon="/MediaScribe;component/Images/Letter%20M%20blue%2032.png">
-    <!--Style="{DynamicResource GlassStyle}">-->
+                      ShowIconOnTitleBar="True"
+        x:Name="MainWindowName" Title="{Binding WindowTitle}" Height="300" Width="679"  Icon="/MediaScribe;component/Resources/Quill-02.ico">
+
     <Window.Resources>
-
-
-
-        <Style x:Key="TabItemFocusVisual">
-            <Setter Property="Control.Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Rectangle Stroke="Black" StrokeDashArray="1 2" StrokeThickness="1" Margin="3,3,3,1" SnapsToDevicePixels="true"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <SolidColorBrush x:Key="TabControlNormalBorderBrush" Color="#8C8E94"/>
-        <LinearGradientBrush x:Key="ButtonNormalBackground" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="#F3F3F3" Offset="0"/>
-            <GradientStop Color="#EBEBEB" Offset="0.5"/>
-            <GradientStop Color="#DDDDDD" Offset="0.5"/>
-            <GradientStop Color="#CDCDCD" Offset="1"/>
-        </LinearGradientBrush>
-        <LinearGradientBrush x:Key="TabItemHotBackground" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="#EAF6FD" Offset="0.15"/>
-            <GradientStop Color="#D9F0FC" Offset=".5"/>
-            <GradientStop Color="#BEE6FD" Offset=".5"/>
-            <GradientStop Color="#A7D9F5" Offset="1"/>
-        </LinearGradientBrush>
-        <SolidColorBrush x:Key="TabItemSelectedBackground" Color="#F9F9F9"/>
-        <SolidColorBrush x:Key="TabItemHotBorderBrush" Color="#3C7FB1"/>
-        <SolidColorBrush x:Key="TabItemDisabledBackground" Color="#F4F4F4"/>
-        <SolidColorBrush x:Key="TabItemDisabledBorderBrush" Color="#FFC9C7BA"/>
-
-        <!-- FS TabItem Control Template-->
-        <Style TargetType="{x:Type TabItem}">
-            <Setter Property="FocusVisualStyle" Value="{StaticResource TabItemFocusVisual}"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="Padding" Value="6,1,6,1"/>
-            <Setter Property="BorderBrush" Value="{StaticResource TabControlNormalBorderBrush}"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TabItem}">
-                        <Grid SnapsToDevicePixels="true">
-                            <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1,1,1,0" Padding="{TemplateBinding Padding}">
-                                <ContentPresenter x:Name="Content" HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" ContentSource="Header" RecognizesAccessKey="True"/>
-                            </Border>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource TabItemHotBackground}"/>
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="true">
-                                <Setter Property="Panel.ZIndex" Value="1"/>
-                                <!--<Setter Property="Background" TargetName="Bd" Value="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}}"/>-->
-                                <Setter Property="Background" TargetName="Bd" Value="#FFEEF6FF"/>
-
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="false">
-                                <!--<Setter Property="Background" TargetName="Bd" Value="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}"/>
-                                <Setter Property="BorderThickness" TargetName="Bd" Value="0" />-->
-                            </Trigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsSelected" Value="false"/>
-                                    <Condition Property="IsMouseOver" Value="true"/>
-                                </MultiTrigger.Conditions>
-                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource TabItemHotBorderBrush}"/>
-                            </MultiTrigger>
-                            <Trigger Property="TabStripPlacement" Value="Bottom">
-                                <Setter Property="BorderThickness" TargetName="Bd" Value="1,0,1,1"/>
-                            </Trigger>
-                            <Trigger Property="TabStripPlacement" Value="Left">
-                                <Setter Property="BorderThickness" TargetName="Bd" Value="1,1,0,1"/>
-                            </Trigger>
-                            <Trigger Property="TabStripPlacement" Value="Right">
-                                <Setter Property="BorderThickness" TargetName="Bd" Value="0,1,1,1"/>
-                            </Trigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsSelected" Value="true"/>
-                                    <Condition Property="TabStripPlacement" Value="Top"/>
-                                </MultiTrigger.Conditions>
-                                <Setter Property="Margin" Value="-2,-2,-2,-1"/>
-                                <Setter Property="Margin" TargetName="Content" Value="0,0,0,1"/>
-                            </MultiTrigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsSelected" Value="true"/>
-                                    <Condition Property="TabStripPlacement" Value="Bottom"/>
-                                </MultiTrigger.Conditions>
-                                <Setter Property="Margin" Value="-2,-1,-2,-2"/>
-                                <Setter Property="Margin" TargetName="Content" Value="0,1,0,0"/>
-                            </MultiTrigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsSelected" Value="true"/>
-                                    <Condition Property="TabStripPlacement" Value="Left"/>
-                                </MultiTrigger.Conditions>
-                                <Setter Property="Margin" Value="-2,-2,-1,-2"/>
-                                <Setter Property="Margin" TargetName="Content" Value="0,0,1,0"/>
-                            </MultiTrigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsSelected" Value="true"/>
-                                    <Condition Property="TabStripPlacement" Value="Right"/>
-                                </MultiTrigger.Conditions>
-                                <Setter Property="Margin" Value="-1,-2,-2,-2"/>
-                                <Setter Property="Margin" TargetName="Content" Value="1,0,0,0"/>
-                            </MultiTrigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource TabItemDisabledBackground}"/>
-                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource TabItemDisabledBorderBrush}"/>
-                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
         <nmConverters:BooleanToVisibilityConverter 
                 x:Key="BooleanToVisibilityConverterTrueIsVisible" 
                 True="Visible" 
                 False="Hidden" />
 
     </Window.Resources>
-    <Window.Background>
-        <LinearGradientBrush
-		StartPoint="0.06,0" EndPoint="0.91,0.99" 
-		SpreadMethod="Pad" ColorInterpolationMode="SRgbLinearInterpolation" >
-            <GradientStop Color="#FFEEF6FF" Offset="0" />
-            <GradientStop Color="#FFDEE6EF" Offset="1" />
-            <GradientStop Color="#FFEEF6FF" Offset="0.81" />
-            <GradientStop Color="#FFF2F6F8" Offset="0.66" />
-            <GradientStop Color="#FFD9E2EB" Offset="0.46" />
-            <GradientStop Color="#FFEEF6FF" Offset="0.2" />
-            <GradientStop Color="#FFD9E3EB" Offset="0.4" />
-        </LinearGradientBrush>
-    </Window.Background>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="348*" />
             <ColumnDefinition Width="309*" />
         </Grid.ColumnDefinitions>
-        <nmControls:MediaScribeMainTabControl x:Name="tabControl1" Padding="0" Grid.ColumnSpan="2" Background="#00000000">
-            <TabItem x:Name="tabCourseList">
-                <TabItem.Header>
-                    <Label Content="Course List">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseLeftButtonDown">
-                                <cmd:EventToCommand Command="{Binding NavigateCommand}" CommandParameter="{x:Static nmCommon:NavigateMessage.ListCourses}"  />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Label>
-                </TabItem.Header>
+
+        <TabControl x:Name="mainTabControl" Grid.ColumnSpan="2" SelectionChanged="mainTabControl_SelectionChanged">
+            <TabItem x:Name="tabCourseList" Header="Course List">
             </TabItem>
-            <TabItem x:Name="tabSettings">
-                <TabItem.Header>
-                    <Label Content="Settings">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseLeftButtonDown">
-                                <cmd:EventToCommand Command="{Binding NavigateCommand}" CommandParameter="{x:Static nmCommon:NavigateMessage.Settings}"  />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Label>
-                </TabItem.Header>
-                <Grid />
+            <TabItem x:Name="tabSettings" Header="Settings">
             </TabItem>
-            <!--<TabItem Header="Import/Export" Name="tabImportExport">
-                <Grid />
-            </TabItem>-->
-            <TabItem x:Name="tabNotes">
-                <TabItem.Header>
-                    <Label Content="Write Notes">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseLeftButtonDown">
-                                <cmd:EventToCommand Command="{Binding NavigateCommand}" CommandParameter="{x:Static nmCommon:NavigateMessage.WriteCourseNotes}"  />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Label>
-                </TabItem.Header>
-                <Grid />
+            <TabItem x:Name="tabNotes" Header="Write Notes">
             </TabItem>
             
-        </nmControls:MediaScribeMainTabControl>
+        </TabControl>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="1">
-            <mui:ModernButton Content="Test" Width="100" RenderTransformOrigin="1.458,-0.824" Background="Black"/>
-            <Button Command="{Binding ExportExcelCommand}" Content="Export"/>
-            <ToggleButton Margin="00 0 3 0" ToolTip="Filter notes to current track only" Width="50">
-                <TextBlock><Run Text="Filter"/></TextBlock>
-            </ToggleButton>
-            <nmControls:NavigationButton Margin="00 0 3 0" MySource="/MediaScribe;component/Images/info32.png"
-				Command="{Binding ExportExcelCommand}"
-				ToolTip="Export notes to Excel"
-				Visibility="{Binding IsWritingNotes, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisible}}"/>
-            <nmControls:NavigationButton Margin="00 0 3 0" MySource="/MediaScribe;component/Images/info32.png"
-				Command="{Binding ToggleFullscreenCommand}"
-				ToolTip="Go Fullscreen Mode"
-				Visibility="{Binding IsWritingNotes, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisible}}"/>
-            <nmControls:NavigationButton Margin="00 0 3 0" MySource="/MediaScribe;component/Images/info32.png"
-				Command="{Binding ShowAboutDialog}"
-				ToolTip="About" />
+           
+            <Button Command="{Binding ExportExcelCommand}"
+                    ToolTip="Export notes to Excel"
+                    Visibility="{Binding IsWritingNotes, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisible}}"
+                        Width="40"
+                        Height="40"
+                        Style="{DynamicResource MetroCircleButtonStyle}">
+                <Rectangle Width="15"
+                               Height="15"
+                               Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Uniform"
+                                         Visual="{DynamicResource appbar_door_leave}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+
+            <Button Command="{Binding ToggleFullscreenCommand}"
+                    ToolTip="Go Fullscreen Mode"
+                    Visibility="{Binding IsWritingNotes, Converter={StaticResource BooleanToVisibilityConverterTrueIsVisible}}"
+                        Width="40"
+                        Height="40"
+                        Style="{DynamicResource MetroCircleButtonStyle}">
+                <Rectangle Width="15"
+                               Height="15"
+                               Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Uniform"
+                                         Visual="{DynamicResource appbar_arrow_expand}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+            
+            <Button Command="{Binding ShowAboutDialog}"
+                    ToolTip="About"
+                        Width="40"
+                        Height="40"
+                        Style="{DynamicResource MetroCircleButtonStyle}">
+                <Rectangle Width="15"
+                               Height="15"
+                               Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Uniform"
+                                         Visual="{DynamicResource appbar_information}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
         </StackPanel>
     </Grid>
-</Window>
+</Controls:MetroWindow>
