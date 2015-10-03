@@ -18,9 +18,14 @@ namespace JayDev.MediaScribe
     {
         private const string Unique = "MediaScribe";
 
+        public static SplashScreen SplashScreen { get { return splashScreen; } }
+        private static SplashScreen splashScreen = null;
+
         [STAThread]
         public static void Main()
         {
+            splashScreen = new SplashScreen("mediascribe-splashscreen.png");
+            splashScreen.Show(true, false);
             #if (DEBUG==false)
             try
             {

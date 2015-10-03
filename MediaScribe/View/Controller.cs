@@ -129,6 +129,8 @@ namespace JayDev.MediaScribe.View
             {
                 Navigate(new NavigateArgs(NavigateMessage.ListCourses, TabChangeSource.Application));
             }
+
+            App.SplashScreen.Close(TimeSpan.FromSeconds(3));
         }
 
         void _mainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)

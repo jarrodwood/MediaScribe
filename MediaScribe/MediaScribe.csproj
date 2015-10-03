@@ -550,6 +550,10 @@
     <Content Include="MediaInfo.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="mediascribe-splashscreen.png" />
+    <Resource Include="Quill-01-256.png" />
+    <Resource Include="Resources\pen-05.ico" />
+    <Resource Include="pen-05.ico" />
     <Resource Include="quill-02.ico" />
     <Resource Include="Resources\quill-02.ico" />
     <Resource Include="Quill-01.ico" />
