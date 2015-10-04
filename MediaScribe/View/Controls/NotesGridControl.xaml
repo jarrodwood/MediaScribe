@@ -16,6 +16,19 @@
              x:Name="NotesGridControlName">
     <UserControl.Resources>
         <Style TargetType="{x:Type nmControls:DelayedBindDataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}" />
+        <!--body content datagrid cell vertical centering-->
+        <Style x:Key="Body_Content_DataGrid_Vertical_Alignment_Top"
+	 TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource MetroDataGridCell}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                        <Grid Background="{TemplateBinding Background}">
+                            <ContentPresenter VerticalAlignment="Top" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Border x:Name="findTextPanel"
@@ -65,11 +78,11 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="From" Width="90" SortMemberPath="StartStringDisplayValue" CanUserSort="True">
+                <DataGridTemplateColumn Header="From" Width="90" SortMemberPath="StartStringDisplayValue" CanUserSort="True" CellStyle="{StaticResource Body_Content_DataGrid_Vertical_Alignment_Top}">
                     <!-- editing template -->
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
                                 <TextBlock Text="{Binding Path=StartStringDisplayValue}" />
                                 <TextBlock xml:space="preserve"></TextBlock>
 
@@ -96,7 +109,7 @@
                         <DataTemplate>
 
 
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
                                 <!--VLC TODO: i can't make this look good...
                                 <Button Click="playNoteButton_Click"
                                 ToolTip="Play from this note's start time"
@@ -131,7 +144,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Note" Width="*" SortMemberPath="Body" CanUserSort="True">
+                <DataGridTemplateColumn Header="Note" Width="*" SortMemberPath="Body" CanUserSort="True" CellStyle="{StaticResource Body_Content_DataGrid_Vertical_Alignment_Top}">
                     <!-- editing template -->
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
@@ -154,7 +167,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Rating" Width="50" SortMemberPath="Rating" CanUserSort="True">
+                <DataGridTemplateColumn Header="Rating" Width="50" SortMemberPath="Rating" CanUserSort="True" CellStyle="{StaticResource Body_Content_DataGrid_Vertical_Alignment_Top}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Rating}" />
