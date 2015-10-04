@@ -24,7 +24,7 @@ namespace JayDev.MediaScribe
         [STAThread]
         public static void Main()
         {
-            splashScreen = new SplashScreen("mediascribe-splashscreen.png");
+            splashScreen = new SplashScreen("mediascribe-splashscreen2.png");
             splashScreen.Show(true, false);
             #if (DEBUG==false)
             try
