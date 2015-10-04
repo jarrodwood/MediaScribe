@@ -6,6 +6,7 @@ using NamedPipeWrapper;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Threading;
+using System.IO;
 
 namespace ThumbnailGeneratorHelper
 {
@@ -43,6 +44,13 @@ namespace ThumbnailGeneratorHelper
                     int secondStep = Int32.Parse(args[1]);
                     string thumbnailDir = args[2];
                     string filepath = args[3];
+
+                    if (false == File.Exists(filepath))
+                    {
+                        generator.State = ThumbnailGenerator.GeneratorState.Stopped;
+                        Debug.WriteLine(string.Format("ThumbnailGenerator: the file '{0}' does not exist. Generation aborted.", filepath));
+                        return;
+                    }
 
                     bool successfulGeneration = false;
                     do

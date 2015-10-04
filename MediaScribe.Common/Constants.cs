@@ -337,6 +337,8 @@ namespace JayDev.MediaScribe.Common
 
     public static class Constants {
 
+        public const string SUPPRESS_NAVIGATION_TAB_CONTROL = "SuppressNavigation";
+
         /// <summary>
         /// used in WPF datagrid, when 'CanUserAddRows' is enabled. WPF adds a blank item to the bottom of the grid, of type
         /// MS.Internal.NamedObject... and the only way, it seems, to detect if a given row is of one of these types, is by calling

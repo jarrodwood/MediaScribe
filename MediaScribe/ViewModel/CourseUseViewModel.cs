@@ -1618,7 +1618,14 @@ namespace JayDev.MediaScribe.ViewModel
             tracks[trackIndex].CheckTrackMissing();
             if (tracks[trackIndex].IsMissing)
             {
-                NextTrackCommand.Execute(null);
+                //if the track is missing, play the next one... unless this is the last track, then stop. Otherwise if /all/ tracks are missing, it leads to an infinite loop.
+                if (trackIndex < tracks.Count - 1) { 
+                    NextTrackCommand.Execute(null);
+                }
+                else
+                {
+                    Stop();
+                }
                 return;
             }
 
@@ -1654,7 +1661,10 @@ namespace JayDev.MediaScribe.ViewModel
             }
             else
             {
-                _player.TogglePause();
+                if (false == _currentTrack.IsMissing)
+                {
+                    _player.TogglePause();
+                }
             }
         }
 
